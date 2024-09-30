@@ -1,0 +1,131 @@
+body {
+	background-color:	black;
+	color:	white;
+
+	/* font-size: 9mm; */
+
+	margin	:0;
+	padding	:0;
+}
+
+
+console
+{
+	background-color: hsl(0, 68%, 37%);
+	border-bottom: hsl(278, 86%, 14%) 1pt;
+
+	position:	absolute;
+
+	display:	block;
+
+	left:	0;
+	top:	0;
+	right:	0;
+
+	padding:	0.5ex;
+
+	transform:	translateY(-100%);
+	transition:	transform 1s;
+
+	z-index: 100;
+}
+
+
+screen
+{
+	display	:block;
+	position	:absolute;
+
+	left	:0;
+	top	:0;
+	right	:0;
+	bottom	:0;
+
+	/* width	:100%; */
+	height	:100vh;
+
+	overflow	:hidden;
+
+	z-index	:-1;
+	touch-action:	none;
+}
+
+
+fps
+{
+	position:	absolute ;
+	display: 	block ;
+	top: 	0 ;
+	right: 	0 ;
+	z-index: 	50 ;
+
+	color:hsl(0, 0%, 68%)
+}
+
+
+#can {
+	position:	absolute;
+
+	left:	0;
+	top:	0;
+
+	z-index: -5;
+}
+
+
+menu
+{
+	display:	none;
+	/* display:	block; */
+	position:	absolute;
+	padding	:0;
+	margin	:0;
+
+	left	:5px;
+	bottom	:5px;
+}
+
+menu>sel
+{
+	display:	block;
+	position:	absolute;
+	bottom:	0;
+	padding:	0;
+	margin:	0;
+
+	width:	90px;
+	height:	90px;
+
+	border-radius:	45px;
+	border:	2px solid #ff6efd;
+	box-shadow:	0 0 20px 5px rgba(255, 72, 203, 0.69), inset 0 0 20px 5px rgba(255, 72, 203, 0.69);
+
+	text-align: center;
+	font-size	:80px;
+	font-weight:	bolder;
+	color:	#ea98ff;
+}
+
+menu>option
+{
+	position:	absolute;
+
+	text-align: center;
+	font-size:	40px;
+	color:	#ff98d8;
+}
+
+
+screen>acts
+{
+	position: absolute;
+	padding	:0;
+	margin	:0;
+
+	background-color: hsla(7, 7%, 23%, 0.8);
+}
+
+screen>acts>button
+{
+	margin: 1ex;
+}

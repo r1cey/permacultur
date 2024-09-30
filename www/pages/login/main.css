@@ -1,0 +1,25 @@
+form.login
+{
+	display:	block;
+	margin:	1em auto 1em auto;
+	width:	max-content;
+	text-align:	center;
+}
+form.login.intro
+{
+	margin-top:	30%;
+}
+form.login h1
+{
+	/* font-size:	 */
+}
+form.login input
+{
+	display:	block;
+	width:	100%;
+	margin-bottom:	0.82em;
+}
+form.login button
+{
+	margin:	0.98em;
+}

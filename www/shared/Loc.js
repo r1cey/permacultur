@@ -1,0 +1,89 @@
+import V	from './Vec.js'
+
+export default class Loc extends V
+{
+	h
+
+	constructor(x,y,l=0)
+	{
+		super( x, y ) 
+
+		this.h	=l
+	}
+
+	v_str()
+	{
+		return super.toString()
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Return better json representation of object for messaging. */
+
+Loc.prototype. newmsg	=function()
+{
+	return [this.x, this.y, this.h]
+}
+
+
+
+Loc.prototype. clone	=function()
+{
+	return new Loc(this.x, this.y, this.h)
+}
+Loc.prototype. c	=Loc.prototype. clone
+
+
+
+Loc.prototype. set	=function( loc )
+{
+	return this.setxy( loc.x, loc.y, loc.h )
+}
+Loc.prototype. setxy	=function( x, y, l )
+{
+	this.x	=x
+	this.y	=y
+	this.h	=l
+
+	return this
+}
+Loc.prototype. seta	=function( a )
+{
+	return this.setxy( a[0], a[1], a[2] )
+}
+
+
+
+Loc.prototype. setvstr	=function( str, h )
+{
+	var a	=str.split('_')
+
+	this.setxy( Number(a[0]), Number(a[1]), h)
+
+	return this
+}
+
+
+
+Loc.prototype. tovstr	=function()
+{
+	return this.x.toString()+V.delim+this.y
+}
+
+
+
+Loc.prototype. toString	=function()
+{
+	return this.x.toString()+V.delim+this.y+V.delim+this.h
+}
+
+
+
+
+Loc.prototype. toJSON	=function()
+{
+	return [this.x, this.y, this.h]
+}

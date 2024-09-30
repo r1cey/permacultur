@@ -1,0 +1,812 @@
+import Loc from '../Loc.js'
+
+import Buf from './Buf.js'
+
+
+
+
+
+export default class Map
+{
+	static Bufs
+
+	bufs	=[]
+
+	o	={}
+
+	////
+	
+	_loc	=new Loc()	//tricky buffer, ONLY access it through
+						//getloc() because it can be changed to anything
+
+	_r	=0
+
+	////
+
+	getloc()	{return this._loc.setxy(
+					this.bufs[0].head[2],
+					this.bufs[0].head[3],
+					this.bufs[0].head[1] )}
+
+	
+	cellsl()	{ return this.bufs[0].cells.length }
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+/** Make new buffers from scratch */
+
+Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
+{
+	if( maxc>0 )
+	{
+		let maxr	=Map.cells2r(maxc)
+
+		if( !r || maxr<r )
+		{
+			r	=maxr
+		}
+	}
+	if( ! r )
+	{
+		console.error('Wrong newbufs')
+		
+		return
+	}
+
+	this._r	=r
+
+	var c	=Map.r2cells( r )
+
+	var Class	=this.constructor
+
+	for(var i=0; i<Class.Bufs.length; i++)
+	{
+		this.bufs[i]	=new (Class.Bufs[i])().new( c )
+	}
+	
+	this.setloc( loc )
+
+	return this
+}
+
+
+/** code is optional. */
+
+
+Map.prototype. setbuf	=function( buf, code )
+{
+	if( !buf )
+	{
+		console.error('Wrong setbuf')
+
+		return
+	}
+	
+	var Class	=this.constructor
+
+	code	??= Map.getcode( buf )
+
+	var bufi	//=index in bufs
+
+	var Buf	//=identified Buf class
+
+	for(bufi=0; bufi<Class.Bufs.length; bufi++)
+	{
+		if( code === Class.Bufs[bufi].code )
+		{
+			Buf	=Class.Bufs[bufi]
+
+			break
+		}
+	}
+	if( ! Buf )
+	{
+		console.error( `Buffer code doesn't fit known buffers`, buf )
+		
+		return
+	}
+
+	var c	=( buf.byteLength - Buf.headlen ) / Buf.bpc
+	
+	var r	=Map.cells2r( c )
+
+	if( c !== Map.r2cells(r) )
+	{
+		console.error( 'MAP BUFFER IS GIVEN WRONG SIZE', buf )
+
+		return
+	}
+
+	this._r	=r
+
+	this.bufs[bufi]	=new Buf().set( buf, c )
+
+	return this
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.prototype. printarr	=function( ibuf , r=6, c )
+{
+	var str	=''
+
+	var ir	=0
+
+	if( !c )	c	=this.getloc()
+
+	this.fore(( loc, r2 )=>
+	{
+		if( r2 > ir )
+		{
+			str	=str.replace( /,$/, '|')
+
+			ir ++
+		}
+
+		str	+=this.gcellc( ibuf, loc ) + ','
+	}
+	, r, c )
+
+	console.log(str)
+}
+
+
+
+Map.prototype. slice	=function( c, r )
+{
+	var map	=this
+
+	var map2	=(new this.constructor()).newbufs( r, 0, c )
+
+	map2.fore(( loc )=>
+	{
+		if( map.inside(loc) )
+		{
+			map2.copycell( loc, map, loc )
+		}
+	})
+
+	return map2
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
+ * If fun returns true then stop looping.
+ * fun( loc, distance, map )
+ */
+
+Map.prototype. fore	=function( fun, r, c )
+{
+	var v, ir, dir, i
+
+	r	??=this._r
+
+	c	??=this.getloc()
+
+	v	= c.c()
+
+	if( fun(v, 0, this) ) return v
+
+	for(ir=1; ir<=r; ir++)
+	{
+		v.neighh( 4 )
+
+		for(dir=0; dir<6; dir++)
+		{
+			for(i=0; i<ir; i++)
+			{
+				if( this.inside(v) )	// I can optimise this
+				{
+					if( fun(v, ir, this) ) return v
+				}
+
+				v.neighh(dir)
+			}
+		}
+	}
+}
+
+
+/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
+ * If fun returns true then stop looping?
+ * fun( loc, map )
+ */
+
+Map.prototype. forring	=function( fun, r, c )
+{
+	if( ! r )
+	{
+		return fun( c, this )
+	}
+
+	r	??=this._r
+
+	c	??=this.getloc()
+
+	var v	=c.clone()
+
+	v.steph( 4, r )
+
+	for(var dir=0; dir<6; dir++)
+	{
+		for(var i=0; i<r; i++)
+		{
+			if( this.inside(v) )
+			{
+				if( fun( v, this ))	return v
+			}
+
+			v.neighh(dir)
+		}
+	}
+}
+
+
+
+/*
+Map.prototype. forstar	=function( fun, r, c )
+{
+	if( ! r )
+	{
+		return fun( c, this )
+	}
+
+	r	??=this._r
+
+	c	??=this.getloc()
+
+	var v	=c.clone()
+
+	v.steph( 4, r )
+
+	for(var dir =0; dir < 6; dir++)
+	{
+		for(var i =r)
+	}
+}*/
+
+
+
+
+Map.prototype. copycell	=function( loc, map2, loc2 )
+{
+	for(var i2, ib=0; ib<this.bufs.length; ib++)
+	{
+		this.bufs[ib].cells[this.i(loc)]	=map2.bufs[ib].cells[map2.i(loc2)]
+	}
+
+	var str2	=loc2.tovstr()
+
+	if( map2.o[str2] )
+	{
+		this.o[loc.tovstr()]	=map2.o[str2]
+	}
+	else
+	{
+		delete this.o[loc.tovstr()]
+	}
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.prototype. gcellprop	=function( ia, loc, ibmp, jbmp )
+{
+	this.bufs[ia].getprop( this.i(loc), ibmp, jbmp )
+}
+
+
+Map.prototype. setcellprop		=function( ia, loc, ibmp, jbmp, val )
+{
+	this.bufs[ia].setprop( this.i(loc), ibmp, jbmp, val )
+}
+
+
+
+Map.prototype. scello	=function( loc )
+{
+	var str	=loc.tovstr()
+
+	var cell	=this.o[str]
+
+	if( ! cell )	this.o[str]	=cell	={}
+
+	return	cell
+}
+
+Map.prototype. setcello	=Map.prototype. scello
+
+
+
+Map.prototype. gcello	=function(loc)
+{
+	return this.o[loc.tovstr()]
+}
+
+Map.prototype. getcello	=Map.prototype. gcello
+
+
+
+Map.prototype. deloprop	=function( loc, n )
+{
+	var str	=loc.tovstr()
+
+	delete this.o[str][n]
+
+	for( n in this.o[str] )
+	{
+		return
+	}
+	
+	delete this.o[str]
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.prototype. getcellc	=function( ib, loc )
+{
+	return this.bufs[ib].cells[this.i(loc)]
+}
+
+Map.prototype. gcellc	=Map.prototype. getcellc
+
+
+
+
+Map.prototype. 	setcellc=function( ib, loc, val )
+{
+	this.bufs[ib].cells[this.i(loc)]	=val
+}
+
+
+
+
+Map.prototype. newmsgo	=function()
+{
+	var o2	={}
+
+	for(var locn in this.o )
+	{
+		var cell	=this.o[locn]
+
+		o2[locn]	={}
+
+		for(var p in cell )
+		{
+			switch( p )
+			{
+				case 'pl':
+
+					o2[locn][p]	=cell[p].newmsgvis()
+				break;
+				default:
+
+					o2[locn][p]	=cell[p]
+			}
+		}
+	}
+
+	return o2
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+Map.r2cells	=function(r)
+{
+	let cells=1
+
+	for(let i=0; i<r; i++)
+	{
+		cells	+= 6*(i+1)
+	}
+	return cells
+}
+Map.cells2r	=function(cells)
+{
+	let r	=0
+	for(let i=6; i<=cells; i+=6*(r+1))
+	{
+		r	++
+	}
+	return r
+}
+
+Map.jsonrplcr	=function(key,val)
+{
+	switch(key)
+	{
+		case 'cl':
+
+			return '0'
+	}
+}
+
+
+
+
+
+Map.prototype. ready	=function()
+{
+	for(var i=0; i<this.constructor.Bufs.length; i++)
+	{
+		if( ! this.bufs[i]?.head?.[0] )
+		{
+			return false
+		}
+	}
+	return true
+}
+
+
+/*
+Map.prototype. bits_gstartlen	=function( n, i )
+{
+	var bits	=this.bits_map
+
+	var start	=0, len	=0
+
+	for(var ib=0; ib<bits.length && !len; ib++)
+	{
+		if( bits[ib][0] === n )
+		{
+			for(var ia=1; ia<bits[ib].length; ia++)
+			{
+				if( ia === i+1 )
+				{
+					len	=bits[ib][ia]
+
+					break
+				}
+
+				start	+= bits[ib][ia]
+			}
+		}
+	}
+
+	return { start, len }
+}
+
+
+
+Map.prototype.getacode	=function( code, n, i )
+{
+	var start, len
+
+}	=this.bits_gstartlen( n, i )
+
+	return Map.mask( code, start, len )
+}
+Map.prototype. code_s	=function( code, n, i, val )
+{
+	var { start, len }	=this.bits_gstartlen( n, i )
+
+	return  Map.mask_s( code, start, len, val )
+}
+*/
+
+
+
+Map.prototype. i	=function( loc )
+{
+	let rsize	=this._r*(this._r+1)
+
+	var v	=this.getloc().neg().addv(loc)
+
+	return (v.x>=0 && v.y<0) * (v.x*this._r - v.y) +
+		(v.y>=0 && v.z()<0) * (rsize + v.y*this._r - v.z()) +
+		(v.z()>=0 && v.x<0) * (rsize*2 + v.z()*this._r - v.x);
+}
+
+
+
+
+Map.prototype. arr_g	=function(id, loc)
+{
+	return this.arrs[i][this.i(loc)]
+}
+Map.prototype. arr_s	=function(id, loc, val)
+{
+	this.arrs[i][this.i(loc)]	=val
+}
+
+
+Map.prototype. arr_gdata	=function( loc, n, i )
+{
+	return this.code_g( this.arr_g(loc), n, i )
+}
+Map.prototype. arr_sdata	=function( loc, n, i, val )
+{
+	var ia	=this.i(loc)
+
+	this.arr[ia]	=this.code_s( this.arr[ia], n, i, val )
+}
+
+
+/** @arg fun	- ( loc, code, cell ) 
+
+Map.prototype. o_for	=function( fun )
+{
+	var x,y
+	
+	var o	=this.o
+
+	var code	=this.code
+
+	var loc	=new V()
+
+	for(x in o)
+	{
+		for(y in o[x])
+		{
+			loc.setxy(+x,+y)
+
+			fun(loc, this.arr_g(loc), o[x][y])
+		}
+	}
+}
+*/
+
+Map.prototype. o_g	=function(loc)
+{
+	return this.o[loc]
+}
+Map.prototype. o_s	=function( loc )
+{
+	return this.o[loc]	??={}
+}
+
+
+Map.prototype. gjson	=function()
+{
+	var o	=this.o
+
+	return JSON.stringify( o, Map.jsonrplcr )
+}
+
+
+/** Not needed atm and maybe later 
+
+
+Map.o_sparse	=function( o, fun )
+{
+		{
+			for(var p2 in cell[p1])
+			{
+				if( p2 === 'loc' )
+				{
+					cell[p1][p2]	=new V().seta(cell[p1][p2])
+				}
+			}
+		}
+
+		fun( loc, code, cell )
+	})
+
+	var loc	=new V()
+
+	for(var x in o )
+	{
+		for(var y in o[x])
+		{
+			var cell	=o[x][y]
+
+			loc.setxy(+x,+y)
+
+			for(var p1 in cell )
+			{
+				for(var p2 in cell[p1])
+				{
+					if( p2 === 'loc' )
+					{
+						cell[p1][p2]	=new V().seta(cell[p1][p2])
+					}
+				}
+			}
+
+			fun( loc, cell )
+		}
+	}
+}
+*/
+
+
+Map.prototype. inside	=function( v )
+{
+	return this.getloc().disth(v) <= this._r
+}
+
+
+
+
+Map.prototype. corner	=function(dir)
+{
+	return Loc.dirvh[dir].c().mul(this._r).addv(this.getloc())
+}
+
+
+
+/** DO NOT CHANGE VECTOR IN FUN() !!! */
+
+Map.prototype. fordiredge	=function( fun, dir, r, c )
+{
+	r	=r?? this._r
+
+	var v	= c ? c.c() : this.getloc().c()
+
+	v.steph( Loc.roth(dir,-1), r )
+
+	dir	=Loc.roth(dir,1)
+
+	for(var s=0; s<2; s++)
+	{
+		for(var i=0; i < r; i++)
+		{
+			fun( v, this )
+
+			v.neighh(dir)
+		}
+		dir	=Loc.roth(dir,1)
+	}
+	fun( v, this )
+}
+
+
+/** Shift map in certain direction, add data
+ * from cells array for revealed cells
+ * @arg {Number}	dir	- direction
+ * @arg {Array}	cells	- each cell is array with buf codes
+ * 		and one option obj at the end. If cell empty, no array, just 0
+ * @arg {Function}	parse	- parsing function to call on each object added
+ */
+
+Map.prototype. shift	=function( dir, cells, parse )
+{
+	var map	=this
+
+	map.setloc(map.getloc().addv( Loc.dirvh[dir] ))
+
+	var diropp	=Loc.roth(dir, Loc.dirvh.length>>1)
+
+	var r	=this._r
+	
+	var coropp	=this.corner(diropp)
+
+	var v	=new Loc()
+	
+	var vnext	=new Loc()
+
+	for(var i, j, side =-1; side <= 1; side += 2 )
+	{
+		for(j=0;  j < r+1; j++)
+		{
+			if( j===0 && side>0 )	continue
+
+			v.set( coropp.c().steph(Loc.roth(dir, side), j) )
+
+			vnext.set( v.c().neighh(dir) )
+
+			for(i=0; i < (r<<1)-j; i++)
+			{
+				this.copycell( v, this, vnext )
+
+				v.neighh(dir)
+
+				vnext.neighh(dir)
+			}
+		}
+	}
+
+	var mapi, ic	=0
+
+	this.fordiredge(( v, map )=>
+	{
+		if( ! cells[ic] )
+		{
+			cells[ic]	=new Uint8Array(map.bufs.length)
+		}
+
+		mapi	=map.i(v)
+
+		for(var ib=0; ib<map.bufs.length; ib++)
+		{
+			map.bufs[ib].cells[mapi]	=cells[ic][ib]
+			
+			// map.scellc( ib, v, ccodes[i] )
+		}
+
+		mapi	=v.tovstr()
+
+		if( cells[ic][ib] )
+		{
+			map.o[mapi]	=parse( cells[ic][ib] )
+		}
+		else
+		{
+			delete map.o[mapi]
+		}
+
+		ic++
+	}
+	, dir )
+}
+
+
+Map.prototype.setloc	=function( loc )
+{
+	for(var i=0, l=this.bufs.length; i<l; i++)
+	{
+		var h	=this.bufs[i].head
+
+		h[2]	=loc.x
+		h[3]	=loc.y
+		h[1]	=loc.h
+	}
+}
+
+
+
+/** Creates new buffer class */
+
+Map.newBuf	=function( code, bpc, bmap )
+{
+	var g
+	
+	if(typeof window == 'object' && window)
+		g	=window
+	else if(typeof global == 'object' &&  global)
+		g	=global
+
+	var clss	=class extends Buf
+	{
+		static code	=code
+
+		static bpc	=bpc
+		
+		static Arr	=g['Uint'+(bpc<<3)+'Array']
+
+		static bmap	=[]
+
+		static bmapo	={}
+	}
+
+	for(var i=0; i<bmap.length; i++)
+	{
+		for(var n in bmap[i] )
+		{
+			clss.bmap[i]	=bmap[i][n]
+
+			clss.bmapo[n]	=bmap[i][n]
+		}
+	}
+
+	return clss
+}
+
+
+
+
+Map.getcode	=function( buf )
+{
+	return new DataView( buf, 0, 2 ).getUint16( 0, true )
+}

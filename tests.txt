@@ -1,0 +1,9 @@
+start creating player and then disconnect
+
+start creating player but another client makes one first
+
+create player in view of another client
+
+login/disconnect from player in view of another client
+
+move in/out of view of another client

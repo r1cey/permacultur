@@ -1,0 +1,35 @@
+createpl
+{
+	display:	block;
+
+	margin:	10% auto 1em auto;
+
+	width:	max-content;
+
+	text-align:	center;
+}
+
+createpl name
+{
+	display:	block;
+
+	margin:	0.7em 0;
+
+	font-family:	monospace;
+}
+
+createpl label
+{
+	display:	block;
+
+	margin: 0.3em;
+}
+
+createpl colbox
+{
+	display:	block;
+	width: 100%;
+	height: 10vh;
+	margin: 1em 0;
+	border: groove;
+}
