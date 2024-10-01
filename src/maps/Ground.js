@@ -51,9 +51,9 @@ G.prototype. gen	=function( r, maxc, trees )
 		{
 			lvl	=m.genhum( loc, ic )
 
-			lvl	=m.gentree( loc, lvl, ic )
+			m.gentree( loc, lvl, ic )
 
-			trees.gentree( loc, lvl, ic )
+			trees.gentree( loc, m, ic )
 		}
 	})
 }

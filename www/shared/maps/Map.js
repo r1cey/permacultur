@@ -752,6 +752,8 @@ Map.prototype. shift	=function( dir, cells, parse )
 }
 
 
+
+
 Map.prototype.setloc	=function( loc )
 {
 	for(var i=0, l=this.bufs.length; i<l; i++)
@@ -763,7 +765,6 @@ Map.prototype.setloc	=function( loc )
 		h[1]	=loc.h
 	}
 }
-
 
 
 /** Creates new buffer class */

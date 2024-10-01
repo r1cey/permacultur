@@ -77,9 +77,20 @@ G.prototype. getwater	=G.prototype.gwater
 
 
 
+G.prototype. getveg	=function( loc )
+{
+	return this.getvegi( this.i(loc) )
+}
+
+
 G.prototype. getvegt	=function( loc )
 {
 	return this.getvegti( this.i(loc) )
+}
+
+G.prototype. getveglvl	=function( loc )
+{
+	return	this.getveglcli( this.i(loc) )
 }
 
 
@@ -144,13 +155,18 @@ G.prototype. isfloori	=function( ic )
 
 
 
+G.prototype. getvegi	=function( ic )
+{
+	return { lvl	:this.getveglvli(ic)
+		,
+		type	:this.getvegti(ic) }
+}
+
+
 G.prototype. getvegti	=function( ic )
 {
 	return this.bufs[0].gprop( ic, 2, 1 )
 }
-
-
-
 
 G.prototype. getveglvli	=function( ic )
 {
