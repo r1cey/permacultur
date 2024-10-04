@@ -77,10 +77,10 @@ V.roth	=function( dir, a=1 )
 {
 	var len	=V.dirvh.length
 	
-	dir	+= a%len
+	dir	+=a
 	
-	if(dir>=len) dir -= len
-	if(dir<0) dir += len
+	while(dir>=len)	dir -=len
+	while(dir<0)	dir +=len
 	
 	return dir
 }

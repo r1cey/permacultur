@@ -11,7 +11,7 @@ export default class T extends Map
 		(
 			3, 1,
 			[
-				{ branch	:[ 2 ]},	// none-stump-branch-platform
+				{ branch	:[ 2, 3 ]},	// none-stump-branch-platform, dir
 			]
 		)
 	]
@@ -33,7 +33,22 @@ export default class T extends Map
 
 T.prototype. getbranch	=function( loc )
 {
-	return this.getbranchi( this.i(loc) )
+	
+}
+
+
+
+T.prototype. getbrancht	=function( loc )
+{
+	return this.getbranchti( this.i(loc) )
+}
+
+
+
+
+T.prototype. getbranchd	=function( loc )
+{
+	return this.getbranchdi( this.i(loc) )
 }
 
 
@@ -48,7 +63,15 @@ T.prototype. isstemi	=function( ic )
 
 
 
-T.prototype. getbranchi	=function( ic )
+T.prototype. getbranchti	=function( ic )
 {
 	return this.bufs[0].getprop( ic, 0, 0 )
+}
+
+
+
+
+T.prototype. getbranchdi	=function( ic )
+{
+	return this.bufs[0].getprop( ic, 0, 1 )
 }
