@@ -1,4 +1,4 @@
-import Maps	from "../shared/Maps.js"
+import Maps	from "../shared/maps/Maps.js"
 
 import V	from "../shared/Vec.js"
 import Col	from "../shared/Color.js"

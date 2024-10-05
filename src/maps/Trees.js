@@ -37,157 +37,20 @@ class Br
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Maybe it's worth it to reuse loc in all functions inside??
- * @return true if no place to grow further
- */
 
-T.prototype. growtree	=function( loc, type, brs, ic )
+T.prototype. gen	=function( gr )
 {
-	var m	=this
+	this.newbufs( gr._r, 0, new Loc(0,0,1) )
 
-	ic	??=m.i(loc)
-
-	if( ! m.getbranchti( ic ) === 1 )
+	gr.fore(( loc )=>
 	{
-		m.setbranchti( ic, 1, loc )
-
-		return
-	}
-
-	var v	=new V()
-
-	var dir
-
-	if( ! brs )
-	{
-		brs	=[]
-
-		for(dir=0; dir<6; dir++)
+		if( gr.getvegt( loc ))
 		{
-			if( nextbranch( v.set(loc).neighh(dir), dir ))
-			{
-				brs.push(new Br( dir ).scan( v ))
-			}
+			this.gentree( loc, gr )
 		}
-	}
-
-	if( ! brs.length )
-	{
-		dir	=newbranch()
-
-		if( !dir )	return true
-
-		m.setbranch( v.set(loc).neighh(dir) , 2 , dir )
-
-		brs[0]	=new Br(dir)
-
-		return
-	}
-	else if( brs.length === 1 )
-	{
-		if( brs[0].size > 1 )
-		{
-			switch( brs[0].dir )
-			{
-				case 5:
-
-					dir	=V.roth( brs[0].dir, plusmin() * 2 )
-				break
-				case 4:
-
-					dir	=0
-				break;
-				case 0:
-
-					dir	=4
-			}
-
-			m.setbranch( v.set(loc).neighh(dir), 2, dir )
-		}
-		else
-		{
-			brs[0].grow( m, v.set(loc) )
-		}
-
-		return
-	}
-	else
-	{
-		brs.sort(( b1, b2 )=> b1.size-b2.size )
-
-		if( brs.length === 2 )
-		{
-			if( brs[0].size > 1 )
-			{
-				dir =V.roth( brs[0].dir, 2 )
-
-				if( dir === brs[1].dir )	dir	=V.roth( dir, 2 )
-
-				m.setbranch( v.set(loc).neighh( dir ), 2, dir )
-
-				return
-			}
-		}
-
-		for(var i=brs.length-1; i>0; i--)
-		{
-			if( brs[i].size > brs[i-1].size+1 )
-			{
-				brs[i-1].grow( m, v.set(loc) )
-
-				return
-			}
-		}
-
-		brs[brs.length-1].grow( m, v.set(loc))
-	}
-	
-
-
-	function newbranch( brs )
-	{
-		if( ! brs.length )
-		{
-			var dirs	=[0,4,5]
-
-			var dir	=rnds( dirs ,( dir )=>
-			{
-				if( m.getbrancht(v.set(loc).neighh(dir)) === 0 )
-				{
-					return dir
-				}
-			})
-
-			if( dir )	return dir
-
-			dirs	=[1,3]
-
-			dir =rnds( dirs ,( dir )=>
-			{
-				if( m.getbrancht(v.set(loc).neighh(dir)) === 0 )
-				{
-					return dir
-				}
-			})
-
-			if( dir )	return dir
-
-			if( m.getbrancht(v.set(loc).neighh(2)) === 0 )
-			{
-				return dir
-			}
-
-			return
-		}
-		else if( brs.length === 1 )
-		{
-			
-		}
-	}
+	})
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -203,12 +66,168 @@ T.prototype. gentree	=function( loc, gr, ic )
 
 	for(var i =4; i <= lvl; i++ )
 	{
-		if( this.growtree( loc, type, brs, ic ))
+		if( ! this.growtree( loc, type, brs, ic ))
 		{
 			break
 		}
 	}
 }
+
+
+
+/** Maybe it's worth it to reuse loc in all functions inside??
+ * @return if grew or not
+ */
+
+T.prototype. growtree	=function( loc, type, brs, ic )
+{
+	var m	=this
+
+	ic	??=m.i(loc)
+
+	{
+		let t	=m.getbranchti( ic )
+	
+		if( t > 1 )
+		{
+			return false
+		}
+		else if( ! t )
+		{
+			m.setbranchti( ic, 1, loc )
+
+			return true
+		}
+	}
+
+	var v	=new V()
+
+	var dir
+
+	if( ! brs )
+	{
+		brs	=[]
+
+		for(dir=0; dir<6; dir++)
+		{
+			if( m.nextbranch( v.set(loc).neighh(dir), dir ))
+			{
+				brs.push(new Br( dir ).scan( m, v ))
+			}
+		}
+		
+		brs.sort(( b1, b2 )=> b1.size-b2.size )
+	}
+
+	if( ! brs.length )
+	{
+		return newbranch( brs )
+	}
+	else if( brs.length === 1 )
+	{
+		if( brs[0].size > 1 )
+		{
+			return newbranch( brs )
+		}
+		else
+		{
+			return brs[0].grow( m, v.set(loc) )
+		}
+	}
+	else
+	{
+		if( brs.length === 2 )
+		{
+			if( brs[0].size > 1 )
+			{
+				return newbranch( brs )
+			}
+		}
+
+		for(var i=brs.length-1; i>0; i--)
+		{
+			if( brs[i].size > brs[i-1].size+1 )
+			{
+				return brs[i-1].grow( m, v.set(loc) )
+			}
+		}
+
+		return brs[brs.length-1].grow( m, v.set(loc))
+	}
+	
+
+
+
+	function newbranch( brs )
+	{
+		var softdirs	=new Set([0,1,2,3,4,5])
+
+		var dir
+
+		for(var i=0; i<brs.length; i++ )
+		{
+			dir	=brs[i].dir
+
+			if( m.nextbranch( v.set(loc).neighh(dir), dir ))	//this check is redundant
+			{
+				for(var j =-1 ; j <= 1; j++)
+				{
+					softdirs.delete( V.roth( dir, j ) )
+				}
+			}
+		}
+
+		dir	=-1
+
+		for(var soft=1; soft >= 0 ; soft--)
+		{
+			if( (dir =scan([0,4,5],soft)) >= 0 )	break
+
+			if( (dir =scan([1,3],soft)) >= 0 )	break
+
+			if( (dir =scan([2],soft)) >= 0 )	break
+		}
+
+		if( dir >= 0 )
+		{
+			m.setbranch( v.set(loc).neighh(dir), 2, dir )
+
+			brs.push( new Br(dir) )
+
+			return true
+		}
+		else
+		{
+			return false
+		}
+
+
+
+		function scan( dirs, soft )
+		{
+			while( dirs.length )
+			{
+				var i	=rnd(dirs.length)
+
+				if( (soft ?softdirs.has(dirs[i]) :1) &&
+				
+					m.getbrancht(v.set(loc).neighh(dirs[i])) === 0 )
+				{
+					return dirs[i]
+				}
+
+				dirs.splice(i, 1)
+			}
+
+			return -1
+		}
+	}
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,6 +253,16 @@ T.prototype. setbrancht	=function( loc, type )
 T.prototype. setbranchd	=function( loc, dir )
 {
 	this.setbranchdi(this.i(loc), dir, loc )
+}
+
+
+
+
+T.prototype. nextbranch	=function( loc, dir )
+{
+	var ic	=this.i(loc)
+
+	return ! ( (this.getbranchti(ic)-2) * (this.getbranchdi(ic)-dir) )
 }
 
 
@@ -272,16 +301,34 @@ T.prototype. setbranchdi	=function( ic, dir, loc )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** loc is changed through calculation */
+/** loc is not changed through calculation */
 
-Br.prototype. calc	=function( loc, dir )
+Br.prototype. scan	=function( map, v )
 {
-	this.dir	=dir
+	var { dir, brs }	=this
+
+	var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
+
+	for(var i=0; i<dirs.length; i++)
+	{
+		if( map.nextbranch( v.neighh(dirs[i]), dirs[i] ))
+		{
+			brs.push( new Br( dirs[i] ).scan( map, v ))
+
+			this.size	+=brs[brs.length-1].size
+		}
+
+		v.neighh( V.rotopph( dirs[i]) )
+	}
+
+	brs.sort(( b1, b2 )=> b1.size-b2.size )
 }
 
 
-/** vec is changed 
- * @return true if didn't manage to grow 
+/** vec is changed
+ * vec points to root
+ * The algorithm of growth maintains relative size of each brand
+ * @return if grew or not 
 */
 
 Br.prototype. grow	=function( map, v )
@@ -290,50 +337,97 @@ Br.prototype. grow	=function( map, v )
 
 	var dir2
 
+	var grew	=false
+	
 	v.neighh( dir )
 
 	if( ! brs.length )
 	{
-		dir2	=this.findnew( map, v )
+		dir2	=findnew()
 
 		if( dir2 < 0 )
 		{
-			return true
+			return false
 		}
 		else
 		{
-			map.setbranch( v.neighh(dir2), 2, dir2 )
+			grew	=newbranch( dir2 )
 		}
 	}
 	else if( size === 3 )
 	{
-		dir2	=this.findnew( map, v )
+		dir2	=findnew()
 
 		if( dir2 < 0 )
 		{
-			return brs[0].grow( map, v )
+			grew	=brs[0].grow( map, v )
 		}
 		else
 		{
-			map.setbranch( v.neighh(dir2), 2, dir2 )
+			grew	=newbranch( dir2 )
 		}
 	}
 	else if( brs.length === 1 )
 	{
-		return brs[0].grow( map, v )
+		grew	=brs[0].grow( map, v )
 	}
 	else
 	{
-		brs.sort(( b1, b2 )=> b1.size-b2.size )
-
 		if( brs[1].size > brs[0].size+1 )
 		{
-			return brs[0].grow( map, v )
+			grew	=brs[0].grow( map, v )
 		}
 		else
 		{
-			return brs[1].grow( map, v )
+			grew	=brs[1].grow( map, v )
 		}
+	}
+
+	if( grew )
+	{
+		this.size ++
+	}
+
+	return grew
+
+
+
+
+	function newbranch( dir )
+	{
+		map.setbranch( v.neighh(dir), 2, dir )
+
+		brs.unshift( new Br( dir ))
+
+		return true
+	}
+
+
+	/* v is changed back */
+
+	function findnew()
+	{
+		var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
+	
+		while( dirs.length )
+		{
+			var i	=rnd( dirs.length )
+	
+			v.neighh( dirs[i] )
+	
+			if( map.getbrancht( v ) === 0 )
+			{
+				v.neighh( V.rotopph( dirs[i] ))
+	
+				return dirs[i]
+			}
+	
+			v.neighh( V.rotopph( dirs[i] ))
+	
+			dirs.splice( i, 1 )
+		}
+	
+		return -1
 	}
 }
 
@@ -341,34 +435,6 @@ Br.prototype. grow	=function( map, v )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Returns loc to original value */
-
-Br.prototype. findnew	=function( map, loc )
-{
-	var { dir }	=this
-
-	var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
-
-	while( dirs.length )
-	{
-		var i	=rnd( dirs.length )
-
-		loc.neighh( dirs[i] )
-
-		if( map.getbrancht( v ) === 0 )
-		{
-			loc.neighh( V.rotopph( dirs[i] ))
-
-			return dirs[i]
-		}
-
-		loc.neighh( V.rotopph( dirs[i] ))
-
-		dirs.splice( i, 1 )
-	}
-
-	return -1
-}
 
 
 

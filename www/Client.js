@@ -55,6 +55,8 @@ Client.prototype. createpl	=async function( name )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
 
 
 Client.prototype. setpl	=function( plmsg )
@@ -76,9 +78,12 @@ Client.prototype. setpl	=function( plmsg )
 
 
 
+
 Client.prototype. setbuf	=function( buf )
 {
 	var maps	=this.maps
+
+	// debugger
 
 	maps.setbuf( buf )
 

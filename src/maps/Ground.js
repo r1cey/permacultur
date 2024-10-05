@@ -19,7 +19,7 @@ G.prototype. gen	=function( r, maxc, trees )
 {
 	var m	=this
 
-	m.newbuf( r, maxc )
+	m.newbufs( r, maxc, new Loc(0,0,0) )
 
 	this.allsoil()
 

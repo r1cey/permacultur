@@ -1,5 +1,5 @@
 import Ground	from './Ground.js'
-import Trees	from '../Trees.js'
+import Trees	from './Trees.js'
 
 
 
@@ -39,7 +39,7 @@ M.prototype. ready	=function()
 
 M.prototype. setbuf	=function( buf )
 {
-	var code	=Maps.Gr.getcode( buf )
+	var code	=Ground.getcode( buf )
 
 	switch( code )
 	{

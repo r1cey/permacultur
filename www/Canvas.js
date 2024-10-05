@@ -100,11 +100,19 @@ Can.prototype. start	=function()
 	html.menu.setopts(
 	[
 		{
-			name	:'slopes'
+			name	:'zoomin'
 			,
-			symb	:'📐'
+			symb	:'+'
 			,
-			fun	:()=>{ can.showslopes	=!can.showslopes }
+			fun	:()=>{ can.zoom(1.5) }
+		}
+		,
+		{
+			name	:'zoomout'
+			,
+			symb	:'-'
+			,
+			fun	:()=>{ can.zoom(0.75) }
 		}
 	])
 
@@ -245,7 +253,7 @@ Can.prototype. frame	=function(now)
 
 		tch.last.set(tch.pos)
 
-		if( can.map.nemptycell( dest.c().roundh() ))
+		if( can.maps.gr.nemptycell( dest.c().roundh() ))
 		{
 			pl.dest.set( dest )
 		}
@@ -541,7 +549,7 @@ Can.prototype. drawclpl	=function()
 	ctx.arc( pos.x, pos.y, pl.r*can.units.r, 0, 2*Math.PI)
 	ctx.fill()
 
-	if( can.maps.gr )// drawreach
+	if( can.maps?.gr )// drawreach
 	{
 		can.maps.gr.forring(( loc )=>
 		{

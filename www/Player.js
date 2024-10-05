@@ -48,7 +48,7 @@ const ClPl =(c) => class extends c
 		{
 			let mul	=0.22
 
-			let map	=this.lcl.vis
+			let map	=this.lcl.maps.gr
 
 			switch( map.gwater( pl.loc ) )
 			{

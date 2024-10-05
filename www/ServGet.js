@@ -137,7 +137,7 @@ Get.prototype. clplmov	=function( o )
 		pl.vision	=o.r
 	}
 
-	var map	=this.cl.vis
+	var map	=this.cl.maps.gr
 
 	map.shift( Loc.dirv2dirh(Loc.seta(o.delta)), o.cells, ( o )=>
 	{

@@ -22,9 +22,16 @@ Send.prototype. map	=function()
 {
 	var pl	=this.pl
 
-	var map	=pl.map.slice( pl.loc, pl.vision )
+	var map	=pl.map.game.maps.gr.slice( pl.loc, pl.vision )
 
 	for(var i=0; i<map.bufs.length; i++)
+	{
+		this.send.binary( map.bufs[i].buf )
+	}
+
+	map	=pl.map.game.maps.tr.slice( pl.loc, pl.vision )
+
+	for(i=0; i<map.bufs.length; i++)
 	{
 		this.send.binary( map.bufs[i].buf )
 	}
