@@ -35,8 +35,9 @@ export default class Client
 Client.prototype. start	=async function()
 {
 	var p	=await this.html.loadp('login')
-	
+
 	p.start(this.srv.login. bind(this.srv))
+
 
 	this.stream	=await navigator.mediaDevices.getUserMedia({audio:true})
 

@@ -184,7 +184,7 @@ Can.prototype. draw	=function( dt )
 {
 	var can	=this
 
-	// var { map, pl }	=can
+	var { maps, pl }	=can
 
 	// var{ r, h }	=can.units
 
@@ -192,11 +192,28 @@ Can.prototype. draw	=function( dt )
 
 	// can.drawgrid()
 
-	if( can.maps )
+	if( maps )
 	{
-		can.maps.gr.draw( can )
-	
-		can.maps.trees.draw( can )
+		let map	=maps.gr
+
+		let vsq	=new V()
+
+		let ic
+
+		let h	=pl.pos.h
+
+		can.forcell(( loc )=>
+		{
+			if( ! map.inside(loc) )	return
+
+			vsq.set(loc).tosqc(can)
+
+			ic	=map.i(loc)
+
+			maps.gr.drawhex( can, loc, h, vsq, ic )
+		
+			maps.trees.drawhex( can, loc, h, vsq, ic )
+		})
 	}
 	
 	{
@@ -364,169 +381,6 @@ Can.prototype. drawgrid	=function()
 			this.drawl( x+(u.r<<1), y, x+(u.r<<1)+rd2, y+h )
 		}
 	}*/
-}
-
-
-
-
-Can.prototype. drawmap	=function()
-{
-	var can	=this
-
-	var map	=this.map
-
-	var vsq	=new V()
-
-	var lvl
-
-	if( this.showslopes )
-	{
-		var dir
-		
-		var arrw	=this.units.r*0.40
-		
-		var arrh	=this.units.h2*0.21
-
-		var arrcol	="#ffffff"
-	}
-
-	var col	=new Col()
-
-	var max, ic
-
-	this.forcell(( loc )=>
-	{
-		if( ! map.inside(loc) )	return
-
-		vsq.set(loc).tosqc(can)
-
-		ic	=map.i(loc)
-
-		lvl	=map.getsoilhumi( ic )
-
-		if( lvl >= 0 )
-		{
-			col.sethsl( 57, 16, 42)	// 2, 47, 10
-
-			max	=map.maxhum()
-
-			col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
-
-			can.fillhex( vsq, col.str() )
-
-			if( can.showlvls )
-			{
-				can.ctx.fillStyle="#FFFFFF"
-
-				can.ctx.fillText( lvl, vsq.x, vsq.y )
-			}
-
-			if( map.isfloori( ic ))
-			{
-			}
-			else
-			{
-				if( lvl =map.getvegti( ic ))
-				{
-					switch( lvl )
-					{
-						case 5:
-
-							lvl	=map.getveglvli(ic)
-
-							col.sethsl( 112, 44, 61 )	//46, 34, 34
-
-							max	=map.maxveglvl()
-
-							col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
-
-							can.fillcirc( vsq.x, vsq.y,
-
-								lvl * (can.units.h2>>1) / max,
-								
-								col.str(), "#000000" )
-					}
-				}
-			}
-		}
-		else if( lvl =map.gwateri(ic) )
-		{
-			col.sethsl( 179, 34, 45 )	// 269, 45, 10
-
-			max	=map.maxwater()-1
-
-			lvl--
-
-			col.add( lvl*90/max, lvl*11/max, lvl*(-35)/max )
-
-			can.fillhex( vsq, col.str() )
-
-			if( can.showlvls )
-			{
-				can.ctx.fillStyle="#FFFFFF"
-
-				can.ctx.fillText( lvl, vsq.x, vsq.y )
-			}
-		}
-
-		if( can.showslopes )
-		{
-			dir	=map.getdir( loc )
-
-			if( dir < 6 )
-			{
-				vsq.set(loc).steph( dir, 0.32 ).tosqc(can)
-
-				can.ctx.globalAlpha	=0.1
-
-				can.drawarrow( vsq, arrw, arrh, dir, arrcol )
-
-				vsq.set(loc).steph( dir, -0.05 ).tosqc(can)
-
-				can.drawarrow( vsq, arrw, arrh, dir, arrcol )
-
-				can.ctx.globalAlpha	=1
-			}
-		}
-	})
-	/*
-	var crn	=this.getcrncell()
-
-	for(var x=crn.x; x < ; x)
-
-	var can	=this
-
-	var w2	=this.w2(),	h2	=this.h2()
-
-	var{ map, ctx, _pos }	=can
-
-	var{ r, h }	=can.units
-
-	var c	=new V()
-
-	map.fore( function( v )
-	{
-		c.set(v).tosqc(can)
-
-		if(c.x-r > _pos.x+w2 && c.y-r > _pos.y+h2)
-		{
-			return true
-		}
-
-		if(map.gwater(v))
-		{
-			ctx.beginPath()
-			ctx.moveTo( c.x-(r>>1), c.y-h )
-			ctx.lineTo( c.x+(r>>1), c.y-h )
-			ctx.lineTo( c.x+r, c.y )
-			ctx.lineTo( c.x+(r>>1), c.y+h )
-			ctx.lineTo( c.x-(r>>1), c.y+h )
-			ctx.lineTo( c.x-r, c.y )
-			ctx.closePath()
-			ctx.fillStyle	="#2211FF"
-			ctx.fill()
-		}
-	})*/
 }
 
 

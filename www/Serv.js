@@ -9,8 +9,8 @@ export default class Serv
 
 	con()	{ return this.cl.html.con }
 
-	// url	='ws://212.68.153.116:8043'
-	url	='ws://127.0.0.1:8043'
+	url	='ws://212.68.153.116:8043'
+	// url	='ws://127.0.0.1:8043'
 
 	ws
 
@@ -59,6 +59,8 @@ Serv.prototype. login	=function( o )
 
 		this.cl.html.ps.login?.reset()
 	}
+
+	// alert('b')
 
 	ws.onopen	=this.s.login.bind( this, o )
 

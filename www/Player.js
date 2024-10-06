@@ -6,6 +6,8 @@ const ClPl =(c) => class extends c
 {
 	lcl
 
+	gmap (){return this.pos.h ?this.lcl.maps.tr :this.lcl.maps.gr }
+
 	pos	=new Loc()
 
 	dest	=new Loc()

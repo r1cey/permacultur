@@ -16,13 +16,13 @@ export default class Gr extends Maps.Gr
 
 
 
-Gr.prototype. draw	=function( can )
+Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 {
 	var map	=this
 
-	var vsq	=new V()
+	vsq	??=new V().set(loc).tosqc(can)
 
-	var lvl
+	ic	??=map.i(loc)
 
 	if( can.showslopes )
 	{
@@ -35,103 +35,98 @@ Gr.prototype. draw	=function( can )
 		var arrcol	="#ffffff"
 	}
 
+	var ctx	=can.ctx
+
+	ctx.globalAlpha	=1
+
 	var col	=new Col()
 
-	var max, ic
+	var max
 
-	can.forcell(( loc )=>
+	var lvl	=map.getsoilhumi( ic )
+
+	if( lvl >= 0 )
 	{
-		if( ! map.inside(loc) )	return
+		col.sethsl( 57, 16, 42)	// 2, 47, 10
 
-		vsq.set(loc).tosqc(can)
+		max	=map.maxhum()
 
-		ic	=map.i(loc)
+		col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
 
-		lvl	=map.getsoilhumi( ic )
+		can.fillhex( vsq, col.str() )
 
-		if( lvl >= 0 )
+		if( can.showlvls )
 		{
-			col.sethsl( 57, 16, 42)	// 2, 47, 10
+			can.ctx.fillStyle="#FFFFFF"
 
-			max	=map.maxhum()
+			can.ctx.fillText( lvl, vsq.x, vsq.y )
+		}
 
-			col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
-
-			can.fillhex( vsq, col.str() )
-
-			if( can.showlvls )
+		if( map.isfloori( ic ))
+		{
+		}
+		else
+		{
+			if( lvl =map.getvegti( ic ))
 			{
-				can.ctx.fillStyle="#FFFFFF"
-
-				can.ctx.fillText( lvl, vsq.x, vsq.y )
-			}
-
-			if( map.isfloori( ic ))
-			{
-			}
-			else
-			{
-				if( lvl =map.getvegti( ic ))
+				switch( lvl )
 				{
-					switch( lvl )
-					{
-						case 5:
+					case 5:
 
-							lvl	=map.getveglvli(ic)
+						lvl	=map.getveglvli(ic)
 
-							col.sethsl( 112, 44, 61 )	//46, 34, 34
+						col.sethsl( 112, 44, 61 )	//46, 34, 34
 
-							max	=map.maxveglvl()
+						max	=map.maxveglvl()
 
-							col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
+						col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
 
-							can.fillcirc( vsq.x, vsq.y,
+						can.fillcirc( vsq.x, vsq.y,
 
-								lvl * (can.units.h2>>1) / max,
-								
-								col.str(), "#000000" )
-					}
+							lvl * (can.units.h2>>1) / max,
+							
+							col.str(), "#000000" )
 				}
 			}
 		}
-		else if( lvl =map.gwateri(ic) )
+	}
+	else if( lvl =map.gwateri(ic) )
+	{
+		col.sethsl( 179, 34, 45 )	// 269, 45, 10
+
+		max	=map.maxwater()-1
+
+		lvl--
+
+		col.add( lvl*90/max, lvl*11/max, lvl*(-35)/max )
+
+		can.fillhex( vsq, col.str() )
+
+		if( can.showlvls )
 		{
-			col.sethsl( 179, 34, 45 )	// 269, 45, 10
+			can.ctx.fillStyle="#FFFFFF"
 
-			max	=map.maxwater()-1
-
-			lvl--
-
-			col.add( lvl*90/max, lvl*11/max, lvl*(-35)/max )
-
-			can.fillhex( vsq, col.str() )
-
-			if( can.showlvls )
-			{
-				can.ctx.fillStyle="#FFFFFF"
-
-				can.ctx.fillText( lvl, vsq.x, vsq.y )
-			}
+			can.ctx.fillText( lvl, vsq.x, vsq.y )
 		}
+	}
 
-		if( can.showslopes )
+	if( can.showslopes )
+	{
+		dir	=map.getdir( loc )
+
+		if( dir < 6 )
 		{
-			dir	=map.getdir( loc )
+			vsq.set(loc).steph( dir, 0.32 ).tosqc(can)
 
-			if( dir < 6 )
-			{
-				vsq.set(loc).steph( dir, 0.32 ).tosqc(can)
+			can.ctx.globalAlpha	=0.1
 
-				can.ctx.globalAlpha	=0.1
+			can.drawarrow( vsq, arrw, arrh, dir, arrcol )
 
-				can.drawarrow( vsq, arrw, arrh, dir, arrcol )
+			vsq.set(loc).steph( dir, -0.05 ).tosqc(can)
 
-				vsq.set(loc).steph( dir, -0.05 ).tosqc(can)
+			can.drawarrow( vsq, arrw, arrh, dir, arrcol )
 
-				can.drawarrow( vsq, arrw, arrh, dir, arrcol )
-
-				can.ctx.globalAlpha	=1
-			}
+			can.ctx.globalAlpha	=1
 		}
-	})
+	}
 }
