@@ -37,9 +37,9 @@ M.prototype. ready	=function()
 
 
 
-M.prototype. setbuf	=function( buf )
+M.prototype. setbuf	=function( buf, code )
 {
-	var code	=Ground.getcode( buf )
+	code	??=Ground.getcode( buf )
 
 	switch( code )
 	{
@@ -53,4 +53,43 @@ M.prototype. setbuf	=function( buf )
 			this.tr.setbuf( buf, code )
 	}
 
+}
+
+
+
+
+M.prototype. fore	=function( fun )
+{
+	fun( this.gr )
+	fun( this.tr )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+M.prototype. shift	=function( arrs, cellso, dir )
+{
+	// code	??=Ground.getcode(bufs)>>8
+
+	this.fore(( map )=>
+	{
+		var h	=map.getloc().h
+
+		map.shift( dir, arrs[h], cellso[h], ( o )=>
+		{
+			for( p in o )
+			{
+				switch( p )
+				{
+					case 'pl' :
+	
+						o[p]	=new Pl.Vis( o[p], this.cl )
+				}
+			}
+	
+			return o
+		})
+	})
 }

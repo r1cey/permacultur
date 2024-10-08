@@ -90,6 +90,15 @@ Ms.prototype. save	=async function()
 	this.trees.save(this.conf.dir)
 }
 
+
+
+Ms.prototype. fore	=function(fun)
+{
+	fun(this.gr)
+
+	fun(this.trees)
+}
+
 /*
 maps. gen	=function()
 {

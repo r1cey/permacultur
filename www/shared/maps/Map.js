@@ -662,25 +662,27 @@ Map.prototype. fordiredge	=function( fun, dir, r, c )
 	{
 		for(var i=0; i < r; i++)
 		{
-			fun( v, this )
+			if( this.inside(v) )	fun( v, this )
 
 			v.neighh(dir)
 		}
+
 		dir	=Loc.roth(dir,1)
 	}
-	fun( v, this )
+
+	if( this.inside(v) )	fun( v, this )
 }
 
 
 /** Shift map in certain direction, add data
  * from cells array for revealed cells
  * @arg {Number}	dir	- direction
- * @arg {Array}	cells	- each cell is array with buf codes
- * 		and one option obj at the end. If cell empty, no array, just 0
+ * @arg {Array}	arrs	-for each buffer an array of codes
+ * @arg {Array} objs	-empty cells are empty
  * @arg {Function}	parse	- parsing function to call on each object added
  */
 
-Map.prototype. shift	=function( dir, cells, parse )
+Map.prototype. shift	=function( dir, arrs, objs, parse )
 {
 	var map	=this
 
@@ -717,16 +719,34 @@ Map.prototype. shift	=function( dir, cells, parse )
 		}
 	}
 
-	var mapi, ic	=0
+	var ic	=0
 
-	this.fordiredge(( v, map )=>
+	var bufs	=map.bufs
+
+	map.fordiredge(( v )=>
 	{
+		var mapi	=map.i(v)
+
+		for(var ib=0, len=bufs.length; ib<len; ib++)
+		{
+			bufs[ib].cells[mapi]	=arrs[ib][ic]
+		}
+
+		if( objs[ic] )
+		{
+			map.o[v.tovstr()]	=parse( objs[ic] )
+		}
+		else
+		{
+			delete map.o[v.tovstr()]
+		}
+
+		/*
 		if( ! cells[ic] )
 		{
 			cells[ic]	=new Uint8Array(map.bufs.length)
 		}
 
-		mapi	=map.i(v)
 
 		for(var ib=0; ib<map.bufs.length; ib++)
 		{
@@ -744,7 +764,7 @@ Map.prototype. shift	=function( dir, cells, parse )
 		else
 		{
 			delete map.o[mapi]
-		}
+		}*/
 
 		ic++
 	}

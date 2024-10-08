@@ -14,7 +14,7 @@ export default class Buf
 
 	static bpc		//bytes per cell
 
-	static Arr		//Buffer Array classes
+	static Arr		//Buffer Array class
 
 	static bmap	//[]
 
@@ -43,7 +43,7 @@ Buf.prototype. set	=function( buf, cellsl )
 {
 	var Class	=this.constructor
 
-	this.head	=new Int16Array( buf, 0, Class.headlen>>1 )
+	this.head	=Class.newheadarr( buf )
 
 	this.head[0]	=Class.code
 
@@ -114,6 +114,7 @@ Buf.prototype. getstartbit	=function( ibmap, jbmap )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -126,6 +127,7 @@ Buf.gmask	=function(code, start, len)
 
 
 
+
 Buf.smask	=function( code, start, len, val )
 {
 	var mask	=~((~0)<<len)
@@ -135,4 +137,12 @@ Buf.smask	=function( code, start, len, val )
 	code	&= mask
 
 	return code	|= Buf.gmask(val,0,len) << start
+}
+
+
+
+
+Buf.newheadarr	=function( buf )
+{
+	return new Int16Array( buf, 0, this.headlen>>1 )
 }

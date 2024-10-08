@@ -4,9 +4,35 @@ import Pl from './Player.js'
 
 import NS from './shared/NSpace.js'
 
+// import Maps	from './maps/Ground.js'
+
 
 export default class Get extends NS
 {
+	msb	=new Msb()
+
+
+
+	constructor( srv )
+	{
+		super(srv)
+
+		this.msb.srv	=srv
+	}
+}
+
+
+
+
+class Msb	// map shift buffer
+{
+	srv
+
+	timecode	=0
+
+	bufs	=[[],[]]
+
+	o
 }
 
 
@@ -107,52 +133,29 @@ Get.prototype. water	=function( lvl )
 
 /** Your player moved here. New information added.
  * @arg o
+ * @arg o.timecode	- used to sync with buffer updates
  * @arg	o.loc	- new location
  * @arg o.delta	- direction of movement
  * @arg o.r	- radius of visible map
- * @arg {Array}	o.cells	- if cell is outside of scope,
- * 		it'll be 0.
- * 		Otherwise it's an array of at least bufs.length size
- * 		Array of codes from the buffers.
- * 		If there're also objects on that cell,
- * 		additional object member is attached at the end of array
+ * @arg {Array}	o.cells	- [[gr objs,,,,],[tr objs,,,,,]] in order, empty cells are empty
  */
 
 Get.prototype. clplmov	=function( o )
 {
-	var pl	=this.cl.pl
+	var msb	=this.g.msb
 
-	var loc	=Loc.seta(o.loc)
+	var { timecode }	=o
 
-	if( ! pl.loc.eq( loc ) )
+	if( ! msb.timecode )
 	{
-		console.log( `RECEIVED WRONG LOCATION!!!`)
-
-		pl.dest.set(loc)
-	}
-	if( pl.vision !== o.r )
-	{
-		console.log(`VISION CHANGED UNEXPECTEDLY! Might be lag. Deal with it.`)
-
-		pl.vision	=o.r
+		msb.timecode	=timecode
 	}
 
-	var map	=this.cl.maps.gr
+	if( msb.timecode !== timecode )	return
 
-	map.shift( Loc.dirv2dirh(Loc.seta(o.delta)), o.cells, ( o )=>
-	{
-		for( p in o )
-		{
-			switch( p )
-			{
-				case 'pl' :
+	msb.o	=o
 
-					o[p]	=new Pl.Vis( o[p], this.cl )
-			}
-		}
-
-		return o
-	})
+	msb.ifready()
 }
 
 
@@ -261,4 +264,160 @@ Get.prototype. wrtc	=async function( o )
 	{
 		pcl.onicecandi( msg.icecandi )
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Get.prototype. msgbuf	=function( buf )
+{
+	// debugger
+
+	var Map	=this.cl.maps.gr.constructor
+
+	var code	=Map.getcode( buf )
+
+	var movcode	=code>>8
+
+	if( movcode )
+	{
+		this.get.msb.addbuf( buf, code, movcode )
+	}
+	else
+	{
+		this.cl.setbuf( buf, code )
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Is called for all websocket messages arriving */
+
+Get.prototype. msg	=function( ev )
+{	
+	var msg	=ev.data
+
+	console.log( 'Recvd: '+msg)
+
+	var cl	=this.cl
+
+	// debugger
+
+	if(msg instanceof ArrayBuffer)
+	{
+		this.get.msgbuf( msg )
+	}
+	else if(typeof msg === 'string')
+	{
+		msg	=JSON.parse(ev.data)
+
+		let prop
+
+		for(prop in msg)
+		{
+			this.g[prop]?.( msg[prop] )
+		}
+		// console.log( `Server Msg: not found! ${prop}`)
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Msb.prototype. addbuf	=function( buf, code, movcode )
+{
+	var ms	=this
+
+	var Map	=ms.srv.cl.maps.gr.constructor
+
+	code	??=Map.getcode( buf )
+
+	movcode	??=code>>8
+
+	var timecode	=code & 255
+
+	if( ! ms.timecode )
+	{
+		ms.timecode	=timecode
+	}
+
+	if( ms.timecode !== timecode )	return
+	
+	var head	=Map.Bufs[0].newheadarr( buf )
+
+	var ibuf	=movcode<3 ? movcode-1 : movcode-3
+
+	this.bufs[head[1]][ibuf]	=buf
+	
+	this.ifready()
+}
+
+
+
+
+Msb.prototype. ifready	=function()
+{
+	var maps	=this.srv.cl.maps
+
+	var { bufs, o }	=this
+
+	maps.fore(( map )=>
+	{
+		var h	=map.getloc().h
+
+		var mbufs	=map.bufs
+
+		for(var i=0, len=mbufs.length; i<len; i++)
+		{
+			if( ! bufs[h][i] )	return
+		}
+	})
+
+	if( ! o )	return
+
+	this.timecode	=0
+
+	/** Enter checks for information in buffer here */
+
+	var pl	=this.srv.cl.pl
+
+	var loc	=Loc.seta(o.loc)
+
+	if( ! pl.loc.eq( loc ) )
+	{
+		console.log( `RECEIVED WRONG LOCATION!!!`)
+
+		pl.dest.set(loc)
+	}
+	if( pl.vision !== o.r )
+	{
+		console.log(`VISION CHANGED UNEXPECTEDLY! Might be lag. Deal with it.`)
+
+		pl.vision	=o.r
+	}
+
+	var arrs	=[]
+
+	for(var im=0; im<bufs.length; im++)
+	{
+		arrs[im]	=[]
+
+		var map	=im ? maps.tr : maps.gr
+
+		for(var ib=0; ib<bufs[im].length; ib++)
+		{
+			arrs[im][ib]	=new map.bufs[ib].constructor.Arr(
+				
+				bufs[im][ib], 12, (o.r<<1)+1
+			)
+		}
+	}
+
+	maps.shift( arrs, o.cells, Loc.dirv2dirh(Loc.seta(o.delta)) )
 }

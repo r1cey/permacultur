@@ -36,7 +36,7 @@ Client.prototype. start	=async function()
 {
 	var p	=await this.html.loadp('login')
 
-	p.start(this.srv.login. bind(this.srv))
+	p.start(this.srv.send.login. bind(this.srv))
 
 
 	this.stream	=await navigator.mediaDevices.getUserMedia({audio:true})
@@ -80,13 +80,13 @@ Client.prototype. setpl	=function( plmsg )
 
 
 
-Client.prototype. setbuf	=function( buf )
+Client.prototype. setbuf	=function( buf, code )
 {
 	var maps	=this.maps
 
 	// debugger
 
-	maps.setbuf( buf )
+	maps.setbuf( buf, code )
 
 	if( maps.ready() )
 	{

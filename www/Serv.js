@@ -9,8 +9,7 @@ export default class Serv
 
 	con()	{ return this.cl.html.con }
 
-	url	='ws://212.68.153.116:8043'
-	// url	='ws://127.0.0.1:8043'
+	url	="ws://127.0.0.1:8043"
 
 	ws
 
@@ -60,8 +59,6 @@ Serv.prototype. login	=function( o )
 		this.cl.html.ps.login?.reset()
 	}
 
-	// alert('b')
-
 	ws.onopen	=this.s.login.bind( this, o )
 
 	ws.onmessage	=this.onmsg. bind(this)
@@ -85,7 +82,9 @@ Serv.prototype. onmsg	=function( ev )
 {	
 	let msg	=ev.data
 
-	// console.log( 'Recvd: '+msg)
+	console.log( 'Recvd: '+msg)
+
+	var cl	=this.cl
 
 	// debugger
 
@@ -93,7 +92,18 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		// debugger
 
-		this.cl.setbuf( msg )
+		let code	=Map.getcode( msg )
+
+		let movcode	=code>>8
+
+		if(movcode)
+		{
+			cl.maps.shift( msg, movcode )
+		}
+		else
+		{
+			cl.setbuf( msg, code )
+		}
 	}
 	else if(typeof msg === 'string')
 	{

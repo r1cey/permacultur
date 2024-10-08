@@ -80,18 +80,187 @@ Send.prototype. clplmov	=function( newloc )
 {
 	var pl	=this.pl
 
+	var r	=pl.vision
+
+	var delta	=newloc.c().subv( pl.loc )
+
+	var cellso	=[[],[]]
+	
+	var timecode	=Math.floor(Math.random()*255) + 1
+
 	var o	=
 	{
+		timecode
+		,
 		loc	:newloc
 		,
-		delta	:newloc.c().subv( pl.loc )
+		delta , r
 		,
-		r	:pl.vision
-		,
-		cells	:[]
+		cells	:cellso
 	}
 
-	var cell, cello
+	var carrs	=[[],[]]	// cell arrays
+
+	var maps	=this.srv.game.maps
+
+	maps.fore(( map )=>
+	{
+		for(var mbuf of map.bufs )
+		{
+			var Buf	=mbuf.constructor
+
+			var mhead	=mbuf.head
+
+			var mheadlen	=mhead.byteLength
+
+			var buf	=new ArrayBuffer(
+				
+				mheadlen + 4 + Buf.Arr.BYTES_PER_ELEMENT * ((r<<1) + 1)
+			)
+
+			var arr	=Buf.newheadarr( buf )
+
+			arr[0]	=mhead[0]<<8 + timecode
+			arr[1]	=newloc.h
+			arr[2]	=newloc.x
+			arr[3]	=newloc.y
+
+			arr	=new Int8Array( buf, mheadlen, 4 )
+
+			arr[0]	=delta.x
+			arr[1]	=delta.y
+			arr[2]	=delta.h
+
+			arr	=new Buf.Arr( buf , mheadlen + 4 ,  (r<<1)+1 )
+
+			carrs[map.getloc().h].push( arr )
+		}
+	})
+
+	var ic	=0
+
+	var h, ib, len
+
+	maps.gr.fordiredge(( loc )=>
+	{
+		maps.fore(( map )=>
+		{
+			h	=map.getloc().h
+
+			var bufs	=map.bufs
+
+			for(ib=0, len=bufs.length; ib<len;ib++ )
+			{
+				carrs[h][ib][ic]	=map.gcellc( ib, loc )
+			}
+
+			var cello	=map.gcello( loc )
+
+			if( cello )
+			{
+				cellso[h][ic]	={}
+
+				for(var prop in cello )
+				{
+					switch( prop )
+					{
+						case 'pl' :
+
+							cellso[h][ic][prop]	=cello[prop].newmsgvis()
+						break;
+						default:
+
+							cellso[h][ic][prop]	=cello[prop]
+					}
+				}
+			}
+		})
+
+		ic ++
+	}
+	, Loc.dirv2dirh( delta ), r, newloc )
+
+	for(h=0; h<2; h++)
+	{
+		for(ib=0, len=carrs[h].length; ib<len; ib++)
+		{
+			this.send.binary( carrs[h][ib].buffer )
+		}
+	}
+
+	this.s.json({ clplmov: o })
+
+
+/*
+	this.srv.game.maps.fore(( map )=>
+	{
+		var sendcells	=[]
+
+		o.cells.push(sendcells)
+
+		for(var mbuf of map.bufs )
+		{
+			var Buf	=mbuf.constructor
+
+			var mhead	=mbuf.head
+
+			var mheadlen	=mhead.byteLength
+
+			var buf	=new ArrayBuffer(
+				
+				mheadlen + 3 + Buf.Arr.BYTES_PER_ELEMENT * ((r<<1) + 1)
+			)
+
+			var arr	=Buf.newheadarr( buf )
+
+			arr[0]	=mhead[0]<<8
+			arr[1]	=newloc.h
+			arr[2]	=newloc.x
+			arr[3]	=newloc.y
+
+			arr	=new Int8Array( buf, mheadlen, 3 )
+
+			arr[0]	=delta.x
+			arr[1]	=delta.y
+			arr[2]	=delta.h
+
+			arr	=new Buf.Arr( buf , mheadlen + 3 ,  (r<<1)+1 )
+
+			var i	=0
+
+			var mcells	=mbuf.cells
+
+			map.fordiredge(( loc )=>
+			{
+				arr[i]	=mcells[map.i(loc)]
+
+				var cello	=map.gcello( loc )
+
+				if( cello )
+				{
+					var msgcello	={}
+				
+					for(var prop in cello )
+					{
+						switch( prop )
+						{
+							case 'pl' :
+
+								msgcello[prop]	=cello[prop].newmsgvis()
+							break;
+							default:
+
+								msgcello[prop]	=cello[prop]
+						}
+					}
+
+				i++
+			}
+			, Loc.dirv2dirh( delta ), r, newloc )
+
+			this.send.binary( buf )
+		}
+	})
 
 	this.pl.map.fordiredge(( loc, map )=>
 	{
@@ -138,6 +307,7 @@ Send.prototype. clplmov	=function( newloc )
 	, Loc.dirv2dirh( o.delta ), o.r, o.loc )
 
 	this.s.json({ clplmov: o })
+	*/
 }
 
 
