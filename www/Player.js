@@ -66,6 +66,7 @@ const ClPl =(c) => class extends c
 
 			this.pos.addv(dv.mul( mul ))
 		}
+		
 		this.loc.set( this.pos ).roundh()
 
 		// console.log(this.pos, this.loc, oldloc)

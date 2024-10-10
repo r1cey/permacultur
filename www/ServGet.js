@@ -90,32 +90,35 @@ Get.prototype. units	=function( o )
 
 /**
  * @param o 
- * @arg o.bufc
+ * @arg o.bcode
  * @arg o.loc
- * @arg o.code
+ * @arg o.ccode
  */
 
 Get.prototype. mapcode	=function( o )
 {
-	var cl	=this.cl
+	var maps	=this.cl.maps
 
 	var loc	=Loc.seta( o.loc )
 
-	var c	=o.code
+	var map, bi
 
-	switch( o.bufc )
+	var bc	=o.bcode
+
+	if( bc < 3 )
 	{
-		case 1 :
+		map	=maps.gr
 
-			cl.gr.setcellc( 0, loc, o.code )
-		break;
-		case 2 :
-
-			cl.gr.setcellc( 1, loc, o.code )
-		break;
-		case 3 :
-			cl.trees.setcellc( 0, loc, o.code )
+		bi	=bc - 1
 	}
+	else
+	{
+		map	=maps.tr
+			
+		bi	=bc - 3
+	}
+
+	map.setcellc( bi, loc, o.ccode )
 }
 
 
@@ -334,6 +337,8 @@ Msb.prototype. addbuf	=function( buf, code, movcode )
 {
 	var ms	=this
 
+	// debugger
+
 	var Map	=ms.srv.cl.maps.gr.constructor
 
 	code	??=Map.getcode( buf )
@@ -353,7 +358,9 @@ Msb.prototype. addbuf	=function( buf, code, movcode )
 
 	var ibuf	=movcode<3 ? movcode-1 : movcode-3
 
-	this.bufs[head[1]][ibuf]	=buf
+	var imap	=movcode<3 ? 0 : 1
+
+	this.bufs[imap][ibuf]	=buf
 	
 	this.ifready()
 }
@@ -364,6 +371,8 @@ Msb.prototype. addbuf	=function( buf, code, movcode )
 Msb.prototype. ifready	=function()
 {
 	var maps	=this.srv.cl.maps
+
+	// debugger
 
 	var { bufs, o }	=this
 
@@ -380,8 +389,6 @@ Msb.prototype. ifready	=function()
 	})
 
 	if( ! o )	return
-
-	this.timecode	=0
 
 	/** Enter checks for information in buffer here */
 
@@ -420,4 +427,11 @@ Msb.prototype. ifready	=function()
 	}
 
 	maps.shift( arrs, o.cells, Loc.dirv2dirh(Loc.seta(o.delta)) )
+
+	this.timecode	=0
+
+	this.bufs[0].length	=0
+	this.bufs[1].length	=0
+	
+	this.o	=null
 }

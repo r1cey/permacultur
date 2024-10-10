@@ -272,7 +272,7 @@ Can.prototype. frame	=function(now)
 
 		if( can.maps.gr.nemptycell( dest.c().roundh() ))
 		{
-			pl.dest.set( dest )
+			pl.dest.setv( dest )
 		}
 	}
 
@@ -649,6 +649,7 @@ Can.prototype. fillcirc	=function( x, y, r, col, colstrok )
 	if( colstrok )
 	{
 		ctx.strokeStyle	=colstrok
+		ctx.lineWidth	=1
 		ctx.stroke()
 	}
 }

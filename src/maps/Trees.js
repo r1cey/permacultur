@@ -262,7 +262,7 @@ T.prototype. nextbranch	=function( loc, dir )
 {
 	var ic	=this.i(loc)
 
-	return ! ( (this.getbranchti(ic)-2) * (this.getbranchdi(ic)-dir) )
+	return this.getbranchti(ic)===2 && this.getbranchdi(ic)===dir
 }
 
 
@@ -284,7 +284,7 @@ T.prototype. setbranchti	=function( ic, type, loc )
 {
 	this.bufs[0].setprop( ic, 0, 0, type )
 
-	this.game?.server?.send.mapcode( loc, 0, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( 3, loc, this.bufs[0].cells[ic] )
 }
 
 
@@ -294,7 +294,7 @@ T.prototype. setbranchdi	=function( ic, dir, loc )
 {
 	this.bufs[0].setprop( ic, 0, 1, dir )
 
-	this.game?.server?.send.mapcode( loc, 0, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( 3, loc, this.bufs[0].cells[ic] )
 }
 
 
@@ -322,6 +322,8 @@ Br.prototype. scan	=function( map, v )
 	}
 
 	brs.sort(( b1, b2 )=> b1.size-b2.size )
+
+	return this
 }
 
 

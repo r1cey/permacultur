@@ -67,9 +67,9 @@ Send.prototype. map	=function()
 
 
 
-Send.prototype. mapcode	=function( loc, ...codes )
+Send.prototype. mapcode	=function( bcode, loc, ccode )
 {
-	this.send.json({mapcode:{ loc, codes }})
+	this.send.json({mapcode:{ bcode, loc, ccode }})
 }
 
 
@@ -120,7 +120,7 @@ Send.prototype. clplmov	=function( newloc )
 
 			var arr	=Buf.newheadarr( buf )
 
-			arr[0]	=mhead[0]<<8 + timecode
+			arr[0]	=(mhead[0]<<8) + timecode
 			arr[1]	=newloc.h
 			arr[2]	=newloc.x
 			arr[3]	=newloc.y

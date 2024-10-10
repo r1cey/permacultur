@@ -10,7 +10,7 @@ export default class S extends NS
 
 
 
-S.prototype. mapcode	=function( loc, ...codes )
+S.prototype. mapcode	=function( bcode, loc, ccode )
 {
 	var cl
 
@@ -20,7 +20,7 @@ S.prototype. mapcode	=function( loc, ...codes )
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send.mapcode( loc, ...codes )
+			cl.send.mapcode( bcode, loc, ccode )
 		}
 	}
 }

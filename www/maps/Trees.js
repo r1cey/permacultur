@@ -24,15 +24,15 @@ Tr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 	ic	??=map.i(loc)
 
-	var alpha	=plh === map.getloc().h	? 1	: 0.42
+	var alpha	=plh === map.getloc().h	? 1	: 0.22
 
 	switch( map.getbranchti( ic ))
 	{
 		case 2 :
 
-			// map.drawbr( can, map.getbranchdi(ic), vsq, alpha )
+			map.drawbr( can, map.getbranchdi(ic), vsq, alpha )
 
-			if( can.showtrlvls )
+			if( can.showbrlvls )
 			{
 				can.ctx.fillStyle="#FFFFFF"
 		
@@ -84,7 +84,7 @@ Tr.prototype. drawbr	=function( can, dir, vsq, al )
 
 	var ctx	=can.ctx
 
-	ctx.lineWidth	=h2>>1
+	ctx.lineWidth	=2
 	ctx.globalAlpha	=al
 	ctx.strokeStyle	="#fff"
 

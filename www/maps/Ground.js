@@ -86,6 +86,13 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 							lvl * (can.units.h2>>1) / max,
 							
 							col.str(), "#000000" )
+
+						if( can.showtrlvls )
+						{
+							can.ctx.fillStyle="#FFFFFF"
+				
+							can.ctx.fillText( lvl, vsq.x, vsq.y )
+						}
 				}
 			}
 		}

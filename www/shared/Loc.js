@@ -41,7 +41,13 @@ Loc.prototype. c	=Loc.prototype. clone
 Loc.prototype. set	=function( loc )
 {
 	return this.setxy( loc.x, loc.y, loc.h )
+
 }
+Loc.prototype. setv	=function( vec )
+{
+	return this.setxy( vec.x, vec.y, this.h )
+}
+
 Loc.prototype. setxy	=function( x, y, l )
 {
 	this.x	=x
