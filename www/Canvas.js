@@ -104,7 +104,7 @@ Can.prototype. start	=function()
 			,
 			symb	:'+'
 			,
-			fun	:()=>{ can.zoom(1.5) }
+			fun	:()=>{ can.zoom(2) }
 		}
 		,
 		{
@@ -112,7 +112,7 @@ Can.prototype. start	=function()
 			,
 			symb	:'-'
 			,
-			fun	:()=>{ can.zoom(0.75) }
+			fun	:()=>{ can.zoom(0.5) }
 		}
 	])
 
@@ -194,26 +194,9 @@ Can.prototype. draw	=function( dt )
 
 	if( maps )
 	{
-		let map	=maps.gr
+		maps.gr.draw(can)
 
-		let vsq	=new V()
-
-		let ic
-
-		let h	=pl.pos.h
-
-		can.forcell(( loc )=>
-		{
-			if( ! map.inside(loc) )	return
-
-			vsq.set(loc).tosqc(can)
-
-			ic	=map.i(loc)
-
-			maps.gr.drawhex( can, loc, h, vsq, ic )
-		
-			maps.trees.drawhex( can, loc, h, vsq, ic )
-		})
+		maps.tr.draw(can)
 	}
 	
 	{
@@ -590,15 +573,17 @@ Can.prototype. fillhex	=function( c, col="#888888" )
 	var ctx	=this.ctx
 	var r	=this.units.r,	h	=this.units.h2>>1
 
+	var f	=Math.floor
+	var ce	=Math.ceil
 	var d	=Math.round
 
 	ctx.beginPath()
-	ctx.moveTo(d( c.x-(r>>1) ),d( c.y-h ))
-	ctx.lineTo(d( c.x+(r>>1) ),d( c.y-h ))
-	ctx.lineTo(d( c.x+r ),d( c.y ))
-	ctx.lineTo(d( c.x+(r>>1) ),d( c.y+h ))
-	ctx.lineTo(d( c.x-(r>>1) ),d( c.y+h ))
-	ctx.lineTo(d( c.x-r ),d( c.y ))
+	ctx.moveTo(f( c.x-(r>>1) ),f( c.y-h-1 ))
+	ctx.lineTo(ce( c.x+(r>>1) ),f( c.y-h-1 ))
+	ctx.lineTo(ce( c.x+r ),d( c.y ))
+	ctx.lineTo(ce( c.x+(r>>1) ),ce( c.y+h ))
+	ctx.lineTo(f( c.x-(r>>1) ),ce( c.y+h ))
+	ctx.lineTo(f( c.x-r ),d( c.y ))
 	ctx.closePath()
 	ctx.fillStyle	=col
 	ctx.fill()

@@ -130,6 +130,21 @@ Map.prototype. setbuf	=function( buf, code )
 }
 
 
+
+
+Map.prototype. ready	=function()
+{
+	for(var i=0; i<this.constructor.Bufs.length; i++)
+	{
+		if( ! this.bufs[i]?.head?.[0] )
+		{
+			return false
+		}
+	}
+	return true
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -443,20 +458,6 @@ Map.jsonrplcr	=function(key,val)
 }
 
 
-
-
-
-Map.prototype. ready	=function()
-{
-	for(var i=0; i<this.constructor.Bufs.length; i++)
-	{
-		if( ! this.bufs[i]?.head?.[0] )
-		{
-			return false
-		}
-	}
-	return true
-}
 
 
 /*

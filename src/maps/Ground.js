@@ -375,9 +375,9 @@ G.prototype. gentree	=function( loc, lvl, ic )
 
 	lvl	??=this.getsoilhumi(ic)
 
-	// from 1/100 to 1/6.66=15/100
+	// from 1/600 to 45/600
 
-	if( Math.floor(Math.random()*100) < lvl )
+	if( Math.floor(Math.random()*1200) < lvl*6 )
 	{
 		if( ! this.fore(( loc2 )=>
 			{
@@ -477,7 +477,7 @@ G.prototype. setsoili	=function( i, lvl, loc )
 
 	this.bufs[0].setprop( i, 0, 1, lvl )
 
-	this.game?.server?.send.mapcode( 0, loc, this.bufs[0].cells[i] )
+	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[i] )
 }
 
 
@@ -554,7 +554,7 @@ G.prototype. setwateri	=function( ic, lvl, loc )
 
 	this.bufs[0].setprop( ic, 0, 1, lvl-1 )
 
-	this.game?.server?.send.mapcode( 0, loc, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[ic] )
 }
 
 
@@ -574,5 +574,5 @@ G.prototype. setvegi	=function( ic, type, lvl =0, loc )
 
 	this.bufs[0].setprop( ic, 2, 2, lvl )
 
-	this.game?.server?.send.mapcode( 0, loc, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[ic] )
 }

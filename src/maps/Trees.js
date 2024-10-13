@@ -17,20 +17,9 @@ export default class T extends Map(Maps.Tree)
 
 
 
-class Br
+class Br extends Maps.Tree.Br
 {
-	dir
 
-	size	=1
-
-	brs	=[]
-
-
-
-	constructor( dir )
-	{
-		this.dir	=dir
-	}
 }
 
 
@@ -42,13 +31,32 @@ T.prototype. gen	=function( gr )
 {
 	this.newbufs( gr._r, 0, new Loc(0,0,1) )
 
-	gr.fore(( loc )=>
+	this.gentrees( gr )
+}
+
+
+
+
+T.prototype. gentrees	=function( gr )
+{
+	var trs	=[]
+
+	var lvl	=gr.maxveglvl()
+
+	while( lvl >= 3 )
 	{
-		if( gr.getvegt( loc ))
+		gr.fore(( loc )=>
 		{
-			this.gentree( loc, gr )
-		}
-	})
+			if( gr.getvegt(loc) === 5 && gr.getveglvl(loc) >= lvl )
+			{
+				this.growtree( loc, 5 )
+			}
+		})
+
+		trs.length	=0
+
+		lvl --
+	}
 }
 
 
@@ -64,7 +72,7 @@ T.prototype. gentree	=function( loc, gr, ic )
 
 	var brs	=[]
 
-	for(var i =4; i <= lvl; i++ )
+	for(var i =3; i <= lvl; i++ )
 	{
 		if( ! this.growtree( loc, type, brs, ic ))
 		{
@@ -100,7 +108,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 		}
 	}
 
-	var v	=new V()
+	var v	=new Loc()
 
 	var dir
 
@@ -256,16 +264,6 @@ T.prototype. setbranchd	=function( loc, dir )
 }
 
 
-
-
-T.prototype. nextbranch	=function( loc, dir )
-{
-	var ic	=this.i(loc)
-
-	return this.getbranchti(ic)===2 && this.getbranchdi(ic)===dir
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -300,31 +298,6 @@ T.prototype. setbranchdi	=function( ic, dir, loc )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-/** loc is not changed through calculation */
-
-Br.prototype. scan	=function( map, v )
-{
-	var { dir, brs }	=this
-
-	var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
-
-	for(var i=0; i<dirs.length; i++)
-	{
-		if( map.nextbranch( v.neighh(dirs[i]), dirs[i] ))
-		{
-			brs.push( new Br( dirs[i] ).scan( map, v ))
-
-			this.size	+=brs[brs.length-1].size
-		}
-
-		v.neighh( V.rotopph( dirs[i]) )
-	}
-
-	brs.sort(( b1, b2 )=> b1.size-b2.size )
-
-	return this
-}
 
 
 /** vec is changed
@@ -371,7 +344,14 @@ Br.prototype. grow	=function( map, v )
 	}
 	else if( brs.length === 1 )
 	{
-		grew	=brs[0].grow( map, v )
+		try
+		{
+			grew	=brs[0].grow( map, v )
+		}
+		catch
+		{
+			console.log(2)
+		}
 	}
 	else
 	{
@@ -431,19 +411,6 @@ Br.prototype. grow	=function( map, v )
 	
 		return -1
 	}
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-Br.prototype. sort	=function()
-{
-	this.brs.sort(( b1, b2 )=> b1.size-b2.size )
 }
 
 

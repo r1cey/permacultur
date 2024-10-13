@@ -16,6 +16,27 @@ export default class Gr extends Maps.Gr
 
 
 
+Gr.prototype. draw	=function( can )
+{
+	let vsq	=new V()
+
+	let h	=can.pl?.pos.h	|| 0
+
+	can.forcell(( loc )=>
+	{
+		if( ! this.inside(loc) )	return
+
+		vsq.set(loc).tosqc(can)
+
+		this.drawhex( can, loc, h, vsq )
+	})
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 {
 	var map	=this
@@ -23,6 +44,8 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 	vsq	??=new V().set(loc).tosqc(can)
 
 	ic	??=map.i(loc)
+
+	var h	=can.units.h2>>1
 
 	if( can.showslopes )
 	{
@@ -81,9 +104,9 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 						col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
 
-						can.fillcirc( vsq.x, vsq.y,
+						var r	=lvl<3	? lvl*h/8	: h*(lvl+max-6)/(2*max-6)
 
-							lvl * (can.units.h2>>1) / max,
+						can.fillcirc( vsq.x, vsq.y, r,
 							
 							col.str(), "#000000" )
 

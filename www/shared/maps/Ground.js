@@ -12,8 +12,7 @@ export default class G extends Map
 			[
 				{ waHuRo	:[ 2, 4 ]},	// water/humid/rock:4	humid:16
 				{ mineral	:[ 5, 4 ]},	// mineral:32	num:16
-				{ planFlo	:[ 1, 7, 3 ]},	// plants/floor:2	plants:128	stage:8
-				{ shad	:[ 2 ]},	// shadow:4
+				{ planFlo	:[ 1, 7, 5 ]},	// plants/floor:2	plants:128	stage:32
 				{ walls	:[ 2, 2 ]}	// walls:4	color:4
 			]
 		),
@@ -90,7 +89,7 @@ G.prototype. getvegt	=function( loc )
 
 G.prototype. getveglvl	=function( loc )
 {
-	return	this.getveglcli( this.i(loc) )
+	return	this.getveglvli( this.i(loc) )
 }
 
 
@@ -212,4 +211,11 @@ G.prototype. maxhum	=function()
 G.prototype. maxveglvl	=function()
 {
 	return ( 1 << this.bufs[0].constructor.bmap[2][2] ) - 1
+}
+
+
+
+G.maxveglvl	=function()
+{
+	return ( 1 << this.Bufs[0].bmap[2][2] ) - 1
 }

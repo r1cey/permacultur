@@ -11,7 +11,7 @@ export default class Loc extends V
 		this.h	=l
 	}
 
-	v_str()
+	tovstr()
 	{
 		return super.toString()
 	}
@@ -72,12 +72,6 @@ Loc.prototype. setvstr	=function( str, h )
 	return this
 }
 
-
-
-Loc.prototype. tovstr	=function()
-{
-	return this.x.toString()+V.delim+this.y
-}
 
 
 

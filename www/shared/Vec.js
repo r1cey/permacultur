@@ -375,8 +375,3 @@ V.prototype. floor	=function()
 	this.y	=Math.floor(this.y)
 	return this
 }
-
-V.prototype. toString	=function()
-{
-	return `[${this.x},${this.y}]`
-}

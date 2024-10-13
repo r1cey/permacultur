@@ -1,4 +1,4 @@
-import Loc from './Loc.js'
+import Loc from '../Loc.js'
 // import V from './Vec.js'
 
 

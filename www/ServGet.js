@@ -54,6 +54,7 @@ Get.prototype. createpl	=async function( name )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
 /** This is your player. */
 
 Get.prototype. setpl	=function( plarr )
@@ -63,12 +64,40 @@ Get.prototype. setpl	=function( plarr )
 	this.cl.setpl( plarr )
 }
 
+
+
 /** This is what you see. */
 
 Get.prototype. setmap	=function(mapmsg)
 {
 	// debugger	
 }
+
+
+
+/** Parse all binary data */
+
+Get.prototype. msgbuf	=function( buf )
+{
+	// debugger
+
+	var Map	=this.cl.maps.gr.constructor
+
+	var code	=Map.getcode( buf )
+
+	var movcode	=code>>8	// binary when player moves is received with code offset
+
+	if( movcode )
+	{
+		this.get.msb.addbuf( buf, code, movcode )
+	}
+	else
+	{
+		this.cl.setbuf( buf, code )
+	}
+}
+
+
 
 /**	This are the units that you see. 
  * @arg o
@@ -266,31 +295,6 @@ Get.prototype. wrtc	=async function( o )
 	else if( msg.icecandi )
 	{
 		pcl.onicecandi( msg.icecandi )
-	}
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-Get.prototype. msgbuf	=function( buf )
-{
-	// debugger
-
-	var Map	=this.cl.maps.gr.constructor
-
-	var code	=Map.getcode( buf )
-
-	var movcode	=code>>8
-
-	if( movcode )
-	{
-		this.get.msb.addbuf( buf, code, movcode )
-	}
-	else
-	{
-		this.cl.setbuf( buf, code )
 	}
 }
 
