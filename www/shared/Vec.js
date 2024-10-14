@@ -266,10 +266,21 @@ V.prototype. roundh	=function()
 	return this
 }
 
+
+
+
 V.prototype. eq	=function(v)
 {
-	return this.x === v.x && this.y === v.y
+	return this.eqxy( v.x, v.y )
 }
+
+V.prototype. eqxy	=function( x, y )
+{
+	return this.x === x && this.y === y
+} 
+
+
+
 
 V.prototype. zero	=function()
 {

@@ -4,7 +4,7 @@ import Pl from './Player.js'
 
 import NS from './shared/NSpace.js'
 
-// import Maps	from './maps/Ground.js'
+import ShMaps	from './shared/maps/Maps.js'
 
 
 export default class Get extends NS
@@ -384,9 +384,9 @@ Msb.prototype. ifready	=function()
 	{
 		var h	=map.getloc().h
 
-		var mbufs	=map.bufs
+		var len	=map.constructor.Msg.Bufs.length
 
-		for(var i=0, len=mbufs.length; i<len; i++)
+		for(var i=0; i<len; i++)
 		{
 			if( ! bufs[h][i] )	return
 		}

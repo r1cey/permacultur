@@ -179,7 +179,9 @@ Map.prototype. slice	=function( c, r )
 {
 	var map	=this
 
-	var map2	=(new this.constructor()).newbufs( r, 0, c )
+	var map2	=(new this.constructor()).
+	
+		newbufs( r, 0, new Loc( c.x, c.y, map.getloc().h ))
 
 	map2.fore(( loc )=>
 	{
@@ -724,11 +726,13 @@ Map.prototype. shift	=function( dir, arrs, objs, parse )
 
 	var bufs	=map.bufs
 
+	var len	=map.constructor.Msg.Bufs.length
+
 	map.fordiredge(( v )=>
 	{
 		var mapi	=map.i(v)
 
-		for(var ib=0, len=bufs.length; ib<len; ib++)
+		for(var ib=0; ib<len; ib++)
 		{
 			bufs[ib].cells[mapi]	=arrs[ib][ic]
 		}

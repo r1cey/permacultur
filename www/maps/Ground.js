@@ -1,4 +1,5 @@
 import Maps	from "../shared/maps/Maps.js"
+import Map	from './Map.js'
 
 import V	from "../shared/Vec.js"
 import Col	from "../shared/Color.js"
@@ -6,9 +7,8 @@ import Col	from "../shared/Color.js"
 
 
 
-export default class Gr extends Maps.Gr
+export default class Gr extends Map( Maps.Gr )
 {
-
 }
 
 
@@ -98,13 +98,15 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 						lvl	=map.getveglvli(ic)
 
-						col.sethsl( 112, 44, 61 )	//46, 34, 34
-
 						max	=map.maxveglvl()
+						
+						// col.sethsl( 112, 44, 61 )	//46, 34, 34
 
-						col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
+						// col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
 
-						var r	=lvl<3	? lvl*h/8	: h*(lvl+max-6)/(2*max-6)
+						Gr.treecol( lvl, col )
+
+						var r	=lvl<3	?(lvl*h)>>3	:Gr.calcy( 3,h>>1,max,h,lvl ) //h*(lvl+max-6)/(2*max-6)
 
 						can.fillcirc( vsq.x, vsq.y, r,
 							
@@ -158,5 +160,37 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 			can.ctx.globalAlpha	=1
 		}
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+Gr.treecol	=function( lvl, col )
+{
+	if( lvl < 1 )
+	{
+		col.sethsl( 112, 44, 61 )
+	}
+	else if( lvl === 1)
+	{
+		col.sethsl( 100, 32, 40 )
+	}
+	else if( lvl === 2 )
+	{
+		col.sethsl( 90, 52, 32 )
+	}
+	else
+	{
+		let max	=Gr.maxveglvl()
+
+		let cy	=Gr.calcy
+
+		// col.sethsl( 52, 69, 25 )//18°, 92%, 16%
+
+		col.sethsl(cy(3,52,max,18,lvl),cy(3,69,max,92,lvl),cy(3,25,max,16,lvl))
 	}
 }

@@ -8,11 +8,11 @@ export default class M
 {
 	cl
 
-	ground	=new Ground()
+	ground	=new Ground(this)
 
 	gr	=this.ground
 
-	trees	=new Trees()
+	trees	=new Trees(this)
 
 	tr	=this.trees
 

@@ -1,4 +1,6 @@
 import Maps	from "../shared/maps/Maps.js"
+import Map	from './Map.js'
+import Gr from "./Ground.js"
 
 import V	from "../shared/Vec.js"
 import Col	from "../shared/Color.js"
@@ -6,13 +8,20 @@ import Col	from "../shared/Color.js"
 
 
 
-export default class Tr extends Maps.Tree
+const TrBase	=Map( Maps.Tree )
+
+
+
+
+export default class Tr extends TrBase
 {
 	constructor()
 	{
 		super()
 
 		var Clss	=this.constructor
+
+		Clss.Bufs	=Clss.Bufs.slice()
 
 		Clss.Bufs.push(Clss.newBuf( 213, 1, [ {size:[Maps.Gr.Bufs[0].bmap[2][2]]} ] ))
 	}
@@ -44,30 +53,13 @@ Tr.prototype. setbuf	=function( buf, code )
 
 	map.fore(( loc )=>
 	{
-		if( map.getbrancht( loc ) !== 1 )	return
-
-		// debugger
-		for(var dir=0; dir<6; dir++)
+		if( map.getbrancht( loc ) === 1 )
 		{
-			if( ! map.nextbranch( v.set(loc).neighh(dir), dir ))	continue
-
-			setbrsizes( new Tr.Br(dir).scan(map, v) , v )
+			map.calcbrsizes( loc, v )
 		}
 	})
 
 	return map
-
-
-
-	function setbrsizes( br, loc )
-	{
-		map.setbrsize( loc, br.size )
-
-		for(var br2 of br.brs )
-		{
-			setbrsizes( br2, new V().set(loc).neighh( br2.dir ) )
-		}
-	}
 }
 
 
@@ -81,9 +73,13 @@ Tr.prototype. draw	=function( can )
 
 	let v	=new V(), v2	=new V()
 
-	let h	=can.pl?.pos.h	|| 0
+	let plh	=can.pl?.pos.h	|| 0
+
+	var brminw	=0.2	//out of units.h
 
 	var col	=new Col()
+
+	var maxbrlvl	=Maps.Gr.maxveglvl()/3
 
 	can.forcell(( loc )=>
 	{
@@ -97,35 +93,29 @@ Tr.prototype. draw	=function( can )
 		{
 			case 2 :
 
-				drawbranch( loc, h, v, ic )
+				drawbranch( loc, plh, v, ic )
 		}
 	})
 
 
 
-	function drawbranch( loc, h, v, ic )
+	function drawbranch( loc, plh, v, ic )
 	{
 		var dir	=map.getbranchdi( ic )
 
 		var ctx	=can.ctx
 
-		var al	=h === map.getloc().h	? 1	: 0.22
+		var al	=plh === map.getloc().h	? 1	: 0.22
 
 		ctx.lineWidth	=1
-		ctx.globalAlpha	=al
+		ctx.globalAlpha	=1//al
 		ctx.strokeStyle	="#000"
-
-		var h	=can.units.h2 >> 1
 
 		var lvl	=map.getbrsizei(ic)
 
-		var max	=Maps.Gr.maxveglvl()
+		// var rlvl	=rootlvl( v.set(loc) )
 
-		var rlvl	=rootlvl( v.set(loc) )
-
-		col.sethsl( 112, 44, 61 )	//46, 34, 34
-
-		col.add( rlvl*(-66)/max, rlvl*(-10)/max, rlvl*(-27)/max )
+		Gr.treecol( lvl*3+3, col )
 
 		ctx.fillStyle	=col.str()
 
@@ -135,9 +125,11 @@ Tr.prototype. draw	=function( can )
 
 		var h2	=can.units.h2<<1	// I can optimise by removing division
 
+		var r	=V.sin60*0.3333	//units.r*3=>units.h
+
 		v.set( loc ).addv(
 			
-			v2.set( V.dirvhrot(dir,1) ).addv( V.dirvhrot(dir,2) ).mul( w(lvl-1)/h2 )
+			v2.set( V.dirvhrot(dir,1) ).addv( V.dirvhrot(dir,2) ).mul( w(lvl-1)*r )
 		
 		).tosqc( can )
 
@@ -145,7 +137,7 @@ Tr.prototype. draw	=function( can )
 
 		v.set( loc ).addv(
 			
-			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl-1)/h2 )
+			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl-1)*r )
 		
 		).tosqc( can )
 
@@ -153,7 +145,7 @@ Tr.prototype. draw	=function( can )
 
 		v.set( loc ).neighh(dir).addv(
 			
-			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl)/h2 )
+			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl)*r )
 		
 		).tosqc( can )
 
@@ -161,7 +153,7 @@ Tr.prototype. draw	=function( can )
 
 		v.set( loc ).neighh(dir).addv(
 			
-			v2.set( V.dirvhrot(dir,1) ).addv( V.dirvhrot(dir,2) ).mul( w(lvl)/h2 )
+			v2.set( V.dirvhrot(dir,1) ).addv( V.dirvhrot(dir,2) ).mul( w(lvl)*r )
 		
 		).tosqc( can )
 
@@ -174,13 +166,14 @@ Tr.prototype. draw	=function( can )
 
 		function w(lvl)
 		{
-			// fromt 2h/3 to h
-
-			return	lvl<1 ? 1	: h*(4*lvl+max-5)/(5*max-5)
+			return	lvl<1 ? 0	: Tr.calcy( 1,brminw, maxbrlvl,0.5, lvl) //h*(4*lvl+max-5)/(5*max-5)
 		}
 
 
 
+
+		/** v is changed 
+		 * Currently not used */
 
 		function rootlvl( v )
 		{
@@ -220,30 +213,25 @@ Tr.prototype. getbrsize	=function( loc )
 
 
 
-Tr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
+
+Tr.prototype. shift	=function( dir, ...args )
 {
+	TrBase.prototype.shift.call( this, dir, ...args )
+
 	var map	=this
 
-	vsq	??=new V().set(loc).tosqc(can)
+	var v	=new V()
 
-	ic	??=map.i(loc)
-
-	var alpha	=plh === map.getloc().h	? 1	: 0.22
-
-	switch( map.getbranchti( ic ))
+	map.fordiredge(( loc )=>
 	{
-		case 2 :
-
-			
-
-			if( can.showbrlvls )
-			{
-				can.ctx.fillStyle="#FFFFFF"
-		
-				can.ctx.fillText( map.getbrsize(loc), vsq.x, vsq.y )
-			}
+		if( map.getbrancht( loc ) === 1 )
+		{
+			map.calcbrsizes( loc, v )
+		}
 	}
+	, dir )
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,4 +292,34 @@ Tr.prototype. drawbr	=function( can, dir, vsq, al )
 	ctx.moveTo( vsrc.x, vsrc.y )
 	ctx.lineTo( vsq.x, vsq.y )
 	ctx.stroke()
+}
+
+
+
+/** Assumes loc is pointing towards stem */
+
+Tr.prototype. calcbrsizes	=function( loc, v )
+{
+	var map	=this
+
+	for(var dir=0; dir<6; dir++)
+	{
+		if( ! map.nextbranch( v.set(loc).neighh(dir), dir ))	continue
+
+		setbrsizes( new Tr.Br(dir).scan(map, v) , v )
+	}
+
+
+	
+	/** loc changes */
+
+	function setbrsizes( br, loc )
+	{
+		map.setbrsize( loc, br.size )
+
+		for(var br2 of br.brs )
+		{
+			setbrsizes( br2, new V().set(loc).neighh( br2.dir ) )
+		}
+	}
 }
