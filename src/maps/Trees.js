@@ -238,6 +238,39 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 
 
+T.prototype. closestbr	=function( loc, ploc )
+{
+	var map	=this
+
+	var brloc	=new Loc()
+
+	// using brloc to save on garbage collection
+	var dir =V.dirv2dirh( brloc.set(ploc).subv(loc) )
+
+	if( br(dir,0) )	return brloc
+
+	for(var i=1; i<=2; i++)
+	{
+		if( br(dir,-i) )	return brloc
+		if( br(dir,i) )	return brloc
+	}
+	if( br(dir,3) )	return brloc
+
+	return
+
+
+
+	function br( dir, rot )
+	{
+		dir	=V.roth(dir,rot)
+
+		brloc.set(loc).neighh(dir)
+
+		if( map.nextbranch( brloc, dir ))	return true
+	}
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

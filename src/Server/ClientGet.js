@@ -11,7 +11,7 @@ export default class Get extends NS
 ///////////////////////////////////////////////////////////////////////////////
 
 /** @arg o
- * @arg o.loc
+ * @arg o.dir
  */
 
 Get.prototype. mov	=function( o )
@@ -54,6 +54,22 @@ Get.prototype. dig	=function( o )
 	var tool	=o
 
 	this.game().dig( tool )
+}
+
+
+/** @arg o.dir	- true is up
+ * @arg o.loc	- tree */
+
+Get.prototype. climb	=function( o )
+{
+	var pl	=this.cl.pl
+
+	var loc	=new Loc().seta(o.loc)
+
+	if( loc.disth(pl.loc) <= 1 && pl.map.climbable(loc) )
+	{
+		pl.climb( dir, loc )
+	}
 }
 
 

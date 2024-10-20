@@ -213,3 +213,17 @@ Player.prototype. subwater	=function( lvl )
 	this.cl?.send.json({ water: this.water })
 }
 
+
+
+Player.prototype. climb	=function( dir, loc )
+{
+	var pl	=this
+
+	var tr	=this.game().maps.tr
+
+	var brloc	=tr.closestbr( loc, pl.loc )
+
+	if( ! brloc )	return
+
+	pl.loc.set( brloc )
+}

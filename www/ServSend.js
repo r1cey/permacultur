@@ -75,6 +75,14 @@ Send.prototype. wrtc	=function( o )
 
 
 
+Send.prototype. climb	=function( dir, loc )
+{
+	this.send.json({ climb: { loc, dir }})
+}
+
+
+
+
 Send.prototype. act	=function( act, o )
 {
 	this.send_json({ [act]: o })

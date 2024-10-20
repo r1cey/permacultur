@@ -37,6 +37,10 @@ Touch.prototype. ondown	=function( ev )
 	tch.last.setev( ev )
 	tch.pos.setev( ev )
 
+	let menu	=this.can.menu
+
+	if(menu)	menu.del()
+
 	var el	=tch.can.el
 
 	el.onpointerup	=this.onup. bind(this)

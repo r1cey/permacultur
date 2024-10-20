@@ -53,6 +53,16 @@ export default class T extends Map
 
 
 
+Tr.prototype. climbable	=function( loc )
+{
+	return this.getbrancht(loc) === 1
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 T.prototype. nextbranch	=function( loc, dir )
 {
 	if( this.inside( loc ))

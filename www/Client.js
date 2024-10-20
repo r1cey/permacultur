@@ -94,6 +94,10 @@ Client.prototype. setbuf	=function( buf, code )
 
 		can.maps	=maps
 
+		maps.tr.can.width	=can.el.width
+
+		maps.tr.can.height	=can.el.height
+
 		if( can.pl )	can.start()
 	}
 }

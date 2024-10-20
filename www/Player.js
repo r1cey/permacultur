@@ -12,6 +12,8 @@ const ClPl =(c) => class extends c
 
 	dest	=new Loc()
 
+	srv()	{return this.lcl.srv }
+
 	constructor( msg, lcl )
 	{
 		super( msg )
@@ -119,11 +121,29 @@ export default class Player extends ClPl( PlSh.O )
 	{
 		if( super.step( dt ))
 		{
+			// this.lcl.srv.s.json({ mov: { dir: }})
+
 			this.lcl.srv.s.mov( this.loc )
 
 			// pl.moved( V.dirv2dirh( oldloc.neg().addv(pl.loc) ) )
 		}
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Player.prototype. climbup	=function( loc )
+{
+	this.srv().send.climb( true , loc )
+/*
+	var pl	=this
+
+	var{ tr }	=this.lcl.maps
+
+	var loc2	=tr.findclosestbr( loc )*/
 }
 
 /*Player.prototype. moved	=function( dir )

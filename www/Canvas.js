@@ -11,6 +11,8 @@ export default class Can
 {
 	html
 
+	imgs()	{return this.html.imgs }
+
 	cl()	{return this.html.cl }
 
 	el
@@ -34,6 +36,10 @@ export default class Can
 			this.h2	=r * V.sin60 * 2
 			this.dh2	=1 / this.h2
 		}
+		,
+		dsq	:function(){return this._dsq.setxy((this.r>>1)*3, this.h2) }
+		,
+		_dsq	:new V()
 	}
 
 	crn	=new V(0,0)	// top left corner in hex
@@ -58,6 +64,9 @@ export default class Can
 
 	showlvls	=false
 
+	v	=new V()	//just utility buffers for ease of garbage collection
+	v2	=new V()
+	v3	=new V()
 
 
 	constructor( html, el )
@@ -66,7 +75,7 @@ export default class Can
 
 		this.el	=el
 
-		this.ctx	=el.getContext('2d')
+		this.ctx	=el.getContext('2d' ,{ alpha :false })
 
 		this.units.calc(40)
 
@@ -196,6 +205,11 @@ Can.prototype. draw	=function( dt )
 	{
 		maps.gr.draw(can)
 
+		if( can.pl )
+		{
+			can.drawclpl()
+		}
+
 		maps.tr.draw(can)
 	}
 	
@@ -215,8 +229,6 @@ Can.prototype. draw	=function( dt )
 	}
 	if( can.pl )
 	{
-		can.drawclpl()
-
 		can.drawwatergui()
 /*
 		if( can.menu )
@@ -247,15 +259,28 @@ Can.prototype. frame	=function(now)
 
 	this.html.fps.set(Math.floor(1000/dt))
 
+	
 	if(tch.on)
 	{
-		let dest	=tch.pos.c().subv(tch.last).tohexc(can).addv(pl.dest)
+		let deltasq	=can.v3.set(tch.pos).subv(tch.last)
 
+		let dest	=can.v.set(deltasq).tohexc(can).addv(pl.dest)
+		
 		tch.last.set(tch.pos)
 
-		if( can.maps.gr.nemptycell( dest.c().roundh() ))
+		let gr	=can.maps.gr
+
+		let ic	=gr.i( can.v2.set(dest).roundh() )
+
+		// console.log(dest)
+		
+		if( gr.nemptycelli(ic) &&
+	
+			! ( gr.getvegti(ic) && gr.getveglvli(ic) > 2 ))
 		{
 			pl.dest.setv( dest )
+
+			can.menu?.mov( deltasq )
 		}
 	}
 
@@ -271,13 +296,11 @@ Can.prototype. frame	=function(now)
 
 
 
-/** !!!Don't modify tpos!!! */
+/**  */
 
 Can.prototype. clicked	=function( possqel )
 {
 	var can	=this
-/*
-	// console.log(tpos.toString())
 
 	if(can.menu)
 	{
@@ -285,23 +308,44 @@ Can.prototype. clicked	=function( possqel )
 	}
 	else
 	{
-		let posh	=possqel.c().tohexc(can).addv(can.crn).roundh()
+		let ploc	=can.pl.loc
 
-		if( posh.disth( can.pl.loc) === 1 )
+		let menu	=new Menu()
+
+		menu.setpos( possqel, ploc )
+
+		let loc	=menu.loc
+
+		if( loc.disth( ploc) !== 1 )	return
+		
+		let map
+
+		switch(loc.h)
 		{
-			let menu	=new Menu()
+			case 0 :
 
-			// menu.pos.set( possqel ).tohexc(can).addv(can.crn)
+				map	=can.maps.gr
 
-			menu.pos.set( possqel )
-
-			menu.addopt("dig")
-
-			menu.show()
-
-			can.menu	=menu
+				if( map.climbable( loc ))
+				{
+					menu.addopt(
+						
+						"climb"
+						,
+						()=>
+						{
+							can.pl.climbup(loc)
+						}
+						,
+						()=>map.climbable(loc)
+					)
+				}
 		}
-	}*/
+
+		menu.show()
+
+		if( menu.ready )	can.menu	=menu
+	}
 }
 
 
@@ -309,10 +353,20 @@ Can.prototype. clicked	=function( possqel )
 
 Can.prototype. trnsfrm	=function()
 {
-	this._crn.set( this.crn ).tosqc( this)
+	var crn	=this._crn
+
+	crn.set( this.crn ).tosqc( this)
 
 	this.ctx.setTransform(1,0,0,1,
-		-this._crn.x, -this._crn.y)
+		-crn.x, -crn.y)
+
+	var maps	=this.maps
+
+	if(maps)
+	{
+		maps.tr.ctx.setTransform(1,0,0,1,
+			-crn.x, -crn.y)
+	}
 }
 
 
@@ -384,6 +438,7 @@ Can.prototype. drawclpl	=function()
 	ctx.fillStyle	=pl.col.str()
 	ctx.beginPath()
 	ctx.arc( pos.x, pos.y, pl.r*can.units.r, 0, 2*Math.PI)
+	ctx.globalAlpha	=1
 	ctx.fill()
 
 	if( can.maps?.gr )// drawreach
@@ -486,11 +541,23 @@ Can.prototype. resize	=function()
 
 	this.size2.set( newsize2h )
 
-	this.el.width	=newsizesq.x
+	var el	=this.el
 
-	this.el.height	=newsizesq.y
+	el.width	=newsizesq.x
+
+	el.height	=newsizesq.y
+
+	var maps	=this.maps
+
+	if( maps )
+	{
+		maps.tr.can.width	=el.width
+		maps.tr.can.height	=el.height
+	}
 
 	this.trnsfrm()
+
+
 }
 
 
@@ -499,7 +566,8 @@ Can.prototype. resize	=function()
 
 Can.prototype. forcell	=function( fun )
 {
-	var crn	=this.crn.c().roundh()
+
+	var crn	=this.crn.c().roundh().add(-1,0)
 
 	var vh	=new V().set(crn)
 
@@ -507,9 +575,11 @@ Can.prototype. forcell	=function( fun )
 
 	// this.drawdbug( crn.c().add(2,0).tosqc(this) )
 
-	var dsq	=new V( (this.units.r>>1)*3 , this.units.h2 )
+	var dsq	=this.units.dsq()
 
-	var vsqmax	=vsq.c().add( this.el.width, this.el.height ).addv( dsq )
+	var el	=this.el
+
+	var vsqmax	=dsq.c().mul(3).addv(vsq).add( el.width, el.height )
 
 	var crnsqx	=vsq.x
 

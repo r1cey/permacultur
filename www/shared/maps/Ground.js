@@ -42,9 +42,25 @@ export default class G extends Map
 
 G.prototype. nemptycell	=function( loc )
 {
-	return Boolean( this.bufs[0].cells[this.i(loc)] )
+	return this.nemptycelli( this.i(loc) )
+}
+G.prototype. nemptycelli	=function( ic )
+{
+	return Boolean( this.bufs[0].cells[ic] )
 }
 
+
+
+
+Gr.prototype. climbable	=function( loc )
+{
+	var ic	=this.i(loc)
+
+	return this.getvegti(ic) === 5 && this.getveglvli(ic) > 4
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -85,6 +101,10 @@ G.prototype. getveg	=function( loc )
 G.prototype. getvegt	=function( loc )
 {
 	return this.getvegti( this.i(loc) )
+}
+G.prototype. getvegti	=function( ic )
+{
+	return this.bufs[0].gprop( ic, 2, 1 )
 }
 
 G.prototype. getveglvl	=function( loc )
@@ -162,10 +182,7 @@ G.prototype. getvegi	=function( ic )
 }
 
 
-G.prototype. getvegti	=function( ic )
-{
-	return this.bufs[0].gprop( ic, 2, 1 )
-}
+
 
 G.prototype. getveglvli	=function( ic )
 {

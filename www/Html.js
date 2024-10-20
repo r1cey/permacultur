@@ -1,6 +1,7 @@
 import Con from './Console.js'
 import Can from './Canvas.js'
 import Menu	from "./Menu.js"
+import Imgs	from "./Imgs.js"
 
 export default class Html
 {
@@ -23,6 +24,8 @@ export default class Html
 	menu	=new Menu(this)
 
 	ps	={}
+
+	imgs	=new Imgs(this)
 
 	resize	=
 	{

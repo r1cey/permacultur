@@ -15,6 +15,12 @@ const TrBase	=Map( Maps.Tree )
 
 export default class Tr extends TrBase
 {
+	can	=new OffscreenCanvas(0,0)
+	
+	ctx	=this.can.getContext('2d')
+
+	_path	=new Path2D()	//used to draw branches
+
 	constructor()
 	{
 		super()
@@ -23,7 +29,12 @@ export default class Tr extends TrBase
 
 		Clss.Bufs	=Clss.Bufs.slice()
 
-		Clss.Bufs.push(Clss.newBuf( 213, 1, [ {size:[Maps.Gr.Bufs[0].bmap[2][2]]} ] ))
+		Clss.Bufs.push(Clss.newBuf( 213, 1,
+		[
+			{ size	:[ Maps.Gr.Bufs[0].bmap[2][2] ]}
+			,
+			{ lvs	:[ 1 ]}
+		]))
 	}
 }
 
@@ -53,9 +64,18 @@ Tr.prototype. setbuf	=function( buf, code )
 
 	map.fore(( loc )=>
 	{
-		if( map.getbrancht( loc ) === 1 )
+		var ic	=map.i(loc)
+		
+		var brt	=map.getbranchti(ic)
+
+		if( brt === 1 || brt === 2 )
 		{
-			map.calcbrsizes( loc, v )
+			map.paintleaves( loc, v )
+
+			if( brt === 2 )
+			{
+				map.endbranchcalc( loc, v )
+			}
 		}
 	})
 
@@ -71,7 +91,7 @@ Tr.prototype. draw	=function( can )
 {
 	var map	=this
 
-	let v	=new V(), v2	=new V()
+	let { v, v2 }	=can
 
 	let plh	=can.pl?.pos.h	|| 0
 
@@ -80,6 +100,10 @@ Tr.prototype. draw	=function( can )
 	var col	=new Col()
 
 	var maxbrlvl	=Maps.Gr.maxveglvl()/3
+
+	var units	=can.units
+
+	var ctx	=can.ctx
 
 	can.forcell(( loc )=>
 	{
@@ -91,41 +115,52 @@ Tr.prototype. draw	=function( can )
 
 		switch( map.getbranchti( ic ))
 		{
+			case 1 :
+
+				drawleaves( loc )
+
+			break;
 			case 2 :
 
-				drawbranch( loc, plh, v, ic )
+				drawbranch( loc, ic )
+
+			break;
+			default :
+
+				if( map.getleavesi( ic ))
+				{
+					drawleaves( loc )
+				}
+
 		}
 	})
 
+	// can.ctx.drawImage( map.can.transferToImageBitmap(), can._crn.x,can._crn.y)
 
 
-	function drawbranch( loc, plh, v, ic )
+
+	function drawbranch( loc, ic )
 	{
 		var dir	=map.getbranchdi( ic )
 
+		// var ctx	=map.ctx
+
 		var ctx	=can.ctx
 
-		var al	=plh === map.getloc().h	? 1	: 0.22
+		drawleaves( loc )
 
-		ctx.lineWidth	=1
-		ctx.globalAlpha	=1//al
-		ctx.strokeStyle	="#000"
+		ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.3
+
 
 		var lvl	=map.getbrsizei(ic)
 
-		// var rlvl	=rootlvl( v.set(loc) )
+		dir	=V.rotopph(dir)
 
-		Gr.treecol( lvl*3+3, col )
-
-		ctx.fillStyle	=col.str()
+		var r	=V.sin60*0.3333	//units.r*3=>units.h
 
 		ctx.beginPath()
 
-		dir	=V.rotopph(dir)
-
-		var h2	=can.units.h2<<1	// I can optimise by removing division
-
-		var r	=V.sin60*0.3333	//units.r*3=>units.h
+		var path	=new Path2D()
 
 		v.set( loc ).addv(
 			
@@ -133,7 +168,9 @@ Tr.prototype. draw	=function( can )
 		
 		).tosqc( can )
 
-		ctx.moveTo( v.x, v.y )
+		var ox	=v.x,	oy	=v.y
+
+		path.moveTo( v.x, v.y )
 
 		v.set( loc ).addv(
 			
@@ -141,13 +178,17 @@ Tr.prototype. draw	=function( can )
 		
 		).tosqc( can )
 
-		ctx.lineTo( v.x, v.y )
+		path.lineTo( v.x, v.y )
+
+		ctx.moveTo( v.x, v.y )
 
 		v.set( loc ).neighh(dir).addv(
 			
 			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl)*r )
 		
 		).tosqc( can )
+
+		path.lineTo( v.x, v.y )
 
 		ctx.lineTo( v.x, v.y )
 
@@ -157,10 +198,22 @@ Tr.prototype. draw	=function( can )
 		
 		).tosqc( can )
 
-		ctx.lineTo( v.x, v.y )
+		path.lineTo( v.x, v.y )
 
-		ctx.closePath()
-		ctx.fill()
+		path.closePath()
+
+		Gr.treecol( lvl * 3 + 3 , col )
+		ctx.fillStyle	=col.str()
+		ctx.fill(path)
+
+		ctx.moveTo( v.x, v.y )
+		ctx.lineTo( ox, oy )
+
+		ctx.lineWidth	=1
+		ctx.strokeStyle	="#000"
+
+		ctx.stroke()
+
 
 
 
@@ -168,31 +221,21 @@ Tr.prototype. draw	=function( can )
 		{
 			return	lvl<1 ? 0	: Tr.calcy( 1,brminw, maxbrlvl,0.5, lvl) //h*(4*lvl+max-5)/(5*max-5)
 		}
+	}
 
 
 
+	function drawleaves( loc )
+	{
+		var { r, h2 }	=units
 
-		/** v is changed 
-		 * Currently not used */
+		v.set(loc).tosqc(can).sub(r, h2>>1)
 
-		function rootlvl( v )
-		{
-			var t	=map.getbrancht(v)
-			
-			if( t === 1 )
-			{
-				return can.maps.gr.getveglvl( v )
-			}
+		ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.1
 
-			else if( ! map.inside(v) || t !== 2)
-			{
-				return 5
-			}
+		ctx.drawImage( can.imgs().o.leaves5, v.x,v.y, r<<1, h2 )
 
-			var dir	=map.getbranchd( v )
-
-			return rootlvl( v.neighh(V.rotopph(dir)) )
-		}
+		// debugger
 	}
 }
 
@@ -206,9 +249,36 @@ Tr.prototype. setbrsize	=function( loc, size )
 	this.bufs[1].setprop(this.i(loc), 0,0, size )
 }
 
+
+
+
 Tr.prototype. getbrsize	=function( loc )
 {
 	return this.getbrsizei(this.i(loc))
+}
+Tr.prototype. getbrsizei	=function( ic )
+{
+	return this.bufs[1].gprop( ic, 0, 0 )
+}
+
+
+
+
+Tr.prototype. setleaves	=function( loc, val )
+{
+	this.setleavesi( this.i(loc), val )
+}
+Tr.prototype. setleavesi	=function( ic, val )
+{
+	this.bufs[1].setprop(ic, 1,0, val )
+}
+
+
+
+
+Tr.prototype. getleavesi	=function( ic, val )
+{
+	return this.bufs[1].gprop( ic, 1,0 )
 }
 
 
@@ -224,9 +294,43 @@ Tr.prototype. shift	=function( dir, ...args )
 
 	map.fordiredge(( loc )=>
 	{
-		if( map.getbrancht( loc ) === 1 )
+		var ic	=map.i(loc)
+		
+		var brt	=map.getbranchti( ic )
+
+		switch( brt )
 		{
-			map.calcbrsizes( loc, v )
+			case 0 :
+
+				for(var dir=0; dir<6; dir++)
+				{
+					if( ! map.inside( v.set(loc).neighh(dir) ))	continue
+
+					switch( map.getbranchti( v ))
+					{
+						case 1 :
+						case 2 :
+
+							map.setleavesi( ic, 1 )
+
+							break
+					}
+				}
+			break
+			case 1 :
+			case 2 :
+
+				map.paintleaves( loc, v )
+
+				if( brt !== 2 )	break
+
+				if( map.getbrsizei(ic) )	break
+
+				if( ! map.endbranchcalc( loc, v ))
+				{
+					map.calcbrsizes( v.set(loc) )
+				}
+			break		
 		}
 	}
 	, dir )
@@ -238,88 +342,95 @@ Tr.prototype. shift	=function( dir, ...args )
 
 
 
-Tr.prototype. getbrsizei	=function( ic )
+/** Just paint around. Don't check source v. 
+ * v is just empty Vec */
+
+Tr.prototype. paintleaves	=function( loc, v )
 {
-	return this.bufs[1].gprop( ic, 0, 0 )
-}
-
-
-
-
-Tr.prototype. drawbr	=function( can, dir, vsq, al )
-{
-	var { h2 }	=can.units
-
-	var vsrc	=new V(  )
-
-	switch( dir )
+	for(var dir=0; dir<6; dir++)
 	{
-		case 0 :
+		if( this.inside( v.set(loc).neighh(dir) ))
+		{
+			var ic	=this.i(v)
 
-			vsrc.setxy( -V.sin60*h2, -h2>>1 )
-		break;
-		case 1 :
-
-			vsrc.setxy( -V.sin60*h2, h2>>1 )
-		break;
-		case 2 :
-
-			vsrc.setxy( 0, h2 )
-		break;
-		case 3 :
-
-			vsrc.setxy( V.sin60*h2, h2>>1 )
-		break;
-		case 4 :
-
-			vsrc.setxy( V.sin60*h2, -h2>>1 )
-		break;
-		case 5 :
-
-			vsrc.setxy( 0, -h2 )
-		break;
+			if( this.getbranchti( ic )===0 )
+			{
+				this.setleavesi( ic , 1 )
+			}
+		}
 	}
-
-	vsrc.addv( vsq )
-
-	var ctx	=can.ctx
-
-	ctx.lineWidth	=2
-	ctx.globalAlpha	=al
-	ctx.strokeStyle	="#fff"
-
-	ctx.beginPath()
-	ctx.moveTo( vsrc.x, vsrc.y )
-	ctx.lineTo( vsq.x, vsq.y )
-	ctx.stroke()
 }
 
 
 
-/** Assumes loc is pointing towards stem */
+/** v is just empty Vec */
 
-Tr.prototype. calcbrsizes	=function( loc, v )
+Tr.prototype. endbranchcalc	=function( loc, v )
 {
 	var map	=this
 
-	for(var dir=0; dir<6; dir++)
+	for(var dir=0; dir<6; dir++ )
 	{
-		if( ! map.nextbranch( v.set(loc).neighh(dir), dir ))	continue
-
-		setbrsizes( new Tr.Br(dir).scan(map, v) , v )
-	}
-
-
-	
-	/** loc changes */
-
-	function setbrsizes( br, loc )
-	{
-		map.setbrsize( loc, br.size )
-
-		for(var br2 of br.brs )
+		if( map.nextbranch( v.set(loc).neighh(dir), dir ))
 		{
-			setbrsizes( br2, new V().set(loc).neighh( br2.dir ) )
+			return false
 		}
 	}
+
+	v.set( loc )
+
+	var size	=1
+
+	do
+	{
+		map.setbrsize( v, size )
+
+		v.neighh( V.rotopph( map.getbranchd( v )))
+
+		if( ! map.inside(v) ) break
+
+		if( map.getbrancht( v ) !== 2 )	break
+
+		size ++
+
+		if( map.getbrsize( v ) >= size )	break
+	}
+	while(true)
+
+	return true
+}
+
+
+
+/** Is used by map.shift()
+ * loc is returned back */
+
+Tr.prototype. calcbrsizes	=function( loc )
+{
+	var map	=this
+
+	var size	=1
+
+	for(var dir=0; dir<6; dir++)
+	{
+		if( ! map.inside( loc.neighh(dir) ))	continue
+
+		var ic	=map.i( loc )
+
+		if( map.nextbranchi( ic, dir ))
+		{
+			var size2	=map.getbrsizei( ic ) || map.calcbrsizes( loc )
+
+			if( size2 >= size )
+			{
+				size	=size2 + 1
+			}
+		}
+
+		loc.neighh( V.rotopph( dir ))
+	}
+
+	map.setbrsize( loc, size )
+
+	return size
 }
