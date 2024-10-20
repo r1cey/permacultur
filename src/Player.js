@@ -1,4 +1,5 @@
 import PlMsg from '../www/shared/Player.js'
+import V from '../www/shared/Vec.js'
 
 import Loc from './Loc.js'
 
@@ -215,15 +216,33 @@ Player.prototype. subwater	=function( lvl )
 
 
 
-Player.prototype. climb	=function( dir, loc )
+Player.prototype. climb	=function( dir )
 {
 	var pl	=this
+	
+	var{ gr }	=this.game().maps
 
-	var tr	=this.game().maps.tr
+	var{ loc }	=pl
 
-	var brloc	=tr.closestbr( loc, pl.loc )
+	var tloc	=new Loc()
 
-	if( ! brloc )	return
+	for(var dir=0;dir<6;dir++)
+	{
+		if( gr.climbable( tloc.set(loc).neighh(dir) ))
+		{
+			break
+		}
+	}
+	if( dir === 6 )
+	{
+		console.log( `Player ${pl.name} doesn't have tree to climb` )
 
-	pl.loc.set( brloc )
+		return
+	}
+
+	loc.h	=1
+
+	pl.map	=pl.game().maps.tr
+
+	pl.srv()?.send.plclimb( pl, dir )
 }

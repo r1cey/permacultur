@@ -58,18 +58,24 @@ Get.prototype. dig	=function( o )
 
 
 /** @arg o.dir	- true is up
- * @arg o.loc	- tree */
+ * @arg o.loc	- pl loc */
 
 Get.prototype. climb	=function( o )
 {
-	var pl	=this.cl.pl
+	var pl	=this.pl
 
-	var loc	=new Loc().seta(o.loc)
+	var ploc	=pl.loc,	loca	=o.loc
 
-	if( loc.disth(pl.loc) <= 1 && pl.map.climbable(loc) )
+	if( ploc.x !== loca[0] || ploc.y !== loca[1] )
 	{
-		pl.climb( dir, loc )
+		console.error("climb: wrong pl loc given: "+pl.name )
+
+		//send error to player
+
+		return
 	}
+
+	pl.climb( o.dir )
 }
 
 

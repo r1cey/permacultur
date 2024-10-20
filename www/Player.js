@@ -137,7 +137,7 @@ export default class Player extends ClPl( PlSh.O )
 
 Player.prototype. climbup	=function( loc )
 {
-	this.srv().send.climb( true , loc )
+	this.srv().send.climb( true , this.loc )
 /*
 	var pl	=this
 

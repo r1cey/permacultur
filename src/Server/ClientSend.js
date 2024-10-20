@@ -327,6 +327,15 @@ Send.prototype.plconn	=function( pl2 )
 }
 
 
+
+/** Assumes player has already climbed */
+
+Send.prototype. clplclimb	=function( dir )
+{
+	this.send.json({ clplclimb: { dir, newloc: this.pl.loc }})
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

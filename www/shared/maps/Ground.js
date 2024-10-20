@@ -52,11 +52,11 @@ G.prototype. nemptycelli	=function( ic )
 
 
 
-Gr.prototype. climbable	=function( loc )
+G.prototype. climbable	=function( loc )
 {
 	var ic	=this.i(loc)
 
-	return this.getvegti(ic) === 5 && this.getveglvli(ic) > 4
+	return this.getvegti(ic) === 5 && this.getveglvli(ic) > 3
 }
 
 

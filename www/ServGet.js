@@ -299,6 +299,34 @@ Get.prototype. wrtc	=async function( o )
 }
 
 
+
+/** @arg o.newloc
+ * @arg o.dir
+ */
+
+Get.prototype. clplclimb	=function( o )
+{
+	var pl	=this.cl.pl
+
+	var{ loc, pos, dest }	=pl
+
+	var newloc	=o.newloc
+
+	if( loc.x !== newloc[0] || loc.y !== newloc[1] )
+	{
+		console.log( `Climbing in new location` )
+
+		dest.set( pos.set( loc.seta( newloc )))
+	}
+	else
+	{
+		loc.h	=1
+		dest.h	=1
+		pos.h	=1
+	}
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

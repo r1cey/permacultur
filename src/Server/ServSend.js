@@ -74,3 +74,23 @@ S.prototype. plmov	=function( pl, newloc )
 		}
 	}
 }
+
+
+
+
+S.prototype. plclimb	=function( pl, dir )
+{
+	if( pl.cl )	pl.cl.s.clplclimb( dir )
+
+	for(var n in this.cls.o )
+	{
+		var pl2	=this.cls.o[n].pl
+
+		if( pl === pl2 )	continue
+
+		if( pl2.sees(pl.loc) )
+		{
+			pl2.cl.s.plclimb( pl, dir )
+		}
+	}
+}

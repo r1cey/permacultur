@@ -53,7 +53,7 @@ export default class T extends Map
 
 
 
-Tr.prototype. climbable	=function( loc )
+T.prototype. climbable	=function( loc )
 {
 	return this.getbrancht(loc) === 1
 }

@@ -237,6 +237,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** Unneeded */
 
 T.prototype. closestbr	=function( loc, ploc )
 {
