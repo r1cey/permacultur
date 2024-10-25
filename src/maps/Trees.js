@@ -1,4 +1,4 @@
-import Maps	from '../../www/shared/maps/Maps.js'
+import ShTrees	from '../../www/shared/maps/Trees.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'
@@ -9,7 +9,7 @@ import V from  '../../www/shared/Vec.js'
 
 
 
-export default class T extends Map(Maps.Tree)
+export default class T extends Map(ShTrees)
 {
 	static name	='trees'
 }
@@ -17,7 +17,7 @@ export default class T extends Map(Maps.Tree)
 
 
 
-class Br extends Maps.Tree.Br
+class Br extends ShTrees.Br
 {
 
 }

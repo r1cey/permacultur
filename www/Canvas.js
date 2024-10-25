@@ -205,12 +205,9 @@ Can.prototype. draw	=function( dt )
 	{
 		maps.gr.draw(can)
 
-		if( can.pl )
-		{
-			can.drawclpl()
-		}
-
-		maps.tr.draw(can)
+		if( pl.loc.h === 0 )	can.drawclpl()
+		
+		maps.tr.draw(can, pl)
 	}
 	
 	{
@@ -308,7 +305,9 @@ Can.prototype. clicked	=function( possqel )
 	}
 	else
 	{
-		let ploc	=can.pl.loc
+		let pl	=can.pl
+
+		let ploc	=pl.loc
 
 		let menu	=new Menu()
 
@@ -318,28 +317,28 @@ Can.prototype. clicked	=function( possqel )
 
 		if( loc.disth( ploc) !== 1 )	return
 		
-		let map
+		let map	=pl.gmap()
+
+		if( map.climbable( loc ))
+		{
+			menu.addopt(
+				
+				"climb"
+				,
+				()=>
+				{
+					can.pl.climb(loc)
+				}
+			)
+		}
 
 		switch(loc.h)
 		{
 			case 0 :
 
-				map	=can.maps.gr
+				// map	=can.maps.gr
 
-				if( map.climbable( loc ))
-				{
-					menu.addopt(
-						
-						"climb"
-						,
-						()=>
-						{
-							can.pl.climbup(loc)
-						}
-						,
-						()=>map.climbable(loc)
-					)
-				}
+				
 		}
 
 		menu.show()

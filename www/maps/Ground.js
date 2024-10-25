@@ -96,28 +96,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 				{
 					case 5:
 
-						lvl	=map.getveglvli(ic)
-
-						max	=map.maxveglvl()
-						
-						// col.sethsl( 112, 44, 61 )	//46, 34, 34
-
-						// col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
-
-						Gr.treecol( lvl, col )
-
-						var r	=lvl<3	?(lvl*h)>>3	:Gr.calcy( 3,h>>1,max,h,lvl ) //h*(lvl+max-6)/(2*max-6)
-
-						can.fillcirc( vsq.x, vsq.y, r,
-							
-							col.str(), "#000000" )
-
-						if( can.showtrlvls )
-						{
-							can.ctx.fillStyle="#FFFFFF"
-				
-							can.ctx.fillText( lvl, vsq.x, vsq.y )
-						}
+						map.drawstem( can, loc, vsq, ic, col )
 				}
 			}
 		}
@@ -160,6 +139,43 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 			can.ctx.globalAlpha	=1
 		}
+	}
+}
+
+
+
+
+Gr.prototype. drawstem	=function( can, loc, vsq, ic, col )
+{
+	var map	=this
+
+	vsq	??=new V().set(loc).tosqc(can)
+
+	ic	??=map.i(loc)
+
+	var lvl	=map.getveglvli(ic)
+
+	var max	=Gr.maxveglvl()
+
+	var h	=can.units.h2>>1
+	
+	// col.sethsl( 112, 44, 61 )	//46, 34, 34
+
+	// col.add( lvl*(-66)/max, lvl*(-10)/max, lvl*(-27)/max )
+
+	Gr.treecol( lvl, col )
+
+	var r	=lvl<3	?(lvl*h)>>3	:Gr.calcy( 3,h>>1,max,h,lvl ) //h*(lvl+max-6)/(2*max-6)
+
+	can.fillcirc( vsq.x, vsq.y, r,
+		
+		col.str(), "#000000" )
+
+	if( can.showtrlvls )
+	{
+		can.ctx.fillStyle="#FFFFFF"
+
+		can.ctx.fillText( lvl, vsq.x, vsq.y )
 	}
 }
 

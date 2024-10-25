@@ -87,13 +87,13 @@ Tr.prototype. setbuf	=function( buf, code )
 
 
 
-Tr.prototype. draw	=function( can )
+Tr.prototype. draw	=function( can, pl )
 {
 	var map	=this
 
 	let { v, v2 }	=can
 
-	let plh	=can.pl?.pos.h	|| 0
+	let plh	=pl?.pos.h	|| 0
 
 	var brminw	=0.2	//out of units.h
 
@@ -109,7 +109,17 @@ Tr.prototype. draw	=function( can )
 	{
 		if( ! this.inside(loc) )	return
 
-		var ic	=map.i(loc)
+		if( map.getleaves( loc ))
+		{
+			drawleaves( loc )
+		}
+	})
+
+	can.forcell(( loc )=>
+	{
+		if( ! this.inside(loc) )	return
+
+		var ic	=map.i( loc )
 
 		// vsq.set(loc).tosqc( can )
 
@@ -117,21 +127,27 @@ Tr.prototype. draw	=function( can )
 		{
 			case 1 :
 
-				drawleaves( loc )
-
+				can.maps.gr.drawstem( can, loc, null, ic, col )
 			break;
 			case 2 :
 
 				drawbranch( loc, ic )
-
 			break;
-			default :
+		}
+	})
 
-				if( map.getleavesi( ic ))
-				{
-					drawleaves( loc )
-				}
+	if( plh === 1 )
+	{
+		can.drawclpl()
+	}
 
+	can.forcell(( loc )=>
+	{
+		if( ! this.inside(loc) )	return
+
+		if( map.getleaves( loc ))
+		{
+			drawleaves( loc, 1 )
 		}
 	})
 
@@ -141,20 +157,20 @@ Tr.prototype. draw	=function( can )
 
 	function drawbranch( loc, ic )
 	{
-		var dir	=map.getbranchdi( ic )
+		var odir	=map.getbranchdi( ic )
 
 		// var ctx	=map.ctx
 
 		var ctx	=can.ctx
-
-		drawleaves( loc )
 
 		ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.3
 
 
 		var lvl	=map.getbrsizei(ic)
 
-		dir	=V.rotopph(dir)
+		// if(lvl===1)	debugger
+
+		var dir	=V.rotopph(odir)
 
 		var r	=V.sin60*0.3333	//units.r*3=>units.h
 
@@ -162,7 +178,16 @@ Tr.prototype. draw	=function( can )
 
 		var path	=new Path2D()
 
-		v.set( loc ).addv(
+		if( lvl === 1 )
+		{
+			v.set( V.dirvh[odir] ).mul(0.5).addv( loc )
+		}
+		else
+		{
+			v.set(loc)
+		}
+
+		v.addv(
 			
 			v2.set( V.dirvhrot(dir,1) ).addv( V.dirvhrot(dir,2) ).mul( w(lvl-1)*r )
 		
@@ -172,7 +197,16 @@ Tr.prototype. draw	=function( can )
 
 		path.moveTo( v.x, v.y )
 
-		v.set( loc ).addv(
+		if( lvl === 1 )
+		{
+			v.set( V.dirvh[odir] ).mul(0.5).addv( loc )
+		}
+		else
+		{
+			v.set(loc)
+		}
+
+		v.addv(
 			
 			v2.set( V.dirvhrot(dir,-1) ).addv( V.dirvhrot(dir,-2) ).mul( w(lvl-1)*r )
 		
@@ -225,13 +259,13 @@ Tr.prototype. draw	=function( can )
 
 
 
-	function drawleaves( loc )
+	function drawleaves( loc, trans )
 	{
 		var { r, h2 }	=units
 
 		v.set(loc).tosqc(can).sub(r, h2>>1)
 
-		ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.1
+		ctx.globalAlpha	=plh === map.getloc().h && ! trans	? 1	: 0.1
 
 		ctx.drawImage( can.imgs().o.leaves5, v.x,v.y, r<<1, h2 )
 
@@ -276,7 +310,11 @@ Tr.prototype. setleavesi	=function( ic, val )
 
 
 
-Tr.prototype. getleavesi	=function( ic, val )
+Tr.prototype. getleaves	=function( loc )
+{
+	return this.getleavesi( this.i(loc) )
+}
+Tr.prototype. getleavesi	=function( ic )
 {
 	return this.bufs[1].gprop( ic, 1,0 )
 }
@@ -347,6 +385,8 @@ Tr.prototype. shift	=function( dir, ...args )
 
 Tr.prototype. paintleaves	=function( loc, v )
 {
+	this.setleaves( loc , 1 )
+
 	for(var dir=0; dir<6; dir++)
 	{
 		if( this.inside( v.set(loc).neighh(dir) ))

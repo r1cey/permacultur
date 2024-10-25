@@ -45,7 +45,7 @@ Pls.prototype. read	=async function( name, map )
 				
 	if(pla)
 	{
-		var pl	=new Pl( pla, map )
+		var pl	=new Pl( pla, game )
 
 		if( pl )
 		{
@@ -69,11 +69,11 @@ Pls.prototype. new	=function( pla )
 {
 	console.log( `Adding new player to game: ${pla.name}` )
 
-	var g=this
+	var g=this.game
 
-	var map	=this.game.maps.ground
+	var map	=g.maps.ground
 
-	var pl	=new Pl( pla, map )
+	var pl	=new Pl( pla, g )
 
 	var loc	=new Loc(0,0,0)
 

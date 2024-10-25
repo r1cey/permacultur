@@ -1,9 +1,38 @@
-import Gr from './Ground.js'
-import Tree from './Trees.js'
-
-export default
+export default (o)=>class
 {
-	Gr
-	,
-	Tree
+	ground	=new o.Ground(this)
+	
+	gr	=this.ground
+
+	trees	=new o.Trees(this)
+
+	tr	=this.trees
+
+
+
+
+	fromloc( loc )
+	{
+		return loc.h	? this.tr	: this.gr
+	}
+
+
+
+
+	ready()
+	{
+		return this.gr.ready() && this.tr.ready()
+	}
+
+
+
+
+	fore( fun )
+	{
+		fun( this.gr )
+		fun( this.tr )
+	}
 }
+
+
+///////////////////////////////////////////////////////////////////////////////

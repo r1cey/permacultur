@@ -106,11 +106,11 @@ var Map	=( Base ) => class extends Base
 
 						proms.push( (async()=>
 						{
-							var pl	=await this.game.pls.read( c.pl, this )
+							var pl	=await this.game.pls.read( c.pl )
 
 							var h	=this.bufs[0]	? this.getloc().h	: pl.loc.h
 
-							pl.loc	=new Loc().setvstr(locst, h )
+							pl.loc.setvstr(locst, h )
 							
 							cell2save.pl	=pl
 						})())

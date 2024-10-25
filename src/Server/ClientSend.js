@@ -22,25 +22,25 @@ Send.prototype. map	=function()
 {
 	var pl	=this.pl
 
-	var map	=pl.map.game.maps.gr.slice( pl.loc, pl.vision )
+	var slicedgr	=pl.game.maps.gr.slice( pl.loc, pl.vision )
 
-	for(var i=0; i<map.bufs.length; i++)
+	for(var i=0; i<slicedgr.bufs.length; i++)
 	{
-		this.send.binary( map.bufs[i].buf )
+		this.send.binary( slicedgr.bufs[i].buf )
 	}
 
-	map	=pl.map.game.maps.tr.slice( pl.loc, pl.vision )
+	var slicedtr	=pl.game.maps.tr.slice( pl.loc, pl.vision )
 
-	for(i=0; i<map.bufs.length; i++)
+	for(i=0; i<slicedtr.bufs.length; i++)
 	{
-		this.send.binary( map.bufs[i].buf )
+		this.send.binary( slicedtr.bufs[i].buf )
 	}
 
 	this.send.json(
 		{
 			setmap:
 			{
-				o: map.o, loc: map.getloc(), r: pl.vision
+				o: [slicedgr.o, slicedtr.o], loc: slicedgr.getloc(), r: pl.vision
 			}
 		},( key, val )=>
 		{
@@ -398,4 +398,12 @@ Send.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 Send.prototype. wrtc	=function( o )
 {
 	this.json({ wrtc: o })
+}
+
+
+
+
+Send.prototype. error	=function( str )
+{
+	this.send.json({ error: str })
 }

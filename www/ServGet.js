@@ -66,11 +66,19 @@ Get.prototype. setpl	=function( plarr )
 
 
 
-/** This is what you see. */
+/** This is what you see.
+ * @arg msg.o	-[gr, tr]
+ * @arg msg.loc
+ * @arg msg.r
+ */
 
-Get.prototype. setmap	=function(mapmsg)
+Get.prototype. setmap	=function( msg )
 {
-	// debugger	
+	var maps	=this.cl.maps
+
+	maps.gr.o	=msg.o[0]
+
+	maps.tr.o	=msg.o[1]
 }
 
 
@@ -314,16 +322,14 @@ Get.prototype. clplclimb	=function( o )
 
 	if( loc.x !== newloc[0] || loc.y !== newloc[1] )
 	{
-		console.log( `Climbing in new location` )
+		console.log( `Reset pl map` )
+	}
 
-		dest.set( pos.set( loc.seta( newloc )))
-	}
-	else
-	{
-		loc.h	=1
-		dest.h	=1
-		pos.h	=1
-	}
+	var desth	=o.dir	? 1	: 0
+
+	loc.h	=desth
+	dest.h	=desth
+	pos.h	=desth
 }
 
 

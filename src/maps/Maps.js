@@ -1,11 +1,13 @@
 import * as fs	from '../fs.js'
+import ShMaps	from '../www/shared/Maps.js'
+
 import Ground from './Ground.js'
 import Trees from './Trees.js'
 
 
 
 
-export default class Ms
+export default class Ms extends ShMaps({ Ground, Trees })
 {
 	conf	=
 	{
@@ -21,23 +23,12 @@ export default class Ms
 
 	game
 
-	ground	=new Ground()
-
-	gr	=this.ground
-
-	trees	=new Trees()
-
-	tr	=this.trees
 
 
 
 	constructor( game )
 	{
 		this.game	=game
-
-		this.gr.game	=game
-
-		this.trees.game	=game
 	}
 }
 
@@ -76,13 +67,6 @@ Ms.prototype. start	=async function()
 
 
 
-Ms.prototype. g	=function( loc )
-{
-	return this.ground
-}
-
-
-
 Ms.prototype. save	=async function()
 {
 	this.gr.save(this.conf.dir)
@@ -91,13 +75,6 @@ Ms.prototype. save	=async function()
 }
 
 
-
-Ms.prototype. fore	=function(fun)
-{
-	fun(this.gr)
-
-	fun(this.trees)
-}
 
 /*
 maps. gen	=function()

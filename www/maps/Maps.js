@@ -1,20 +1,14 @@
+import ShMaps	from './shared/Maps.js'
 import Ground	from './Ground.js'
 import Trees	from './Trees.js'
 
 
 
 
-export default class M
+export default class M extends ShMaps({ Ground, Trees })
 {
 	cl
 
-	ground	=new Ground(this)
-
-	gr	=this.ground
-
-	trees	=new Trees(this)
-
-	tr	=this.trees
 
 
 
@@ -26,13 +20,6 @@ export default class M
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-M.prototype. ready	=function()
-{
-	return this.gr.ready() && this.tr.ready()
-}
 
 
 
@@ -53,15 +40,6 @@ M.prototype. setbuf	=function( buf, code )
 			this.tr.setbuf( buf, code )
 	}
 
-}
-
-
-
-
-M.prototype. fore	=function( fun )
-{
-	fun( this.gr )
-	fun( this.tr )
 }
 
 

@@ -1,10 +1,10 @@
-import Maps	from '../../www/shared/maps/Maps.js'
+import ShGround	from '../../www/shared/maps/Ground.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'
 import Vec from  '../../www/shared/Vec.js'
 
-export default class G extends Map(Maps.Gr)
+export default class G extends Map(ShGround)
 {
 	static name	='ground'
 }

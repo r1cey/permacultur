@@ -1,6 +1,8 @@
 import PlMsg from '../www/shared/Player.js'
 import V from '../www/shared/Vec.js'
 
+import NS from '../www/shared/NSpace.js'
+
 import Loc from './Loc.js'
 
 import * as fs	from './fs.js'
@@ -44,21 +46,22 @@ class PlSlp extends SrvPl( PlMsg.Vis )
 
 export default class Player extends PlMsg.O	//SrvPl( PlMsg )
 {	
+	game
+
+	map()	{return this.game.maps.fromh( this.loc.h )}
+
 	cl
 
-	map
+	srv()	{return this.game.server }
 
-	game()	{return this.map.game }
 
-	srv()	{return this.game().server }
 
-	get fs()	{return this.map.game.files }
 
-	constructor( msg, map )
+	constructor( msg, game )
 	{
 		super(msg)
 
-		this.map	=map
+		this.game	=game
 	}
 
 	/*static Slp	=PlSlp
@@ -101,18 +104,18 @@ Player.prototype. conncl	=function( cl )
 
 	cl.send.map()
 
-	this.map.game.srv?.send.plconn( this )
+	this.game.srv?.send.plconn( this )
 }
 
 
 
 Player.prototype. clclosed	=function()
 {
-	this.game().srv?.cls.del( this.name )
+	this.game.srv?.cls.del( this.name )
 
 	this.cl	=null
 
-	this.game().srv?.send.plconn( this )
+	this.game.srv?.send.plconn( this )
 }
 
 
@@ -125,7 +128,9 @@ Player.prototype. mov	=function( newloc )
 {
 	var pl	=this
 
-	if( pl.loc.eq( newloc )) return
+	var{ loc }	=pl
+
+	if( loc.eq( newloc )) return
 
 	pl.loc.forlineh( newloc, (loc)=>
 	{
@@ -136,24 +141,27 @@ Player.prototype. mov	=function( newloc )
 
 	this.srv()?.send.plmov( this, newloc )
 
-	var map	=this.map
+	var map	=this.map()
 	
-	map.deloprop( this.loc, "pl" )
+	map.deloprop( loc, "pl" )
 
-	pl.loc.set(newloc)
+	loc.set(newloc)
 
 	map.scello(newloc).pl	=this
 
-	map.fore(( loc )=>
+	if( loc.h === 0 )
 	{
-		if( map.gwater(loc) )
+		map.fore(( loc )=>
 		{
-			pl.setwater( 1 )
+			if( map.gwater(loc) )
+			{
+				pl.setwater( 1 )
 
-			return true
+				return true
+			}
 		}
+		,1 ,loc )
 	}
-	,1 ,pl.loc )
 
 	// console.log(`Player ${this.pl.name} moved to ${this.pl.loc.p()}.`)
 }
@@ -216,33 +224,51 @@ Player.prototype. subwater	=function( lvl )
 
 
 
-Player.prototype. climb	=function( dir )
+/** @arg hdir	- true is up */
+
+Player.prototype. climb	=function( hdir )
 {
 	var pl	=this
-	
-	var{ gr }	=this.game().maps
 
+	var map	=pl.map()
+	
 	var{ loc }	=pl
 
 	var tloc	=new Loc()
 
 	for(var dir=0;dir<6;dir++)
 	{
-		if( gr.climbable( tloc.set(loc).neighh(dir) ))
+		if( map.climbable( tloc.set(loc).neighh(dir) ))
 		{
 			break
 		}
 	}
 	if( dir === 6 )
 	{
-		console.log( `Player ${pl.name} doesn't have tree to climb` )
+		pl.cl.send.error( `No tree to climb` )
 
 		return
 	}
 
-	loc.h	=1
+	var desth	=Number(!loc.h)
 
-	pl.map	=pl.game().maps.tr
+	var destmap	=pl.game.maps.fromh( desth )
 
-	pl.srv()?.send.plclimb( pl, dir )
+	if( destmap.gcello(loc)?.pl )
+	{
+		pl.cl.send.error( "Another player underneath" )
+
+		return
+	}
+
+	map.deloprop( loc, "pl" )
+
+	loc.h	=desth
+
+	destmap.scello(loc).pl	=pl
+
+	pl.srv()?.send.plclimb( pl, hdir )
 }
+
+
+///////////////////////////////////////////////////////////////////////////////

@@ -87,19 +87,18 @@ Get.prototype. msg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var msg	=JSON.parse( data.toString() )
-
-	var prop
-
-	for(prop in msg )
+	var msg	=JSON.parse( data.toString() )/* ,( key, val )=>
 	{
-		if( this.g[prop] )
-		{
-			this.g[prop]( msg[prop] )
+		if( key.startsWith( "loc" ))	return new Loc().seta(val)
 
-			return
-		}
+		return val
+	})*/
+
+	for(var prop in msg )
+	{
+		var fun	=this.get[prop]
+
+		if( fun )	fun( msg[prop] )
 	}
-	console.error( `Client Msg: not found: ${prop}`)
+	// console.error( `Client Msg: not found: ${prop}`)
 }
-
