@@ -53,6 +53,30 @@ export default class T extends Map
 
 
 
+T.prototype. isplmov	=function( dest )
+{
+	var ic	=this.i(dest)
+
+	var brancht	=this.getbranchti(ic)
+
+	var v	=new V()
+
+	if( Map.prototype.isplmov.call(this, dest) && brancht !== 1 )
+	{
+		if( brancht === 2 )	return true
+
+		for(var dir=0;dir<6;dir++)
+		{
+			if( this.getbrancht( v.set(dest).neighh(dir) ) === 1 )
+			{
+				return true
+			}
+		}
+	}
+	return false
+}
+
+
 T.prototype. climbable	=function( loc )
 {
 	return this.getbrancht(loc) === 1

@@ -2,6 +2,8 @@ import Loc from "./Loc.js"
 import Col from './Color.js'
 
 
+
+
 class	PlVis
 {
 	name
@@ -17,6 +19,9 @@ class	PlVis
 	sleep	=0
 }
 
+
+
+
 class PlVisA extends PlVis
 {
 	// static _	=new PlVisA()
@@ -28,6 +33,8 @@ class PlVisA extends PlVis
 		if( viso )	this.seto( viso )
 	}
 }
+
+
 
 
 class PlVisO extends PlVis
@@ -45,6 +52,9 @@ class PlVisO extends PlVis
 		if(visa)	this.seta( visa )
 	}
 }
+
+
+
 
 function classpl( rootclass )
 {
@@ -65,6 +75,9 @@ function classpl( rootclass )
 	}
 }
 
+
+
+
 class PlA extends classpl( PlVisA )
 {
 	static Vis	=PlVisA
@@ -77,6 +90,9 @@ class PlA extends classpl( PlVisA )
 	}
 }
 
+
+
+
 class PlO extends classpl( PlVisO )
 {
 	static Msg	=PlA
@@ -88,6 +104,9 @@ class PlO extends classpl( PlVisO )
 		if( pla ) this.seta( pla )
 	}
 }
+
+
+
 
 export default 
 {
@@ -104,6 +123,7 @@ export default
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
 PlVisA.prototype. seto	=function( plo )
 {	
 	for(var prop in this )
@@ -115,6 +135,7 @@ PlVisA.prototype. seto	=function( plo )
 
 	this.cl	=plo.cl	? 1	: 0
 }
+
 
 
 
@@ -137,45 +158,21 @@ PlVisO.prototype. seta	=function( pla )
 
 
 
+
 PlVisO.prototype. newmsg	=function()
 {
 	return new this.constructor.Msg( this )
-	
-	/*for(var prop in this.constructor.Msg._ )
-	{
-		if(typeof this[prop] === 'function' )	continue
-
-		if(this[prop].newarr)
-		{
-			o[prop]	=this[prop].newarr()
-		}
-		else
-		{
-			o[prop]	=this[prop]
-		}
-	}
-
-	o.cl	=o.cl ? 1 : 0
-
-	if(oldloc)
-	{
-		o.loc[0]	=oldloc.x
-		o.loc[1]	=oldloc.y
-		o.loc[2]	=oldloc.h
-	}
-
-	return o*/
 }
+
+
 
 
 PlVisO.prototype. newmsgvis	=function( oldloc )
 {
 	return new this.constructor.Msg.Vis( this )
-
-	//or return new PlVisA( this )
-
-	//return Player._vis.set( this ).newarr( oldloc )
 }
+
+
 
 
 PlO.prototype. sees	=function( v )
@@ -187,6 +184,8 @@ PlO.prototype. sees	=function( v )
 	return dist <= pl.vision
 }
 
+
+
 /** Can't see self */
 
 PlO.prototype. seespl	=function( pl2 )
@@ -195,6 +194,9 @@ PlO.prototype. seespl	=function( pl2 )
 
 	return this.sees( pl2.loc )
 }
+
+
+
 
 PlO.prototype. setwater	=function( lvl )
 {
@@ -205,6 +207,10 @@ PlO.prototype. setwater	=function( lvl )
 
 	return lvl
 }
+
+
+
+
 PlO.prototype. subwater	=function( n )
 {
 	return this.setwater( this.water - n )

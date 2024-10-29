@@ -262,22 +262,14 @@ Can.prototype. frame	=function(now)
 		let deltasq	=can.v3.set(tch.pos).subv(tch.last)
 
 		let dest	=can.v.set(deltasq).tohexc(can).addv(pl.dest)
+
+		let destloc	=can.v2.set(dest).roundh()
 		
 		tch.last.set(tch.pos)
 
-		let gr	=can.maps.gr
-
-		let ic	=gr.i( can.v2.set(dest).roundh() )
-
-		// console.log(dest)
-		
-		if( gr.nemptycelli(ic) &&
-	
-			! ( gr.getvegti(ic) && gr.getveglvli(ic) > 2 ))
+		if( pl.gmap().isplmov( destloc ) )
 		{
 			pl.dest.setv( dest )
-
-			can.menu?.mov( deltasq )
 		}
 	}
 

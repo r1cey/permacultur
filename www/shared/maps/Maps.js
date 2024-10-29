@@ -16,6 +16,11 @@ export default (o)=>class
 		return loc.h	? this.tr	: this.gr
 	}
 
+	fromh( h )
+	{
+		return h	? this.tr	: this.gr
+	}
+
 
 
 
@@ -31,6 +36,14 @@ export default (o)=>class
 	{
 		fun( this.gr )
 		fun( this.tr )
+	}
+
+
+
+
+	isplmov( dest )
+	{
+		return this.fromloc( dest ).isplmov( dest )
 	}
 }
 

@@ -48,7 +48,7 @@ export default class Player extends PlMsg.O	//SrvPl( PlMsg )
 {	
 	game
 
-	map()	{return this.game.maps.fromh( this.loc.h )}
+	map()	{return this.game.maps.fromloc( this.loc )}
 
 	cl
 
@@ -130,7 +130,21 @@ Player.prototype. mov	=function( newloc )
 
 	var{ loc }	=pl
 
-	if( loc.eq( newloc )) return
+	var map	=this.map()
+
+	if( ! map.isplmov( newloc ))
+	{
+		pl.cl?.send.error( "Can't move there." )
+
+		return
+	}
+
+	if( loc.eq( newloc ))
+	{
+		pl.cl?.send.error( "Already there." )
+		
+		return
+	}
 
 	pl.loc.forlineh( newloc, (loc)=>
 	{
@@ -141,8 +155,6 @@ Player.prototype. mov	=function( newloc )
 
 	this.srv()?.send.plmov( this, newloc )
 
-	var map	=this.map()
-	
 	map.deloprop( loc, "pl" )
 
 	loc.set(newloc)
@@ -165,6 +177,59 @@ Player.prototype. mov	=function( newloc )
 
 	// console.log(`Player ${this.pl.name} moved to ${this.pl.loc.p()}.`)
 }
+
+
+
+/** I can presend location of tree to not look for it every time
+ * @arg hdir	- true is up */
+
+Player.prototype. climb	=function( hdir )
+{
+	var pl	=this
+
+	var{ loc }	=pl
+
+	var dest	=new Loc().set(loc)
+	
+	dest.h	=hdir	? 1	: 0
+
+	var destmap	=pl.game.maps.fromloc( dest )
+
+	if( ! destmap.isplmov( dest ))
+	{
+		pl.cl?.send.error( "Can't climb there" )
+
+		return
+	}
+
+	var map	=pl.map()
+	
+	var tloc	=new Loc()
+
+	for(var dir=0;dir<6;dir++)
+	{
+		if( map.climbable( tloc.set(loc).neighh(dir) ))
+		{
+			break
+		}
+	}
+	if( dir === 6 )
+	{
+		pl.cl.send.error( `No tree to climb` )
+
+		return
+	}
+
+	map.deloprop( loc, "pl" )
+
+	loc.h	=dest.h
+
+	destmap.scello(loc).pl	=pl
+
+	pl.srv()?.send.plclimb( pl, hdir )
+}
+
+
 
 
 Player.prototype. cl_send	=function( msg )
@@ -220,54 +285,6 @@ Player.prototype. subwater	=function( lvl )
 	PlMsg.O.prototype. subwater.call(this, lvl )
 
 	this.cl?.send.json({ water: this.water })
-}
-
-
-
-/** @arg hdir	- true is up */
-
-Player.prototype. climb	=function( hdir )
-{
-	var pl	=this
-
-	var map	=pl.map()
-	
-	var{ loc }	=pl
-
-	var tloc	=new Loc()
-
-	for(var dir=0;dir<6;dir++)
-	{
-		if( map.climbable( tloc.set(loc).neighh(dir) ))
-		{
-			break
-		}
-	}
-	if( dir === 6 )
-	{
-		pl.cl.send.error( `No tree to climb` )
-
-		return
-	}
-
-	var desth	=Number(!loc.h)
-
-	var destmap	=pl.game.maps.fromh( desth )
-
-	if( destmap.gcello(loc)?.pl )
-	{
-		pl.cl.send.error( "Another player underneath" )
-
-		return
-	}
-
-	map.deloprop( loc, "pl" )
-
-	loc.h	=desth
-
-	destmap.scello(loc).pl	=pl
-
-	pl.srv()?.send.plclimb( pl, hdir )
 }
 
 

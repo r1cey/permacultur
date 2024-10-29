@@ -149,6 +149,16 @@ Map.prototype. ready	=function()
 
 
 
+
+Map.prototype. isplmov	=function( dest )
+{
+	return ! this.gcello(dest)?.pl
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 Map.prototype. printarr	=function( ibuf , r=6, c )
 {
 	var str	=''

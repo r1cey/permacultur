@@ -1,5 +1,5 @@
 import * as fs	from '../fs.js'
-import ShMaps	from '../www/shared/Maps.js'
+import ShMaps	from '../../www/shared/maps/Maps.js'
 
 import Ground from './Ground.js'
 import Trees from './Trees.js'
@@ -28,7 +28,13 @@ export default class Ms extends ShMaps({ Ground, Trees })
 
 	constructor( game )
 	{
+		super()
+
 		this.game	=game
+
+		this.gr.game	=game
+
+		this.tr.game	=game
 	}
 }
 

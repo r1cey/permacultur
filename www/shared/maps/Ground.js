@@ -2,6 +2,8 @@ import Map from './Map.js'
 import Loc from '../Loc.js'
 
 
+
+
 export default class G extends Map
 {
 	static Bufs	=
@@ -25,6 +27,23 @@ export default class G extends Map
 		)
 	]
 
+	/*	Minerals
+
+		P
+		S ?
+		K
+		Mg
+		Ca
+		Cl ?
+
+		Fe
+		K
+		Mg
+		P
+		Na
+		Zn
+		Mn
+
 	/******/
 
 	constructor( r, c, loc )
@@ -37,6 +56,19 @@ export default class G extends Map
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+G.prototype. isplmov	=function( dest )
+{
+	var ic	=this.i(dest)
+
+	return this.nemptycelli(ic) && Map.prototype.isplmov.call(this, dest) &&
+	
+		! ( this.getvegti(ic) === 5 && this.getveglvli(ic) > 1 )
+}
+
 
 
 

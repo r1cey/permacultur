@@ -118,6 +118,10 @@ V.prototype. toString	=function()
 {
 	return this.x+V.delim+this.y
 }
+V.prototype. tovstr	=V.prototype. toString
+
+
+
 
 V.prototype. set	=function( v )
 {

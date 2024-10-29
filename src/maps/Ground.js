@@ -7,6 +7,8 @@ import Vec from  '../../www/shared/Vec.js'
 export default class G extends Map(ShGround)
 {
 	static name	='ground'
+
+	trees
 }
 
 

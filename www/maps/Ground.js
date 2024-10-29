@@ -1,4 +1,4 @@
-import Maps	from "../shared/maps/Maps.js"
+import ShGr	from "../shared/maps/Ground.js"
 import Map	from './Map.js'
 
 import V	from "../shared/Vec.js"
@@ -7,7 +7,7 @@ import Col	from "../shared/Color.js"
 
 
 
-export default class Gr extends Map( Maps.Gr )
+export default class Gr extends Map( ShGr )
 {
 }
 

@@ -1,4 +1,4 @@
-import Maps	from "../shared/maps/Maps.js"
+import ShTr	from "../shared/maps/Trees.js"
 import Map	from './Map.js'
 import Gr from "./Ground.js"
 
@@ -8,7 +8,7 @@ import Col	from "../shared/Color.js"
 
 
 
-const TrBase	=Map( Maps.Tree )
+const TrBase	=Map( ShTr )
 
 
 
@@ -31,7 +31,7 @@ export default class Tr extends TrBase
 
 		Clss.Bufs.push(Clss.newBuf( 213, 1,
 		[
-			{ size	:[ Maps.Gr.Bufs[0].bmap[2][2] ]}
+			{ size	:[ Gr.Bufs[0].bmap[2][2] ]}
 			,
 			{ lvs	:[ 1 ]}
 		]))
@@ -45,7 +45,7 @@ export default class Tr extends TrBase
 
 Tr.prototype. setbuf	=function( buf, code )
 {
-	Maps.Tree.prototype.setbuf.call( this, buf, code )
+	TrBase.prototype.setbuf.call( this, buf, code )
 
 	var map	=this
 
@@ -99,7 +99,7 @@ Tr.prototype. draw	=function( can, pl )
 
 	var col	=new Col()
 
-	var maxbrlvl	=Maps.Gr.maxveglvl()/3
+	var maxbrlvl	=Gr.maxveglvl()/3
 
 	var units	=can.units
 
