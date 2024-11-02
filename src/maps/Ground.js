@@ -468,6 +468,8 @@ G.prototype. setsoil	=function( loc, lvl )
 	if( lvl > this.maxhum() )	lvl	=this.maxhum()
 
 	this.setsoili(this.i( loc ), lvl, loc )
+
+	this.wsr.
 }
 
 

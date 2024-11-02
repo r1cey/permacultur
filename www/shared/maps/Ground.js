@@ -13,14 +13,27 @@ export default class G extends Map
 			1, 4,
 			[
 				{ waHuRo	:[ 2, 4 ]},	// water/humid/rock:4	humid:16
-				{ mineral	:[ 5, 4 ]},	// mineral:32	num:16
 				{ planFlo	:[ 1, 7, 5 ]},	// plants/floor:2	plants:128	stage:32
 				{ walls	:[ 2, 2 ]}	// walls:4	color:4
 			]
 		),
 		Map.newBuf
 		(
-			2, 2,
+			2, 4,
+			[
+				{ n	:[ 4 ]},
+				{ p	:[ 4 ]},
+				{ k	:[ 4 ]},
+				{ ca	:[ 4 ]},
+				{ mg	:[ 4 ]},
+				{ na	:[ 4 ]},
+				{ fe	:[ 4 ]},
+				{ cu	:[ 4 ]}
+			]
+		),
+		Map.newBuf
+		(
+			3, 2,
 			[
 				{ dir	:[ 3 ]}
 			]
@@ -264,7 +277,21 @@ G.prototype. maxveglvl	=function()
 
 
 
+
+G.maxhum	=function()
+{
+	var def	=this.def
+
+	return ( 1 << this.Bufs[def.WSR_BUF].bmap[def.WSR][2] ) - 1	
+}
+
+
+
 G.maxveglvl	=function()
 {
-	return ( 1 << this.Bufs[0].bmap[2][2] ) - 1
+	var def	=this.def
+
+	return ( 1 << this.Bufs[def.PLFL_BUF].bmap[def.PLFL][2] ) - 1
+
+	// return ( 1 << this.Bufs[0].bmap[2][2] ) - 1
 }
