@@ -67,9 +67,34 @@ Send.prototype. map	=function()
 
 
 
-Send.prototype. mapcode	=function( bcode, loc, ccode )
+Send.prototype. mapcode	=function( map, loc, ic, ib )
 {
-	this.send.json({mapcode:{ bcode, loc, ccode }})
+	var Bufs	=map.constructor.Bufs
+
+	ic	??=map.i(loc)
+
+	if( ib )	send(ib)
+
+	else
+	{
+		for(ib =0;ib< Bufs.length; ib++)
+		{
+			send( ib )
+		}
+	}
+
+
+
+
+	function send(ib)
+	{
+		this.send.json({mapcode:
+			{
+				bcode	:Bufs[ib].id ,
+				loc ,
+				ccode	:map.bufs[ib].cells[ic] 
+			}})
+	}
 }
 
 

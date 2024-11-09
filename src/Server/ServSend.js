@@ -10,17 +10,15 @@ export default class S extends NS
 
 
 
-S.prototype. mapcode	=function( bcode, loc, ccode )
+S.prototype. mapcode	=function( map, loc, ic, ib )
 {
-	var cl
-
 	for(var n in this.cls.o )
 	{
-		cl	=this.cls.o[n]
+		var cl	=this.cls.o[n]
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send.mapcode( bcode, loc, ccode )
+			cl.send.mapcode( map, loc, ic, ib )
 		}
 	}
 }

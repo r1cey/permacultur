@@ -85,19 +85,13 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 			can.ctx.fillText( lvl, vsq.x, vsq.y )
 		}
 
-		if( map.isfloori( ic ))
+		if( map.isvegi( ic ))
 		{
-		}
-		else
-		{
-			if( lvl =map.getvegti( ic ))
+			switch( map.getvegti( ic ) )
 			{
-				switch( lvl )
-				{
-					case 5:
+				case map.veg.apple:
 
-						map.drawstem( can, loc, vsq, ic, col )
-				}
+					map.drawstem( can, loc, vsq, ic, col )
 			}
 		}
 	}
@@ -105,7 +99,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 	{
 		col.sethsl( 179, 34, 45 )	// 269, 45, 10
 
-		max	=map.maxwater()-1
+		max	=Gr.maxwater()-1
 
 		lvl--
 

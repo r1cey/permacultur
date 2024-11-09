@@ -14,14 +14,6 @@ var Map	=( Base ) => class extends Base
 
 	static name
 
-	constructor( game, path )
-	{
-		super()
-
-		this.game	=game
-
-		if(path)	this.read( path )
-	}
 
 
 

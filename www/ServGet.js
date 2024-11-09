@@ -134,28 +134,13 @@ Get.prototype. units	=function( o )
 
 Get.prototype. mapcode	=function( o )
 {
-	var maps	=this.cl.maps
+	var{ bcode }	=o
 
 	var loc	=Loc.seta( o.loc )
 
-	var map, bi
+	var map	=this.cl.maps.frombcode( bcode )
 
-	var bc	=o.bcode
-
-	if( bc < 3 )
-	{
-		map	=maps.gr
-
-		bi	=bc - 1
-	}
-	else
-	{
-		map	=maps.tr
-			
-		bi	=bc - 3
-	}
-
-	map.setcellc( bi, loc, o.ccode )
+	map.setcellb( map.constructor.frombcode( bcode ), loc, o.code )
 }
 
 

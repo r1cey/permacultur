@@ -8,9 +8,9 @@ export default class Buf
 
 	get buf()	{return this.head.buffer }
 
-	static headlen	=4*2
+	static id
 
-	static code
+	static headlen	=4*2
 
 	static bpc		//bytes per cell
 
@@ -18,7 +18,9 @@ export default class Buf
 
 	static bmap	//[]
 
-	static bmapo	//{}
+	/** Each bmap member is [[number of bits],[numbits,{name:val,name:val}],...] */
+
+	static bmapo	//{ name :index , ... }
 }
 
 
@@ -45,7 +47,7 @@ Buf.prototype. set	=function( buf, cellsl )
 
 	this.head	=Class.newheadarr( buf )
 
-	this.head[0]	=Class.code
+	this.head[0]	=Class.id
 
 	this.cells	=new Class.Arr( buf, Class.headlen, cellsl )
 
@@ -56,9 +58,16 @@ Buf.prototype. set	=function( buf, cellsl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @arg ibmp	- Can be number or string
+ * @arg val	- can be number of string
+*/
 
 Buf.prototype. setprop		=function( ic, ibmp, jbmp, val )
 {
+	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+
+	if( typeof val === "string" )	val	=this.bmap[ibmp][1][val]
+
 	var start	=this.getstartbit( ibmp, jbmp )
 
 	this.cells[ic] =Buf.smask( this.cells[ic], start, this.constructor.bmap[ibmp][jbmp], val )
@@ -81,13 +90,25 @@ Buf.prototype. setprop		=function( ic, ibmp, jbmp, val )
 }
 
 
+/** @arg ibmp	- Can be number or string */
 
 Buf.prototype. getprop	=function( ic, ibmp, jbmp )
 {
-	return Buf.gmask( this.cells[ic], this.getstartbit( ibmp, jbmp ), this.constructor.bmap[ibmp][jbmp] )
+	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+	
+	return Buf.gmask( this.cells[ic], this.getstartbit( ibmp, jbmp ), this.constructor.bmap[ibmp][jbmp][0] )
 }
 
 Buf.prototype. gprop	=Buf.prototype. getprop
+
+
+
+Buf.prototype. testprop	=function( ic, ibmp, jbmp, valname )
+{
+	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+
+	return this.getprop( ic, ibmp, jbmp ) === this.constructor.bmap[ibmp][jbmp][1][valname]
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

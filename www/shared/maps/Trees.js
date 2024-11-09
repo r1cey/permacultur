@@ -3,6 +3,10 @@ import Map from './Map.js'
 import V from "../Vec.js"
 
 
+var def	=
+{
+	branch	:["none","stump","b","platform"]
+}
 
 class Br
 {
@@ -29,22 +33,38 @@ export default class T extends Map
 	[
 		Map.newBuf
 		(
-			3, 1,
+			1,
 			[
-				{ branch	:[ 2, 3 ]}	// none-stump-branch-platform, dir
+				{ branch	:
+					[
+						[ 2, def.branch ],
+						  3
+					]
+				}	// none-stump-branch-platform, dir
 			]
 		)
 	]
 
+	static enum	={}
+
+	static e	=T.enum
+
 	static Br	=Br
 
 	/******/
+}
 
-	constructor( r, c, loc )
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+for(var n in def)
+{
+	T.enum[n]	={}
+
+	for(var i =0;i< def[n].length ;i++)
 	{
-		super()
-
-		if( r || c )	this.newbufs( r, c, loc )
+		T.enum[n][def[n][i]]	=i
 	}
 }
 
@@ -61,13 +81,13 @@ T.prototype. isplmov	=function( dest )
 
 	var v	=new V()
 
-	if( Map.prototype.isplmov.call(this, dest) && brancht !== 1 )
+	if( Map.prototype.isplmov.call(this, dest) && brancht !== T.e.branch.stump )
 	{
-		if( brancht === 2 )	return true
+		if( brancht === T.e.branch.b )	return true
 
 		for(var dir=0;dir<6;dir++)
 		{
-			if( this.getbrancht( v.set(dest).neighh(dir) ) === 1 )
+			if( this.getbrancht( v.set(dest).neighh(dir) ) === T.e.branch.stump )
 			{
 				return true
 			}
@@ -79,7 +99,7 @@ T.prototype. isplmov	=function( dest )
 
 T.prototype. climbable	=function( loc )
 {
-	return this.getbrancht(loc) === 1
+	return this.getbrancht(loc) === T.e.branch.stump
 }
 
 
@@ -122,18 +142,13 @@ T.prototype. getbranchd	=function( loc )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-T.prototype. isstemi	=function( ic )
-{
-	return this.bufs[0].getprop( ic, 0, 0 ) === 1
-}
-
 
 
 /** Might not be necessary. When using ic for checking this? */
 
 T.prototype. nextbranchi	=function( ic, dir )
 {
-	return this.getbranchti(ic)===2 && this.getbranchdi(ic)===dir
+	return this.getbranchti(ic)===T.e.branch.b && this.getbranchdi(ic)===dir
 }
 
 
@@ -141,7 +156,7 @@ T.prototype. nextbranchi	=function( ic, dir )
 
 T.prototype. getbranchti	=function( ic )
 {
-	return this.bufs[0].getprop( ic, 0, 0 )
+	return this.getbprop( ic, "branch", 0 )
 }
 
 
@@ -149,7 +164,7 @@ T.prototype. getbranchti	=function( ic )
 
 T.prototype. getbranchdi	=function( ic )
 {
-	return this.bufs[0].getprop( ic, 0, 1 )
+	return this.getbprop( ic, "branch", 1 )
 }
 
 

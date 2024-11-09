@@ -124,7 +124,7 @@ G.prototype. makeriver	=function( maindir =1 , w =0 )
 	{
 		forstar(( loc )=>
 		{
-			m.setwateri( m.i(loc), 1 )
+			m.setwater( loc, 1 )
 		}
 		,w ,vn, buf )
 
@@ -327,7 +327,7 @@ G.prototype. genwaterdepth	=function( loc, ic )
 
 	m.fore(( locd, r )=>
 	{
-		if( m.getsoilhum(locd) >= 0 || r >= m.maxwater() )
+		if( m.getsoilhum(locd) >= 0 || r >= G.maxwater() )
 		{
 			lvl	=r
 
@@ -350,7 +350,7 @@ G.prototype. genhum	=function( loc, ic )
 
 	var lvl	=0
 
-	var max	=m.maxhum()
+	var max	=G.maxhum()
 
 	m.fore(( locd, r )=>
 	{
@@ -383,16 +383,16 @@ G.prototype. gentree	=function( loc, lvl, ic )
 	{
 		if( ! this.fore(( loc2 )=>
 			{
-				if( this.getvegt( loc2 ) === 5 )
+				if( this.getvegt( loc2 ) === G.e.veg.apple )
 				{
 					return true
 				}
 			}
 			,2 ,loc ))
 		{
-			lvl	=Math.floor(Math.random()*( this.maxveglvl() + 1 ))
+			lvl	=Math.floor(Math.random()*( G.maxveglvl() + 1 ))
 
-			this.setvegi( ic, 5, lvl, loc )
+			this.setvegi( ic, G.e.veg.apple, lvl, loc )
 
 			return lvl
 		}
@@ -444,7 +444,7 @@ G.prototype. randomwater	=function( len )
 	{
 		p.randh( this._r )
 
-		this.setwateri( this.i(p), 1 )
+		this.setwater( p, 1 )
 	}
 }
 
@@ -453,11 +453,10 @@ G.prototype. randomwater	=function( len )
 
 
 
-G.prototype. setdir	=function( loc, dir )
+/*G.prototype. setdir	=function( loc, dir )
 {
 	this.bufs[1].setprop( this.i(loc), 0, 0, dir)
-}
-
+}*/
 
 
 
@@ -465,11 +464,9 @@ G.prototype. setsoil	=function( loc, lvl )
 {
 	if( lvl < 0 )	lvl	=0
 
-	if( lvl > this.maxhum() )	lvl	=this.maxhum()
+	if( lvl > G.maxhum() )	lvl	=G.maxhum()
 
 	this.setsoili(this.i( loc ), lvl, loc )
-
-	this.wsr.
 }
 
 
@@ -477,11 +474,15 @@ G.prototype. setsoil	=function( loc, lvl )
 
 G.prototype. setsoili	=function( i, lvl, loc )
 {
-	this.bufs[0].setprop( i, 0, 0, 2 )
+	var ib	=G.bufp.wsr
 
-	this.bufs[0].setprop( i, 0, 1, lvl )
+	var bmapi	=G.Bufs[ib].bmapo.wsr
 
-	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[i] )
+	this.bufs[ib].setprop( i, bmapi, 0, "soil" )
+
+	this.bufs[ib].setprop( i, bmapi, 1, lvl )
+
+	this.game?.server?.send.mapcode( "gr", loc, i, ib )
 }
 
 
@@ -506,7 +507,7 @@ G.prototype. addwateri	=function( ic, loc )
 	}
 	else if( wlvl =this.gwateri( ic ))
 	{
-		if( wlvl < this.maxwater() - 1 )
+		if( wlvl < G.maxwater() - 1 )
 		{
 			this.setwateri( ic, wlvl+1, loc )
 		}
@@ -544,7 +545,7 @@ G.prototype. setwater	=function( loc, lvl )
 {
 	if( lvl < 1 )	lvl	=1
 
-	if( lvl > this.maxwater() )	lvl	=this.maxwater()
+	if( lvl > G.maxwater() )	lvl	=G.maxwater()
 
 	this.setwateri(this.i( loc ), lvl , loc )
 }

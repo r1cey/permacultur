@@ -21,17 +21,17 @@ export default class Tr extends TrBase
 
 	_path	=new Path2D()	//used to draw branches
 
-	constructor()
+	constructor( id )
 	{
-		super()
+		super( id )
 
 		var Clss	=this.constructor
 
 		Clss.Bufs	=Clss.Bufs.slice()
 
-		Clss.Bufs.push(Clss.newBuf( 213, 1,
+		Clss.Bufs.push(Clss.newBuf( 1,
 		[
-			{ size	:[ Gr.Bufs[0].bmap[2][2] ]}
+			{ size	:[ Math.log( Gr.maxveglvl()+1 ) / Math.log( 2 ) ]}
 			,
 			{ lvs	:[ 1 ]}
 		]))

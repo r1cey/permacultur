@@ -1,49 +1,45 @@
-export default (o)=>class
+export default function( Ground, Trees )
 {
-	ground	=new o.Ground(this)
-	
-	gr	=this.ground
+	Trees.setids( Ground.setids( 1 ) )
 
-	trees	=new o.Trees(this)
-
-	tr	=this.trees
-
-
-
-
-	fromloc( loc )
+	return class
 	{
-		return loc.h	? this.tr	: this.gr
-	}
+		ground	=new Ground()
+		
+		gr	=this.ground
 
-	fromh( h )
-	{
-		return h	? this.tr	: this.gr
-	}
+		trees	=new Trees()
 
-
-
-
-	ready()
-	{
-		return this.gr.ready() && this.tr.ready()
-	}
+		tr	=this.trees
 
 
 
+		fromloc( loc )
+		{
+			return loc.h	? this.tr	: this.gr
+		}
 
-	fore( fun )
-	{
-		fun( this.gr )
-		fun( this.tr )
-	}
+		fromh( h )
+		{
+			return h	? this.tr	: this.gr
+		}
+
+		ready()
+		{
+			return this.gr.ready() && this.tr.ready()
+		}
+
+		fore( fun )
+		{
+			fun( this.gr )
+			fun( this.tr )
+		}
 
 
-
-
-	isplmov( dest )
-	{
-		return this.fromloc( dest ).isplmov( dest )
+		isplmov( dest )
+		{
+			return this.fromloc( dest ).isplmov( dest )
+		}
 	}
 }
 

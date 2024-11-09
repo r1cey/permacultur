@@ -10,6 +10,8 @@ export default class Map
 {
 	static Bufs
 
+	static bufp	={}	// { name: bufi }
+
 	bufs	=[]
 
 	o	={}
@@ -31,6 +33,22 @@ export default class Map
 	
 	cellsl()	{ return this.bufs[0].cells.length }
 
+
+	/////
+
+	
+	constructor()
+	{
+		var Class	=this.constructor
+
+		for(var i=0; i<Class.Bufs.length; i++)
+		{
+			for(var n in Class.Bufs[i].bmapo )
+			{
+				Class.bufp[n]	=i
+			}
+		}
+	}
 }
 
 
@@ -149,6 +167,7 @@ Map.prototype. ready	=function()
 
 
 
+/** Can player move there? */
 
 Map.prototype. isplmov	=function( dest )
 {
@@ -332,16 +351,25 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-Map.prototype. gcellprop	=function( ia, loc, ibmp, jbmp )
+Map.prototype. getbprop	=function( ic, name, jbmp )
 {
-	this.bufs[ia].getprop( this.i(loc), ibmp, jbmp )
+	var Class	=this.constructor
+
+	this.bufs[Class.bufp[name]].getprop( ic, name, jbmp )
 }
 
 
 Map.prototype. setcellprop		=function( ia, loc, ibmp, jbmp, val )
 {
 	this.bufs[ia].setprop( this.i(loc), ibmp, jbmp, val )
+}
+
+
+/** @arg val	- must be string */
+
+Map.prototype. testbprop	=function( ic, name, jbmp, val )
+{
+	return this.bufs[ this.constructor.bufp[name] ].testprop( ic, name, jbmp, val )
 }
 
 
@@ -399,7 +427,7 @@ Map.prototype. gcellc	=Map.prototype. getcellc
 
 
 
-Map.prototype. 	setcellc=function( ib, loc, val )
+Map.prototype. 	setcellb=function( ib, loc, val )
 {
 	this.bufs[ib].cells[this.i(loc)]	=val
 }
@@ -802,9 +830,24 @@ Map.prototype.setloc	=function( loc )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.setids	=function( startid )
+{
+	for(var i =0;i< this.Bufs.length ;i++)
+	{
+		this.Bufs[i].id	=i + startid
+	}
+
+	return i
+}
+
+
 /** Creates new buffer class */
 
-Map.newBuf	=function( code, bpc, bmap )
+Map.newBuf	=function( bpc, bmap )
 {
 	var g
 	
@@ -815,8 +858,6 @@ Map.newBuf	=function( code, bpc, bmap )
 
 	var clss	=class extends Buf
 	{
-		static code	=code
-
 		static bpc	=bpc
 		
 		static Arr	=g['Uint'+(bpc<<3)+'Array']
@@ -826,13 +867,32 @@ Map.newBuf	=function( code, bpc, bmap )
 		static bmapo	={}
 	}
 
-	for(var i=0; i<bmap.length; i++)
+	for(var i =0;i< bmap.length ;i++)
 	{
 		for(var n in bmap[i] )
 		{
-			clss.bmap[i]	=bmap[i][n]
+			for(var j =0;j< bmap[i][n].length ;j++)
+			{
+				var bits	=bmap[i][n][j]
 
-			clss.bmapo[n]	=bmap[i][n]
+				if( typeof bits === "number" )	bits	=[bits]
+
+				if( bits.length > 1 )
+				{
+					var enum1	={}
+
+					for(var ie =0; ie< bits[1].length ;ie++)
+					{
+						enum1[bits[1][ie]]	=ie
+					}
+
+					bits[1]	=enum1
+				}
+
+				clss.bmap[i]	=bits
+
+				clss.bmapo[n]	=bits
+			}
 		}
 	}
 
@@ -845,4 +905,20 @@ Map.newBuf	=function( code, bpc, bmap )
 Map.getcode	=function( buf )
 {
 	return new DataView( buf, 0, 2 ).getUint16( 0, true )
+}
+
+
+
+Map.getmaxbval	=function( name, j )
+{
+	return ( 1 << this.getbmapbits(name,j) ) - 1
+}
+
+
+
+Map.getbmapbits	=function( name , j )
+{
+	var Buf	=this.Bufs[this.bufp[name]]
+
+	return Buf.bmap[Buf.bmapo[name]][j]
 }

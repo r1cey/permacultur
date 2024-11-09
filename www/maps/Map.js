@@ -5,12 +5,6 @@ var Map	=( Base ) => class extends Base
 
 
 
-	constructor( maps, r, c, loc )
-	{
-		super( r, c, loc )
-
-		this.maps	=maps
-	}
 
 
 
