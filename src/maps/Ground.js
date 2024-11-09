@@ -124,7 +124,7 @@ G.prototype. makeriver	=function( maindir =1 , w =0 )
 	{
 		forstar(( loc )=>
 		{
-			m.setwater( loc, 1 )
+			m.setwateri( m.i(loc), 1, loc )
 		}
 		,w ,vn, buf )
 
@@ -482,7 +482,7 @@ G.prototype. setsoili	=function( i, lvl, loc )
 
 	this.bufs[ib].setprop( i, bmapi, 1, lvl )
 
-	this.game?.server?.send.mapcode( "gr", loc, i, ib )
+	this.game?.server?.send.mapcode( this, loc, i, ib )
 }
 
 
@@ -496,7 +496,7 @@ G.prototype. addwateri	=function( ic, loc )
 
 	if( hum >= 0)
 	{
-		if( hum < this.maxhum() )
+		if( hum < G.maxhum() )
 		{
 			this.setsoili( ic, hum + 1, loc )
 		}
@@ -555,11 +555,15 @@ G.prototype. setwater	=function( loc, lvl )
 
 G.prototype. setwateri	=function( ic, lvl, loc )
 {
-	this.bufs[0].setprop( ic, 0, 0, 3 )
+	var ib	=G.bufp.wsr
 
-	this.bufs[0].setprop( ic, 0, 1, lvl-1 )
+	var bmapi	=G.Bufs[ib].bmapo.wsr
 
-	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[ic] )
+	this.bufs[ib].setprop( ic, bmapi, 0, G.e.wsr.water )
+
+	this.bufs[ib].setprop( ic, bmapi, 1, lvl-1 )
+
+	this.game?.server?.send.mapcode( this, loc, ic, ib )
 }
 
 
@@ -573,11 +577,15 @@ G.prototype. setveg	=function( loc, type, lvl )
 
 G.prototype. setvegi	=function( ic, type, lvl =0, loc )
 {
-	this.bufs[0].setprop( ic, 2, 0, 0 )
+	var ib	=G.bufp.plfl
 
-	this.bufs[0].setprop( ic, 2, 1, type )
+	var ibmap	=G.Bufs[ib].bmapo.plfl
 
-	this.bufs[0].setprop( ic, 2, 2, lvl )
+	this.bufs[ib].setprop( ic, ibmap, 0, G.e.plfl.plant )
 
-	this.game?.server?.send.mapcode( 1, loc, this.bufs[0].cells[ic] )
+	this.bufs[ib].setprop( ic, ibmap, 1, type )
+
+	this.bufs[ib].setprop( ic, ibmap, 2, lvl )
+
+	this.game?.server?.send.mapcode( this, loc, ic, ib )
 }

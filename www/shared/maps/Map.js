@@ -902,6 +902,17 @@ Map.newBuf	=function( bpc, bmap )
 
 
 
+Map.ifrombid	=funcion( bid )
+{
+	for(var i =0;i< this.Bufs.length; i++)
+	{
+		if( this.Bufs[i].id === bid )	return i
+	}
+}
+
+
+
+
 Map.getcode	=function( buf )
 {
 	return new DataView( buf, 0, 2 ).getUint16( 0, true )

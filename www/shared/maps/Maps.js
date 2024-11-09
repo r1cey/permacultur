@@ -24,6 +24,22 @@ export default function( Ground, Trees )
 			return h	? this.tr	: this.gr
 		}
 
+		frombid( bid )
+		{
+			var ibuf
+
+			if( ibuf	=this.gr.constructor.ifrombid(bid) )
+			{
+				return { map :this.gr, ibuf}
+			}
+			else if( ibuf	=this.tr.constructor.ifrombid(bid) )
+			{
+				return { map :this.tr, ibuf }
+			}
+
+			console.error("Can't find buffer from id!")
+		}
+
 		ready()
 		{
 			return this.gr.ready() && this.tr.ready()

@@ -84,15 +84,13 @@ Send.prototype. mapcode	=function( map, loc, ic, ib )
 	}
 
 
-
-
 	function send(ib)
 	{
 		this.send.json({mapcode:
 			{
-				bcode	:Bufs[ib].id ,
+				bid	:Bufs[ib].id ,
 				loc ,
-				ccode	:map.bufs[ib].cells[ic] 
+				bval	:map.bufs[ib].cells[ic] 
 			}})
 	}
 }

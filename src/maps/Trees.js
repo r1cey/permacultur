@@ -4,6 +4,8 @@ import Map	from './Map.js'
 import Loc from  '../../www/shared/Loc.js'
 import V from  '../../www/shared/Vec.js'
 
+import Gr	from './Ground.js'
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -41,13 +43,13 @@ T.prototype. gentrees	=function( gr )
 {
 	var trs	=[]
 
-	var lvl	=gr.maxveglvl()
+	var lvl	=Gr.maxveglvl()
 
 	while( lvl >= 3 )
 	{
 		gr.fore(( loc )=>
 		{
-			if( gr.getvegt(loc) === 5 && gr.getveglvl(loc) >= lvl )
+			if( gr.getvegt(loc) === Gr.e.veg.apple && gr.getveglvl(loc) >= lvl )
 			{
 				this.growtree( loc, 5 )
 			}
@@ -96,15 +98,15 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 	{
 		let t	=m.getbranchti( ic )
 	
-		if( t > 1 )
+		if( t === T.e.branch.none )
 		{
-			return false
-		}
-		else if( ! t )
-		{
-			m.setbranchti( ic, 1, loc )
+			m.setbranchti( ic, T.e.branch.stump, loc )
 
 			return true
+		}
+		else if( t !== T.e.branch.stump)
+		{
+			return false
 		}
 	}
 
@@ -198,7 +200,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 		if( dir >= 0 )
 		{
-			m.setbranch( v.set(loc).neighh(dir), 2, dir )
+			m.setbranch( v.set(loc).neighh(dir), E.e.branch.b, dir )
 
 			brs.push( new Br(dir) )
 
@@ -219,7 +221,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 				if( (soft ?softdirs.has(dirs[i]) :1) &&
 				
-					m.getbrancht(v.set(loc).neighh(dirs[i])) === 0 )
+					m.getbrancht(v.set(loc).neighh(dirs[i])) ===  )
 				{
 					return dirs[i]
 				}

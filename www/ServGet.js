@@ -127,20 +127,20 @@ Get.prototype. units	=function( o )
 
 /**
  * @param o 
- * @arg o.bcode
+ * @arg o.bid
  * @arg o.loc
- * @arg o.ccode
+ * @arg o.bval
  */
 
 Get.prototype. mapcode	=function( o )
 {
-	var{ bcode }	=o
+	var{ bid }	=o
 
 	var loc	=Loc.seta( o.loc )
 
-	var map	=this.cl.maps.frombcode( bcode )
+	var{ map, ibuf }	=this.cl.maps.frombid( bid )
 
-	map.setcellb( map.constructor.frombcode( bcode ), loc, o.code )
+	map.setcellb( ibuf, loc, o.bval )
 }
 
 
