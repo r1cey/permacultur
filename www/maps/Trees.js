@@ -20,23 +20,19 @@ export default class Tr extends TrBase
 	ctx	=this.can.getContext('2d')
 
 	_path	=new Path2D()	//used to draw branches
-
-	constructor( id )
-	{
-		super( id )
-
-		var Clss	=this.constructor
-
-		Clss.Bufs	=Clss.Bufs.slice()
-
-		Clss.Bufs.push(Clss.newBuf( 1,
-		[
-			{ size	:[ Math.log( Gr.maxveglvl()+1 ) / Math.log( 2 ) ]}
-			,
-			{ lvs	:[ 1 ]}
-		]))
-	}
 }
+
+
+Tr.Bufs	=TrBase.Bufs.slice()
+
+Tr.Bufs.push(Tr.newBuf( 1,
+	[
+		{ size	:[ Math.log( Gr.maxveglvl()+1 ) / Math.log( 2 ) ]},
+		{ lvs	:[ 1 ]}
+	],
+	true ))
+
+Tr.setbufp()
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +45,7 @@ Tr.prototype. setbuf	=function( buf, code )
 
 	var map	=this
 
-	if( ! map.bufs[0] )
+	if( ! map.bufs[0] )	// ??? change 0 ?
 	{
 		return
 	}
@@ -68,11 +64,11 @@ Tr.prototype. setbuf	=function( buf, code )
 		
 		var brt	=map.getbranchti(ic)
 
-		if( brt === 1 || brt === 2 )
+		if( brt === map.e.branch.stem || brt === map.e.branch.b )
 		{
 			map.paintleaves( loc, v )
 
-			if( brt === 2 )
+			if( brt === map.e.branch.b )
 			{
 				map.endbranchcalc( loc, v )
 			}
@@ -125,11 +121,11 @@ Tr.prototype. draw	=function( can, pl )
 
 		switch( map.getbranchti( ic ))
 		{
-			case 1 :
+			case map.e.branch.stem :
 
 				can.maps.gr.drawstem( can, loc, null, ic, col )
 			break;
-			case 2 :
+			case map.e.branch.b :
 
 				drawbranch( loc, ic )
 			break;
@@ -280,7 +276,7 @@ Tr.prototype. draw	=function( can, pl )
 
 Tr.prototype. setbrsize	=function( loc, size )
 {
-	this.bufs[1].setprop(this.i(loc), 0,0, size )
+	this.setbprop( this.i(loc), 'size', 0, size )
 }
 
 
@@ -292,7 +288,7 @@ Tr.prototype. getbrsize	=function( loc )
 }
 Tr.prototype. getbrsizei	=function( ic )
 {
-	return this.bufs[1].gprop( ic, 0, 0 )
+	return this.getbprop( ic, "size", 0 )
 }
 
 
@@ -304,7 +300,7 @@ Tr.prototype. setleaves	=function( loc, val )
 }
 Tr.prototype. setleavesi	=function( ic, val )
 {
-	this.bufs[1].setprop(ic, 1,0, val )
+	this.setbprop(ic, "lvs", 0, val )
 }
 
 
@@ -316,7 +312,7 @@ Tr.prototype. getleaves	=function( loc )
 }
 Tr.prototype. getleavesi	=function( ic )
 {
-	return this.bufs[1].gprop( ic, 1,0 )
+	return this.getbprop( ic, "lvs", 0 )
 }
 
 
@@ -330,6 +326,8 @@ Tr.prototype. shift	=function( dir, ...args )
 
 	var v	=new V()
 
+	var brts	=map.e.branch
+
 	map.fordiredge(( loc )=>
 	{
 		var ic	=map.i(loc)
@@ -338,7 +336,7 @@ Tr.prototype. shift	=function( dir, ...args )
 
 		switch( brt )
 		{
-			case 0 :
+			case brts.none :
 
 				for(var dir=0; dir<6; dir++)
 				{
@@ -346,8 +344,8 @@ Tr.prototype. shift	=function( dir, ...args )
 
 					switch( map.getbranchti( v ))
 					{
-						case 1 :
-						case 2 :
+						case brts.stem :
+						case brts.b :
 
 							map.setleavesi( ic, 1 )
 
@@ -355,12 +353,12 @@ Tr.prototype. shift	=function( dir, ...args )
 					}
 				}
 			break
-			case 1 :
-			case 2 :
+			case brts.stem :
+			case brts.b :
 
 				map.paintleaves( loc, v )
 
-				if( brt !== 2 )	break
+				if( brt !== brts.b )	break
 
 				if( map.getbrsizei(ic) )	break
 
@@ -393,7 +391,7 @@ Tr.prototype. paintleaves	=function( loc, v )
 		{
 			var ic	=this.i(v)
 
-			if( this.getbranchti( ic )===0 )
+			// if( this.getbranchti( ic ) === this.e.branch.none )
 			{
 				this.setleavesi( ic , 1 )
 			}
@@ -429,7 +427,7 @@ Tr.prototype. endbranchcalc	=function( loc, v )
 
 		if( ! map.inside(v) ) break
 
-		if( map.getbrancht( v ) !== 2 )	break
+		if( map.getbrancht( v ) !== map.e.branch.b )	break
 
 		size ++
 

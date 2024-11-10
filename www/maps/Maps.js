@@ -30,18 +30,9 @@ M.prototype. setbuf	=function( buf, code )
 {
 	code	??=Ground.getcode( buf )
 
-	switch( code )
-	{
-		case 1 :
-		case 2 :
+	var{ map, ibuf }	=this.frombid(code)
 
-			this.gr.setbuf( buf, code )
-		break
-		case 3 :
-
-			this.tr.setbuf( buf, code )
-	}
-
+	map.setbuf( buf, ibuf )
 }
 
 

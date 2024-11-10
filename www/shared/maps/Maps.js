@@ -2,6 +2,8 @@ export default function( Ground, Trees )
 {
 	Trees.setids( Ground.setids( 1 ) )
 
+
+
 	return class
 	{
 		ground	=new Ground()
@@ -28,11 +30,11 @@ export default function( Ground, Trees )
 		{
 			var ibuf
 
-			if( ibuf	=this.gr.constructor.ifrombid(bid) )
+			if( ibuf	=this.gr.constructor.bifrombid(bid) )
 			{
 				return { map :this.gr, ibuf}
 			}
-			else if( ibuf	=this.tr.constructor.ifrombid(bid) )
+			else if( ibuf	=this.tr.constructor.bifrombid(bid) )
 			{
 				return { map :this.tr, ibuf }
 			}

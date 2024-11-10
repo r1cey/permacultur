@@ -221,7 +221,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 				if( (soft ?softdirs.has(dirs[i]) :1) &&
 				
-					m.getbrancht(v.set(loc).neighh(dirs[i])) ===  )
+					m.getbrancht(v.set(loc).neighh(dirs[i])) === T.e.branch.none )
 				{
 					return dirs[i]
 				}
@@ -316,9 +316,9 @@ T.prototype. setbranchi	=function( ic, type, dir, loc )
 
 T.prototype. setbranchti	=function( ic, type, loc )
 {
-	this.bufs[0].setprop( ic, 0, 0, type )
+	var ibuf	=this.setbprop( ic, "branch", 0, type )
 
-	this.game?.server?.send.mapcode( 3, loc, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( this, loc, ic, ibuf )
 }
 
 
@@ -326,9 +326,9 @@ T.prototype. setbranchti	=function( ic, type, loc )
 
 T.prototype. setbranchdi	=function( ic, dir, loc )
 {
-	this.bufs[0].setprop( ic, 0, 1, dir )
+	var ibuf	=this.setbprop( ic, "branch", 1, dir )
 
-	this.game?.server?.send.mapcode( 3, loc, this.bufs[0].cells[ic] )
+	this.game?.server?.send.mapcode( this, loc, ic, ibuf )
 }
 
 
@@ -433,7 +433,7 @@ Br.prototype. grow	=function( map, v )
 	
 			v.neighh( dirs[i] )
 	
-			if( map.getbrancht( v ) === 0 )
+			if( map.getbrancht( v ) === T.e.branch.none )
 			{
 				v.neighh( V.rotopph( dirs[i] ))
 	

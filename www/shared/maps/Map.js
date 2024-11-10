@@ -37,9 +37,9 @@ export default class Map
 	/////
 
 	
-	constructor()
+	static setbufp()
 	{
-		var Class	=this.constructor
+		var Class	=this
 
 		for(var i=0; i<Class.Bufs.length; i++)
 		{
@@ -96,7 +96,7 @@ Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
 /** code is optional. */
 
 
-Map.prototype. setbuf	=function( buf, code )
+Map.prototype. setbuf	=function( buf, bufi )
 {
 	if( !buf )
 	{
@@ -104,7 +104,7 @@ Map.prototype. setbuf	=function( buf, code )
 
 		return
 	}
-	
+	/*
 	var Class	=this.constructor
 
 	code	??= Map.getcode( buf )
@@ -127,7 +127,9 @@ Map.prototype. setbuf	=function( buf, code )
 		console.error( `Buffer code doesn't fit known buffers`, buf )
 		
 		return
-	}
+	}*/
+
+	var Buf	=this.constructor.Bufs[bufi]
 
 	var c	=( buf.byteLength - Buf.headlen ) / Buf.bpc
 	
@@ -359,9 +361,15 @@ Map.prototype. getbprop	=function( ic, name, jbmp )
 }
 
 
-Map.prototype. setcellprop		=function( ia, loc, ibmp, jbmp, val )
+/** @returns - index of buffer where property was set */
+
+Map.prototype. setbprop		=function( ic, name, jbmp, val )
 {
-	this.bufs[ia].setprop( this.i(loc), ibmp, jbmp, val )
+	var ibuf	=this.constructor.bufp[name]
+
+	this.bufs[ibuf].setprop( ic, name, jbmp, val )
+
+	return ibuf
 }
 
 
@@ -836,18 +844,24 @@ Map.prototype.setloc	=function( loc )
 
 Map.setids	=function( startid )
 {
+	var id	=startid
+
 	for(var i =0;i< this.Bufs.length ;i++)
 	{
-		this.Bufs[i].id	=i + startid
+		if( this.Bufs[i].skipid )	continue
+
+		this.Bufs[i].id	=id
+
+		id++
 	}
 
-	return i
+	return id
 }
 
 
 /** Creates new buffer class */
 
-Map.newBuf	=function( bpc, bmap )
+Map.newBuf	=function( bpc, bmap, skipid )
 {
 	var g
 	
@@ -865,6 +879,8 @@ Map.newBuf	=function( bpc, bmap )
 		static bmap	=[]
 
 		static bmapo	={}
+
+		static skipid	=skipid
 	}
 
 	for(var i =0;i< bmap.length ;i++)
@@ -902,7 +918,7 @@ Map.newBuf	=function( bpc, bmap )
 
 
 
-Map.ifrombid	=funcion( bid )
+Map.bifrombid	=funcion( bid )
 {
 	for(var i =0;i< this.Bufs.length; i++)
 	{

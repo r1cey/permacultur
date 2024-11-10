@@ -89,7 +89,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 		{
 			switch( map.getvegti( ic ) )
 			{
-				case map.veg.apple:
+				case map.e.veg.apple:
 
 					map.drawstem( can, loc, vsq, ic, col )
 			}

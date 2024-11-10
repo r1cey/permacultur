@@ -10,6 +10,8 @@ export default class Buf
 
 	static id
 
+	static skipid	=false	//when true, skip this buffer when assigning ids
+
 	static headlen	=4*2
 
 	static bpc		//bytes per cell
@@ -64,13 +66,15 @@ Buf.prototype. set	=function( buf, cellsl )
 
 Buf.prototype. setprop		=function( ic, ibmp, jbmp, val )
 {
-	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+	var Class	=this.constructor
 
-	if( typeof val === "string" )	val	=this.bmap[ibmp][1][val]
+	if( typeof ibmp === "string" )	ibmp	=Class.bmapo[ibmp]
+
+	if( typeof val === "string" )	val	=Class.bmap[ibmp][1][val]
 
 	var start	=this.getstartbit( ibmp, jbmp )
 
-	this.cells[ic] =Buf.smask( this.cells[ic], start, this.constructor.bmap[ibmp][jbmp], val )
+	this.cells[ic] =Buf.smask( this.cells[ic], start, Class.bmap[ibmp][jbmp], val )
 
 	/*
 	// var mask	=~((~0)<< Con.bmaps[ia][ibmp][jbmp] )
@@ -94,9 +98,11 @@ Buf.prototype. setprop		=function( ic, ibmp, jbmp, val )
 
 Buf.prototype. getprop	=function( ic, ibmp, jbmp )
 {
-	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+	var Class	=this.constructor
+
+	if( typeof ibmp === "string" )	ibmp	=Class.bmapo[ibmp]
 	
-	return Buf.gmask( this.cells[ic], this.getstartbit( ibmp, jbmp ), this.constructor.bmap[ibmp][jbmp][0] )
+	return Buf.gmask( this.cells[ic], this.getstartbit( ibmp, jbmp ), Class.bmap[ibmp][jbmp][0] )
 }
 
 Buf.prototype. gprop	=Buf.prototype. getprop
@@ -105,9 +111,11 @@ Buf.prototype. gprop	=Buf.prototype. getprop
 
 Buf.prototype. testprop	=function( ic, ibmp, jbmp, valname )
 {
-	if( typeof ibmp === "string" )	ibmp	=this.bmapo[ibmp]
+	var Class	=this.constructor
 
-	return this.getprop( ic, ibmp, jbmp ) === this.constructor.bmap[ibmp][jbmp][1][valname]
+	if( typeof ibmp === "string" )	ibmp	=Class.bmapo[ibmp]
+
+	return this.getprop( ic, ibmp, jbmp ) === Class.bmap[ibmp][jbmp][1][valname]
 }
 
 
