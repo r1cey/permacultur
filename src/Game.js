@@ -53,7 +53,7 @@ export default class G
 
 	constructor( confpa )
 	{
-		this.start(confpa)
+		// this.start(confpa)
 	}
 }
 

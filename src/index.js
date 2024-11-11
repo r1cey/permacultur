@@ -4,6 +4,8 @@ import Game from "./Game.js"
 
 global.game	=new Game( 'conf.json' )
 
+game.start()
+
 // game.server.start()
 
 // game.maps.ground.printarr(0)

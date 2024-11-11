@@ -11,7 +11,7 @@ export async function readjson	( url )
 	}
 	catch(err)
 	{
-		console.error(err)
+		console.error("Couldn't read JSON: "+url)
 	}
 	return o
 }

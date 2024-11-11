@@ -47,7 +47,7 @@ Get.prototype. createpl	=async function( name )
 
 	var pg	=await this.cl.html.loadp('createpl')
 	
-	pg.start( name, this.s_newplayer. bind(this))
+	pg.start( name, this.send.newplayer. bind(this))
 }
 
 
@@ -91,7 +91,7 @@ Get.prototype. msgbuf	=function( buf )
 
 	var Map	=this.cl.maps.gr.constructor
 
-	var code	=Map.getcode( buf )
+	var code	=Map.idfrombuf( buf )
 
 	var movcode	=code>>8	// binary when player moves is received with code offset
 
@@ -364,7 +364,7 @@ Msb.prototype. addbuf	=function( buf, code, movcode )
 
 	var Map	=ms.srv.cl.maps.gr.constructor
 
-	code	??=Map.getcode( buf )
+	code	??=Map.idfrombuf( buf )
 
 	movcode	??=code>>8
 

@@ -10,7 +10,7 @@ export default class Map
 {
 	static Bufs
 
-	static bufp	={}	// { name: bufi }
+	static ibfromp	// { name: bufi }
 
 	bufs	=[]
 
@@ -45,7 +45,7 @@ export default class Map
 		{
 			for(var n in Class.Bufs[i].bmapo )
 			{
-				Class.bufp[n]	=i
+				Class.ibfromp[n]	=i
 			}
 		}
 	}
@@ -93,10 +93,10 @@ Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
 }
 
 
-/** code is optional. */
+/** ibuf is optional. */
 
 
-Map.prototype. setbuf	=function( buf, bufi )
+Map.prototype. setbuf	=function( buf, ibuf )
 {
 	if( !buf )
 	{
@@ -104,32 +104,19 @@ Map.prototype. setbuf	=function( buf, bufi )
 
 		return
 	}
-	/*
+
 	var Class	=this.constructor
 
-	code	??= Map.getcode( buf )
+	ibuf	??=Class.ibfrombid( Class.idfrombuf( buf ))
 
-	var bufi	//=index in bufs
-
-	var Buf	//=identified Buf class
-
-	for(bufi=0; bufi<Class.Bufs.length; bufi++)
+	if( ibuf < 0  )
 	{
-		if( code === Class.Bufs[bufi].code )
-		{
-			Buf	=Class.Bufs[bufi]
-
-			break
-		}
-	}
-	if( ! Buf )
-	{
-		console.error( `Buffer code doesn't fit known buffers`, buf )
+		console.error( `Buffer id doesn't fit known buffers`, Class.idfrombuf( buf ) )
 		
 		return
-	}*/
+	}
 
-	var Buf	=this.constructor.Bufs[bufi]
+	var Buf	=Class.Bufs[ibuf]
 
 	var c	=( buf.byteLength - Buf.headlen ) / Buf.bpc
 	
@@ -144,7 +131,7 @@ Map.prototype. setbuf	=function( buf, bufi )
 
 	this._r	=r
 
-	this.bufs[bufi]	=new Buf().set( buf, c )
+	this.bufs[ibuf]	=new Buf().set( buf, c )
 
 	return this
 }
@@ -357,7 +344,7 @@ Map.prototype. getbprop	=function( ic, name, jbmp )
 {
 	var Class	=this.constructor
 
-	this.bufs[Class.bufp[name]].getprop( ic, name, jbmp )
+	return this.bufs[Class.ibfromp[name]].getprop( ic, name, jbmp )
 }
 
 
@@ -365,7 +352,7 @@ Map.prototype. getbprop	=function( ic, name, jbmp )
 
 Map.prototype. setbprop		=function( ic, name, jbmp, val )
 {
-	var ibuf	=this.constructor.bufp[name]
+	var ibuf	=this.constructor.ibfromp[name]
 
 	this.bufs[ibuf].setprop( ic, name, jbmp, val )
 
@@ -377,7 +364,7 @@ Map.prototype. setbprop		=function( ic, name, jbmp, val )
 
 Map.prototype. testbprop	=function( ic, name, jbmp, val )
 {
-	return this.bufs[ this.constructor.bufp[name] ].testprop( ic, name, jbmp, val )
+	return this.bufs[ this.constructor.ibfromp[name] ].testprop( ic, name, jbmp, val )
 }
 
 
@@ -859,7 +846,9 @@ Map.setids	=function( startid )
 }
 
 
-/** Creates new buffer class */
+/** Creates new buffer class
+ * @arg bmap	- [{name:[[bits],[bits,[enum]],...]},{name,[...]}]
+ */
 
 Map.newBuf	=function( bpc, bmap, skipid )
 {
@@ -885,6 +874,8 @@ Map.newBuf	=function( bpc, bmap, skipid )
 
 	for(var i =0;i< bmap.length ;i++)
 	{
+		clss.bmap[i]	=[]
+
 		for(var n in bmap[i] )
 		{
 			for(var j =0;j< bmap[i][n].length ;j++)
@@ -905,9 +896,9 @@ Map.newBuf	=function( bpc, bmap, skipid )
 					bits[1]	=enum1
 				}
 
-				clss.bmap[i]	=bits
+				clss.bmap[i][j]	=bits
 
-				clss.bmapo[n]	=bits
+				clss.bmapo[n]	=i
 			}
 		}
 	}
@@ -918,18 +909,22 @@ Map.newBuf	=function( bpc, bmap, skipid )
 
 
 
-Map.bifrombid	=funcion( bid )
+Map.ibfrombid	=function( bid )
 {
 	for(var i =0;i< this.Bufs.length; i++)
 	{
-		if( this.Bufs[i].id === bid )	return i
+		if( this.Bufs[i].id === bid )
+		{
+			return i
+		}
 	}
+	return -1
 }
 
 
 
 
-Map.getcode	=function( buf )
+Map.idfrombuf	=function( buf )
 {
 	return new DataView( buf, 0, 2 ).getUint16( 0, true )
 }
@@ -945,7 +940,7 @@ Map.getmaxbval	=function( name, j )
 
 Map.getbmapbits	=function( name , j )
 {
-	var Buf	=this.Bufs[this.bufp[name]]
+	var Buf	=this.Bufs[this.ibfromp[name]]
 
-	return Buf.bmap[Buf.bmapo[name]][j]
+	return Buf.bmap[Buf.bmapo[name]][j][0]
 }

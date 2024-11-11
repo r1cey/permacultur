@@ -1,11 +1,11 @@
-import ShMaps	from '../shared/Maps/Maps.js'
+import ShMaps	from '../shared/maps/Maps.js'
 import Ground	from './Ground.js'
 import Trees	from './Trees.js'
 
 
 
 
-export default class M extends ShMaps({ Ground, Trees })
+export default class M extends ShMaps( Ground, Trees )
 {
 	cl
 
@@ -28,7 +28,7 @@ export default class M extends ShMaps({ Ground, Trees })
 
 M.prototype. setbuf	=function( buf, code )
 {
-	code	??=Ground.getcode( buf )
+	code	??=Ground.idfrombuf( buf )
 
 	var{ map, ibuf }	=this.frombid(code)
 
@@ -42,7 +42,7 @@ M.prototype. setbuf	=function( buf, code )
 
 M.prototype. shift	=function( arrs, cellso, dir )
 {
-	// code	??=Ground.getcode(bufs)>>8
+	// code	??=Ground.idfrombuf(bufs)>>8
 
 	this.fore(( map )=>
 	{

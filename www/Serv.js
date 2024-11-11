@@ -92,7 +92,7 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		// debugger
 
-		let code	=Map.getcode( msg )
+		let code	=Map.idfrombuf( msg )
 
 		let movcode	=code>>8
 

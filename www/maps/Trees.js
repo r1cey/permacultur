@@ -64,11 +64,11 @@ Tr.prototype. setbuf	=function( buf, code )
 		
 		var brt	=map.getbranchti(ic)
 
-		if( brt === map.e.branch.stem || brt === map.e.branch.b )
+		if( brt === Tr.e.branch.stem || brt === Tr.e.branch.b )
 		{
 			map.paintleaves( loc, v )
 
-			if( brt === map.e.branch.b )
+			if( brt === Tr.e.branch.b )
 			{
 				map.endbranchcalc( loc, v )
 			}
@@ -121,11 +121,11 @@ Tr.prototype. draw	=function( can, pl )
 
 		switch( map.getbranchti( ic ))
 		{
-			case map.e.branch.stem :
+			case Tr.e.branch.stem :
 
 				can.maps.gr.drawstem( can, loc, null, ic, col )
 			break;
-			case map.e.branch.b :
+			case Tr.e.branch.b :
 
 				drawbranch( loc, ic )
 			break;
@@ -326,7 +326,7 @@ Tr.prototype. shift	=function( dir, ...args )
 
 	var v	=new V()
 
-	var brts	=map.e.branch
+	var brts	=Tr.e.branch
 
 	map.fordiredge(( loc )=>
 	{
@@ -391,7 +391,7 @@ Tr.prototype. paintleaves	=function( loc, v )
 		{
 			var ic	=this.i(v)
 
-			// if( this.getbranchti( ic ) === this.e.branch.none )
+			// if( this.getbranchti( ic ) === Tr.e.branch.none )
 			{
 				this.setleavesi( ic , 1 )
 			}
@@ -427,7 +427,7 @@ Tr.prototype. endbranchcalc	=function( loc, v )
 
 		if( ! map.inside(v) ) break
 
-		if( map.getbrancht( v ) !== map.e.branch.b )	break
+		if( map.getbrancht( v ) !== Tr.e.branch.b )	break
 
 		size ++
 

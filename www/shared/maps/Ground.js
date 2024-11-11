@@ -62,6 +62,8 @@ export default class G extends Map
 		)
 	]
 
+	static ibfromp	={}
+
 	static enum	={}	/** definitions for bmap values taken from "def" variable */
 
 	static e	=G.enum
@@ -117,7 +119,7 @@ G.prototype. nemptycell	=function( loc )
 }
 G.prototype. nemptycelli	=function( ic )
 {
-	return Boolean( this.bufs[G.bufp.wsr].cells[ic] )
+	return Boolean( this.bufs[G.ibfromp.wsr].cells[ic] )
 }
 
 
@@ -168,7 +170,7 @@ G.prototype. getvegti	=function( ic )
 {
 	return this.getbprop( ic, "plfl", 1 )
 
-	// return this.bufs[G.bufp.plfl].gprop( ic, "plfl", 1 )
+	// return this.bufs[G.ibfromp.plfl].gprop( ic, "plfl", 1 )
 }
 
 G.prototype. getveglvl	=function( loc )
@@ -184,7 +186,7 @@ G.prototype. getveglvl	=function( loc )
 
 G.prototype. getsoilhumi	=function(i)
 {
-	var ib	=this.bufp( "wsr" )
+	var ib	=G.ibfromp.wsr
 
 	var ibmap	=G.Bufs[ib].bmapo.wsr
 
@@ -201,7 +203,7 @@ G.prototype. getsoilhumi	=function(i)
 
 G.prototype. gwateri	=function( ic )
 {
-	var ib	=this.bufp( "wsr" )
+	var ib	=G.ibfromp.wsr
 
 	var ibmap	=G.Bufs[ib].bmapo.wsr
 

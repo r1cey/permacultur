@@ -45,6 +45,8 @@ export default class T extends Map
 		)
 	]
 
+	static ibfromp	={}
+
 	static enum	={}
 
 	static e	=T.enum

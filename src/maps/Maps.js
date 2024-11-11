@@ -7,7 +7,7 @@ import Trees from './Trees.js'
 
 
 
-export default class Ms extends ShMaps({ Ground, Trees })
+export default class Ms extends ShMaps( Ground, Trees )
 {
 	conf	=
 	{
@@ -56,13 +56,13 @@ Ms.prototype. start	=async function()
 
 	if( ! proms[0] )
 	{
-		console.log( `Ground file was not found` )
+		console.log( `Ground files were not found` )
 
 		this.gr.gen(this.conf.size.r, this.conf.size.maxcells, this.trees)
 	}
 	else if( ! proms[1] )
 	{
-		console.log( `Trees file was not found`)
+		console.log( `Trees files were not found`)
 
 		this.tr.gen( this.gr )
 	}

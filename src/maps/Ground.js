@@ -20,7 +20,9 @@ export default class G extends Map(ShGround)
 G.prototype. gen	=function( r, maxc, trees )
 {
 	var m	=this
-
+	
+	trees.newbufs( r, maxc, new Loc( 0, 0, 1 ))
+	
 	m.newbufs( r, maxc, new Loc(0,0,0) )
 
 	this.allsoil()
@@ -95,7 +97,7 @@ G.prototype. dry	=function( loc )
 
 G.prototype. allsoil	=function()
 {
-	var maxhum	=this.maxhum()
+	// var maxhum	=G.maxhum()
 
 	this.fore(( loc )=>
 	{
@@ -474,7 +476,7 @@ G.prototype. setsoil	=function( loc, lvl )
 
 G.prototype. setsoili	=function( i, lvl, loc )
 {
-	var ib	=G.bufp.wsr
+	var ib	=G.ibfromp.wsr
 
 	var bmapi	=G.Bufs[ib].bmapo.wsr
 
@@ -555,7 +557,7 @@ G.prototype. setwater	=function( loc, lvl )
 
 G.prototype. setwateri	=function( ic, lvl, loc )
 {
-	var ib	=G.bufp.wsr
+	var ib	=G.ibfromp.wsr
 
 	var bmapi	=G.Bufs[ib].bmapo.wsr
 
@@ -577,7 +579,7 @@ G.prototype. setveg	=function( loc, type, lvl )
 
 G.prototype. setvegi	=function( ic, type, lvl =0, loc )
 {
-	var ib	=G.bufp.plfl
+	var ib	=G.ibfromp.plfl
 
 	var ibmap	=G.Bufs[ib].bmapo.plfl
 

@@ -28,15 +28,20 @@ export default function( Ground, Trees )
 
 		frombid( bid )
 		{
-			var ibuf
+			var ibuf	=this.gr.constructor.ibfrombid(bid)
 
-			if( ibuf	=this.gr.constructor.bifrombid(bid) )
+			if( ibuf >= 0 )
 			{
 				return { map :this.gr, ibuf}
 			}
-			else if( ibuf	=this.tr.constructor.bifrombid(bid) )
+			else
 			{
-				return { map :this.tr, ibuf }
+				ibuf	=this.tr.constructor.ibfrombid(bid)
+
+				if( ibuf >= 0  )
+				{
+					return { map :this.tr, ibuf }
+				}
 			}
 
 			console.error("Can't find buffer from id!")

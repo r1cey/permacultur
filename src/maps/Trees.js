@@ -200,7 +200,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 		if( dir >= 0 )
 		{
-			m.setbranch( v.set(loc).neighh(dir), E.e.branch.b, dir )
+			m.setbranch( v.set(loc).neighh(dir), T.e.branch.b, dir )
 
 			brs.push( new Br(dir) )
 
@@ -380,14 +380,7 @@ Br.prototype. grow	=function( map, v )
 	}
 	else if( brs.length === 1 )
 	{
-		try
-		{
-			grew	=brs[0].grow( map, v )
-		}
-		catch
-		{
-			console.log(2)
-		}
+		grew	=brs[0].grow( map, v )
 	}
 	else
 	{

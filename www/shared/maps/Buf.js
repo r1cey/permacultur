@@ -70,11 +70,11 @@ Buf.prototype. setprop		=function( ic, ibmp, jbmp, val )
 
 	if( typeof ibmp === "string" )	ibmp	=Class.bmapo[ibmp]
 
-	if( typeof val === "string" )	val	=Class.bmap[ibmp][1][val]
+	if( typeof val === "string" )	val	=Class.bmap[ibmp][jbmp][1][val]
 
 	var start	=this.getstartbit( ibmp, jbmp )
 
-	this.cells[ic] =Buf.smask( this.cells[ic], start, Class.bmap[ibmp][jbmp], val )
+	this.cells[ic] =Buf.smask( this.cells[ic], start, Class.bmap[ibmp][jbmp][0], val )
 
 	/*
 	// var mask	=~((~0)<< Con.bmaps[ia][ibmp][jbmp] )
@@ -137,7 +137,7 @@ Buf.prototype. getstartbit	=function( ibmap, jbmap )
 				return start
 			}
 
-			start	+=bmap[i][j]
+			start	+=bmap[i][j][0]
 		}
 	}
 }
