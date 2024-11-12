@@ -153,13 +153,15 @@ Player.prototype. mov	=function( newloc )
 		return true
 	})
 
-	this.srv()?.send.plmov( this, newloc )
-
 	map.deloprop( loc, "pl" )
+
+	var dir	=Loc.dirv2dirh(loc.subv(newloc).neg())
 
 	loc.set(newloc)
 
 	map.scello(newloc).pl	=this
+
+	this.srv()?.send.plmov( this, dir )
 
 	if( loc.h === 0 )
 	{

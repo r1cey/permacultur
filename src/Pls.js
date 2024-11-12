@@ -84,6 +84,8 @@ Pls.prototype. new	=function( pla )
 
 	pl.loc.set( loc )
 
+	this.o[pl.name]	=pl
+
 	pl.save( this.conf.dir )
 
 	map.scello(loc).pl	=pl

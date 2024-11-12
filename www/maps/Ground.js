@@ -72,7 +72,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 	{
 		col.sethsl( 57, 16, 42)	// 2, 47, 10
 
-		max	=map.maxhum()
+		max	=Gr.maxhum()
 
 		col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
 
@@ -89,7 +89,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 		{
 			switch( map.getvegti( ic ) )
 			{
-				case map.e.veg.apple:
+				case Gr.e.veg.apple:
 
 					map.drawstem( can, loc, vsq, ic, col )
 			}

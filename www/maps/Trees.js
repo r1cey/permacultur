@@ -45,7 +45,7 @@ Tr.prototype. setbuf	=function( buf, code )
 
 	var map	=this
 
-	if( ! map.bufs[0] )	// ??? change 0 ?
+	if( ! map.bufs[Tr.ibfromp.branch] )
 	{
 		return
 	}

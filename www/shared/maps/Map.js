@@ -143,7 +143,7 @@ Map.prototype. ready	=function()
 {
 	for(var i=0; i<this.constructor.Bufs.length; i++)
 	{
-		if( ! this.bufs[i]?.head?.[0] )
+		if( ! this.bufs[i]?.head )
 		{
 			return false
 		}

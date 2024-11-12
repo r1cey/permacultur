@@ -1,3 +1,7 @@
+import Loc	from "../Loc.js"
+
+
+
 export default class Buf
 {
 	head
@@ -174,4 +178,14 @@ Buf.smask	=function( code, start, len, val )
 Buf.newheadarr	=function( buf )
 {
 	return new Int16Array( buf, 0, this.headlen>>1 )
+}
+
+
+
+
+Buf. diredgesize	=function( r )
+{
+	var Buf	=this
+
+	return Buf.headlen + Buf.Arr.BYTES_PER_ELEMENT * Loc.diredgesize(r)
 }

@@ -6,6 +6,8 @@ export default class Loc extends V
 
 	static Vec	=V
 
+	static V	=V
+
 	constructor(x,y,l=0)
 	{
 		super( x, y ) 

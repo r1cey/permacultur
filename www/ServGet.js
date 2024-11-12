@@ -89,20 +89,24 @@ Get.prototype. msgbuf	=function( buf )
 {
 	// debugger
 
+	this.cl.maps.onbuf( buf )
+
+	/*
 	var Map	=this.cl.maps.gr.constructor
 
-	var code	=Map.idfrombuf( buf )
+	var id	=Map.idfrombuf( buf )
 
-	var movcode	=code>>8	// binary when player moves is received with code offset
+	var idmove	=id>>8	// binary when player moves is received with code offset
 
-	if( movcode )
+	if( idmove )
 	{
-		this.get.msb.addbuf( buf, code, movcode )
+		
+		// this.get.msb.addbuf( buf, code, movcode )
 	}
 	else
 	{
 		this.cl.setbuf( buf, code )
-	}
+	}*/
 }
 
 

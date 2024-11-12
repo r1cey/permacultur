@@ -59,12 +59,16 @@ Ms.prototype. start	=async function()
 		console.log( `Ground files were not found` )
 
 		this.gr.gen(this.conf.size.r, this.conf.size.maxcells, this.trees)
+
+		this.save()
 	}
 	else if( ! proms[1] )
 	{
 		console.log( `Trees files were not found`)
 
 		this.tr.gen( this.gr )
+
+		this.trees.save(this.conf.dir)
 	}
 }
 
