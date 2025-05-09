@@ -1,6 +1,8 @@
+/** Is also in charge of assigning ids to buffers */
+
 export default function( Ground, Trees )
 {
-	Trees.setids( Ground.setids( 1 ) )
+	var maxid	=Trees.setids( Ground.setids( 1 ) ) - 1
 
 
 
@@ -14,6 +16,9 @@ export default function( Ground, Trees )
 
 		tr	=this.trees
 
+		static Trees	=Trees
+
+		static Ground	=Ground
 
 
 		fromloc( loc )
@@ -62,6 +67,12 @@ export default function( Ground, Trees )
 		isplmov( dest )
 		{
 			return this.fromloc( dest ).isplmov( dest )
+		}
+
+
+		static maxid()
+		{
+			return maxid
 		}
 	}
 }

@@ -91,3 +91,10 @@ Loc.prototype. toJSON	=function()
 {
 	return [this.x, this.y, this.h]
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Loc. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1])) * isNaN(parseInt(a[2]))

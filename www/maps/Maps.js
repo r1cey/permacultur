@@ -1,6 +1,7 @@
 import ShMaps	from '../shared/maps/Maps.js'
 import Map	from '../shared/maps/Map.js'
-// import Trees	from './Trees.js'
+import Trees	from './Trees.js'
+import Ground	from './Ground.js'
 
 
 
@@ -26,7 +27,7 @@ export default class M extends ShMaps( Ground, Trees )
 
 M.prototype. onbuf	=function( buf )
 {
-	var id	=Map.idfrombuf( buf )
+	var id	=Map.codefrombuf( buf )
 
 	var idmove	=id>>8		// when player moves, buffer id is received with offset
 
@@ -54,7 +55,7 @@ M.prototype. onbuf	=function( buf )
 
 M.prototype. setbuf	=function( buf, code )
 {
-	code	??=Ground.idfrombuf( buf )
+	code	??=Ground.codefrombuf( buf )
 
 	var{ map, ibuf }	=this.frombid(code)
 
@@ -68,7 +69,7 @@ M.prototype. setbuf	=function( buf, code )
 
 M.prototype. shift	=function( arrs, cellso, dir )
 {
-	// code	??=Ground.idfrombuf(bufs)>>8
+	// code	??=Ground.codefrombuf(bufs)>>8
 
 	this.fore(( map )=>
 	{

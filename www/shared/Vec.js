@@ -94,19 +94,31 @@ V.dirvhrot	=function( dir, a=1 )
 	return V.dirvh[V.roth( dir, a )]
 }
 
+
 V.newcube	=function(x, y, z)
 {
 	return {x,y,z}
 }
 
+
 V.set	=function( v )
 {
 	return new this().set(v)
 }
+
+
+/** Checks if array is valid */
+
 V.seta	=function( arr )
 {
-	return new this().seta(arr)
+	if( this.isarr( arr) )
+	{
+		return new this().seta(arr)
+	}
+	return
 }
+
+
 
 V.prototype. z	=function()
 {
@@ -397,3 +409,10 @@ V. diredgesize	=function( r )
 {
 	return (r<<1) + 1
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+V. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1]))

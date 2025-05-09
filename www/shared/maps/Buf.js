@@ -12,9 +12,10 @@ export default class Buf
 
 	get buf()	{return this.head.buffer }
 
-	static id
+	static id	//used to recongise buffer when receiving binary data
 
 	static skipid	=false	//when true, skip this buffer when assigning ids
+							// used in client maps which add visual buffers
 
 	static headlen	=4*2
 

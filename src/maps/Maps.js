@@ -172,3 +172,9 @@ Ms.prototype. forcell	=function( fun )
 		map.fore( fun )
 	})
 }*/
+
+
+Ms.prototype. newshiftmaps	=function( pl )
+{
+	return [ this.gr.newshiftmap( pl ), this.tr.newshiftmap( pl )]
+}

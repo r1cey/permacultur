@@ -4,9 +4,9 @@ import { WebSocketServer, WebSocket } from "ws"
 // import Vec from '../www/shared/Vec.js'
 // import Player from './Player.js'
 import Cls from "./Clients.js"
-import Send from './ServSend.js'
+import ServSend from './ServSend.js'
 
-export default class Server
+export default class Server extends ServSend
 {
 	game
 
@@ -46,7 +46,7 @@ Server.prototype. start	=async function( port )
 	
 	srv.wss	=new WebSocketServer({ port:this.conf.port/*, clientTracking: true */})
 	
-	srv.wss.on( 'connection', srv.g_conn. bind(srv))
+	srv.wss.on( 'connection', srv.onconn. bind(srv))
 	
 	console.log(`WS server started on ${this.conf.port} port...`)
 }
@@ -56,7 +56,7 @@ Server.prototype. start	=async function( port )
 
 
 
-Server.prototype. g_conn	=function( ws, req )
+Server.prototype. onconn	=function( ws, req )
 {
 	var ip	=req.socket.remoteAddress
 
@@ -73,7 +73,7 @@ Server.prototype. g_conn	=function( ws, req )
 		return
 	}*/
 
-	ws.on( 'message', this.login. bind(this, ws, ip ))
+	ws.on( 'message', this.onlogin. bind(this, ws, ip ))
 
 	ws.on( 'error', console.log )
 
@@ -92,7 +92,7 @@ Server.prototype. g_conn	=function( ws, req )
  * @arg [o.pl]
  */
 
-Server.prototype. login	=async function( ws, ip, data, isbin )
+Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 {
 	var str	=data.toString()
 
@@ -116,7 +116,7 @@ Server.prototype. login	=async function( ws, ip, data, isbin )
 		return
 	}
 
-	var pl	=this.game.pls.o[plmsg.name]
+	var pl	=this.game.pls.o[name]
 
 	if( pl )
 	{

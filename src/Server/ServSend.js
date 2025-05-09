@@ -1,7 +1,12 @@
-import NS from '../../www/shared/NSpace.js'
+// import NS from '../../www/shared/NSpace.js'
 
 
-export default class S extends NS
+/********
+ * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
+ * ***/
+
+
+export default class SSe
 {
 }
 
@@ -10,7 +15,7 @@ export default class S extends NS
 
 
 
-S.prototype. mapcode	=function( map, loc, ic, ib )
+SSe.prototype. mapcode	=function( map, loc, ic, ib )
 {
 	for(var n in this.cls.o )
 	{
@@ -28,7 +33,7 @@ S.prototype. mapcode	=function( map, loc, ic, ib )
 
 
 
-S.prototype. newpl	=function( pl )
+SSe.prototype. newpl	=function( pl )
 {
 	for(var n in this.cls.o )
 	{
@@ -41,7 +46,7 @@ S.prototype. newpl	=function( pl )
 
 
 
-S.prototype. plconn	=function( pl )
+SSe.prototype. plconn	=function( pl )
 {
 	for(var n in this.cls.o)
 	{
@@ -54,7 +59,7 @@ S.prototype. plconn	=function( pl )
 
 
 
-S.prototype. plmov	=function( pl, newloc )
+SSe.prototype. plmov	=function( pl, newloc )
 {
 	if( pl.cl )	pl.cl.s.clplmov( newloc )
 
@@ -76,7 +81,7 @@ S.prototype. plmov	=function( pl, newloc )
 
 
 
-S.prototype. plclimb	=function( pl, dir )
+SSe.prototype. plclimb	=function( pl, dir )
 {
 	if( pl.cl )	pl.cl.s.clplclimb( dir )
 
@@ -91,4 +96,18 @@ S.prototype. plclimb	=function( pl, dir )
 			pl2.cl.s.plclimb( pl, dir )
 		}
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+for(var funn in SSe.prototype)
+{
+	SSe.prototype["send_"+funn]	=SSe.prototype[funn]
+
+	SSe.prototype["s_"+funn]	=SSe.prototype[funn]
+
+	delete SSe.prototype[funn]
 }

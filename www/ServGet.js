@@ -2,35 +2,38 @@ import Loc from './shared/Loc.js'
 
 import Pl from './Player.js'
 
-import NS from './shared/NSpace.js'
-
-import ShMaps	from './shared/maps/Maps.js'
+import Maps	from './maps/Maps.js'
 
 
-export default class Get extends NS
+
+export default class SG
 {
-	msb	=new Msb()
-
-
-
-	constructor( srv )
-	{
-		super(srv)
-
-		this.msb.srv	=srv
-	}
+	deenc	=new Deencap(this)
 }
 
 
 
+/** Buffer to gather all binary data needed for coherent update 
+ * @prop {Deencap.Instance[]} times	- array where each index is timecode
+*/
 
-class Msb	// map shift buffer
+class Deencap	// map shift buffer
 {
 	srv
 
-	timecode	=0
+	times	=[]
 
-	bufs	=[[],[]]
+	
+
+	constructor(srv)
+	{
+		this.srv	=srv
+	}
+}
+
+Deencap.Instance	=class
+{
+	bufarr	=[]
 
 	o
 }
@@ -39,9 +42,14 @@ class Msb	// map shift buffer
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/********
+ * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "on_" PREFIXES 
+ * ***/
+
+
 /** Player with [name] doesn't exist and needs to be created. */
 
-Get.prototype. createpl	=async function( name )
+SG.prototype. createpl	=async function( name )
 {
 	this.cl.html.delpage('login')
 
@@ -57,7 +65,7 @@ Get.prototype. createpl	=async function( name )
 
 /** This is your player. */
 
-Get.prototype. setpl	=function( plarr )
+SG.prototype. setpl	=function( plarr )
 {
 	// debugger
 
@@ -67,63 +75,34 @@ Get.prototype. setpl	=function( plarr )
 
 
 /** This is what you see.
- * @arg msg.o	-[gr, tr]
- * @arg msg.loc
- * @arg msg.r
+ * @arg {Object} o
+ * @arg o.timecode	- used to join with binary buffers
+ * @arg o.loc
+ * @arg o.r
+ * @arg {Object} o.cells
+ * @arg	{Array} o.cells.gr	-all cells in order, empty cells are empty members
+ * @arg {Array} o.cells.tr
  */
 
-Get.prototype. setmap	=function( msg )
+SG.prototype. setmap	=function( msg )
 {
-	var maps	=this.cl.maps
-
-	maps.gr.o	=msg.o[0]
-
-	maps.tr.o	=msg.o[1]
+	this.deenc.onobj( msg )
 }
-
-
-
-/** Parse all binary data */
-
-Get.prototype. msgbuf	=function( buf )
-{
-	// debugger
-
-	this.cl.maps.onbuf( buf )
-
-	/*
-	var Map	=this.cl.maps.gr.constructor
-
-	var id	=Map.idfrombuf( buf )
-
-	var idmove	=id>>8	// binary when player moves is received with code offset
-
-	if( idmove )
-	{
-		
-		// this.get.msb.addbuf( buf, code, movcode )
-	}
-	else
-	{
-		this.cl.setbuf( buf, code )
-	}*/
-}
-
 
 
 /**	This are the units that you see. 
  * @arg o
  * @arg	o.r
  * @arg {PlVis[]} o.pls
- */
+ *
 
-Get.prototype. units	=function( o )
+SG.prototype. units	=function( o )
 {
 	for(var i=0;i<o.pls.length; i++)
 	{
 		this.cl().genevispl(o.pls[i], true )
 	}
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,7 +115,7 @@ Get.prototype. units	=function( o )
  * @arg o.bval
  */
 
-Get.prototype. mapcode	=function( o )
+SG.prototype. mapcode	=function( o )
 {
 	var{ bid }	=o
 
@@ -153,7 +132,7 @@ Get.prototype. mapcode	=function( o )
 
 /** This is your new water level. */
 
-Get.prototype. water	=function( lvl )
+SG.prototype. water	=function( lvl )
 {
 	// this.cl().pl.water	=lvl
 }
@@ -161,30 +140,19 @@ Get.prototype. water	=function( lvl )
 
 
 /** Your player moved here. New information added.
- * @arg o
+ * @arg {Object} o
  * @arg o.timecode	- used to sync with buffer updates
  * @arg	o.loc	- new location
  * @arg o.delta	- direction of movement
  * @arg o.r	- radius of visible map
- * @arg {Array}	o.cells	- [[gr objs,,,,],[tr objs,,,,,]] in order, empty cells are empty
+ * @arg {Object} o.cells
+ * @arg {Array} o.cells.gr	- cells in order, empty cells are empty entries
+ * @arg {Array} o.cells.tr
  */
 
-Get.prototype. clplmov	=function( o )
+SG.prototype. clplmov	=function( o )
 {
-	var msb	=this.g.msb
-
-	var { timecode }	=o
-
-	if( ! msb.timecode )
-	{
-		msb.timecode	=timecode
-	}
-
-	if( msb.timecode !== timecode )	return
-
-	msb.o	=o
-
-	msb.ifready()
+	this.deenc.onobj( o )
 }
 
 
@@ -198,7 +166,7 @@ Get.prototype. clplmov	=function( o )
  * @arg [o.name]
 */
 
-Get.prototype. plmov	=function( o )
+SG.prototype. plmov	=function( o )
 {
 	var vispls	=this.srv.cl.vispls
 
@@ -233,7 +201,7 @@ Get.prototype. plmov	=function( o )
  *@arg	o.cl
  */
 
-Get.prototype. plconn	=function( o )
+SG.prototype. plconn	=function( o )
 {
 	var cl	=this.cl()
 
@@ -251,7 +219,7 @@ Get.prototype. plconn	=function( o )
 
 /** New player was created. */
 
-Get.prototype. newpl	=function( pl2visa )
+SG.prototype. newpl	=function( pl2visa )
 {
 	var pl2vis	=new Pl.Vis(pl2visa, true, this.srv.cl )
 
@@ -271,7 +239,7 @@ Get.prototype. newpl	=function( pl2visa )
  * @arg	[o.msg.icecandi]
  */
 
-Get.prototype. wrtc	=async function( o )
+SG.prototype. wrtc	=async function( o )
 {
 	var pcl	=this.cl().genepcl( o.name, false )
 
@@ -301,7 +269,7 @@ Get.prototype. wrtc	=async function( o )
  * @arg o.dir
  */
 
-Get.prototype. clplclimb	=function( o )
+SG.prototype. clplclimb	=function( o )
 {
 	var pl	=this.cl.pl
 
@@ -327,7 +295,7 @@ Get.prototype. clplclimb	=function( o )
 
 /** Is called for all websocket messages arriving */
 
-Get.prototype. msg	=function( ev )
+SG.prototype. msg	=function( ev )
 {	
 	var msg	=ev.data
 
@@ -360,6 +328,64 @@ Get.prototype. msg	=function( ev )
 
 
 
+Deencap.prototype. onbuf	=function( buf )
+{
+	var Map	=Maps.Ground
+
+	var code	=Map.codefrombuf( buf )
+
+	var time	=Map.timefromcode( code )
+
+	var deenc_inst	=this.getdeencinst( time )
+
+	var id	=Map.idfromcode( code ) - 1
+
+	deenc_inst.bufarr[id]	=buf
+
+	this.ready( time )
+
+	/*let movcode	=code>>8
+
+	if(movcode)
+	{
+		cl.maps.shift( msg, movcode )
+	}
+	else
+	{
+		cl.setbuf( msg, code )
+	}*/
+}
+
+
+
+Deencap.prototype. onobj	=function( o )
+{
+	var deenc_inst	=this.getdeencinst( o.timecode )
+
+	deenc_inst.o	=o
+
+	this.ready( o.timecode )
+}
+
+
+/** Never call directly. Is checked by .ready() method */
+
+Deencap.prototype. onready	=function( timecode )
+{
+	var inst	=this.times[timecode]
+
+	if( "delta" in inst.o )
+	{
+		this.srv.onmapshift( inst )
+	}
+	else
+	{
+		this.srv.onnewmap( inst )
+	}
+}
+
+
+/*
 Msb.prototype. addbuf	=function( buf, code, movcode )
 {
 	var ms	=this
@@ -368,7 +394,7 @@ Msb.prototype. addbuf	=function( buf, code, movcode )
 
 	var Map	=ms.srv.cl.maps.gr.constructor
 
-	code	??=Map.idfrombuf( buf )
+	code	??=Map.codefrombuf( buf )
 
 	movcode	??=code>>8
 
@@ -417,7 +443,7 @@ Msb.prototype. ifready	=function()
 
 	if( ! o )	return
 
-	/** Enter checks for information in buffer here */
+	/** Enter checks for information in buffer here *
 
 	var pl	=this.srv.cl.pl
 
@@ -461,4 +487,52 @@ Msb.prototype. ifready	=function()
 	this.bufs[1].length	=0
 	
 	this.o	=null
+}*/
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** @todo Should add actual data checks. To see that everything matches. */
+
+Deencap.prototype. ready	=function( timecode )
+{
+	var inst	=this.times[timecode]
+
+	if( ! inst.o ) return false
+
+	for(var i =0,len= Maps.maxid()-1 ;i<len;i++)
+	{
+		if( ! inst.bufarr[i] )	return false
+	}
+
+	this.onready( timecode )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Deencap.prototype. getdeencinst	=function( timecode )
+{
+	var inst	=this.times[timecode]
+
+	if( ! inst )
+	{
+		inst	=this.times[timecode]	=new Deencap.Instance()
+	}
+
+	return inst
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+for(var funn in SG.prototype)
+{
+	SG.prototype["on_"+funn]	=SG.prototype[funn]
+
+	delete SG.prototype[funn]
 }

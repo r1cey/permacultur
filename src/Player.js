@@ -134,14 +134,14 @@ Player.prototype. mov	=function( newloc )
 
 	if( ! map.isplmov( newloc ))
 	{
-		pl.cl?.send.error( "Can't move there." )
+		pl.cl?.send_error( "Can't move there." )
 
 		return
 	}
 
 	if( loc.eq( newloc ))
 	{
-		pl.cl?.send.error( "Already there." )
+		pl.cl?.send_error( "Already there." )
 		
 		return
 	}
@@ -155,16 +155,20 @@ Player.prototype. mov	=function( newloc )
 
 	map.deloprop( loc, "pl" )
 
-	var dir	=Loc.dirv2dirh(loc.subv(newloc).neg())
+	// var dir	=Loc.dirv2dirh(loc.subv(newloc).neg())
 
-	loc.set(newloc)
+	var oldloc	=loc
+
+	pl.loc	=newloc
 
 	map.scello(newloc).pl	=this
 
-	this.srv()?.send.plmov( this, dir )
+	this.srv()?.send_plmov( this, newloc, oldloc )
 
-	if( loc.h === 0 )
+	if( newloc.h === 0 )
 	{
+		map	=pl.game.maps.gr
+
 		map.fore(( loc )=>
 		{
 			if( map.gwater(loc) )

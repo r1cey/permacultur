@@ -1,3 +1,5 @@
+import Board from './Board.js'
+
 import Loc from '../Loc.js'
 
 import Buf from './Buf.js'
@@ -6,49 +8,13 @@ import Buf from './Buf.js'
 
 
 
-export default class Map
+export default class Map extends Board
 {
-	static Bufs
-
-	static ibfromp	// { name: bufi }
-
-	bufs	=[]
-
-	o	={}
-
 	////
 	
-	_loc	=new Loc()	//tricky buffer, ONLY access it through
-						//getloc() because it can be changed to anything
-
 	_r	=0
 
 	////
-
-	getloc()	{return this._loc.setxy(
-					this.bufs[0].head[2],
-					this.bufs[0].head[3],
-					this.bufs[0].head[1] )}
-
-	
-	cellsl()	{ return this.bufs[0].cells.length }
-
-
-	/////
-
-	
-	static setbufp()
-	{
-		var Class	=this
-
-		for(var i=0; i<Class.Bufs.length; i++)
-		{
-			for(var n in Class.Bufs[i].bmapo )
-			{
-				Class.ibfromp[n]	=i
-			}
-		}
-	}
 }
 
 
@@ -107,11 +73,11 @@ Map.prototype. setbuf	=function( buf, ibuf )
 
 	var Class	=this.constructor
 
-	ibuf	??=Class.ibfrombid( Class.idfrombuf( buf ))
+	ibuf	??=Class.ibfrombid( Class.codefrombuf( buf ))
 
 	if( ibuf < 0  )
 	{
-		console.error( `Buffer id doesn't fit known buffers`, Class.idfrombuf( buf ) )
+		console.error( `Buffer id doesn't fit known buffers`, Class.codefrombuf( buf ) )
 		
 		return
 	}
@@ -336,76 +302,6 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-Map.prototype. getbprop	=function( ic, name, jbmp )
-{
-	var Class	=this.constructor
-
-	return this.bufs[Class.ibfromp[name]].getprop( ic, name, jbmp )
-}
-
-
-/** @returns - index of buffer where property was set */
-
-Map.prototype. setbprop		=function( ic, name, jbmp, val )
-{
-	var ibuf	=this.constructor.ibfromp[name]
-
-	this.bufs[ibuf].setprop( ic, name, jbmp, val )
-
-	return ibuf
-}
-
-
-/** @arg val	- must be string */
-
-Map.prototype. testbprop	=function( ic, name, jbmp, val )
-{
-	return this.bufs[ this.constructor.ibfromp[name] ].testprop( ic, name, jbmp, val )
-}
-
-
-
-Map.prototype. scello	=function( loc )
-{
-	var str	=loc.tovstr()
-
-	var cell	=this.o[str]
-
-	if( ! cell )	this.o[str]	=cell	={}
-
-	return	cell
-}
-
-Map.prototype. setcello	=Map.prototype. scello
-
-
-
-Map.prototype. gcello	=function(loc)
-{
-	return this.o[loc.tovstr()]
-}
-
-Map.prototype. getcello	=Map.prototype. gcello
-
-
-
-Map.prototype. deloprop	=function( loc, n )
-{
-	var str	=loc.tovstr()
-
-	delete this.o[str][n]
-
-	for( n in this.o[str] )
-	{
-		return
-	}
-	
-	delete this.o[str]
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -828,6 +724,7 @@ Map.prototype.setloc	=function( loc )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @returns next available id */
 
 Map.setids	=function( startid )
 {
@@ -924,10 +821,22 @@ Map.ibfrombid	=function( bid )
 
 
 
-Map.idfrombuf	=function( buf )
+Map.codefrombuf	=function( buf )
 {
 	return new DataView( buf, 0, 2 ).getUint16( 0, true )
 }
+
+Map.timefromcode	=function( code )
+{
+	return code>>8
+}
+
+Map.idfromcode	=function( code )
+{
+	return (code&255)>>3
+}
+
+Map.dirfromcode	=( code )	=> code&7
 
 
 

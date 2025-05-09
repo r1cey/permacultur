@@ -1,8 +1,14 @@
-import NS from '../../www/shared/NSpace.js'
+// import NS from '../../www/shared/NSpace.js'
 
 import Loc from '../../www/shared/Loc.js'
 
-export default class Send extends NS
+
+
+/********
+ * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
+ * ***/
+
+export default class ClS
 {
 	
 }
@@ -11,36 +17,39 @@ export default class Send extends NS
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Send.prototype. setpl	=function()
+
+ClS.prototype. setpl	=function()
 {
-	this.send.json({ setpl: this.pl.newmsg() })
+	this.send_json({ setpl: this.pl.newmsg() })
 }
 
 
 
-Send.prototype. map	=function()
+ClS.prototype. map	=function()
 {
 	var pl	=this.pl
 
-	var slicedgr	=pl.game.maps.gr.slice( pl.loc, pl.vision )
+	var game	=this.srv.game
+
+	var slicedgr	=game.maps.gr.slice( pl.loc, pl.vision )
 
 	for(var i=0; i<slicedgr.bufs.length; i++)
 	{
-		this.send.binary( slicedgr.bufs[i].buf )
+		this.send_binary( slicedgr.bufs[i].buf )
 	}
 
 	var slicedtr	=pl.game.maps.tr.slice( pl.loc, pl.vision )
 
 	for(i=0; i<slicedtr.bufs.length; i++)
 	{
-		this.send.binary( slicedtr.bufs[i].buf )
+		this.send_binary( slicedtr.bufs[i].buf )
 	}
 
-	this.send.json(
+	this.send_json(
 		{
 			setmap:
 			{
-				o: [slicedgr.o, slicedtr.o], loc: slicedgr.getloc(), r: pl.vision
+				o: [slicedgr.o, slicedtr.o], loc: pl.loc, r: pl.vision
 			}
 		},( key, val )=>
 		{
@@ -67,7 +76,7 @@ Send.prototype. map	=function()
 
 
 
-Send.prototype. mapcode	=function( map, loc, ic, ib )
+ClS.prototype. mapcode	=function( map, loc, ic, ib )
 {
 	var Bufs	=map.constructor.Bufs
 
@@ -86,7 +95,7 @@ Send.prototype. mapcode	=function( map, loc, ic, ib )
 
 	function send(ib)
 	{
-		this.send.json({mapcode:
+		this.send_json({mapcode:
 			{
 				bid	:Bufs[ib].id ,
 				loc ,
@@ -99,9 +108,11 @@ Send.prototype. mapcode	=function( map, loc, ic, ib )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Send.prototype. clplmov	=function( dir )
+ClS.prototype. clplmov	=function( dir )
 {
 	var pl	=this.pl
+
+	var newvismaps	=this.srv.game.maps.gshiftmaps( pl)
 
 	var{ loc }	=pl
 
@@ -204,7 +215,7 @@ Send.prototype. clplmov	=function( dir )
 	{
 		for(var ib =0,len= carrs[h].length ;ib<len;ib++)
 		{
-			this.send.binary( bcodes[h][ib].buffer )
+			this.send_binary( bcodes[h][ib].buffer )
 		}
 	}
 
@@ -214,7 +225,7 @@ Send.prototype. clplmov	=function( dir )
 
 /** New player born. */
 
-Send.prototype. newpl	=function( pl2 )
+ClS.prototype. newpl	=function( pl2 )
 {
 	this.send_json({ newpl: pl2.newmsgvis() })
 }
@@ -222,7 +233,7 @@ Send.prototype. newpl	=function( pl2 )
 
 /** Different player connected */
 
-Send.prototype.plconn	=function( pl2 )
+ClS.prototype.plconn	=function( pl2 )
 {
 	this.send_json({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
 }
@@ -231,24 +242,11 @@ Send.prototype.plconn	=function( pl2 )
 
 /** Assumes player has already climbed */
 
-Send.prototype. clplclimb	=function( dir )
+ClS.prototype. clplclimb	=function( dir )
 {
-	this.send.json({ clplclimb: { dir, newloc: this.pl.loc }})
+	this.send_json({ clplclimb: { dir, newloc: this.pl.loc }})
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-Send.prototype. json	=function( o, replcr )
-{
-	this.ws.send( JSON.stringify( o, replcr ) )
-}
-
-Send.prototype. binary	=function( buf )
-{
-	this.ws.send( buf, {binary: true})
-}
 
 /*Send.prototype. createpl	=function( name )
 {
@@ -276,14 +274,14 @@ Send.prototype. units	=function( clid, pln )
 
 Send.prototype. water	=function()
 {
-	this.send.json({ water: this.pl.water })
+	this.send_json({ water: this.pl.water })
 }*/
 
 
 
 /** Player object should have old location still. */
 
-Send.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
+ClS.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 {
 	var pl	=this.cl.pl
 
@@ -293,18 +291,30 @@ Send.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 		o.name	=pl2n	:
 		o.pl	=pl2.newmsgvis(pl2n)
 
-	this.json(clid, { plmov: o })
+	this.send_json(clid, { plmov: o })
 }
 
-Send.prototype. wrtc	=function( o )
+ClS.prototype. wrtc	=function( o )
 {
-	this.json({ wrtc: o })
+	this.send_json({ wrtc: o })
+}
+
+
+ClS.prototype. error	=function( str )
+{
+	this.send_json({ error: str })
 }
 
 
 
+///////////////////////////////////////////////////////////////////////////////
 
-Send.prototype. error	=function( str )
+
+for(var funn in ClS.prototype)
 {
-	this.send.json({ error: str })
+	ClS.prototype["send_"+funn]	=ClS.prototype[funn]
+
+	ClS.prototype["s_"+funn]	=ClS.prototype[funn]
+
+	delete ClS.prototype[funn]
 }

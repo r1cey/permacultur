@@ -112,6 +112,20 @@ var Map	=( Base ) => class extends Base
 
 		await Promise.all( proms )
 	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+	newshiftmap( pl )
+	{
+		// var newmap	=this.
+
+		for(var i=0, len=this.bufs.length; i<len; i++)
+		{
+			// this.bufs[i].
+		}
+	}
 }
 
 export default Map

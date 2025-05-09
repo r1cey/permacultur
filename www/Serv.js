@@ -1,9 +1,10 @@
 // import Msg from './shared/Msg.js'
-import Get from './ServGet.js'
-import Send from './ServSend.js'
+
+import SrvS from './ServSend.js'
+
 import Map from './shared/maps/Ground.js'
 
-export default class Serv
+export default class Serv extends SrvS
 {
 	cl
 
@@ -23,11 +24,13 @@ export default class Serv
 
 	constructor(client)
 	{
+		super()
+
 		this.cl	=client
 	}
 }
 
-var Server	=Serv
+// var Server	=Serv
 
 Serv.prototype. test	=function()
 {
@@ -92,18 +95,7 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		// debugger
 
-		let code	=Map.idfrombuf( msg )
-
-		let movcode	=code>>8
-
-		if(movcode)
-		{
-			cl.maps.shift( msg, movcode )
-		}
-		else
-		{
-			cl.setbuf( msg, code )
-		}
+		this.deenc.onbuf( msg )
 	}
 	else if(typeof msg === 'string')
 	{
@@ -113,8 +105,23 @@ Serv.prototype. onmsg	=function( ev )
 
 		for(prop in msg)
 		{
-			this.g[prop]?.( msg[prop] )
+			this["on_"+prop]?.( msg[prop] )
 		}
 		// console.log( `Server Msg: not found! ${prop}`)
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Serv.prototype. onfullbuf	=function( bufarr, code )
+{
+	var dir	=Map.dirfromcode( code )
+
+	if(dir)
+	{
+
 	}
 }

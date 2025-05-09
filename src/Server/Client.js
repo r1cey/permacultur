@@ -1,20 +1,13 @@
 import V from '../../www/shared/Vec.js'
-import Get from './ClientGet.js'
-import Send from './ClientSend.js'
 
-export default class Client
+import ClG from './ClientGet.js'
+
+
+export default class Client extends ClG
 {
 	ws
 
 	pl
-
-	get	=new Get(this)
-
-	g	=this.get
-
-	send	=new Send( this)
-
-	s	=this.send
 
 	srv
 
@@ -22,6 +15,7 @@ export default class Client
 	// 1:	master
 	// 2:	slave
 	// BDSM
+
 
 	constructor(ws, pl, srv )
 	{
@@ -34,9 +28,9 @@ export default class Client
 
 		ws.removeAllListeners( 'message' )
 
-		ws.on( 'message', this.g.msg. bind(this))
+		ws.on( 'message', this.onmsg. bind(this))
 
-		ws.on('close', this.closed. bind(this))
+		ws.on('close', this.onclose. bind(this))
 	}
 }
 
@@ -45,16 +39,56 @@ export default class Client
 
 
 
-Client.prototype. closed	=function( code, reason, wsclosed =false )
+Client.prototype. onmsg	=function( data, isbin )
 {
-	console.log( `Client ${this.pl.name} disconnected: code=${code}, reason=${reason}.` )
+	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	this.pl.clclosed()
+	var msg	=JSON.parse( data.toString() )/* ,( key, val )=>
+	{
+		if( key.startsWith( "loc" ))	return new Loc().seta(val)
+
+		return val
+	})*/
+
+	for(var prop in msg )
+	{
+		this["on_"+prop]?.(msg[prop])
+	}
+	// console.error( `Client Msg: not found: ${prop}`)
+}
+
+
+
+Client.prototype. onclose	=function( code, reason /*, wsclosed =false*/ )
+{
+	var pl	=this.pl
+
+	console.log( `Client ${pl.name} disconnected: code=${code}, reason=${reason}.` )
+
+	this.srv.cls.del( pl.name )
+
+	pl.cl	=null
+
+	this.srv.send_plconn( pl, false )
 
 	for(var cl2 of this.rtcstate)
 	{
 		cl2.rtcstate.delete(this)
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+Client.prototype. sendjson	=function( o, replcr )
+{
+	this.ws.send( JSON.stringify( o, replcr ) )
+}
+
+Client.prototype. sendbin	=function( buf )
+{
+	this.ws.send( buf, {binary: true})
 }
 
 

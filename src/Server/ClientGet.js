@@ -1,24 +1,31 @@
-import NS from '../../www/shared/NSpace.js'
+// import NS from '../../www/shared/NSpace.js'
+
+import ClS from './ClientSend.js'
 
 import Loc from '../../www/shared/Loc.js'
 
-export default class Get extends NS
+
+
+/*********************************************************************
+ * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "on_" PREFIX
+ * ******************************************************************/
+
+export default class ClG extends ClS
 {
 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
 
 /** @arg o
- * @arg o.dir
+ * @arg o.loc
  */
 
-Get.prototype. mov	=function( o )
+ClG.prototype. mov	=function( o )
 {
-	// if( !o.loc || !V.testarr( o.loc ) )	return
-
-	this.pl.mov( new Loc().seta(o.loc) )
+	var loc	=Loc.seta( o.loc )
+	
+	if( loc )	this.pl.mov( loc )
 }
 
 /** Relay WRTC message between clients through the server.
@@ -27,7 +34,7 @@ Get.prototype. mov	=function( o )
  * @arg {Object}	o.msg
  */
 
-Get.prototype. wrtc	=function( o )
+ClG.prototype. wrtc	=function( o )
 {
 	var cl2	=this.game().pls[o.name].cl
 
@@ -49,7 +56,7 @@ Get.prototype. wrtc	=function( o )
 	cl2.s.wrtc( o )
 }
 
-Get.prototype. dig	=function( o )
+ClG.prototype. dig	=function( o )
 {
 	var tool	=o
 
@@ -60,7 +67,7 @@ Get.prototype. dig	=function( o )
 /** @arg o.dir	- true is up
  * @arg o.loc	- pl loc */
 
-Get.prototype. climb	=function( o )
+ClG.prototype. climb	=function( o )
 {
 	var pl	=this.pl
 
@@ -82,23 +89,9 @@ Get.prototype. climb	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-Get.prototype. msg	=function( data, isbin )
+for(var funn in ClG.prototype)
 {
-	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
+	ClG.prototype["on_"+funn]	=ClG.prototype[funn]
 
-	var msg	=JSON.parse( data.toString() )/* ,( key, val )=>
-	{
-		if( key.startsWith( "loc" ))	return new Loc().seta(val)
-
-		return val
-	})*/
-
-	for(var prop in msg )
-	{
-		var fun	=this.get[prop]
-
-		if( fun )	fun( msg[prop] )
-	}
-	// console.error( `Client Msg: not found: ${prop}`)
+	delete ClG.prototype[funn]
 }
