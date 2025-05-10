@@ -140,19 +140,19 @@ SG.prototype. water	=function( lvl )
 
 
 /** Your player moved here. New information added.
- * @arg {Object} o
- * @arg o.timecode	- used to sync with buffer updates
- * @arg	o.loc	- new location
- * @arg o.delta	- direction of movement
- * @arg o.r	- radius of visible map
- * @arg {Object} o.cells
- * @arg {Array} o.cells.gr	- cells in order, empty cells are empty entries
- * @arg {Array} o.cells.tr
+ * @arg {Object}	msg
+ * @arg 			msg.timecode	- used to sync with buffer updates
+ * @arg				msg.loc	- new location
+ * @arg 			msg.delta	- direction of movement
+ * @arg 			msg.r	- radius of visible map
+ * @arg {Object} 	msg.cells
+ * @arg {Array}		msg.cells.gr	- cells in order, empty cells are empty entries
+ * @arg {Array} 	msg.cells.tr
  */
 
-SG.prototype. clplmov	=function( o )
+SG.prototype. clplmov	=function( msg )
 {
-	this.deenc.onobj( o )
+	this.deenc.onobj( msg )
 }
 
 

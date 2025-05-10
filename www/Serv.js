@@ -95,6 +95,13 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		// debugger
 
+		let code	=Map.codefrombuf( msg )
+
+		if( Map.timefromcode( code ))
+		{
+			
+		}
+
 		this.deenc.onbuf( msg )
 	}
 	else if(typeof msg === 'string')

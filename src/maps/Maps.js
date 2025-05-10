@@ -174,7 +174,10 @@ Ms.prototype. forcell	=function( fun )
 }*/
 
 
-Ms.prototype. newshiftmaps	=function( pl )
+/** When player moves, get the additional cells he sees. */
+
+Ms.prototype. gshiftbufs	=function( loc, r, delta, timecode )
 {
-	return [ this.gr.newshiftmap( pl ), this.tr.newshiftmap( pl )]
+	return { gr :this.gr.newshiftbufs( loc, r, delta, timecode ),
+				tr :this.tr.newshiftbufs( loc, r, delta, timecode ) }
 }

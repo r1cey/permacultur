@@ -11,6 +11,8 @@ export default class Client extends ClG
 
 	srv
 
+	timecode	=1
+
 	rtcstate	=new Map()
 	// 1:	master
 	// 2:	slave

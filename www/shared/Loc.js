@@ -93,6 +93,31 @@ Loc.prototype. toJSON	=function()
 }
 
 
+Loc.prototype. add	=function( x, y, h )
+{
+	this.x	+= x
+	this.y	+= y
+	this.h	+= h
+	return this
+}
+Loc.prototype. addv	=function( v )
+{
+	return this.add( v.x, v.y, v.h)
+}
+
+Loc.prototype. sub	=function( x, y, h )
+{
+	this.x	-= x
+	this.y	-= y
+	this.h	-= h
+	return this
+}
+Loc.prototype. subv	=function( v )
+{
+	return this.sub(v.x, v.y, v.h )
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

@@ -108,11 +108,23 @@ ClS.prototype. mapcode	=function( map, loc, ic, ib )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-ClS.prototype. clplmov	=function( dir )
+/** This client's player had moved. */
+
+ClS.prototype. clplmov	=function( delta )
 {
 	var pl	=this.pl
 
-	var newvismaps	=this.srv.game.maps.gshiftmaps( pl)
+	var timecode	=this.timecode
+
+	var bufs	=this.game().maps.gshiftbufs( pl.loc, pl.vision, delta, this.timecode )
+
+
+	
+
+	for(var board of visshiftboards )
+	{
+		this.sendbin( board.)
+	}
 
 	var{ loc }	=pl
 
@@ -121,12 +133,10 @@ ClS.prototype. clplmov	=function( dir )
 	// var dir	=newloc.c().subv( pl.loc )
 
 	var cellso	=[[],[]]
-	
-	var timecode	=Math.floor(Math.random()*255) + 1
 
-	var o	=
+	var msg	=
 	{
-		timecode, loc, dir , r
+		timecode, loc, delta , r
 		,
 		cells	:cellso
 	}

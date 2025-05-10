@@ -70,6 +70,23 @@ var Map	=( Base ) => class extends Base
 	}
 
 
+	///////////////////////////////////////////////////////////////////////////
+
+
+	newshiftbufs ( loc, r, delta, timecode )
+	{
+		var bufs	=[]
+
+		for(var i =0,len= this.bufs.length ;i<len;i++)
+		{
+			bufs[i]	=this.bufs[i].new
+		}
+
+
+		var cellslen	=(r << 1) + 1
+	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
 
@@ -111,20 +128,6 @@ var Map	=( Base ) => class extends Base
 		}
 
 		await Promise.all( proms )
-	}
-
-
-	///////////////////////////////////////////////////////////////////////////
-
-
-	newshiftmap( pl )
-	{
-		// var newmap	=this.
-
-		for(var i=0, len=this.bufs.length; i<len; i++)
-		{
-			// this.bufs[i].
-		}
 	}
 }
 

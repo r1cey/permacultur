@@ -1,38 +1,51 @@
 import Loc	from "../Loc.js"
 
 
+/** Wrapper class for binary buffers */
 
 export default class Buf
 {
+	/** Array wrapper */
 	head
 
+	/** Array wrapper */
 	cells
+
 
 	get c()	{return this.cells }
 
 	get buf()	{return this.head.buffer }
 
-	static id	//used to recongise buffer when receiving binary data
-
-	static skipid	=false	//when true, skip this buffer when assigning ids
-							// used in client maps which add visual buffers
 
 	static headlen	=4*2
 
-	static bpc		//bytes per cell
+	/** Used to recongise buffer when receiving binary data.
+	Needs to be defined in derived class.
+	@static
+	@var id */
 
-	static Arr		//Buffer Array class
+	/** when true, skip this buffer when assigning ids
+	used in client maps which add visual buffers */
+	static skipid	=false
 
-	static bmap	//[]
+	/** bytes per cell
+	To be defined in derived class.
+	@static
+	@var bpc */
 
-	/** Each bmap member is [[number of bits],[numbits,{name:val,name:val}],...] */
+	/** Buffer Array class *
+	static Arr
+
+	/** @type {Array} 
+	static bmap
+
+	/** Each bmap member is [[number of bits],[numbits,{name:val,name:val}],...] /
 
 	static bmapo	//{ name :index , ... }
+	*/
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 Buf.prototype. new	=function( cellsl )
@@ -47,10 +60,11 @@ Buf.prototype. new	=function( cellsl )
 }
 
 
-
 Buf.prototype. set	=function( buf, cellsl )
 {
 	var Class	=this.constructor
+
+	cellsl	??=parseInt( (buf.byteLength - Class.headlen) / Class.bpc )
 
 	this.head	=Class.newheadarr( buf )
 

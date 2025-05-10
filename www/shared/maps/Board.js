@@ -1,4 +1,4 @@
-/** Cell object used contents:
+/** Cell object used properties:
  * pl
  */
 

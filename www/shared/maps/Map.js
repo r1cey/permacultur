@@ -826,17 +826,11 @@ Map.codefrombuf	=function( buf )
 	return new DataView( buf, 0, 2 ).getUint16( 0, true )
 }
 
-Map.timefromcode	=function( code )
-{
-	return code>>8
-}
+Map.timefromcode	=( code )	=> code>>8
 
-Map.idfromcode	=function( code )
-{
-	return (code&255)>>3
-}
+Map.idfromcode	=( code )	=> code & 15
 
-Map.dirfromcode	=( code )	=> code&7
+Map.dirfromcode	=( code )	=> ( (code&255)>>4 ) - 1
 
 
 

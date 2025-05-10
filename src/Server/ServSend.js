@@ -1,5 +1,7 @@
 // import NS from '../../www/shared/NSpace.js'
 
+import Loc from "../../www/shared/Loc.js"
+
 
 /********
  * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
@@ -59,9 +61,13 @@ SSe.prototype. plconn	=function( pl )
 
 
 
-SSe.prototype. plmov	=function( pl, newloc )
+SSe.prototype. plmov	=function( pl, oldloc )
 {
-	if( pl.cl )	pl.cl.s.clplmov( newloc )
+	var newloc	=pl.loc
+
+	var delta	=Loc.set(newloc).subv(oldloc)
+
+	if( pl.cl && ! delta.h )	pl.cl.s_clplmov( delta )
 
 	for(var n in this.cls.o )
 	{
@@ -69,11 +75,11 @@ SSe.prototype. plmov	=function( pl, newloc )
 
 		if( pl === pl2 )	continue
 
-		var seesoldloc	=pl2.sees(pl.loc)
+		var seesoldloc	=pl2.sees(oldloc)
 
 		if( pl2.sees(newloc) || seesoldloc)
 		{
-			pl2.cl.s.plmov( pl, newloc, seesoldloc )
+			pl2.cl.s_plmov( pl, delta, seesoldloc )
 		}
 	}
 }
