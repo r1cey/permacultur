@@ -1,25 +1,27 @@
 import Loc	from "../Loc.js"
 
 
-/** Wrapper class for binary buffers */
+/** Wrapper class for binary buffer messages.
+Mostly to manage recognition code. */
 
 export default class Buf
 {
-	/** Array wrapper */
-	head
+	/** @type {ArrayBuffer} */
+	buf
 
-	/** Array wrapper */
-	cells
-
-
-	get c()	{return this.cells }
-
-	get buf()	{return this.head.buffer }
+	dataview
 
 
-	static headlen	=4*2
+	static codelen	=32
 
-	/** Used to recongise buffer when receiving binary data.
+	getcode()	{return this.dataview.getUint32( 0,true)}
+
+
+
+	/** Size of buffer header in bytes */
+	static headlen	=16*4
+
+	/** Code for how the cell data is structured.
 	Needs to be defined in derived class.
 	@static
 	@var id */
@@ -43,22 +45,34 @@ export default class Buf
 
 	static bmapo	//{ name :index , ... }
 	*/
+
+	constructor( buf )
+	{
+		this.set( buf )
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Buf.prototype. new	=function( cellsl )
+Buf.prototype. set	=function( buf )
 {
-	var Class	=this.constructor
+	this.buf	=buf
 
-	var buf	=new ArrayBuffer( cellsl * Class.bpc + Class.headlen )
-
-	this.set( buf, cellsl )
-
-	return this
+	this.dataview	=new DataView( buf, 0, Buf.codelen )
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+Buf.prototype. getcode	=function()
+{
+	return this.dataview.getUint32
+}
+
+
+
+throw Error(666)
 
 Buf.prototype. set	=function( buf, cellsl )
 {

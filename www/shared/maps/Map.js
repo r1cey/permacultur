@@ -5,8 +5,17 @@ import Loc from '../Loc.js'
 import Buf from './Buf.js'
 
 
+/** @return {Map} */
 
+export default function( bmap )
+{
+	class Map extends Board( bmap )
+	{
 
+	}
+
+	return Map
+}
 
 export default class Map extends Board
 {

@@ -1,20 +1,114 @@
+import Board from "./Board.js"
+
 import Map from './Map.js'
+
 import Loc from '../Loc.js'
 
 
-var def	=
+var bmap	=
+[
+	{
+		name	:"wsr"
+		,
+		subd	:
+		[
+			{
+				name	:"ty"
+				,
+				bits	:2
+				,
+				vals	:["empty", "rock", "soil", "water"]
+			},
+			{
+				name	:"lvl"
+				,
+				bits	:4
+			}
+		]
+	},
+	{ name: "n", bits	:4 },
+	{ name: "p", bits	:4 },
+	{ name: "k", bits	:4 },
+	{ name: "ca", bits	:4 },
+	{ name: "mg", bits	:4 },
+	{ name: "na", bits	:4 },
+	{ name: "fe", bits	:4 },
+	{ name: "cu", bits	:4 },
+	/*	S ?	Cl ? Zn	Mn */
+	{
+		name	:"plfl"
+		,
+		subd	:
+		[
+			{
+				name	:"ty"
+				,
+				bits	:1
+				,
+				vals	:["plant", "floor"]
+			},
+			{
+				condsubd	:
+				{
+					"plant"	:
+					[
+						{
+							name	:"ty"
+							,
+							bits	:7
+							,
+							vals	:[,,,,"apple"]
+						},
+						{
+							name	:"lvl"
+							,
+							bits	:5
+						}
+					]
+				}
+			}
+		]
+	},
+	{
+		name	:"walls"
+		,
+		subd	:
+		[
+			{
+				name	:"dir"
+				,
+				bits	:2
+			},
+			{
+				name	:"col"
+				,
+				bits	:3
+			}
+		]
+	}
+]
+
+
+/** @returns {Ground} */
+
+export default function( Base )
 {
-	wsr	:["empty","rock","soil","water"]
-	,
-	plfl	: ["plant","floor"]
-	,
-	veg:
-	[
-		,,,,"apple"
-	]
+	class Gr extends Base( bmap )
+	{
+	}
+
+
+	Gr.prototype. nemptycelli	=function( ic )
+	{
+		return Boolean( this.val("wsr","ty") )
+	}
+
+
+	return Gr
 }
 
 
+/*
 export default class G extends Map
 {
 	static Bufs	=
@@ -51,6 +145,7 @@ export default class G extends Map
 				{ na	:[ 4 ]},
 				{ fe	:[ 4 ]},
 				{ cu	:[ 4 ]}
+
 			]
 		),
 		Map.newBuf
@@ -64,18 +159,11 @@ export default class G extends Map
 
 	static ibfromp	={}
 
-	static enum	={}	/** definitions for bmap values taken from "def" variable */
+	static enum	={}	/** definitions for bmap values taken from "def" variable *
 
 	static e	=G.enum
 
-	/*	Minerals
-
-		S ?
-		Cl ?
-		Zn
-		Mn
-
-	/******/
+	
 }
 
 
@@ -283,3 +371,6 @@ G.maxveglvl	=function()
 {
 	return this.getmaxbval( "plfl", 2 )
 }
+*/
+
+//////////////////////////////////////////////////////////
