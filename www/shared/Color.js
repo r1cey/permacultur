@@ -17,6 +17,8 @@ Color.prototype. c	=function()
 	return new Color().set(this)
 }
 
+
+
 Color.prototype. set	=function( o )
 {
 	this.h	=o.h
@@ -25,6 +27,10 @@ Color.prototype. set	=function( o )
 
 	return this
 }
+
+
+/** Colour  *
+
 Color.prototype. seta	=function( arr )
 {
 	this.h	=arr[0]
@@ -33,6 +39,14 @@ Color.prototype. seta	=function( arr )
 
 	return this
 }
+
+Color.prototype. toJSON	=function()
+{
+	return [this.h, this.s, this.l]
+}*/
+
+
+
 Color.prototype. sethsl	=function( h, s, l )
 {
 	this.h	=h
@@ -50,12 +64,12 @@ Color.prototype. add	=function( h, s, l )
 }
 
 
-/** Return better json representation of object for messaging. */
+/** Return better json representation of object for messaging. *
 
 Color.prototype. newmsg	=function()
 {
 	return [this.h, this.s, this.l]
-}
+}*/
 
 Color.prototype. str	=function()
 {
@@ -74,3 +88,7 @@ Color.prototype. inv	=function()
 
 	return this
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+

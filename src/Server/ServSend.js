@@ -16,8 +16,9 @@ export default class SSe
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @arg [ic] */
 
-SSe.prototype. mapcode	=function( map, loc, ic, ib )
+SSe.prototype. mapbcell	=function( map, loc, ic )
 {
 	for(var n in this.cls.o )
 	{
@@ -25,7 +26,7 @@ SSe.prototype. mapcode	=function( map, loc, ic, ib )
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send.mapcode( map, loc, ic, ib )
+			cl.send_mapbval( map, loc, ic )
 		}
 	}
 }

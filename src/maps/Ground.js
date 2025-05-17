@@ -1,10 +1,10 @@
-import ShGround	from '../../www/shared/maps/Ground.js'
+import ShGr	from '../../www/shared/maps/GroundMap.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'
 import Vec from  '../../www/shared/Vec.js'
 
-export default class G extends Map(ShGround)
+export default class G extends ShGr(Map)
 {
 	static name	='ground'
 
@@ -19,11 +19,11 @@ export default class G extends Map(ShGround)
 
 G.prototype. gen	=function( r, maxc, trees )
 {
-	var m	=this
+	var gr	=this
 	
-	trees.newbufs( r, maxc, new Loc( 0, 0, 1 ))
-	
-	m.newbufs( r, maxc, new Loc(0,0,0) )
+	trees.newbuf( r, maxc, new Loc( 0, 0, 1 ))
+
+	gr.newbuf( r, maxc, new Loc(0,0,0) )
 
 	this.allsoil()
 
@@ -43,21 +43,21 @@ G.prototype. gen	=function( r, maxc, trees )
 
 	var ic
 
-	m.fore(( loc )=>
+	gr.fore(( loc )=>
 	{
-		ic	=m.i(loc)
+		ic	=gr.i(loc)
 
-		if( m.getwateri( ic ))
+		if( gr.getwateri( ic ))
 		{	
-			m.genwaterdepth( loc, ic )
+			gr.genwaterdepth( loc, ic )
 		}
-		else if( m.getsoilhumi( ic ) >= 0 )
+		else if( gr.getsoilhumi( ic ) >= 0 )
 		{
-			lvl	=m.genhum( loc, ic )
+			lvl	=gr.genhum( loc, ic )
 
-			m.gentree( loc, lvl, ic )
+			gr.gentree( loc, lvl, ic )
 
-			trees.gentree( loc, m, ic )
+			trees.gentree( loc, gr, ic )
 		}
 	})
 }
@@ -474,17 +474,13 @@ G.prototype. setsoil	=function( loc, lvl )
 
 
 
-G.prototype. setsoili	=function( i, lvl, loc )
+G.prototype. setsoili	=function( ic, lvl, loc )
 {
-	var ib	=G.ibfromp.wsr
+	this.bin.setval( ic, ["wsr","ty"], "soil" )
 
-	var bmapi	=G.Bufs[ib].bmapo.wsr
+	this.bin.setval( ic, ["wsr","lvl"], lvl )
 
-	this.bufs[ib].setprop( i, bmapi, 0, "soil" )
-
-	this.bufs[ib].setprop( i, bmapi, 1, lvl )
-
-	this.game?.server?.send.mapcode( this, loc, i, ib )
+	this.game?.server?.send_mapbcell( this, loc, "setsoil", ic )
 }
 
 
@@ -565,7 +561,7 @@ G.prototype. setwateri	=function( ic, lvl, loc )
 
 	this.bufs[ib].setprop( ic, bmapi, 1, lvl-1 )
 
-	this.game?.server?.send.mapcode( this, loc, ic, ib )
+	this.game?.server?.send_mapbcell( this, loc, ic, ib )
 }
 
 
@@ -589,5 +585,5 @@ G.prototype. setvegi	=function( ic, type, lvl =0, loc )
 
 	this.bufs[ib].setprop( ic, ibmap, 2, lvl )
 
-	this.game?.server?.send.mapcode( this, loc, ic, ib )
+	this.game?.server?.send_mapbcell( this, loc, "setveg", ic )
 }

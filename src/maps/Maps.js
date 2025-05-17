@@ -6,7 +6,6 @@ import Trees from './Trees.js'
 
 
 
-
 export default class Ms extends ShMaps( Ground, Trees )
 {
 	conf	=
@@ -47,7 +46,7 @@ Ms.prototype. start	=async function()
 {
 	var proms	=
 	[
-		this.gr.read( this.conf.dir )//, this.conf.size.r, this.conf.size.maxcells )
+		this.gr.read( this.conf.dir )
 		,
 		this.trees.read( this.conf.dir )
 	]
@@ -176,7 +175,7 @@ Ms.prototype. forcell	=function( fun )
 
 /** When player moves, get the additional cells he sees. */
 
-Ms.prototype. gshiftbufs	=function( loc, r, delta, timecode )
+Ms.prototype. gshiftboards	=function( loc, r, delta, timecode )
 {
 	return { gr :this.gr.newshiftbufs( loc, r, delta, timecode ),
 				tr :this.tr.newshiftbufs( loc, r, delta, timecode ) }

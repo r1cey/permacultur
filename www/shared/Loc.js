@@ -25,12 +25,12 @@ export default class Loc extends V
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Return better json representation of object for messaging. */
+/** Return better json representation of object for messaging. *
 
 Loc.prototype. newmsg	=function()
 {
 	return [this.x, this.y, this.h]
-}
+}*/
 
 
 
@@ -59,38 +59,28 @@ Loc.prototype. setxy	=function( x, y, l )
 	this.h	=l
 
 	return this
-}
+}/*
 Loc.prototype. seta	=function( a )
 {
 	return this.setxy( a[0], a[1], a[2] )
-}
+}*/
 
 
 
 Loc.prototype. setvstr	=function( str, h )
 {
-	var a	=str.split('_')
+	var a	=str.split(V.delim)
 
 	this.setxy( Number(a[0]), Number(a[1]), h)
 
 	return this
 }
 
-
-
-
 Loc.prototype. toString	=function()
 {
 	return this.x.toString()+V.delim+this.y+V.delim+this.h
 }
 
-
-
-
-Loc.prototype. toJSON	=function()
-{
-	return [this.x, this.y, this.h]
-}
 
 
 Loc.prototype. add	=function( x, y, h )
@@ -123,3 +113,11 @@ Loc.prototype. subv	=function( v )
 
 
 Loc. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1])) * isNaN(parseInt(a[2]))
+
+
+
+/*
+Loc.prototype. toJSON	=function()
+{
+	return [this.x, this.y, this.h]
+}*/

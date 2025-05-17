@@ -1,25 +1,14 @@
 import Board from './Board.js'
+import Obj from './Obj.js'
 
 import Loc from '../Loc.js'
 
-import Buf from './Buf.js'
 
-
-/** @return {Map} */
-
-export default function( bmap )
-{
-	class Map extends Board( bmap )
-	{
-
-	}
-
-	return Map
-}
+/** Hexagonally round version of Board. */
 
 export default class Map extends Board
 {
-	////
+	obj	=new Obj()
 	
 	_r	=0
 
@@ -31,9 +20,9 @@ export default class Map extends Board
 
 
 
-/** Make new buffers from scratch */
+/** Make new buffer from scratch */
 
-Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
+Map.prototype. newbuf	=function( r, maxc=0, loc=new Loc(0,0,0) )
 {
 	if( maxc>0 )
 	{
@@ -46,7 +35,7 @@ Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
 	}
 	if( ! r )
 	{
-		console.error('Wrong newbufs')
+		console.error('Wrong newbuf')
 		
 		return
 	}
@@ -55,19 +44,21 @@ Map.prototype. newbufs	=function( r, maxc=0, loc=new Loc(0,0,0) )
 
 	var c	=Map.r2cells( r )
 
-	var Class	=this.constructor
+	Board.newbuf.call( this, c )
+
+	/*var Class	=this.constructor
 
 	for(var i=0; i<Class.Bufs.length; i++)
 	{
 		this.bufs[i]	=new (Class.Bufs[i])().new( c )
-	}
+	}*/
 	
 	this.setloc( loc )
 
 	return this
 }
 
-
+throw new Error(666)
 /** ibuf is optional. */
 
 
@@ -195,8 +186,9 @@ Map.prototype. slice	=function( c, r )
 
 /** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
  * If fun returns true then stop looping.
- * fun( loc, distance, map )
- */
+ * @arg {function} fun -( loc, distance, map )
+ * @arg [r=mapRadius]
+ * @arg [c=mapCenter]	-center from where to start looping */
 
 Map.prototype. fore	=function( fun, r, c )
 {
@@ -459,29 +451,8 @@ Map.prototype. i	=function( loc )
 		(v.z()>=0 && v.x<0) * (rsize*2 + v.z()*this._r - v.x);
 }
 
+Map.prototype. ic	=Map.prototype.i
 
-
-
-Map.prototype. arr_g	=function(id, loc)
-{
-	return this.arrs[i][this.i(loc)]
-}
-Map.prototype. arr_s	=function(id, loc, val)
-{
-	this.arrs[i][this.i(loc)]	=val
-}
-
-
-Map.prototype. arr_gdata	=function( loc, n, i )
-{
-	return this.code_g( this.arr_g(loc), n, i )
-}
-Map.prototype. arr_sdata	=function( loc, n, i, val )
-{
-	var ia	=this.i(loc)
-
-	this.arr[ia]	=this.code_s( this.arr[ia], n, i, val )
-}
 
 
 /** @arg fun	- ( loc, code, cell ) 
@@ -507,15 +478,6 @@ Map.prototype. o_for	=function( fun )
 	}
 }
 */
-
-Map.prototype. o_g	=function(loc)
-{
-	return this.o[loc]
-}
-Map.prototype. o_s	=function( loc )
-{
-	return this.o[loc]	??={}
-}
 
 
 Map.prototype. gjson	=function()
@@ -841,12 +803,6 @@ Map.idfromcode	=( code )	=> code & 15
 
 Map.dirfromcode	=( code )	=> ( (code&255)>>4 ) - 1
 
-
-
-Map.getmaxbval	=function( name, j )
-{
-	return ( 1 << this.getbmapbits(name,j) ) - 1
-}
 
 
 

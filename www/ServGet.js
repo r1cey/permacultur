@@ -108,14 +108,14 @@ SG.prototype. units	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/**
+/** Get map binary cell
  * @param o 
- * @arg o.bid
+ * @arg o.mapid
  * @arg o.loc
- * @arg o.bval
- */
+ * @arg o.binval
+ * @arg o.act	-action which triggered change */
 
-SG.prototype. mapcode	=function( o )
+SG.prototype. mapbcell	=function( o )
 {
 	var{ bid }	=o
 

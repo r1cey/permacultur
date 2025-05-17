@@ -75,33 +75,25 @@ ClS.prototype. map	=function()
 //////////////////////////////////////////////////////////////////////////////
 
 
+/** @arg act	-action which triggered the change
+ * @arg [ic] */
 
-ClS.prototype. mapcode	=function( map, loc, ic, ib )
+ClS.prototype. mapbcell	=function( map, loc, act, ic )
 {
-	var Bufs	=map.constructor.Bufs
+	// var Bufs	=map.constructor.Bufs
 
-	ic	??=map.i(loc)
+	ic	??=map.ic(loc)
 
-	if( ib )	send(ib)
-
-	else
-	{
-		for(ib =0;ib< Bufs.length; ib++)
+	this.sendjson({mapbcell:
 		{
-			send( ib )
-		}
-	}
-
-
-	function send(ib)
-	{
-		this.send_json({mapcode:
-			{
-				bid	:Bufs[ib].id ,
-				loc ,
-				bval	:map.bufs[ib].cells[ic] 
-			}})
-	}
+			mapid	:map.bin.constructor.id
+			,
+			loc
+			,
+			binval	:map.bin.getcell( ic )
+			,
+			act
+		}})
 }
 
 
@@ -114,18 +106,31 @@ ClS.prototype. clplmov	=function( delta )
 {
 	var pl	=this.pl
 
-	var timecode	=this.timecode
-
-	var bufs	=this.game().maps.gshiftbufs( pl.loc, pl.vision, delta, this.timecode )
-
-
-	
-
-	for(var board of visshiftboards )
+	var msg	=
 	{
-		this.sendbin( board.)
+		timecode	:this.timecode,
+		loc	:pl.loc,
+		delta,
+		r	:pl.vision,
+		cells	:
+		{
+			gr	:null,
+			tr	:null
+		}
 	}
 
+	var boards	=this.game().maps.gshiftboards( msg.loc, msg.r, delta, msg.timecode )
+
+	for(var n in boards )
+	{
+		this.sendbin( boards[n].getbuf() )
+
+		msg.cells[n]	=boards[n].o
+	}
+
+	this.sendjson({ clplmov : msg })
+
+	/*
 	var{ loc }	=pl
 
 	var r	=pl.vision
@@ -141,7 +146,7 @@ ClS.prototype. clplmov	=function( delta )
 		cells	:cellso
 	}
 
-	/* prepare binary buffers */
+	/* prepare binary buffers *
 
 	var bcodes	=[[],[]]	// binary codes
 
@@ -174,7 +179,7 @@ ClS.prototype. clplmov	=function( delta )
 		}
 	})
 
-	/* fill cells data */
+	/* fill cells data *
 
 	var ic	=0
 
@@ -219,7 +224,7 @@ ClS.prototype. clplmov	=function( delta )
 	},
 	dir, r, loc )
 
-	/* send */
+	/* send *
 
 	for(var h =0;h< 2 ;h++)
 	{
@@ -229,7 +234,7 @@ ClS.prototype. clplmov	=function( delta )
 		}
 	}
 
-	this.s.json({ clplmov: o })
+	this.s.json({ clplmov: o })*/
 }
 
 

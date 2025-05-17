@@ -21,14 +21,15 @@ export async function readbuf	( path )
 {
 	try
 	{
-		return (await fs.readFile(path))?.buffer
+		var bin	=(await fs.readFile(path))?.buffer
 	}
 	catch( err )
 	{
-		console.error( `Coudln't read map file: ${path}` )
+		console.error( `Coudln't read bin file: ${path}` )
 
-		throw err
+		// throw err
 	}
+	return bin
 }
 
 

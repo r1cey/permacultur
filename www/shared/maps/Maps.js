@@ -1,81 +1,68 @@
-/** Is also in charge of assigning ids to buffers */
-
-export default function( Ground, Trees )
+export default ( Ground, Trees )=> class extends Maps
 {
-	var maxid	=Trees.setids( Ground.setids( 1 ) ) - 1
+	ground	=new Ground()
+	
+	trees	=new Trees()
 
+	static Trees	=Trees
 
-
-	return class
-	{
-		ground	=new Ground()
-		
-		gr	=this.ground
-
-		trees	=new Trees()
-
-		tr	=this.trees
-
-		static Trees	=Trees
-
-		static Ground	=Ground
-
-
-		fromloc( loc )
-		{
-			return loc.h	? this.tr	: this.gr
-		}
-
-		fromh( h )
-		{
-			return h	? this.tr	: this.gr
-		}
-
-		frombid( bid )
-		{
-			var ibuf	=this.gr.constructor.ibfrombid(bid)
-
-			if( ibuf >= 0 )
-			{
-				return { map :this.gr, ibuf}
-			}
-			else
-			{
-				ibuf	=this.tr.constructor.ibfrombid(bid)
-
-				if( ibuf >= 0  )
-				{
-					return { map :this.tr, ibuf }
-				}
-			}
-
-			console.error("Can't find buffer from id!")
-		}
-
-		ready()
-		{
-			return this.gr.ready() && this.tr.ready()
-		}
-
-		fore( fun )
-		{
-			fun( this.gr )
-			fun( this.tr )
-		}
-
-
-		isplmov( dest )
-		{
-			return this.fromloc( dest ).isplmov( dest )
-		}
-
-
-		static maxid()
-		{
-			return maxid
-		}
-	}
+	static Ground	=Ground
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Maps
+{
+	ground
+	
+	get gr()	{return this.ground }
+
+	trees
+
+	get tr()	{return this.trees }
+
+	static Trees
+
+	static Ground
+}
+
+
+Maps.prototype. fromloc	=function( loc )
+{
+	return this.fromh( loc.h )
+}
+
+Maps.prototype. fromh	=function( h )
+{
+	return h	? this.tr	: this.gr
+}
+
+Maps.prototype. fromid	=function( id )
+{
+	return id === 2	? this.tr	: this.gr
+}
+
+
+
+Maps.prototype. isready	=function()
+{
+	return this.gr.ready() && this.tr.ready()
+}
+
+
+
+Maps.prototype. fore	=function( fun )
+{
+	fun( this.gr )
+	fun( this.tr )
+}
+
+
+
+Maps.prototype. isplmov	=function( dest )
+{
+	return this.fromloc( dest ).isplmov( dest )
+}

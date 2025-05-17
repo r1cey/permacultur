@@ -1,3 +1,5 @@
+import ShMap	from "../../www/shared/maps/Map.js"
+
 import * as fs	from '../fs.js'
 
 import Pl	from '../Player.js'
@@ -6,73 +8,82 @@ import Loc	from "../../www/shared/Loc.js"
 
 
 
-var Map	=( Base ) => class extends Base
+export default class Map extends ShMap
 {
 	game
 
 	get g()	{return this.game }
 
-	static name
+	/** define in derived class
+	@static
+	@var name */
+}
 
 
 
 
+Map.prototype. read	=async function( dir ="" )
+{
+	var pa	=dir + this.constructor.name
+/*
+	var proms	=[]
 
-	async read( dir ="" )
+	for(var i=0; i<this.constructor.Bufs.length; i++)
 	{
-		var pa	=dir + this.constructor.name
-
-		var proms	=[]
-
-		for(var i=0; i<this.constructor.Bufs.length; i++)
-		{
-			proms.push( fs.readbuf( pa+i+'.bin' ))
-		}
-
-		var	files	=await Promise.allSettled(
-					[Promise.all(proms), fs.readjson(pa+'.json')])
-		
-		for(var i=0; i<files[0].value?.length; i++)
-		{
-			this.setbuf( files[0].value[i] )
-		}
-
-		await this.seto( files[1].value )
-
-		if( files[0].value )
-		{
-			console.log('Read map: '+this.constructor.name )
-		}
-		return Boolean(files[0].value )
+		proms.push( fs.readbuf( pa+i+'.bin' ))
 	}
 
+	var	files	=await Promise.allSettled(
+				[Promise.all(proms), fs.readjson(pa+'.json')])*/
 
-
-	async save( dir ="")
+	var	files	=await Promise.all(
+				[fs.readbuf( pa+".bin"), fs.readjson(pa+'.json')])
+	
+	/*for(var i=0; i<files[0].value?.length; i++)
 	{
-		var pa	=dir+this.constructor.name
+		this.setbuf( files[0].value[i] )
+	}*/
 
-		for(var i=0; i<this.bufs.length; i++)
-		{
-			fs.savebuf( pa+i+'.bin', this.bufs[i].buf )
-		}
 
-		fs.savejson( pa+'.json' , this.o ,( key, val )=>
-		{
-			switch( key )
-			{
-				case 'pl' :
+	if( files[0] )
+	{
+		console.log('Has read bin map: '+this.constructor.name )
 
-					return val.name
-			}
-			return val
-		})
+		this.setbuf( files[0].value)
 	}
+
+	this.seto( files[1] )
+
+	return Boolean(files[0] )
+}
+
+
+
+Map.prototype. save	=async function( dir ="")
+{
+	var pa	=dir+this.constructor.name
+
+	for(var i=0; i<this.bufs.length; i++)
+	{
+		fs.savebuf( pa+i+'.bin', this.bufs[i].buf )
+	}
+
+	fs.savejson( pa+'.json' , this.o ,( key, val )=>
+	{
+		switch( key )
+		{
+			case 'pl' :
+
+				return val.name
+		}
+		return val
+	})
+}
 
 
 	///////////////////////////////////////////////////////////////////////////
 
-
+/*
 	newshiftbufs ( loc, r, delta, timecode )
 	{
 		var bufs	=[]
@@ -85,53 +96,10 @@ var Map	=( Base ) => class extends Base
 
 		var cellslen	=(r << 1) + 1
 	}
+*/
 
 
-
-	///////////////////////////////////////////////////////////////////////////
-
-
-	/** Parse o and read data from files to fill o */
-
-	async seto( o )
-	{
-		if( !o )	return
-
-		this.o	=o
-
-		var proms	=[]
-
-		for(var locst in o)
-		{
-			var c	=o[locst]
-
-			for(var p in c )
-			{
-				switch(p)
-				{
-					case 'pl':
-
-						let cell2save	=c
-
-						proms.push( (async()=>
-						{
-							var pl	=await this.game.pls.read( c.pl )
-
-							var h	=this.bufs[0]	? this.getloc().h	: pl.loc.h
-
-							pl.loc.setvstr(locst, h )
-							
-							cell2save.pl	=pl
-						})())
-				}
-			}
-		}
-
-		await Promise.all( proms )
-	}
-}
-
-export default Map
+///////////////////////////////////////////////////////////////////////////
 
 
 /*

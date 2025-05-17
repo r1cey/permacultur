@@ -1,5 +1,5 @@
+import Bin from "./Bin.js"
 import Board from "./Board.js"
-
 import Map from './Map.js'
 
 import Loc from '../Loc.js'
@@ -26,15 +26,22 @@ var bmap	=
 			}
 		]
 	},
-	{ name: "n", bits	:4 },
-	{ name: "p", bits	:4 },
-	{ name: "k", bits	:4 },
-	{ name: "ca", bits	:4 },
-	{ name: "mg", bits	:4 },
-	{ name: "na", bits	:4 },
-	{ name: "fe", bits	:4 },
-	{ name: "cu", bits	:4 },
-	/*	S ?	Cl ? Zn	Mn */
+	{
+		name	:"mine"
+		,
+		subd	:
+		[
+			{ name: "n", bits	:4 },
+			{ name: "p", bits	:4 },
+			{ name: "k", bits	:4 },
+			{ name: "ca", bits	:4 },
+			{ name: "mg", bits	:4 },
+			{ name: "na", bits	:4 },
+			{ name: "fe", bits	:4 },
+			{ name: "cu", bits	:4 },
+			/*	S ?	Cl ? Zn	Mn */
+		]
+	},
 	{
 		name	:"plfl"
 		,
@@ -89,19 +96,50 @@ var bmap	=
 ]
 
 
-/** @returns {Ground} */
+/** @returns {class} */
 
 export default function( Base )
 {
-	class Gr extends Base( bmap )
+	class Gr extends Base
 	{
+		static Bin	=Bin( 1, bmap )
 	}
 
 
-	Gr.prototype. nemptycelli	=function( ic )
+	///////////////////////////////////////////////////////////////////////////
+
+
+
+	Gr.prototype. nemptycell_i	=function( ic )
 	{
-		return Boolean( this.val("wsr","ty") )
+		return Boolean( this.bin.getval( ic, ["wsr","ty"] ) )
 	}
+
+
+	
+	Gr.maxwater	=function()
+	{
+		return ( this.maxhum() >> 1 ) + 1
+	}
+
+	Gr.maxwat		=Gr.maxwater
+
+
+
+	Gr.maxhum	=function()
+	{
+		return this.Bin.getmaxval( ["wsr", "lvl"] )
+	}
+
+
+
+	Gr.maxveglvl	=function()
+	{
+		return this.Bin.getmaxval( ["plfl", "plant", "lvl"] )
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
 
 
 	return Gr
@@ -349,28 +387,6 @@ G.prototype. flowcell	=function( loc )
 
 
 
-G.maxwater	=function()
-{
-	return ( this.maxhum() >> 1 ) + 1
-}
-
-G.maxwat		=G.maxwater
-
-
-
-
-
-G.maxhum	=function()
-{
-	return this.getmaxbval( "wsr", 1 )
-}
-
-
-
-G.maxveglvl	=function()
-{
-	return this.getmaxbval( "plfl", 2 )
-}
 */
 
 //////////////////////////////////////////////////////////

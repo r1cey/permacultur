@@ -318,7 +318,7 @@ T.prototype. setbranchti	=function( ic, type, loc )
 {
 	var ibuf	=this.setbprop( ic, "branch", 0, type )
 
-	this.game?.server?.send.mapcode( this, loc, ic, ibuf )
+	this.game?.server?.send_mapbcell( this, loc, ic, ibuf )
 }
 
 
@@ -328,7 +328,7 @@ T.prototype. setbranchdi	=function( ic, dir, loc )
 {
 	var ibuf	=this.setbprop( ic, "branch", 1, dir )
 
-	this.game?.server?.send.mapcode( this, loc, ic, ibuf )
+	this.game?.server?.send_mapbcell( this, loc, ic, ibuf )
 }
 
 

@@ -1,9 +1,16 @@
-import Loc from "./Loc.js"
-import Col from './Color.js'
+import PV	from "./PlVis.js"
 
 
+export default class Pl extends PV
+{
+	speed	=1
 
+	vision	=50
 
+	water	=1
+}
+
+/*
 class	PlVis
 {
 	name
@@ -21,7 +28,7 @@ class	PlVis
 
 
 
-
+/*
 class PlVisA extends PlVis
 {
 	// static _	=new PlVisA()
@@ -43,7 +50,7 @@ class PlVisO extends PlVis
 
 	loc	=new Loc(0,0,0)
 
-	static Msg	=PlVisA
+	// static Msg	=PlVisA
 
 	constructor( visa )
 	{
@@ -70,13 +77,13 @@ function classpl( rootclass )
 		{
 			super(...arg)
 
-			delete this.cl
+			// delete this.cl
 		}
 	}
 }
 
 
-
+/*
 
 class PlA extends classpl( PlVisA )
 {
@@ -95,7 +102,7 @@ class PlA extends classpl( PlVisA )
 
 class PlO extends classpl( PlVisO )
 {
-	static Msg	=PlA
+	// static Msg	=PlA
 
 	constructor( pla )
 	{
@@ -172,23 +179,22 @@ PlVisO.prototype. newmsgvis	=function( oldloc )
 	return new this.constructor.Msg.Vis( this )
 }
 
+*/
 
 
-
-PlO.prototype. sees	=function( v )
+Pl.prototype. sees	=function( loc )
 {
 	var pl	=this
 
-	var dist	=pl.loc.disth( v )
+	var dist	=pl.loc.disth( loc )
 
 	return dist <= pl.vision
 }
 
 
-
 /** Can't see self */
 
-PlO.prototype. seespl	=function( pl2 )
+Pl.prototype. seespl	=function( pl2 )
 {
 	if( this === pl2 )	return false
 
@@ -198,7 +204,7 @@ PlO.prototype. seespl	=function( pl2 )
 
 
 
-PlO.prototype. setwater	=function( lvl )
+Pl.prototype. setwater	=function( lvl )
 {
 	if(lvl < 0)	lvl	=0
 	if(lvl > 1)	lvl	=1
@@ -211,7 +217,17 @@ PlO.prototype. setwater	=function( lvl )
 
 
 
-PlO.prototype. subwater	=function( n )
+Pl.prototype. subwater	=function( n )
 {
 	return this.setwater( this.water - n )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Pl.prototype. toJSON	=function(key)
+{
+	return this
 }
