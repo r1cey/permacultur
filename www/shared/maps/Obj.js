@@ -18,6 +18,7 @@ Obj.prototype. set	=function( loc )
 	return	this.o[loc.tovstr()]	??={}
 }
 
+Obj.prototype. s	=Obj.prototype. set
 // Bo.prototype. setcello	=Bo.prototype. scello
 
 
@@ -28,6 +29,7 @@ Obj.prototype. get	=function(loc)
 	return this.o[loc.tovstr()]
 }
 
+Obj.prototype. g	=Obj.prototype. get
 // Bo.prototype. getcello	=Bo.prototype. gcello
 
 

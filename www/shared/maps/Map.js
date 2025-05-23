@@ -1,4 +1,5 @@
-import Board from './Board.js'
+import Board from './newBoard.js'
+import BinMap	from "./newBinMap.js"
 import Obj from './Obj.js'
 
 import Loc from '../Loc.js'
@@ -6,7 +7,7 @@ import Loc from '../Loc.js'
 
 /** Hexagonally round version of Board. */
 
-export default class Map extends Board
+export default class Map extends Board(BinMap)
 {
 	obj	=new Obj()
 	
@@ -19,11 +20,12 @@ export default class Map extends Board
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 /** Make new buffer from scratch */
 
 Map.prototype. newbuf	=function( r, maxc=0, loc=new Loc(0,0,0) )
 {
+	var C	=this.constructor
+
 	if( maxc>0 )
 	{
 		let maxr	=Map.cells2r(maxc)
@@ -44,7 +46,7 @@ Map.prototype. newbuf	=function( r, maxc=0, loc=new Loc(0,0,0) )
 
 	var c	=Map.r2cells( r )
 
-	Board.newbuf.call( this, c )
+	this.bin	=new C.Bin().new( c )
 
 	/*var Class	=this.constructor
 
@@ -58,11 +60,9 @@ Map.prototype. newbuf	=function( r, maxc=0, loc=new Loc(0,0,0) )
 	return this
 }
 
-throw new Error(666)
-/** ibuf is optional. */
 
 
-Map.prototype. setbuf	=function( buf, ibuf )
+Map.prototype. setbuf	=function( buf )
 {
 	if( !buf )
 	{
@@ -71,9 +71,9 @@ Map.prototype. setbuf	=function( buf, ibuf )
 		return
 	}
 
-	var Class	=this.constructor
+	var C	=this.constructor
 
-	ibuf	??=Class.ibfrombid( Class.codefrombuf( buf ))
+	/*ibuf	??=Class.ibfrombid( Class.codefrombuf( buf ))
 
 	if( ibuf < 0  )
 	{
@@ -82,9 +82,11 @@ Map.prototype. setbuf	=function( buf, ibuf )
 		return
 	}
 
-	var Buf	=Class.Bufs[ibuf]
+	var Buf	=Class.Bufs[ibuf]*/
 
-	var c	=( buf.byteLength - Buf.headlen ) / Buf.bpc
+	var bin	=new C.Bin().set( buf )
+
+	var c	=bin.cellsl
 	
 	var r	=Map.cells2r( c )
 
@@ -97,7 +99,7 @@ Map.prototype. setbuf	=function( buf, ibuf )
 
 	this._r	=r
 
-	this.bufs[ibuf]	=new Buf().set( buf, c )
+	this.bin	=bin
 
 	return this
 }
@@ -105,16 +107,9 @@ Map.prototype. setbuf	=function( buf, ibuf )
 
 
 
-Map.prototype. ready	=function()
+Map.prototype. isready	=function()
 {
-	for(var i=0; i<this.constructor.Bufs.length; i++)
-	{
-		if( ! this.bufs[i]?.head )
-		{
-			return false
-		}
-	}
-	return true
+	return Boolean( this.bin?.getbuf() )
 }
 
 
@@ -126,7 +121,7 @@ Map.prototype. ready	=function()
 
 Map.prototype. isplmov	=function( dest )
 {
-	return ! this.gcello(dest)?.pl
+	return ! this.obj.g(dest)?.pl
 }
 
 
@@ -678,17 +673,9 @@ Map.prototype. shift	=function( dir, arrs, objs, parse )
 
 
 
-
 Map.prototype.setloc	=function( loc )
 {
-	for(var i=0, l=this.bufs.length; i<l; i++)
-	{
-		var h	=this.bufs[i].head
-
-		h[2]	=loc.x
-		h[3]	=loc.y
-		h[1]	=loc.h
-	}
+	this.bin.setloc( loc )
 }
 
 

@@ -13,9 +13,27 @@ export default class PlVis
 
 	col	=new Col(0, 100, 50)
 	
-	loc	=new Loc(0,0,0)	//(not sure if true anymore) when this is derived, it can become a getter function
+	loc	=new Loc(0,0,0)	//when this is derived on client, it can become a getter function
 
 	cl	=0
 
 	sleep	=0
+}
+
+
+PlVis.prototype. seta	=function( pla )
+{
+	for(var prop in pla )
+	{
+		if( this[prop]?.seta )
+		{
+			this[prop].seta( pla[prop] )
+		}
+		else
+		{
+			this[prop]	=pla[prop]
+		}
+	}
+
+	return this
 }

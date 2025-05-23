@@ -106,9 +106,11 @@ ClS.prototype. clplmov	=function( delta )
 {
 	var pl	=this.pl
 
+	var timecode	=this.tc.next()
+
 	var msg	=
 	{
-		timecode	:this.timecode,
+		timecode,
 		loc	:pl.loc,
 		delta,
 		r	:pl.vision,

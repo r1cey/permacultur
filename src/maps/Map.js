@@ -1,5 +1,7 @@
 import ShMap	from "../../www/shared/maps/Map.js"
 
+import Obj	from "./Obj.js"
+
 import * as fs	from '../fs.js'
 
 import Pl	from '../Player.js'
@@ -17,6 +19,8 @@ export default class Map extends ShMap
 	/** define in derived class
 	@static
 	@var name */
+
+	obj	=new Obj()
 }
 
 
@@ -49,10 +53,10 @@ Map.prototype. read	=async function( dir ="" )
 	{
 		console.log('Has read bin map: '+this.constructor.name )
 
-		this.setbuf( files[0].value)
+		this.setbuf( files[0] )
 	}
 
-	this.seto( files[1] )
+	this.obj.seto( files[1] )
 
 	return Boolean(files[0] )
 }

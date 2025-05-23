@@ -5,43 +5,72 @@ import Loc	from "../Loc.js"
 
 
 
-export default ( id, bmap )=>	class extends Bin
+export default function( id, bmap, structadd )
 {
-	static id	=id
+	class C extends Bin
+	{
+		static id	=id
 
-	static bmap	=bmap
+		static bmap	=bmap
 
-	static bpc	=prepbmap( bmap )
+		static bpc	=prepbmap( bmap )
+	}
+
+	if( structadd )	C._structarr	=Bin._structarr.concat( structadd )
+
+	C.build_structo()
+
+	return C
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Collection of cells stored in a binary buffer. */
+/** Collection of cells stored in a binary buffer.
+ * Basic class divides the data like this:
+ * [ code, id, r, loc, cells ]
+ * code	-Defines the type of data inside the binary data.
+	 * 1 - BinMap
+	 * 2 - BinMapShift 
+ * id	-Map type identifier.
+ * r	-Radius
+ * loc	-3 values for location
+ * cells	-The actual cell data. */
 
 class Bin
 {
-	/** Code for how the cell data is structured. */
-	static id
+	/**Defined in derived class.
+	@static
+	@var code */
 
-	getcode()	{return this.codedv["getUint"+Bin.codelen]( 0,true)}
+	/**Code for how the cell data is structured.
+	 * Defined in derived class.
+	@static
+	@var id */
 
-	static codelen	=32
-
-	/** Location object returned can change later. Don't reuse it outside of class.
-	 * Designed like this just to save on garbage collection */
-	getloc()	{return this._loc.setxy( this.locdv.getInt16(2, true),
-			this.locdv.getInt16(4, true), this.locdv.getInt16(0, true) ) }
-
-	static loclen	=16
-
-	/** Cells length */
-	cellsl	=0
+	/** Bytes per cell.
+	 * Defined in derived class.
+	@static
+	@var bpc */
 
 	////----
 
+	/** DataViews */
+	dvs	={ cells :null }
+
+	/**Second value must be valid bits number for DataVew get and set functions. */
+	static _structarr	=
+		[ ["code",16],["id",16],["r",16],["loc",16] ]
+
+	static _structo	={ }
+
+	/**Number of cells. If cell is less than 8 bits long,
+	 * automatic calculation from buffer will not work properly*/
+	// cellsl	=0
+
 	/** Bitmap for values. No value must take more than 24 bits!
+	 * Defined in derived class.
 	 * name	-used for looking up
 	 * bits -bit length of this value.
 	 * 		If omitted is calculated automatically from inner subd values.
@@ -51,26 +80,20 @@ class Bin
 	 * 		Make sure total bits counts match.
 	 * 		Each subdivision must be an array.
 	 * enum	-automatically created reverse lookup of named values
-	 * offset	-automatically created bit offset from the beginning */
-	static bmap
-
-	/** Bytes per cell. */
-	static bpc
-
-	/** @type {DataView} */
-	codedv
-
-	/** @type {DataView} */
-	locdv
-
-	/** @type {DataView} */
-	cellsdv
+	 * offset	-automatically created bit offset from the beginning 
+	@static
+	@var bmap */
 
 	////----
 
 	/** tricky buffer, ONLY access it through
 	 * getloc() because it can be changed to anything */	
 	_loc	=new Loc()
+
+
+	constructor(  )
+	{
+	}
 }
 
 
@@ -78,36 +101,82 @@ class Bin
 
 
 
-Bin.prototype. newbuf	=function( c )
+Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
-	var Class	=this.constructor
+	var Class	=C	=this.constructor
 
-	var buf	=new ArrayBuffer( c * Class.bpc + Class.headlen() )
+	var buf	=new ArrayBuffer( clen * Class.bpc + Class.headlen() )
 
-	this.setbuf( buf, c )
+	this.setdataviews( buf )
+
+	this.set("code", C.code)
+	this.set("id", C.id )
+	this.set("r", r )
+	this.setloc( loc )
 
 	return this
 }
 
 
 
-Bin.prototype. setbuf	=function( buf, c )
+Bin.prototype. setbuf	=function( buf )
 {
 	var C	=this.constructor
 
-	this.codedv	=new DataView( buf, 0, C.codelen )
-
-	this.locdv	=new DataView( buf, C.codelen, C.loclen * 3 )
-
-	this.cellsdv	=new DataView( buf, C.headlen() )
-
-	this.cellsl	=c
+	this.setdataviews( buf )
 
 	return this
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+Bin.prototype. get	=function( dataname )
+{
+	var C	=this.constructor
+
+	this.dvs[dataname]["getUint"+C._structo[dataname]]( 0,true)
+}
+
+
+Bin.prototype. set	=function( dataname, val )
+{
+	var C	=this.constructor
+
+	this.dvs[dataname]["setUint"+C._structo[dataname]]( 0, val ,true)
+}
+
+
+
+Bin.prototype. setloc	=function( loc )
+{
+	var C	=this.constructor
+
+	var loclen	=C._structo.loc
+
+	var setf	=this.dvs.loc["setInt"+loclen]
+
+	setf( 0, loc.h ,true)
+	setf( loclen >> 3 , loc.x ,true)
+	setf( loclen >> 2 , loc.y ,true)
+}
+
+
+/** Location object returned can change later. Don't reuse it outside of class.
+ * Designed like this just to save on garbage collection */
+
+Bin.prototype. getloc	=function()
+{
+	var C	=this.constructor
+
+	var loclen	=C._structo.loc
+
+	var getf	=this.dvs.loc["getInt"+loclen]
+
+	return this._loc.setxy( getf( loclen>>3 ,true), getf( loclen>>2 ,true), getf(0 ,true) )
+}
 
 
 /** Similar to gbval
@@ -126,14 +195,14 @@ Bin.prototype. setval	=function( ic, names, val )
 
 	var byteoffs	=bitoffs >> 3
 
-	var data	=this.cellsdv.getUint32( byteoffs ,true)
+	var data	=this.dvs.cells.getUint32( byteoffs ,true)
 
 	if( typeof val === "string" )
 	{
 		val	=bmapv.enum[val]
 	}
 
-	this.cellsdv.setUint32( byteoffs, C.setval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
+	this.dvs.cells.setUint32( byteoffs, C.setval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
 }
 
 
@@ -155,9 +224,18 @@ Bin.prototype. getval	=function( ic, names )
 
 	var byteoffs	=bitoffs >> 3
 
-	var data	=this.cellsdv.getUint32( byteoffs, true)
+	var data	=this.dvs.cells.getUint32( byteoffs, true)
 
 	return C.gval( data, bitoffs - (byteoffs<<3), bmapv.bits )
+}
+
+Bin.prototype. gval	=Bin.prototype. getval
+
+
+
+Bin.prototype. cmpval	=function( ic, names, valstr )
+{
+	return this.getval( ic, names ) === this.constructor.getbmapval( names ).enum[valstr]
 }
 
 
@@ -172,7 +250,7 @@ Bin. getmaxval	=function( names )
 
 Bin.prototype. getbuf	=function()
 {
-	return this.cellsdv.buffer
+	return this.dvs?.cells.buffer
 }
 
 
@@ -208,13 +286,6 @@ Bin.prototype. getcell	=function( ic )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-Bin. headlen	=function()
-{
-	return this.codelen + this.loclen * 3
-}
 
 
 /** Get bmap entry.
@@ -315,6 +386,7 @@ Bin.sval	=function( code, start, len, val )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
 /** Call it to make sure that all bmap data is filled properly.
  * Recursive function; is called on certain inner arrays too.
  * @arg [offset=0]	-Don't use when calling manually. Needed for recursion.
@@ -363,6 +435,53 @@ function prepbmap( arr, offset=0 )
 
 	return bits
 }
+
+
+
+Bin.prototype. setdataviews	=function( buf )
+{
+	var C	=this.constructor
+
+	var start	=0
+
+	for(var dvvals of C._structarr )
+	{
+		var name	=dvvals[0]
+
+		var len	=dvvals[1] + (name==="loc")*(dvvals[1]<<1)
+
+		this.dvs[name]	=new DataView( buf, start>>3, len>>3 )
+
+		start	+= len
+	}
+
+	this.dvs.cells	=new DataView( buf, start )
+}
+
+
+
+Bin. headlen	=function()
+{
+	var len	=0
+
+	for(var val of this._structarr )
+	{
+		len	+= val[1] + (val[0]==="loc")*(val[1]<<1)
+	}
+	return len >> 3
+}
+
+
+Bin. build_structo	=function()
+{
+	var C	=this
+
+	for(var val of C._structarr )
+	{
+		C._structo[val[0]]	=val[1]
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

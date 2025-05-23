@@ -1,4 +1,4 @@
-import ShMaps	from '../shared/maps/Maps.js'
+import ShMaps	from '../shared/maps/newMaps.js'
 import Map	from '../shared/maps/Map.js'
 import Trees	from './Trees.js'
 import Ground	from './Ground.js'

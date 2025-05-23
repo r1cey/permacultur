@@ -1,4 +1,4 @@
-import ShGr	from "../shared/maps/Ground.js"
+import ShGr	from "../shared/maps/newGround.js"
 import Map	from './Map.js'
 
 import V	from "../shared/Vec.js"

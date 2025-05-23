@@ -1,4 +1,4 @@
-import ShGr	from '../../www/shared/maps/GroundMap.js'
+import ShGr	from '../../www/shared/maps/newGroundMap.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'

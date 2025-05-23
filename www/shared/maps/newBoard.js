@@ -2,15 +2,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-export default class Bo
-{	
-	/** Bin class to use. Defined in derived class
-	@static
-	@var Bin */
+export default function(newBin)
+{
+	class Bo
+	{	
+		/** {function}	-Not the actual class, but the function which makes it. */
+		static newBin	=newBin
 
-	/** Cell objects. In Board they're just sorted in order.
-	 * For inner values, look into Obj.js */
-	obj	=[]
+		/** Cell objects. In Board they're just sorted in order.
+		 * For inner values, look into Obj.js */
+		obj	=[]
+	}
+
+	return Bo
 }
 
 

@@ -2,6 +2,8 @@ import V from '../../www/shared/Vec.js'
 
 import ClG from './ClientGet.js'
 
+import Map	from "../maps/Ground.js"
+
 
 export default class Client extends ClG
 {
@@ -11,7 +13,7 @@ export default class Client extends ClG
 
 	srv
 
-	timecode	=1
+	tc	=new Timecode( Map.Bin.timecodelen )
 
 	rtcstate	=new Map()
 	// 1:	master
@@ -120,3 +122,31 @@ Client.prototype. onsucclogin	=function( pl, isnew )
 	})
 }
 */
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+class Timecode
+{
+	val	=0
+
+	bits
+
+	
+	constructor( bits )
+	{
+		this.bits	=bits
+	}
+}
+
+
+Timecode.prototype. next	=function()
+{
+	var val	=this.val + 1
+
+	if( val >> this.bits )	val	=1
+
+	this.val	=val
+
+	return val
+}

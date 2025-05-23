@@ -1,5 +1,5 @@
-import Bin from "./Bin.js"
-import Board from "./Board.js"
+import Bin from "./newBin.js"
+import Board from "./newBoard.js"
 import Map from './Map.js'
 
 import Loc from '../Loc.js'
@@ -102,7 +102,7 @@ export default function( Base )
 {
 	class Gr extends Base
 	{
-		static Bin	=Bin( 1, bmap )
+		static Bin	=Base.newBin( 1, bmap )
 	}
 
 
