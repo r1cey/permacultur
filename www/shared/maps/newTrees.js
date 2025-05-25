@@ -15,7 +15,7 @@ var bmap	=
 				,
 				bits	:2
 				,
-				vals	:["none", "trunk", "reg", "platform"]
+				valsa	:["none", "trunk", "reg", "platform"]
 			},
 			{
 				name	:"dir"

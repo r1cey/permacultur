@@ -376,7 +376,7 @@ G.prototype. genhum	=function( loc, ic )
 
 G.prototype. gentree	=function( loc, lvl, ic )
 {
-	ic	??=this.i(loc)
+	ic	??=this.ic(loc)
 
 	lvl	??=this.getsoilhum_i(ic)
 
@@ -386,7 +386,7 @@ G.prototype. gentree	=function( loc, lvl, ic )
 	{
 		if( ! this.fore(( loc2 )=>
 			{
-				if( this.cmpveg( loc2 ,[ "apple" ])
+				if( this.isvegty( loc2 ,[ "apple" ]) )
 				{
 					return true
 				}

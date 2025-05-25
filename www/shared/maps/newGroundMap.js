@@ -46,9 +46,21 @@ export default function( Map )
 		return this.getsoilhum_i(this.ic( loc ))
 	}
 
-	Gr.prototype. cmpveg	=function( loc, vegns )
+	Gr.prototype. isvegty	=function( loc, vegns )
 	{
-		return this.cmpveg_i( this.ic( loc ))
+		var ic	=this.ic( loc )
+
+		if( this.isveg_i( ic ))
+		{
+			for(var vegn of vegns )
+			{
+				if( this.getvegty_str_i( ic ) === Gr.Bin.bmap.plfl.plant.ty.valso[vegn] )
+				{
+					return true
+				}
+			}
+		}
+		return false
 	}
 
 

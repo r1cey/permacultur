@@ -17,7 +17,7 @@ var bmap	=
 				,
 				bits	:2
 				,
-				vals	:["empty", "rock", "soil", "water"]
+				valsa	:["empty", "rock", "soil", "water"]
 			},
 			{
 				name	:"lvl"
@@ -52,7 +52,7 @@ var bmap	=
 				,
 				bits	:1
 				,
-				vals	:["plant", "floor"]
+				valsa	:["plant", "floor"]
 			},
 			{
 				condsubd	:
@@ -64,7 +64,7 @@ var bmap	=
 							,
 							bits	:7
 							,
-							vals	:[,,,,"apple"]
+							valsa	:[,,,,"apple"]
 						},
 						{
 							name	:"lvl"
@@ -112,7 +112,7 @@ export default function( Base )
 
 	Gr.prototype. nemptycell_i	=function( ic )
 	{
-		return Boolean( this.bin.getval( ic, ["wsr","ty"] ) )
+		return Boolean( this.bin.getval( ic, Gr.Bin.bmap.wsr.ty ) )
 	}
 
 
@@ -141,15 +141,9 @@ export default function( Base )
 
 	/** @arg {string[]} vegns */
 
-	Gr.prototype. cmpveg_i	=function( ic, vegns )
+	Gr.prototype. getvegty_i	=function( ic )
 	{
-		var vegn	=this.bin.getvalstr( ic, ["plfl","plant","ty"] )
-
-		for(var vegcheck of vegns)
-		{
-			if( vegn === vegcheck )	return true
-		}
-		return false
+		return this.bin.getval( ic, Gr.Bin.bmap.plfl.plant.ty )
 	}
 
 
@@ -174,7 +168,7 @@ export default function( Base )
 
 	Gr.maxveglvl	=function()
 	{
-		return this.Bin.getmaxval( ["plfl", "plant", "lvl"] )
+		return Gr.Bin.getmaxval( Gr.Bin.bmap.plfl.plant.lvl )
 	}
 
 
