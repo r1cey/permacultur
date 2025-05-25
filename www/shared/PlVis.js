@@ -21,13 +21,13 @@ export default class PlVis
 }
 
 
-PlVis.prototype. seta	=function( pla )
+PlVis.prototype. fromJSON	=function( pla )
 {
 	for(var prop in pla )
 	{
-		if( this[prop]?.seta )
+		if( this[prop]?.fromJSON )
 		{
-			this[prop].seta( pla[prop] )
+			this[prop].fromJSON( pla[prop] )
 		}
 		else
 		{

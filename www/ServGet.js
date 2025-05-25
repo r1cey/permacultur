@@ -112,18 +112,18 @@ SG.prototype. units	=function( o )
  * @param o 
  * @arg o.mapid
  * @arg o.loc
- * @arg o.binval
+ * @arg {array}	o.val	-Array of values, 16 bits at a time.
  * @arg o.act	-action which triggered change */
 
 SG.prototype. mapbcell	=function( o )
 {
-	var{ bid }	=o
+	var loc	=new Loc( o.loc )
 
-	var loc	=Loc.seta( o.loc )
+	var map	=this.cl.maps.fromid( o.mapid )
 
-	var{ map, ibuf }	=this.cl.maps.frombid( bid )
+	if( map !== this.cl.maps.fromloc( loc ))	console.error("srv.on_mapbcell")
 
-	map.setcellb( ibuf, loc, o.bval )
+	map.setcell_b( loc, o.val )
 }
 
 

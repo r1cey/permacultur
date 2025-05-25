@@ -23,10 +23,12 @@ export default class Server extends ServSend
 
 	// g	=new Get(this)
 
-	send	=new Send(this)
+	// send	=new Send(this)
 
 	constructor( game, port )
 	{
+		super()
+
 		this.game	=game
 
 		// this.start(port)

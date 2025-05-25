@@ -1,12 +1,12 @@
 import * as fs	from '../fs.js'
-import ShMaps	from '../../www/shared/maps/Maps.js'
+import newShMaps	from '../../www/shared/maps/newMaps.js'
 
 import Ground from './Ground.js'
 import Trees from './Trees.js'
 
 
 
-export default class Ms extends ShMaps( Ground, Trees )
+export default class Ms extends newShMaps( Ground, Trees )
 {
 	conf	=
 	{
@@ -72,6 +72,18 @@ Ms.prototype. start	=async function()
 }
 
 
+
+Ms.prototype. gen	=function( r, maxc )
+{
+/*	r	??=this.conf.size.r
+	
+	maxc	??=this.conf.size.maxcells
+
+	var gr	=this.gr
+
+	var tr	=this.tr*/
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -85,11 +97,7 @@ Ms.prototype. save	=async function()
 
 
 
-/*
-maps. gen	=function()
-{
-	this.ground?.gen()
-}
+
 /*
 Ms.prototype. parseo	=function( o )
 {

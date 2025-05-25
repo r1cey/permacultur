@@ -116,6 +116,45 @@ export default function( Base )
 	}
 
 
+	Gr.prototype. issoil_i	=function( ic )
+	{
+		return this.bin.cmpval( ic, ["wsr","ty"], "soil" )
+	}
+
+	
+	Gr.prototype. getsoilhum_i	=function(ic)
+	{
+		return this.bin.getval( ic, ["wsr", "lvl"] )
+	}
+
+	
+	Gr.prototype. iswater_i	=function( ic )
+	{
+		return this.bin.getvalstr( ic, ["wsr","ty"] ) === "water"
+	}
+
+
+	Gr.prototype. getwaterlvl_i	=function( ic )
+	{
+		return this.bin.getval( ic, ["wsr", "lvl"] ) + 1
+	}
+
+	/** @arg {string[]} vegns */
+
+	Gr.prototype. cmpveg_i	=function( ic, vegns )
+	{
+		var vegn	=this.bin.getvalstr( ic, ["plfl","plant","ty"] )
+
+		for(var vegcheck of vegns)
+		{
+			if( vegn === vegcheck )	return true
+		}
+		return false
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
 	
 	Gr.maxwater	=function()
 	{
@@ -225,28 +264,6 @@ for(var n in def)
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-
-G.prototype. isplmov	=function( dest )
-{
-	var ic	=this.i(dest)
-
-	return this.nemptycelli(ic) && Map.prototype.isplmov.call(this, dest) &&
-	
-		! ( this.getvegti(ic) === G.enum.veg.apple && this.getveglvli(ic) > 1 )
-}
-
-
-
-
-G.prototype. nemptycell	=function( loc )
-{
-	return this.nemptycelli( this.i(loc) )
-}
-G.prototype. nemptycelli	=function( ic )
-{
-	return Boolean( this.bufs[G.ibfromp.wsr].cells[ic] )
-}
 
 
 

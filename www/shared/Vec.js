@@ -19,10 +19,16 @@ export default class V
 	x
 	y
 	
-	constructor( x=0, y=0 )
+	constructor( ...args )
 	{
-		this.x	=x
-		this.y	=y
+		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
+
+		else
+		{
+			this.x	=args[0] ?? 0
+			
+			this.y	=args[1] ?? 0
+		}
 	}
 }
 
@@ -109,11 +115,11 @@ V.set	=function( v )
 
 /** Checks if array is valid */
 
-V.seta	=function( arr )
+V.fromJSON	=function( arr )
 {
 	if( this.isarr( arr) )
 	{
-		return new this().seta(arr)
+		return new this().fromJSON(arr)
 	}
 	return
 }
@@ -140,12 +146,12 @@ V.prototype. set	=function( v )
 	this.setxy( v.x, v.y )
 	return this
 }
-V.prototype. seta	=function(arr)
+V.prototype. fromJSON	=function(arr)
 {
 	this.setxy( arr[0], arr[1])
 	return this
 }
-V.prototype. setxy	=function( x, y )
+V.prototype. setxy	=function( x , y )
 {
 	this.x	=x
 	this.y	=y
@@ -315,9 +321,9 @@ V.prototype. steph	=function( dir, n )
 
 V.prototype. disth	=function( v )
 {
-	return Math.max( Math.abs(this.x - (v?v.x:0)),
-		Math.abs(this.y - (v?v.y:0)),
-		Math.abs(this.z() - (v?v.z():0)) )
+	return Math.max( Math.abs(this.x - (v?.x ?? 0)),
+		Math.abs(this.y - (v?.y ?? 0)),
+		Math.abs(this.z() - (v?.z() ?? 0)) )
 }
 
 /** !!!Don't modify the vector sent to fun!!! */

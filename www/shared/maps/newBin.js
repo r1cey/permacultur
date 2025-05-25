@@ -5,7 +5,7 @@ import Loc	from "../Loc.js"
 
 
 
-export default function( id, bmap, structadd )
+export default function( id, bmapa, structadd )
 {
 	class C extends Bin
 	{
@@ -19,6 +19,8 @@ export default function( id, bmap, structadd )
 	if( structadd )	C._structarr	=Bin._structarr.concat( structadd )
 
 	C.build_structo()
+
+	C.build_bmape()
 
 	return C
 }
@@ -63,6 +65,7 @@ class Bin
 	static _structarr	=
 		[ ["code",16],["id",16],["r",16],["loc",16] ]
 
+	/** Reverse lookup for data structure values */
 	static _structo	={ }
 
 	/**Number of cells. If cell is less than 8 bits long,
@@ -80,9 +83,13 @@ class Bin
 	 * 		Make sure total bits counts match.
 	 * 		Each subdivision must be an array.
 	 * enum	-automatically created reverse lookup of named values
+	 * e	-same as enum
 	 * offset	-automatically created bit offset from the beginning 
 	@static
 	@var bmap */
+
+	/** Reverse lookup enum object for bmap */
+	static bmape	={}
 
 	////----
 
@@ -91,7 +98,7 @@ class Bin
 	_loc	=new Loc()
 
 
-	constructor(  )
+	constructor( )
 	{
 	}
 }
@@ -100,6 +107,7 @@ class Bin
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @ret {ArrayBuffer} */
 
 Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
@@ -114,10 +122,12 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 	this.set("r", r )
 	this.setloc( loc )
 
-	return this
+	return buf
 }
 
 
+/** @arg {ArrayBuffer} buf
+ * @ret {Bin} */
 
 Bin.prototype. setbuf	=function( buf )
 {
@@ -173,21 +183,31 @@ Bin.prototype. getloc	=function()
 
 	var loclen	=C._structo.loc
 
-	var getf	=this.dvs.loc["getInt"+loclen]
+	var get	=this.dvs.loc["getInt"+loclen]
 
-	return this._loc.setxy( getf( loclen>>3 ,true), getf( loclen>>2 ,true), getf(0 ,true) )
+	return this._loc.setxy( get( loclen>>3 ,true), get( loclen>>2 ,true), get(0 ,true) )
 }
 
 
-/** Similar to gbval
- * @arg {(number|string)}	val	-When string, it's an enumed valued in bmap
- */
 
-Bin.prototype. setval	=function( ic, names, val )
+
+Bin.prototype. setvalstr	=function( ic, names, valstr )
 {
 	var C	=this.constructor
 
 	var bmapv	=C.getbmapval( names )
+
+	this.setval( ic, null, bmapv.enum[valstr], bmapv )
+}
+
+
+/** Similar to getval  */
+
+Bin.prototype. setval	=function( ic, names, val, bmapv )
+{
+	var C	=this.constructor
+
+	bmapv	??=C.getbmapval( names )
 
 	var bitoffs	=this.getcellsoffs( ic, bmapv.offset )
 
@@ -199,7 +219,7 @@ Bin.prototype. setval	=function( ic, names, val )
 
 	if( typeof val === "string" )
 	{
-		val	=bmapv.enum[val]
+		throw new Error("find where the mistake is. Not supposed to be string")
 	}
 
 	this.dvs.cells.setUint32( byteoffs, C.setval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
@@ -209,16 +229,17 @@ Bin.prototype. setval	=function( ic, names, val )
 /** Get binary value.
  * Doesn't check if subdivision choice matches the written value in the buffer.
  * Use separate method for that.
- @arg ic	-index of cell
-@arg {string[]} names	-includes the name of conditional subdivision for look up  */
+ *@arg ic	-index of cell
+ *@arg {string[]} names	-includes the name of conditional subdivision for look up 
+ *@arg [bmapval]	-if this is given, names can be null */
 
-Bin.prototype. getval	=function( ic, names )
+Bin.prototype. getval	=function( ic, names, bmapval )
 {
 	var C	=this.constructor
 
-	var bmapv	=C.getbmapval( names )
+	bmapval	??=C.getbmapval( names )
 
-	var bitoffs	=this.getcellsoffs( ic, bmapv.offset )
+	var bitoffs	=this.getcellsoffs( ic, bmapval.offset )
 
 	// reminder that bitlen can't be more than 24 bits
 
@@ -226,16 +247,31 @@ Bin.prototype. getval	=function( ic, names )
 
 	var data	=this.dvs.cells.getUint32( byteoffs, true)
 
-	return C.gval( data, bitoffs - (byteoffs<<3), bmapv.bits )
+	return C.gval( data, bitoffs - (byteoffs<<3), bmapval.bits )
 }
 
 Bin.prototype. gval	=Bin.prototype. getval
 
 
 
+Bin.prototype. getvalstr	=function( ic, names )
+{
+	var bmapval	=this.constructor.getbmapval( names )
+
+	var val	=this.getval( ic, null, bmapval )
+
+	return bmapval.vals[val]
+}
+
+Bin.prototype. gvaln	=Bin.prototype. getvalstr
+
+
+
 Bin.prototype. cmpval	=function( ic, names, valstr )
 {
-	return this.getval( ic, names ) === this.constructor.getbmapval( names ).enum[valstr]
+	var bmapval	=this.constructor.getbmapval( names )
+
+	return this.getval( ic, null, bmapval ) === bmapval.enum[valstr]
 }
 
 
@@ -251,6 +287,38 @@ Bin. getmaxval	=function( names )
 Bin.prototype. getbuf	=function()
 {
 	return this.dvs?.cells.buffer
+}
+
+
+
+Bin.prototype. setcell	=function( ic, valarr )
+{
+	var C	=this.constructor
+
+	var bpc	=C.bpc
+
+	var bitoffs	=this.getcellsoffs( ic )
+
+	var end	=bitoffs + bpc
+
+	var byteoffs	=bitoffs >> 3
+
+	var relbitoffs	=bitoffs - (byteoffs<<3)
+
+	for(var val of valarr )
+	{
+		var dword	=this.dvs.cells.getUint32( byteoffs, true)
+
+		var readend	=(byteoffs<<3) + relbitoffs + 16
+
+		var len	=end < readend	? 16 - readend + end	: 16
+
+		val	=C.sval( dword, relbitoffs, len, val )
+
+		this.dvs.cells.setUint32( byteoffs, val ,true)
+
+		byteoffs	+= 2
+	}
 }
 
 
@@ -274,11 +342,11 @@ Bin.prototype. getcell	=function( ic )
 
 	for(var max= bitoffs+C.bpc ; byteoffs<<3 < max ; byteoffs += 2 )
 	{
-		var dword	=this.cellsdv.getUint32( byteoffs ,true)
+		var dword	=this.dvs.cells.getUint32( byteoffs ,true)
 
 		var readend	=(byteoffs<<3) + relbitoffs + 16
 
-		vals.push( C.getval( dword, relbitoffs, readend < max ? 16 : 16 - readend + max ) )
+		vals.push( C.gval( dword, relbitoffs, readend < max ? 16 : 16 - readend + max ) )
 	}
 
 	return vals
@@ -404,13 +472,13 @@ function prepbmap( arr, offset=0 )
 		{
 			if( prop.subd )
 			{
-				prop.bits	=Bin.prepbmap( prop.subd, offset )
+				prop.bits	=prepbmap( prop.subd, offset )
 			}
 			else if( prop.condsubd )
 			{
 				for(var cond in prop.condsubd )
 				{
-					prop.bits	=Bin.prepbmap( prop.condsubd[cond], offset )
+					prop.bits	=prepbmap( prop.condsubd[cond], offset )
 				}
 			}
 		}
@@ -426,6 +494,8 @@ function prepbmap( arr, offset=0 )
 					prop.enum[prop.vals[iv]]	=iv
 				}
 			}
+
+			prop.e	=prop.enum
 		}
 
 		bits	+= prop.bits
@@ -479,6 +549,24 @@ Bin. build_structo	=function()
 	for(var val of C._structarr )
 	{
 		C._structo[val[0]]	=val[1]
+	}
+}
+
+
+
+Bin. build_bmape	=function()
+{
+	var bmap	=this.bmap
+
+	var bmape	=this.bmape
+
+	for(var i= 0 ;i< bmap.length ;i++)
+	{
+		var bmapv	=bmap[i]
+
+		var bmapeo	=bmape[bmapv.name]	={}
+
+		bmapeo.__i__	=i
 	}
 }
 

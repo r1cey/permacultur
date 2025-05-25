@@ -18,7 +18,7 @@ export default class SSe
 
 /** @arg [ic] */
 
-SSe.prototype. mapbcell	=function( map, loc, ic )
+SSe.prototype. mapbcell	=function( map, loc, act, ic )
 {
 	for(var n in this.cls.o )
 	{
@@ -26,7 +26,7 @@ SSe.prototype. mapbcell	=function( map, loc, ic )
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send_mapbval( map, loc, ic )
+			cl.send_mapbcell( map, loc, act, ic )
 		}
 	}
 }

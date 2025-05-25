@@ -1,5 +1,5 @@
-import Board from './newBoard.js'
-import BinMap	from "./newBinMap.js"
+import newBoard from './newBoard.js'
+import newBinMap	from "./newBinMap.js"
 import Obj from './Obj.js'
 
 import Loc from '../Loc.js'
@@ -7,10 +7,10 @@ import Loc from '../Loc.js'
 
 /** Hexagonally round version of Board. */
 
-export default class Map extends Board(BinMap)
+export default class Map extends newBoard(newBinMap)
 {
 	obj	=new Obj()
-	
+
 	_r	=0
 
 	////
@@ -20,88 +20,25 @@ export default class Map extends Board(BinMap)
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Make new buffer from scratch */
 
-Map.prototype. newbuf	=function( r, maxc=0, loc=new Loc(0,0,0) )
+Map.prototype. build	=function( r, maxc =0, loc =new Loc(0,0,0) )
 {
 	var C	=this.constructor
 
-	if( maxc>0 )
-	{
-		let maxr	=Map.cells2r(maxc)
+	this.bin	=new C.Bin( r, maxc, loc )
 
-		if( !r || maxr<r )
-		{
-			r	=maxr
-		}
-	}
-	if( ! r )
-	{
-		console.error('Wrong newbuf')
-		
-		return
-	}
-
-	this._r	=r
-
-	var c	=Map.r2cells( r )
-
-	this.bin	=new C.Bin().new( c )
-
-	/*var Class	=this.constructor
-
-	for(var i=0; i<Class.Bufs.length; i++)
-	{
-		this.bufs[i]	=new (Class.Bufs[i])().new( c )
-	}*/
-	
-	this.setloc( loc )
-
-	return this
+	this._r	=this.bin.get("r")
 }
 
 
 
 Map.prototype. setbuf	=function( buf )
 {
-	if( !buf )
-	{
-		console.error('Wrong setbuf')
-
-		return
-	}
-
 	var C	=this.constructor
 
-	/*ibuf	??=Class.ibfrombid( Class.codefrombuf( buf ))
+	this.bin	=new C.Bin( buf )
 
-	if( ibuf < 0  )
-	{
-		console.error( `Buffer id doesn't fit known buffers`, Class.codefrombuf( buf ) )
-		
-		return
-	}
-
-	var Buf	=Class.Bufs[ibuf]*/
-
-	var bin	=new C.Bin().set( buf )
-
-	var c	=bin.cellsl
-	
-	var r	=Map.cells2r( c )
-
-	if( c !== Map.r2cells(r) )
-	{
-		console.error( 'MAP BUFFER IS GIVEN WRONG SIZE', buf )
-
-		return
-	}
-
-	this._r	=r
-
-	this.bin	=bin
-
-	return this
+	this._r	=this.bin.get("r")
 }
 
 
@@ -116,12 +53,13 @@ Map.prototype. isready	=function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-/** Can player move there? */
+/** Can player move there?
+ *Can optimize by making special case for server maps by testing for
+ *distance from 0,0 */
 
 Map.prototype. isplmov	=function( dest )
 {
-	return ! this.obj.g(dest)?.pl
+	return ! this.obj.g(dest)?.pl && this.inside( dest )
 }
 
 
@@ -154,13 +92,28 @@ Map.prototype. printarr	=function( ibuf , r=6, c )
 
 
 
+Map.prototype. getloc	=function()
+{
+	return this.bin.getloc()
+}
+
+
+/**@arg {string[]} valname */
+
+Map.prototype. cmpbinval	=function( loc, valname, strval )
+{
+	this.bin.cmpval( this.ic(loc), valname, strval )
+}
+
+
+
 Map.prototype. slice	=function( c, r )
 {
 	var map	=this
 
-	var map2	=(new this.constructor()).
-	
-		newbufs( r, 0, new Loc( c.x, c.y, map.getloc().h ))
+	var map2	=new this.constructor()
+
+	map2.build( r, 0, new Loc( c.x, c.y, map.getloc().h ) )
 
 	map2.fore(( loc )=>
 	{
@@ -276,24 +229,30 @@ Map.prototype. forstar	=function( fun, r, c )
 }*/
 
 
+/** Sets map height to loc */
+
+Map.prototype. loch	=function( loc )
+{
+	loc.h	=this.getloc().h
+
+	return loc
+}
+
 
 
 Map.prototype. copycell	=function( loc, map2, loc2 )
 {
-	for(var i2, ib=0; ib<this.bufs.length; ib++)
-	{
-		this.bufs[ib].cells[this.i(loc)]	=map2.bufs[ib].cells[map2.i(loc2)]
-	}
+	this.setcell_b( loc, map2.getcell_b( loc2 ) )
 
 	var str2	=loc2.tovstr()
 
-	if( map2.o[str2] )
+	if( map2.obj.o[str2] )
 	{
-		this.o[loc.tovstr()]	=map2.o[str2]
+		this.obj.o[loc.tovstr()]	=map2.obj.o[str2]
 	}
 	else
 	{
-		delete this.o[loc.tovstr()]
+		delete this.obj.o[loc.tovstr()]
 	}
 }
 
@@ -304,21 +263,20 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 
 
 
-Map.prototype. getcellc	=function( ib, loc )
+Map.prototype. getcell_b	=function( loc )
 {
-	return this.bufs[ib].cells[this.i(loc)]
+	return this.bin.getcell( this.ic(loc) )
 }
 
-Map.prototype. gcellc	=Map.prototype. getcellc
+Map.prototype. gcell_b	=Map.prototype. getcell_b
 
 
 
 
-Map.prototype. 	setcellb=function( ib, loc, val )
+Map.prototype. 	setcell_b=function( loc, vals )
 {
-	this.bufs[ib].cells[this.i(loc)]	=val
+	this.bin.setcell( this.ic(loc), vals )
 }
-
 
 
 
@@ -354,25 +312,6 @@ Map.prototype. newmsgo	=function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Map.r2cells	=function(r)
-{
-	let cells=1
-
-	for(let i=0; i<r; i++)
-	{
-		cells	+= 6*(i+1)
-	}
-	return cells
-}
-Map.cells2r	=function(cells)
-{
-	let r	=0
-	for(let i=6; i<=cells; i+=6*(r+1))
-	{
-		r	++
-	}
-	return r
-}
 
 Map.jsonrplcr	=function(key,val)
 {

@@ -44,7 +44,7 @@ class PlSlp extends SrvPl( PlMsg.Vis )
 }*/
 
 
-export default class Player extends PlMsg.O	//SrvPl( PlMsg )
+export default class Player extends PlMsg	//SrvPl( PlMsg )
 {	
 	game
 

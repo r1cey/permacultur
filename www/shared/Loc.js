@@ -4,15 +4,24 @@ export default class Loc extends V
 {
 	h
 
+
 	static Vec	=V
 
 	static V	=V
 
-	constructor(x,y,l=0)
-	{
-		super( x, y ) 
 
-		this.h	=l
+	constructor( ...args )
+	{
+		super( ...args )
+
+		if( Array.isArray( args[0] ) )
+		{
+			this.h	=args[0][2]
+		}
+		else
+		{
+			this.h	=args[2] ?? 0
+		}
 	}
 
 	tovstr()
@@ -59,11 +68,11 @@ Loc.prototype. setxy	=function( x, y, l )
 	this.h	=l
 
 	return this
-}/*
-Loc.prototype. seta	=function( a )
+}
+Loc.prototype. fromJSON	=function( a )
 {
 	return this.setxy( a[0], a[1], a[2] )
-}*/
+}
 
 
 
@@ -116,8 +125,7 @@ Loc. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1])) * isNaN(parseI
 
 
 
-/*
 Loc.prototype. toJSON	=function()
 {
 	return [this.x, this.y, this.h]
-}*/
+}

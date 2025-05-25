@@ -1,4 +1,4 @@
-import ShTr	from "../shared/maps/Trees.js"
+import ShTr	from "../shared/maps/newTrees.js"
 import Map	from './Map.js'
 import Gr from "./Ground.js"
 

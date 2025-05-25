@@ -80,8 +80,6 @@ ClS.prototype. map	=function()
 
 ClS.prototype. mapbcell	=function( map, loc, act, ic )
 {
-	// var Bufs	=map.constructor.Bufs
-
 	ic	??=map.ic(loc)
 
 	this.sendjson({mapbcell:
@@ -90,7 +88,7 @@ ClS.prototype. mapbcell	=function( map, loc, act, ic )
 			,
 			loc
 			,
-			binval	:map.bin.getcell( ic )
+			val	:map.bin.getcell( ic )
 			,
 			act
 		}})

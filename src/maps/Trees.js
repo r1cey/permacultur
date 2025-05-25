@@ -1,4 +1,4 @@
-import ShTrees	from '../../www/shared/maps/Trees.js'
+import newShTrees	from '../../www/shared/maps/newTrees.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'
@@ -10,8 +10,9 @@ import Gr	from './Ground.js'
 ///////////////////////////////////////////////////////////////////////////////
 
 
+var ShTrees	=newShTrees(Map)
 
-export default class T extends Map(ShTrees)
+export default class T extends ShTrees
 {
 	static name	='trees'
 }

@@ -226,8 +226,8 @@ Pl.prototype. subwater	=function( n )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 Pl.prototype. toJSON	=function(key)
 {
 	return this
-}
+}*/

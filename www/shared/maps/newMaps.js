@@ -30,6 +30,10 @@ class Maps
 }
 
 
+///////////////////////////////////////////////////////////////////////////
+
+
+
 Maps.prototype. fromloc	=function( loc )
 {
 	return this.fromh( loc.h )
@@ -42,7 +46,9 @@ Maps.prototype. fromh	=function( h )
 
 Maps.prototype. fromid	=function( id )
 {
-	return id === 2	? this.tr	: this.gr
+	if( id === this.gr.constructor.id )	return this.gr
+
+	if( id === this.tr.constructor.id )	return this.tr
 }
 
 

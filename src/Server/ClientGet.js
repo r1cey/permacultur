@@ -23,7 +23,7 @@ export default class ClG extends ClS
 
 ClG.prototype. mov	=function( o )
 {
-	var loc	=Loc.seta( o.loc )
+	var loc	=Loc.fromJSON( o.loc )
 	
 	if( loc )	this.pl.mov( loc )
 }

@@ -30,7 +30,7 @@ export default function(newBin)
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 
 throw Error(666)
 
@@ -42,7 +42,7 @@ Bo.prototype. getbprop	=function( ic, name, jbmp )
 }
 
 
-/** @returns - index of buffer where property was set */
+/** @returns - index of buffer where property was set *
 
 Bo.prototype. setbprop		=function( ic, name, jbmp, val )
 {
@@ -54,11 +54,11 @@ Bo.prototype. setbprop		=function( ic, name, jbmp, val )
 }
 
 
-/** @arg val	- must be string */
+/** @arg val	- must be string *
 
 Bo.prototype. testbprop	=function( ic, name, jbmp, val )
 {
 	return this.bufs[ this.constructor.ibfromp[name] ].testprop( ic, name, jbmp, val )
 }
 
-
+*/

@@ -29,9 +29,9 @@ Color.prototype. set	=function( o )
 }
 
 
-/** Colour  *
+/** Colour  */
 
-Color.prototype. seta	=function( arr )
+Color.prototype. fromJSON	=function( arr )
 {
 	this.h	=arr[0]
 	this.s	=arr[1]
@@ -43,7 +43,7 @@ Color.prototype. seta	=function( arr )
 Color.prototype. toJSON	=function()
 {
 	return [this.h, this.s, this.l]
-}*/
+}
 
 
 

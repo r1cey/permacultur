@@ -66,7 +66,7 @@ G.prototype. start	=async function( confpa )
 {
 	var g=this
 
-	var fs	=this.files
+	// var fs	=this.files
 
 	if( confpa )
 	{
