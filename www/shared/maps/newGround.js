@@ -103,6 +103,8 @@ export default function( Base )
 	class Gr extends Base
 	{
 		static Bin	=Base.newBin( 1, bmap )
+
+		static bmap	=this.Bin.bmap
 	}
 
 
@@ -115,36 +117,74 @@ export default function( Base )
 		return Boolean( this.bin.getval( ic, Gr.Bin.bmap.wsr.ty ) )
 	}
 
+	
+
+	Gr.prototype. setsoil_i	=function( ic, lvl )
+	{
+		this.bin.setval_str( ic, Gr.Bin.bmap.wsr.ty, "soil" )
+
+		this.bin.setval( ic, Gr.Bin.bmap.wsr.lvl, lvl )
+	}
+
 
 	Gr.prototype. issoil_i	=function( ic )
 	{
-		return this.bin.cmpval( ic, ["wsr","ty"], "soil" )
+		return this.bin.getval_str( ic, Gr.Bin.bmap.wsr.ty ) === "soil"
 	}
 
 	
 	Gr.prototype. getsoilhum_i	=function(ic)
 	{
-		return this.bin.getval( ic, ["wsr", "lvl"] )
+		return this.bin.getval( ic, Gr.Bin.bmap.wsr.lvl )
+	}
+
+
+
+	Gr.prototype. setwater_i	=function( ic, lvl )
+	{
+		this.bin.setval_str( ic, Gr.Bin.bmap.wsr.ty, "water" )
+
+		this.bin.setval( ic, Gr.Bin.bmap.wsr.lvl, lvl - 1 )
 	}
 
 	
 	Gr.prototype. iswater_i	=function( ic )
 	{
-		return this.bin.getvalstr( ic, ["wsr","ty"] ) === "water"
+		return this.bin.getval_str( ic, Gr.Bin.bmap.wsr.ty ) === "water"
 	}
 
 
 	Gr.prototype. getwaterlvl_i	=function( ic )
 	{
-		return this.bin.getval( ic, ["wsr", "lvl"] ) + 1
+		return this.bin.getval( ic, Gr.Bin.bmap.wsr.lvl ) + 1
 	}
 
-	/** @arg {string[]} vegns */
+
+
+	Gr.prototype. setveg_i	=function( ic, type, lvl =0 )
+	{
+		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.ty, "plant" )
+
+		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.plant.ty, type )
+
+		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.lvl, lvl )
+	}
+
 
 	Gr.prototype. getvegty_i	=function( ic )
 	{
-		return this.bin.getval( ic, Gr.Bin.bmap.plfl.plant.ty )
+		return this.bin.getval_str( ic, Gr.Bin.bmap.plfl.plant.ty )
 	}
+
+
+	Gr.prototype. getveglvl_i	=function( ic )
+	{
+		return this.bin.getval( ic, Gr.Bin.bmap.plfl.plant.lvl )
+	}
+
+
+
+
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -161,7 +201,7 @@ export default function( Base )
 
 	Gr.maxhum	=function()
 	{
-		return this.Bin.getmaxval( ["wsr", "lvl"] )
+		return this.Bin.getmaxval( Gr.Bin.bmap.wsr.lvl )
 	}
 
 

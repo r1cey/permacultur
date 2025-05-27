@@ -1,4 +1,4 @@
-import newShTrees	from '../../www/shared/maps/newTrees.js'
+import newShTrees	from '../../www/shared/maps/newTreesMap.js'
 import Map	from './Map.js'
 
 import Loc from  '../../www/shared/Loc.js'
@@ -50,7 +50,7 @@ T.prototype. gentrees	=function( gr )
 	{
 		gr.fore(( loc )=>
 		{
-			if( gr.getvegt(loc) === Gr.e.veg.apple && gr.getveglvl(loc) >= lvl )
+			if( gr.getvegty(loc) === Gr.e.veg.apple && gr.getveglvl(loc) >= lvl )
 			{
 				this.growtree( loc, 5 )
 			}
@@ -63,15 +63,16 @@ T.prototype. gentrees	=function( gr )
 }
 
 
+/** @arg [ic]
+ * @arg [lvl] */
 
-
-T.prototype. gentree	=function( loc, gr, ic )
+T.prototype. gentree	=function( loc, gr, ic, lvl )
 {
-	ic	??= this.i(loc)
+	ic	??= this.ic(loc)
 
-	var lvl	=gr.getveglvli( ic )
+	lvl	??=gr.getveglvl_i( ic )
 
-	var type	=gr.getvegti( ic )
+	var type	=gr.getvegty_i( ic )
 
 	var brs	=[]
 
@@ -87,25 +88,25 @@ T.prototype. gentree	=function( loc, gr, ic )
 
 
 /** Maybe it's worth it to reuse loc in all functions inside??
- * @return if grew or not
- */
+ * @arg [ic]
+ * @return if grew or not */
 
 T.prototype. growtree	=function( loc, type, brs, ic )
 {
 	var m	=this
 
-	ic	??=m.i(loc)
+	ic	??=m.ic(loc)
 
 	{
-		let t	=m.getbranchti( ic )
+		let t	=m.getfloorty_i( ic )
 	
-		if( t === T.e.branch.none )
+		if( t === "none" )
 		{
-			m.setbranchti( ic, T.e.branch.stump, loc )
+			m.set_ic_("floorty", ic, loc, "trunk" )
 
 			return true
 		}
-		else if( t !== T.e.branch.stump)
+		else if( t !== "trunk" )
 		{
 			return false
 		}
@@ -121,7 +122,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 		for(dir=0; dir<6; dir++)
 		{
-			if( m.nextbranch( v.set(loc).neighh(dir), dir ))
+			if( m.isnextbr( v.set(loc).neighh(dir), dir ))
 			{
 				brs.push(new Br( dir ).scan( m, v ))
 			}
@@ -179,7 +180,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 		{
 			dir	=brs[i].dir
 
-			if( m.nextbranch( v.set(loc).neighh(dir), dir ))	//this check is redundant
+			if( m.isnextbr( v.set(loc).neighh(dir), dir ))	//this check is redundant
 			{
 				for(var j =-1 ; j <= 1; j++)
 				{
@@ -201,7 +202,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 		if( dir >= 0 )
 		{
-			m.setbranch( v.set(loc).neighh(dir), T.e.branch.b, dir )
+			m.set_("branch", v.set(loc).neighh(dir), dir )
 
 			brs.push( new Br(dir) )
 
@@ -222,7 +223,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 
 				if( (soft ?softdirs.has(dirs[i]) :1) &&
 				
-					m.getbrancht(v.set(loc).neighh(dirs[i])) === T.e.branch.none )
+					m.getfloorty(v.set(loc).neighh(dirs[i])) === "none" )
 				{
 					return dirs[i]
 				}
@@ -276,65 +277,6 @@ T.prototype. closestbr	=function( loc, ploc )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-T.prototype. setbranch	=function( loc, type, dir )
-{
-	this.setbranchi(this.i(loc), type, dir, loc )
-}
-
-
-
-
-T.prototype. setbrancht	=function( loc, type )
-{
-	this.setbranchti(this.i(loc), type, loc )
-}
-
-
-
-
-T.prototype. setbranchd	=function( loc, dir )
-{
-	this.setbranchdi(this.i(loc), dir, loc )
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-T.prototype. setbranchi	=function( ic, type, dir, loc )
-{
-	this.setbranchti( ic, type, loc )
-
-	this.setbranchdi( ic, dir, loc )
-}
-
-
-
-
-T.prototype. setbranchti	=function( ic, type, loc )
-{
-	var ibuf	=this.setbprop( ic, "branch", 0, type )
-
-	this.game?.server?.send_mapbcell( this, loc, ic, ibuf )
-}
-
-
-
-
-T.prototype. setbranchdi	=function( ic, dir, loc )
-{
-	var ibuf	=this.setbprop( ic, "branch", 1, dir )
-
-	this.game?.server?.send_mapbcell( this, loc, ic, ibuf )
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
 
 
 /** vec is changed
@@ -407,7 +349,7 @@ Br.prototype. grow	=function( map, v )
 
 	function newbranch( dir )
 	{
-		map.setbranch( v.neighh(dir), 2, dir )
+		map.set_("branch", v.neighh(dir), dir )
 
 		brs.unshift( new Br( dir ))
 
@@ -427,7 +369,7 @@ Br.prototype. grow	=function( map, v )
 	
 			v.neighh( dirs[i] )
 	
-			if( map.getbrancht( v ) === T.e.branch.none )
+			if( map.getfloorty( v ) === "none" )
 			{
 				v.neighh( V.rotopph( dirs[i] ))
 	

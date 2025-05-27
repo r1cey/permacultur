@@ -92,7 +92,7 @@ Loc.prototype. toString	=function()
 
 
 
-Loc.prototype. add	=function( x, y, h )
+Loc.prototype. add	=function( x, y, h =0 )
 {
 	this.x	+= x
 	this.y	+= y
@@ -104,7 +104,7 @@ Loc.prototype. addv	=function( v )
 	return this.add( v.x, v.y, v.h)
 }
 
-Loc.prototype. sub	=function( x, y, h )
+Loc.prototype. sub	=function( x, y, h =0 )
 {
 	this.x	-= x
 	this.y	-= y

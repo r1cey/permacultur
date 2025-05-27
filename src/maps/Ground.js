@@ -4,7 +4,10 @@ import Map	from './Map.js'
 import Loc from  '../../www/shared/Loc.js'
 import Vec from  '../../www/shared/Vec.js'
 
-export default class G extends newShGr(Map)
+
+var ShGr	=newShGr(Map)
+
+export default class G extends ShGr
 {
 	static name	='ground'
 
@@ -43,9 +46,11 @@ G.prototype. gen	=function( r, maxc, trees )
 
 	var ic
 
+	var loctr	=trees.getloc().clone()
+
 	gr.fore(( loc )=>
 	{
-		ic	=gr.i(loc)
+		ic	=gr.ic(loc)
 
 		if( gr.iswater_i( ic ) )
 		{	
@@ -53,11 +58,11 @@ G.prototype. gen	=function( r, maxc, trees )
 		}
 		else if( gr.issoil_i( ic ) )
 		{
-			lvl	=gr.genhum( loc, ic )
+			// lvl	=gr.genhum( loc, ic )
 
-			gr.gentree( loc, lvl, ic )
+			// lvl	=gr.gentree( loc, lvl, ic )
 
-			trees.gentree( loc, gr, ic )
+			// if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
 		}
 	})
 }
@@ -101,7 +106,7 @@ G.prototype. allsoil	=function()
 
 	this.fore(( loc )=>
 	{
-		this.setsoil( loc, 0)//Math.floor(Math.random()*maxhum) )
+		this.set_("soil", loc, 0)//Math.floor(Math.random()*maxhum) )
 	})
 }
 
@@ -126,7 +131,7 @@ G.prototype. makeriver	=function( maindir =1 , w =0 )
 	{
 		forstar(( loc )=>
 		{
-			m.setwater( loc, 1 )
+			m.set_("water", loc, 1 )
 		}
 		,w ,vn, buf )
 
@@ -179,7 +184,7 @@ G.prototype. makeriver	=function( maindir =1 , w =0 )
 	{
 		return forstar(( loc )=>
 			{
-				if( m.issoil_i( m.ic(loc) ) )
+				if( m.issoil( loc ) )
 				{
 					return true
 				}
@@ -329,7 +334,7 @@ G.prototype. genwaterdepth	=function( loc, ic )
 
 	m.fore(( locd, r )=>
 	{
-		if( m.issoil_i( m.ic(locd) ) || r >= G.maxwater() )
+		if( m.issoil( locd ) || r >= G.maxwater() )
 		{
 			lvl	=r
 
@@ -338,7 +343,7 @@ G.prototype. genwaterdepth	=function( loc, ic )
 	}
 	,m._r ,loc )
 
-	m.setwater_i( ic, lvl, loc )
+	m.set_ic_("water", ic, loc, lvl )
 }
 
 
@@ -348,7 +353,7 @@ G.prototype. genhum	=function( loc, ic )
 {
 	var m	=this
 
-	ic	??=m.i(loc)
+	ic	??=m.ic(loc)
 
 	var lvl	=0
 
@@ -356,7 +361,7 @@ G.prototype. genhum	=function( loc, ic )
 
 	m.fore(( locd, r )=>
 	{
-		if( m.iswater_i( m.ic(locd) ) || ((r-1)>>1) >= max )
+		if( m.iswater( locd ) || ((r-1)>>1) >= max )
 		{
 			lvl	=max - ((r-1)>>1)
 
@@ -365,7 +370,7 @@ G.prototype. genhum	=function( loc, ic )
 	}
 	,m._r, loc )
 
-	m.setsoil_i( ic, lvl, loc )
+	m.set_ic_("soil", ic, loc, lvl )
 
 	return lvl
 }
@@ -386,7 +391,7 @@ G.prototype. gentree	=function( loc, lvl, ic )
 	{
 		if( ! this.fore(( loc2 )=>
 			{
-				if( this.isvegty( loc2 ,[ "apple" ]) )
+				if( this.getvegty( loc2 ) === "apple" )
 				{
 					return true
 				}
@@ -395,7 +400,7 @@ G.prototype. gentree	=function( loc, lvl, ic )
 		{
 			lvl	=Math.floor(Math.random()*( G.maxveglvl() + 1 ))
 
-			this.setvegi( ic, G.e.veg.apple, lvl, loc )
+			this.set_ic_("veg", ic, loc, "apple", lvl )
 
 			return lvl
 		}
@@ -406,7 +411,7 @@ G.prototype. gentree	=function( loc, lvl, ic )
 
 
 
-
+/*
 G.prototype. randomdir	=function()
 {
 	var map	=this
@@ -432,11 +437,11 @@ G.prototype. randomdir	=function()
 		map.setdir( loc, dir )
 	}
 	, map._r )
-}
+}*/
 
 
 
-
+/*
 G.prototype. randomwater	=function( len )
 {
 	len	=len ?? (this.cellsl() >> 4)
@@ -449,40 +454,19 @@ G.prototype. randomwater	=function( len )
 
 		this.setwater( p, 1 )
 	}
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
+
+
 /*G.prototype. setdir	=function( loc, dir )
 {
 	this.bufs[1].setprop( this.i(loc), 0, 0, dir)
-}*/
-
-
-
-G.prototype. setsoil	=function( loc, lvl )
-{
-	if( lvl < 0 )	lvl	=0
-
-	if( lvl > G.maxhum() )	lvl	=G.maxhum()
-
-	this.setsoil_i(this.ic( loc ), lvl, loc )
 }
-
-
-
-G.prototype. setsoil_i	=function( ic, lvl, loc )
-{
-	this.bin.setvalstr( ic, ["wsr","ty"], "soil" )
-
-	this.bin.setval( ic, ["wsr","lvl"], lvl )
-
-	this.game?.server?.send_mapbcell( this, loc, "setsoil", ic )
-}
-
 
 
 
@@ -534,48 +518,4 @@ G.prototype. dryi	=function( ic, loc )
 			this.setsoil_i( ic, this.maxhum(), loc )
 		}
 	}
-}
-
-
-
-
-G.prototype. setwater	=function( loc, lvl )
-{
-	if( lvl < 1 )	lvl	=1
-
-	if( lvl > G.maxwater() )	lvl	=G.maxwater()
-
-	this.setwater_i(this.ic( loc ), lvl , loc )
-}
-
-
-
-
-G.prototype. setwater_i	=function( ic, lvl, loc )
-{
-	this.bin.setvalstr( ic, ["wsr","ty"], "water" )
-
-	this.bin.setval( ic, ["wsr","lvl"], lvl - 1 )
-
-	this.game?.server?.send_mapbcell( this, loc, "setwater", ic )
-}
-
-
-
-
-G.prototype. setveg	=function( loc, type, lvl )
-{
-	this.setveg_i(this.ic(loc), type, lvl, loc )
-}
-
-
-G.prototype. setveg_i	=function( ic, type, lvl =0, loc )
-{
-	this.bin.setvalstr( ic, ["plfl","ty"], "plant" )
-
-	this.bin.setval( ic, ["plfl","plant","ty"], type )
-
-	this.bin.setval( ic, ["plfl","plant","lvl"], lvl )
-
-	this.game?.server?.send_mapbcell( this, loc, "setveg", ic )
-}
+}*/

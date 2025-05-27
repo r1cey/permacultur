@@ -15,12 +15,20 @@ var bmap	=
 				,
 				bits	:2
 				,
-				valsa	:["none", "trunk", "reg", "platform"]
+				valsa	:["none", "trunk", "branch", "platform"]
 			},
 			{
-				name	:"dir"
-				,
-				bits	:3
+				condsubd:
+				{
+					"branch"	:
+					[
+						{
+							name	:"dir"
+							,
+							bits	:3
+						}
+					]
+				}
 			}
 		]
 	}
@@ -34,127 +42,54 @@ export default function( Base )
 	class Tr extends Base
 	{
 		static Bin	=Base.newBin( 2, bmap )
-
-		static Br	=Br
-	}
-
-
-
-	Tr.prototype. nextbranch	=function( loc, dir )
-	{
-		if( this.inside( loc ))
-		{
-			return this.nextbranchi( this.i(loc), dir )
-		}
-	}
-
-
-
-
-	Tr.prototype. getbranch	=function( loc )
-	{
-		
-	}
-
-
-
-	Tr.prototype. getbrancht	=function( loc )
-	{
-		return this.getbranchti( this.i(loc) )
-	}
-
-
-
-
-	Tr.prototype. getbranchd	=function( loc )
-	{
-		return this.getbranchdi( this.i(loc) )
 	}
 
 
 	///////////////////////////////////////////////////////////////////////////////
 
+	
 
+	Tr.prototype. setfloorty_i	=function( ic, type )
+	{
+		this.bin.setval_str( ic, Tr.Bin.bmap.floor.ty, type )
+	}
+
+
+	Tr.prototype. getfloorty_i	=function( ic )
+	{
+		return this.bin.getval_str( ic, Tr.Bin.bmap.floor.ty )
+	}
+
+	
+
+	Tr.prototype. setbranch_i	=function( ic, dir )
+	{
+		this.setfloorty_i( ic, "branch" )
+
+		this.setbrdir_i( ic, dir )
+	}
 
 
 	/** Might not be necessary. When using ic for checking this? */
 
-	Tr.prototype. nextbranchi	=function( ic, dir )
+	Tr.prototype. isnextbr_i	=function( ic, dir )
 	{
-		return this.getbranchti(ic)===T.e.branch.b && this.getbranchdi(ic)===dir
+		return this.getfloorty_i(ic)==="branch" && this.getbrdir_i(ic)===dir
 	}
 
 
-
-
-	Tr.prototype. getbranchti	=function( ic )
+	Tr.prototype. setbrdir_i	=function( ic, dir )
 	{
-		return this.getbprop( ic, "branch", 0 )
+		this.bin.setval( ic, Tr.Bin.bmap.floor.branch.dir , dir )
 	}
 
-
-
-
-	Tr.prototype. getbranchdi	=function( ic )
+	Tr.prototype. getbrdir_i	=function( ic )
 	{
-		return this.getbprop( ic, "branch", 1 )
+		return this.bin.getval( ic, Tr.Bin.bmap.floor.branch.dir )
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 
 
 	return Tr
-}
-
-class Br
-{
-	dir
-
-	size	=1
-
-	brs	=[]
-
-
-
-	constructor( dir )
-	{
-		this.dir	=dir
-	}
-}
-
-
-/** loc is not changed through calculation */
-
-Br.prototype. scan	=function( map, v )
-{
-	var { dir, brs }	=this
-
-	var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
-
-	for(var i=0; i<dirs.length; i++)
-	{
-		if( map.nextbranch( v.neighh(dirs[i]), dirs[i] ))
-		{
-			brs.push( new this.constructor( dirs[i] ).scan( map, v ))
-
-			this.size	+=brs[brs.length-1].size
-		}
-
-		v.neighh( V.rotopph( dirs[i]) )
-	}
-
-	brs.sort(( b1, b2 )=> b1.size-b2.size )
-
-	return this
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
-Br.prototype. sort	=function()
-{
-	this.brs.sort(( b1, b2 )=> b1.size-b2.size )
 }

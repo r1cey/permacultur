@@ -89,11 +89,6 @@ class Bin
 	/** tricky buffer, ONLY access it through
 	 * getloc() because it can be changed to anything */	
 	_loc	=new Loc()
-
-
-	constructor( )
-	{
-	}
 }
 
 
@@ -104,14 +99,14 @@ class Bin
 
 Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
-	var Class	=C	=this.constructor
+	var Bin	=this.constructor
 
-	var buf	=new ArrayBuffer( clen * Class.bpc + Class.headlen() )
+	var buf	=new ArrayBuffer( clen * Bin.bpc + Bin.headlen() )
 
 	this.setdataviews( buf )
 
-	this.set("code", C.code)
-	this.set("id", C.id )
+	this.set("code", Bin.code)
+	this.set("id", Bin.id )
 	this.set("r", r )
 	this.setloc( loc )
 
@@ -140,7 +135,7 @@ Bin.prototype. get	=function( dataname )
 {
 	var C	=this.constructor
 
-	this.dvs[dataname]["getUint"+C._structo[dataname]]( 0,true)
+	return this.dvs[dataname]["getUint"+C._structo[dataname]]( 0,true)
 }
 
 
@@ -159,11 +154,11 @@ Bin.prototype. setloc	=function( loc )
 
 	var loclen	=C._structo.loc
 
-	var setf	=this.dvs.loc["setInt"+loclen]
+	var set	=this.dvs.loc["setInt"+loclen]. bind(this.dvs.loc)
 
-	setf( 0, loc.h ,true)
-	setf( loclen >> 3 , loc.x ,true)
-	setf( loclen >> 2 , loc.y ,true)
+	set( 0, loc.h ,true)
+	set( loclen >> 3 , loc.x ,true)
+	set( loclen >> 2 , loc.y ,true)
 }
 
 
@@ -176,7 +171,7 @@ Bin.prototype. getloc	=function()
 
 	var loclen	=C._structo.loc
 
-	var get	=this.dvs.loc["getInt"+loclen]
+	var get	=this.dvs.loc["getInt"+loclen]. bind(this.dvs.loc)
 
 	return this._loc.setxy( get( loclen>>3 ,true), get( loclen>>2 ,true), get(0 ,true) )
 }
@@ -184,7 +179,7 @@ Bin.prototype. getloc	=function()
 
 
 
-Bin.prototype. setvalstr	=function( ic, bmapv, valstr )
+Bin.prototype. setval_str	=function( ic, bmapv, valstr )
 {
 	this.setval( ic, bmapv, bmapv.valso[valstr] )
 }
@@ -207,7 +202,7 @@ Bin.prototype. setval	=function( ic, bmapv, val )
 		throw new Error("find where the mistake is. Not supposed to be string")
 	}
 
-	this.dvs.cells.setUint32( byteoffs, Bin.setval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
+	this.dvs.cells.setUint32( byteoffs, Bin.sval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
 }
 
 
@@ -232,21 +227,14 @@ Bin.prototype. gval	=Bin.prototype. getval
 
 
 
-Bin.prototype. getvalstr	=function( ic, bmapv )
+Bin.prototype. getval_str	=function( ic, bmapv )
 {
 	var val	=this.getval( ic, bmapv )
 
 	return bmapv.valsa[val]
 }
 
-Bin.prototype. gvaln	=Bin.prototype. getvalstr
-
-
-
-Bin.prototype. cmpval	=function( ic, bmapv, valstr )
-{
-	return this.getval( ic, bmapv ) === bmapv.valso[valstr]
-}
+Bin.prototype. gvaln	=Bin.prototype. getval_str
 
 
 /** Get maximum value that can be stored in bin map */
@@ -483,7 +471,7 @@ function build_bmap( bmapa )
 {
 	var bmap	={}
 
-	for(var prop of arr )
+	for(var prop of bmapa )
 	{
 		if( prop.subd )	bmap[prop.name]	=build_bmap( prop.subd )
 		

@@ -108,22 +108,27 @@ SG.prototype. units	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Get map binary cell
+/** Received a map changing method
  * @param o 
  * @arg o.mapid
+ * @arg o.act	-method name
  * @arg o.loc
- * @arg {array}	o.val	-Array of values, 16 bits at a time.
- * @arg o.act	-action which triggered change */
+ * @arg {array}	o.vals */
 
-SG.prototype. mapbcell	=function( o )
+SG.prototype. mapset_	=function( o )
 {
-	var loc	=new Loc( o.loc )
-
 	var map	=this.cl.maps.fromid( o.mapid )
 
-	if( map !== this.cl.maps.fromloc( loc ))	console.error("srv.on_mapbcell")
+	var act	=o.act
 
-	map.setcell_b( loc, o.val )
+	var loc	=new Loc( o.loc )
+
+	if( map !== this.cl.maps.fromloc( loc ))
+	{
+		console.error("srv.on_mapset_", o.act, o.loc, o.vals )
+	}
+
+	map["set"+act]( loc, ...o.vals )
 }
 
 

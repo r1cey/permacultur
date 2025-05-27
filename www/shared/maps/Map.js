@@ -5,7 +5,10 @@ import Obj from './Obj.js'
 import Loc from '../Loc.js'
 
 
-/** Hexagonally round version of Board. */
+/** Hexagonally round version of Board.
+ * In derived classes, make sure every set..._i method
+ * has a matching regular set... method. The reason is:
+ * when _i is called on server, the client will be sent regulat method */
 
 export default class Map extends newBoard(newBinMap)
 {

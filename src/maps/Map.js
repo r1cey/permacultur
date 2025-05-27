@@ -67,12 +67,11 @@ Map.prototype. save	=async function( dir ="")
 {
 	var pa	=dir+this.constructor.name
 
-	for(var i=0; i<this.bufs.length; i++)
-	{
-		fs.savebuf( pa+i+'.bin', this.bufs[i].buf )
-	}
+	var buf	=this.bin.getbuf()
 
-	fs.savejson( pa+'.json' , this.o ,( key, val )=>
+	if( buf )	fs.savebuf( pa+'.bin', buf )
+
+	fs.savejson( pa+'.json' , this.obj.o ,( key, val )=>
 	{
 		switch( key )
 		{
@@ -86,6 +85,25 @@ Map.prototype. save	=async function( dir ="")
 
 
 	///////////////////////////////////////////////////////////////////////////
+
+	
+
+	Map.prototype. set_	=function( name, loc, ...vals )
+	{
+		this["set"+name]( loc, ...vals )
+
+		this.game?.server?.send_mapset_( this, name, loc, vals )
+	}
+
+
+	/** @arg name	-Name of the set method. "_i" will be added automatically */
+
+	Map.prototype. set_ic_	=function( name, ic, loc, ...vals )
+	{
+		this["set"+name+"_i"]( ic, ...vals )
+
+		this.game?.server?.send_mapset_( this, name, loc, vals )
+	}
 
 /*
 	newshiftbufs ( loc, r, delta, timecode )

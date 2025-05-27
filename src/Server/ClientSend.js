@@ -75,20 +75,19 @@ ClS.prototype. map	=function()
 //////////////////////////////////////////////////////////////////////////////
 
 
-/** @arg act	-action which triggered the change
- * @arg [ic] */
+/** @arg {string} act 
+ * @arg {array} vals */
 
-ClS.prototype. mapbcell	=function( map, loc, act, ic )
+
+ClS.prototype. mapset_	=function( map, act, loc, vals )
 {
-	ic	??=map.ic(loc)
-
-	this.sendjson({mapbcell:
+	this.sendjson({mapset_:
 		{
 			mapid	:map.bin.constructor.id
 			,
 			loc
 			,
-			val	:map.bin.getcell( ic )
+			vals
 			,
 			act
 		}})

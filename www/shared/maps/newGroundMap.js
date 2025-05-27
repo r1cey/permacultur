@@ -35,6 +35,16 @@ export default function( Map )
 
 
 
+	GM.prototype. setsoil	=function( loc, lvl )
+	{
+		if( lvl < 0 )	lvl	=0
+
+		if( lvl > GM.maxhum() )	lvl	=GM.maxhum()
+
+		this.setsoil_i(this.ic( loc ), lvl )
+	}
+
+
 	GM.prototype. issoil	=function( loc )
 	{
 		return this.issoil_i( this.ic( loc ))
@@ -46,21 +56,34 @@ export default function( Map )
 		return this.getsoilhum_i(this.ic( loc ))
 	}
 
-	Gr.prototype. isvegty	=function( loc, vegns )
-	{
-		var ic	=this.ic( loc )
+	
 
-		if( this.isveg_i( ic ))
-		{
-			for(var vegn of vegns )
-			{
-				if( this.getvegty_str_i( ic ) === Gr.Bin.bmap.plfl.plant.ty.valso[vegn] )
-				{
-					return true
-				}
-			}
-		}
-		return false
+	GM.prototype. setwater	=function( loc, lvl )
+	{
+		if( lvl < 1 )	lvl	=1
+
+		if( lvl > GM.maxwater() )	lvl	=GM.maxwater()
+
+		this.setwater_i(this.ic( loc ), lvl )
+	}
+
+
+	GM.prototype. iswater	=function(loc)
+	{
+		return this.iswater_i(this.ic(loc))
+	}
+
+
+
+	GM.prototype. setveg	=function( loc, type, lvl )
+	{
+		this.setveg_i(this.ic(loc), type, lvl )
+	}
+
+
+	GM.prototype. getvegty	=function( loc )
+	{
+		return this.getvegty_i( this.ic(loc))
 	}
 
 

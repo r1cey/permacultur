@@ -15,6 +15,8 @@ export default function( id, bmap )
 
 		constructor( ...args )
 		{
+			super()
+
 			if( args[0] instanceof ArrayBuffer )	this.setbuf( ...args )
 
 			else if( args[0] > 0 || args[1] > 0 )	this.newbuf( ...args )
