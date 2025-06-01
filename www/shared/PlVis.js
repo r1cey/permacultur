@@ -21,17 +21,18 @@ export default class PlVis
 }
 
 
-PlVis.prototype. fromJSON	=function( pla )
+
+PlVis.prototype. fromJSON	=function( plmsg )
 {
-	for(var prop in pla )
+	for(var key in plmsg )
 	{
-		if( this[prop]?.fromJSON )
+		if( this[key]?.fromJSON )
 		{
-			this[prop].fromJSON( pla[prop] )
+			this[key].fromJSON( plmsg[key] )
 		}
-		else
+		else if( key in this )
 		{
-			this[prop]	=pla[prop]
+			this[key]	=plmsg[key]
 		}
 	}
 

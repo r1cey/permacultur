@@ -1,20 +1,20 @@
-export default ( Ground, Trees )=> class extends Maps
+/*export default ( newGround, newTrees )=> class extends Maps
 {
-	ground	=new Ground()
+	ground	=newGround()
 	
-	trees	=new Trees()
+	trees	=newTrees()
 
 	static Trees	=Trees
 
 	static Ground	=Ground
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
-class Maps
+export default class Maps
 {
 	ground
 	
@@ -24,9 +24,17 @@ class Maps
 
 	get tr()	{return this.trees }
 
-	static Trees
+	Tr()	{return this.ground.constructor }
 
-	static Ground
+	Gr()	{return this.trees.constructor }
+
+
+	constructor( gr, tr )
+	{
+		this.ground	=gr
+
+		this.trees	=tr
+	}
 }
 
 

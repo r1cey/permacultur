@@ -8,34 +8,9 @@ import Maps	from './maps/Maps.js'
 
 export default class SG
 {
-	deenc	=new Deencap(this)
-}
+	mapbuf	=new Mapbuf(this)
 
-
-
-/** Buffer to gather all binary data needed for coherent update 
- * @prop {Deencap.Instance[]} times	- array where each index is timecode
-*/
-
-class Deencap	// map shift buffer
-{
-	srv
-
-	times	=[]
-
-	
-
-	constructor(srv)
-	{
-		this.srv	=srv
-	}
-}
-
-Deencap.Instance	=class
-{
-	bufarr	=[]
-
-	o
+	// mapshbuf	=new Mapshbuf()
 }
 
 
@@ -55,7 +30,7 @@ SG.prototype. createpl	=async function( name )
 
 	var pg	=await this.cl.html.loadp('createpl')
 	
-	pg.start( name, this.send.newplayer. bind(this))
+	pg.start( name, this.send_newplayer. bind(this))
 }
 
 
@@ -65,28 +40,30 @@ SG.prototype. createpl	=async function( name )
 
 /** This is your player. */
 
-SG.prototype. setpl	=function( plarr )
+SG.prototype. setpl	=function( plmsg )
 {
 	// debugger
 
-	this.cl.setpl( plarr )
+	this.cl.setpl( plmsg )
 }
 
 
 
 /** This is what you see.
- * @arg {Object} o
- * @arg o.timecode	- used to join with binary buffers
+ * @arg o
  * @arg o.loc
  * @arg o.r
- * @arg {Object} o.cells
- * @arg	{Array} o.cells.gr	-all cells in order, empty cells are empty members
- * @arg {Array} o.cells.tr
+ * @arg {Array} o.obj	-[gr, tr]
  */
 
 SG.prototype. setmap	=function( msg )
 {
-	this.deenc.onobj( msg )
+	if( this.mapbuf.add( new Loc(o.loc), o.r ) )
+	{
+		this.mapbuf.objs	=o.obj
+
+		this.mapbuf.isready()
+	}
 }
 
 
@@ -298,41 +275,82 @@ SG.prototype. clplclimb	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Is called for all websocket messages arriving */
 
-SG.prototype. msg	=function( ev )
-{	
-	var msg	=ev.data
+class Mapbuf
+{
+	srv
 
-	console.log( 'Recvd: '+msg)
+	loc
 
-	var cl	=this.cl
+	r
 
-	// debugger
+	bins	=[]
+	objs	=[]
 
-	if(msg instanceof ArrayBuffer)
+
+	constructor( srv )
 	{
-		this.get.msgbuf( msg )
+		this.srv	=srv
 	}
-	else if(typeof msg === 'string')
+}
+
+
+/** @return {bool} */
+
+Mapbuf.prototype. add	=function( loc, r )
+{
+	if( this.loc )
 	{
-		msg	=JSON.parse(ev.data)
-
-		let prop
-
-		for(prop in msg)
+		if( ! this.loc.eq(loc) )
 		{
-			this.g[prop]?.( msg[prop] )
+			console.error( `Mapbuf.add(${loc},${r})`)
+
+			return false
 		}
-		// console.log( `Server Msg: not found! ${prop}`)
 	}
+	else
+	{
+		this.loc	=loc
+	}
+	if( this.r )
+	{
+		if( ! this.r === r )
+		{
+			console.error( `Mapbuf.add(${loc},${r})`)
+
+			return false
+		}
+	}
+	else
+	{
+		this.r	=r
+	}
+	return true
+}
+
+
+Mapbuf.prototype. isready	=function()
+{
+	for(var val of this.bins )
+	{
+		if( ! val )	return false
+	}
+	for(var val of this.objs )
+	{
+		if( ! val )	return false
+	}
+
+	this.srv.cl.setmaps({ gr :[ this.bins[0],this.objs[0] ],
+							tr :[ this.bins[1],this.objs[1] ] })
+
+	return true
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 Deencap.prototype. onbuf	=function( buf )
 {
 	var Map	=Maps.Ground
@@ -358,7 +376,7 @@ Deencap.prototype. onbuf	=function( buf )
 	else
 	{
 		cl.setbuf( msg, code )
-	}*/
+	}*
 }
 
 
@@ -374,7 +392,7 @@ Deencap.prototype. onobj	=function( o )
 
 
 /** Never call directly. Is checked by .ready() method */
-
+/*
 Deencap.prototype. onready	=function( timecode )
 {
 	var inst	=this.times[timecode]
@@ -498,7 +516,7 @@ Msb.prototype. ifready	=function()
 
 
 /** @todo Should add actual data checks. To see that everything matches. */
-
+/*
 Deencap.prototype. ready	=function( timecode )
 {
 	var inst	=this.times[timecode]
@@ -529,7 +547,7 @@ Deencap.prototype. getdeencinst	=function( timecode )
 
 	return inst
 }
-
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 

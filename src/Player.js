@@ -50,18 +50,18 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	map()	{return this.game.maps.fromloc( this.loc )}
 
-	cl
-
 	srv()	{return this.game.server }
 
 
 
 
-	constructor( msg, game )
+	constructor( game )
 	{
-		super(msg)
+		super()
 
 		this.game	=game
+
+		// if( msg )	this.fromJSON( msg )
 	}
 
 	/*static Slp	=PlSlp
@@ -88,9 +88,7 @@ Player.prototype. save	=async function( dir )
 {
 	var pa	=dir+this.name+'.json'
 
-	var pla	=this.newmsg()
-
-	await fs.savejson( pa, pla )
+	await fs.savejson( pa, this )
 }
 
 
@@ -100,11 +98,11 @@ Player.prototype. conncl	=function( cl )
 {
 	this.cl	=cl
 
-	cl.send.setpl()
+	cl.send_setpl()
 
-	cl.send.map()
+	cl.send_setmap()
 
-	this.game.srv?.send.plconn( this )
+	this.game.srv?.send_plconn( this )
 }
 
 
@@ -295,3 +293,17 @@ Player.prototype. subwater	=function( lvl )
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+/*Player. replacer	=function( key, val )
+{
+	switch( key )
+	{
+		case "cl" :	return val ? 1 : 0
+		break
+		case "game" :	return undefined
+		break
+		default:	return val
+	}
+}*/

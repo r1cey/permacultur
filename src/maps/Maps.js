@@ -1,12 +1,12 @@
 import * as fs	from '../fs.js'
-import newShMaps	from '../../www/shared/maps/newMaps.js'
+import shMaps	from '../../www/shared/maps/Maps.js'
 
 import Ground from './Ground.js'
 import Trees from './Trees.js'
 
 
 
-export default class Ms extends newShMaps( Ground, Trees )
+export default class Ms extends shMaps
 {
 	conf	=
 	{
@@ -27,13 +27,9 @@ export default class Ms extends newShMaps( Ground, Trees )
 
 	constructor( game )
 	{
-		super()
+		super(new Ground( game ) ,new Trees( game ))
 
 		this.game	=game
-
-		this.gr.game	=game
-
-		this.tr.game	=game
 	}
 }
 

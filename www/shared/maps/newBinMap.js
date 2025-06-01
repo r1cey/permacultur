@@ -64,7 +64,9 @@ export default function( id, bmap )
 
 		var cellsl	=C.r2cells( this.get("r") )
 
-		if( Math.ceil(cellsl * C.bpc / 8) !== buf.byteLength )	throw new Error()
+		this.cellsl	=cellsl
+
+		if( Math.ceil(cellsl * C.bpc / 8) + C.headlen() !== buf.byteLength )	throw new Error()
 
 		return cellsl
 	}

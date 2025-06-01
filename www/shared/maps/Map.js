@@ -12,11 +12,18 @@ import Loc from '../Loc.js'
 
 export default class Map extends newBoard(newBinMap)
 {
-	obj	=new Obj()
+	obj	=new Obj(this)
 
 	_r	=0
 
 	////
+
+	/** tricky buffer, ONLY access it through
+	 * getloc() because it can be changed to anything.
+	 * It's not defined from start because if bin arrives before obj,
+	 * I need to see that loc wasn't defined yet
+	 *@type {Loc} */	
+	_loc
 }
 
 
@@ -31,6 +38,8 @@ Map.prototype. build	=function( r, maxc =0, loc =new Loc(0,0,0) )
 	this.bin	=new C.Bin( r, maxc, loc )
 
 	this._r	=this.bin.get("r")
+
+	this._loc	=new Loc()
 }
 
 
@@ -41,9 +50,39 @@ Map.prototype. setbuf	=function( buf )
 
 	this.bin	=new C.Bin( buf )
 
-	this._r	=this.bin.get("r")
+	if(this._r)
+	{
+		if( this._r !== this.bin.get("r") )
+		{
+			console.error( `Map.setbuf: radius doesn't match`)
+
+			return false
+		}
+	}
+	else
+	{
+		this._r	=this.bin.get("r")
+	}
+	if( this._loc )
+	{
+		if( ! this._loc.eq( this.bin.getloc(new Loc()) ) )
+		{
+			console.error( `Map.setbuf: location doesn't match`)
+
+			return false
+		}
+	}
+	else
+	{
+		this._loc	=new Loc()
+	}
 }
 
+
+Map.prototype. setobj	=function( o, loc, r )
+{
+	this.obj.o
+}
 
 
 
@@ -94,10 +133,13 @@ Map.prototype. printarr	=function( ibuf , r=6, c )
 }
 
 
+/** Location instance returned is only changed when this function is called.
+ * Don't reuse it outside of class.
+ * Designed like this just to save on garbage collection */
 
 Map.prototype. getloc	=function()
 {
-	return this.bin.getloc()
+	return this.bin.getloc( this._loc )
 }
 
 
@@ -721,23 +763,12 @@ Map.ibfrombid	=function( bid )
 
 
 
-Map.codefrombuf	=function( buf )
-{
-	return new DataView( buf, 0, 2 ).getUint16( 0, true )
-}
-
-Map.timefromcode	=( code )	=> code>>8
-
-Map.idfromcode	=( code )	=> code & 15
-
-Map.dirfromcode	=( code )	=> ( (code&255)>>4 ) - 1
 
 
-
-
+/*
 Map.getbmapbits	=function( name , j )
 {
 	var Buf	=this.Bufs[this.ibfromp[name]]
 
 	return Buf.bmap[Buf.bmapo[name]][j][0]
-}
+}*/

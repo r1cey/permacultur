@@ -1,5 +1,6 @@
 import SG from './ServGet.js'
 
+
 export default class SS extends SG
 {
 	constructor()
@@ -40,9 +41,9 @@ SS.prototype. login	=function( o )
 		this.cl.html.ps.login?.reset()
 	}
 
-	ws.onopen	=this.send.json. bind(this, o )
+	ws.onopen	=this.sendjson. bind(this, o )
 
-	ws.onmessage	=this.get.msg. bind(this)
+	ws.onmessage	=this.onmsg. bind(this)
 
 	ws.onclose	=(ev)=>
 	{
@@ -60,7 +61,7 @@ SS.prototype. login	=function( o )
 
 SS.prototype. newplayer	=function( o )
 {
-	this.s.json( o )
+	this.sendjson( o )
 }
 
 
@@ -70,14 +71,14 @@ SS.prototype. newplayer	=function( o )
 
 SS.prototype. mov	=function( loc )
 {
-	this.s.json({ mov: { loc: loc.newarr() } })
+	this.sendjson({ mov: { loc: loc.newarr() } })
 }
 
 
 
 SS.prototype. wrtc	=function( o )
 {
-	this.send_json({ wrtc: o })
+	this.sendjson({ wrtc: o })
 }
 
 
@@ -85,7 +86,7 @@ SS.prototype. wrtc	=function( o )
 
 SS.prototype. climb	=function( dir, loc )
 {
-	this.send.json({ climb: { loc, dir }})
+	this.sendjson({ climb: { loc, dir }})
 }
 
 
@@ -93,27 +94,19 @@ SS.prototype. climb	=function( dir, loc )
 
 SS.prototype. act	=function( act, o )
 {
-	this.send_json({ [act]: o })
+	this.sendjson({ [act]: o })
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-SS.prototype. json	=function( o )
-{
-	this.ws.send(JSON.stringify( o ))
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 for(var funn in SS.prototype)
-	{
-		SS.prototype["send_"+funn]	=SS.prototype[funn]
-	
-		SS.prototype["s_"+funn]	=SS.prototype[funn]
-	
-		delete SS.prototype[funn]
-	}
+{
+	SS.prototype["send_"+funn]	=SS.prototype[funn]
+
+	SS.prototype["s_"+funn]	=SS.prototype[funn]
+
+	delete SS.prototype[funn]
+}

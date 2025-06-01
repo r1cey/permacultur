@@ -1,21 +1,38 @@
 import ShObj	from "../../www/shared/maps/Obj.js"
 
-// import * as fs	from '../fs.js'
+import * as fs	from '../fs.js'
+
+import * as json from "../../www/shared/json.js"
+
+
+
 
 export default class Obj extends ShObj
 {
+	rules
 
+
+	constructor( ...args )
+	{
+		super( ...args )
+		/*
+		this.rules	=json.newrules(
+			{
+				pl	:
+				{
+					rev	:( val )=> this.map.game.pls.read
+				}
+			})*/
+	}
 }
 
 
 
-/** Parse o and read data from files to fill o */
-
-Obj.prototype. seto	=async function( o, map )
+Obj.prototype. read	=async function( path )
 {
-	if( !o )	return
+	var map	=this.map
 
-	this.o	=o
+	var o	=await fs.readjson( path+'.json', json.newreviver() )
 
 	var proms	=[]
 

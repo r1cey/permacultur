@@ -122,12 +122,12 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 
 	if( pl )
 	{
-		console.log( `Player ${pl.name} connected.` )
-
 		this.cls.new( ws, pl )
 	}
 	else if( this.game.pls.left() <= 0 )
 	{
+		console.log("Too many players in the game :(")
+
 		ws.close( 4124, "Too many players in the game :(")
 	}
 	else if( plmsg.col  )
@@ -136,6 +136,8 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 	}
 	else
 	{
+		console.log( `No ${name} player found. Create new.`)
+
 		ws.send( `{"createpl":"${name}"}` )
 	}
 }
@@ -172,7 +174,7 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 
 Server. json	=function( data, ip )
 {
@@ -395,7 +397,7 @@ Server.prototype. forseencls	=function( pln )
 		}
 	})
 }
-*/
+*
 Server.prototype. succlogin	=function( pl, ws, ip )
 {
 	var cl	=this.cls[clid]

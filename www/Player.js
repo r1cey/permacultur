@@ -1,4 +1,5 @@
 import PlSh from './shared/Player.js'
+import PlVSh from './shared/PlVis.js'
 import PCl from './PeerCl.js'
 import Loc from './shared/Loc.js'
 
@@ -6,7 +7,7 @@ const ClPl =(c) => class extends c
 {
 	lcl
 
-	gmap (){return this.pos.h ?this.lcl.maps.tr :this.lcl.maps.gr }
+	gmap (){return this.lcl.maps.fromloc( this.loc ) }
 
 	pos	=new Loc()
 
@@ -16,7 +17,9 @@ const ClPl =(c) => class extends c
 
 	constructor( msg, lcl )
 	{
-		super( msg )
+		super()
+
+		this.fromJSON( msg )
 
 		this.lcl	=lcl
 
@@ -84,7 +87,7 @@ const ClPl =(c) => class extends c
 
 
 
-class PlVis extends ClPl( PlSh.VisO )
+class PlVis extends ClPl( PlVSh )
 {
 	step( dt )
 	{
@@ -112,7 +115,7 @@ PlVis.prototype. newcl	=function()
 
 
 
-export default class Player extends ClPl( PlSh.O )
+export default class Player extends ClPl( PlSh )
 {
 	static Vis	=PlVis
 

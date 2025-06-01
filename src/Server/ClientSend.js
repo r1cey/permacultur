@@ -20,12 +20,12 @@ export default class ClS
 
 ClS.prototype. setpl	=function()
 {
-	this.send_json({ setpl: this.pl.newmsg() })
+	this.sendjson({ setpl: this.pl })
 }
 
 
 
-ClS.prototype. map	=function()
+ClS.prototype. setmap	=function()
 {
 	var pl	=this.pl
 
@@ -33,23 +33,21 @@ ClS.prototype. map	=function()
 
 	var slicedgr	=game.maps.gr.slice( pl.loc, pl.vision )
 
-	for(var i=0; i<slicedgr.bufs.length; i++)
-	{
-		this.send_binary( slicedgr.bufs[i].buf )
-	}
+	this.sendbin( slicedgr.bin.getbuf())
 
 	var slicedtr	=pl.game.maps.tr.slice( pl.loc, pl.vision )
 
-	for(i=0; i<slicedtr.bufs.length; i++)
-	{
-		this.send_binary( slicedtr.bufs[i].buf )
-	}
+	this.sendbin( slicedtr.bin.getbuf())
 
-	this.send_json(
+	this.sendjson(
 		{
 			setmap:
 			{
-				o: [slicedgr.o, slicedtr.o], loc: pl.loc, r: pl.vision
+				obj	:[slicedgr.obj.o, slicedtr.obj.o]
+				,
+				loc	:pl.loc
+				,
+				r	:pl.vision
 			}
 		},( key, val )=>
 		{
@@ -60,10 +58,6 @@ ClS.prototype. map	=function()
 					if( this.pl.name === val.name )
 					{
 						return 0
-					}
-					else
-					{
-						return val.newmsgvis()
 					}
 			}
 			
@@ -241,7 +235,7 @@ ClS.prototype. clplmov	=function( delta )
 
 ClS.prototype. newpl	=function( pl2 )
 {
-	this.send_json({ newpl: pl2.newmsgvis() })
+	this.sendjson({ newpl: pl2 })
 }
 
 

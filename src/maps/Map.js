@@ -20,7 +20,13 @@ export default class Map extends ShMap
 	@static
 	@var name */
 
-	obj	=new Obj()
+	obj	=new Obj(this)
+
+
+	constructor( game )
+	{
+		this.game	=game
+	}
 }
 
 
@@ -29,36 +35,19 @@ export default class Map extends ShMap
 Map.prototype. read	=async function( dir ="" )
 {
 	var pa	=dir + this.constructor.name
-/*
-	var proms	=[]
 
-	for(var i=0; i<this.constructor.Bufs.length; i++)
-	{
-		proms.push( fs.readbuf( pa+i+'.bin' ))
-	}
+	var buf	=await fs.readbuf( pa+".bin")
 
-	var	files	=await Promise.allSettled(
-				[Promise.all(proms), fs.readjson(pa+'.json')])*/
-
-	var	files	=await Promise.all(
-				[fs.readbuf( pa+".bin"), fs.readjson(pa+'.json')])
-	
-	/*for(var i=0; i<files[0].value?.length; i++)
-	{
-		this.setbuf( files[0].value[i] )
-	}*/
-
-
-	if( files[0] )
+	if( buf )
 	{
 		console.log('Has read bin map: '+this.constructor.name )
 
-		this.setbuf( files[0] )
+		this.setbuf( buf )
 	}
 
-	this.obj.seto( files[1] )
+	await this.obj.read( pa )
 
-	return Boolean(files[0] )
+	return buf
 }
 
 
@@ -124,34 +113,15 @@ Map.prototype. save	=async function( dir ="")
 ///////////////////////////////////////////////////////////////////////////
 
 
-/*
-Map.new	=async function( name, dir )
+
+Map.prototype. setobj	=function( o )
 {
-	var map	=new Map()
 
-	var path	=dir+name
+}
 
-	var buf	=await fs.readbuf( path+'.bin' )
 
-	if( !buf )
-	{
-		return
-	}
 
-	map.setbuf( buf )
+var rules	=
+{
 
-	if( map.getloc().toString() !== name )
-	{
-		console.error( `Filename of map doesn't match the inside name! `+
-				`${name} ${map.getloc()}` )
-	}
-
-	console.log( `Read: r=${map.r}, cells=${map.cells}`)
-
-	var o	=await fs.readjson( path+'.json' )
-
-	if(o )
-	{
-		map.o	=o
-	}
-}*/
+}

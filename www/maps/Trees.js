@@ -1,5 +1,6 @@
-import ShTr	from "../shared/maps/newTrees.js"
+import newShTr	from "../shared/maps/newTrees.js"
 import Map	from './Map.js'
+import newBin from "../shared/maps/newBinMap.js"
 import Gr from "./Ground.js"
 
 import V	from "../shared/Vec.js"
@@ -7,32 +8,35 @@ import Col	from "../shared/Color.js"
 
 
 
+const TrBase	=newShTr( Map )
 
-const TrBase	=Map( ShTr )
 
-
+var bmap	=
+[
+	{
+		name	:"size"
+		,
+		bits	:Gr.Bin.bmap.plfl.plant.lvl.bits
+	},
+	{
+		name	:"lvs"	// what's that?
+		,
+		bits	:1
+	}
+]
 
 
 export default class Tr extends TrBase
 {
+	/** Additional binary map for faster client drawing. */
+	bincl	=newBin( 0, bmap )
+
 	can	=new OffscreenCanvas(0,0)
 	
 	ctx	=this.can.getContext('2d')
 
 	_path	=new Path2D()	//used to draw branches
 }
-
-
-Tr.Bufs	=TrBase.Bufs.slice()
-
-Tr.Bufs.push(Tr.newBuf( 1,
-	[
-		{ size	:[ Math.log( Gr.maxveglvl()+1 ) / Math.log( 2 ) ]},
-		{ lvs	:[ 1 ]}
-	],
-	true ))
-
-Tr.setbufp()
 
 
 ///////////////////////////////////////////////////////////////////////////////

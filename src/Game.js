@@ -7,7 +7,7 @@ import Players from './Pls.js'
 import Loc	from './Loc.js'
 // import fs from './fs.js'
 // import Map from './Map.js'
-// import Player from './Player.js'
+import Pl from './Player.js'
 // import Actions from './Acts.js'
 // import fs from 'fs/promises'
 // import { constrainedMemory } from 'process'
@@ -20,6 +20,19 @@ Function.prototype. c	=function(...args)
 	{
 
 	})
+}
+
+
+var jsonkeys	=
+{
+	game	:
+	{
+		rep :()=> undefined
+	},
+	pl	:
+	{
+		rev :( val )=> new Pl( val )
+	}
 }
 
 
@@ -37,6 +50,8 @@ export default class G
 	{
 		pa	:'./conf.js'
 	}
+
+	json	=new Json( this, )
 
 	maps	=new Maps( this)
 

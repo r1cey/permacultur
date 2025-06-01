@@ -68,7 +68,10 @@ class Bin
 	/** DataViews */
 	dvs	={ cells :null }
 
-	/**Second value must be valid bits number for DataVew get and set functions. */
+	/** Structure of the header element of binary data.
+	 * Code value has to come first. Id value has to come second.
+	 * {vals} = [ name , valid bits number for DataVew get and set functions ]
+	 * @type {vals[]} */
 	static _structarr	=
 		[ ["code",16],["id",16],["r",16],["loc",16] ]
 
@@ -77,7 +80,7 @@ class Bin
 
 	/**Number of cells. If cell is less than 8 bits long,
 	 * automatic calculation from buffer will not work properly*/
-	// cellsl	=0
+	cellsl	=0
 
 	
 	/** Defined in derived class.
@@ -85,14 +88,21 @@ class Bin
 	@var bmap */
 
 	////----
-
-	/** tricky buffer, ONLY access it through
-	 * getloc() because it can be changed to anything */	
-	_loc	=new Loc()
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+Bin. getcode	=function( buf )
+{
+	return new DataView( buf )["getUint"+this._structarr[0][1]](0, true)
+}
+
+Bin. getid	=function( buf )
+{
+	return new DataView( buf )["getUint"+this._structarr[1][1]](0, true)
+}
 
 
 /** @ret {ArrayBuffer} */
@@ -101,7 +111,7 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
 	var Bin	=this.constructor
 
-	var buf	=new ArrayBuffer( clen * Bin.bpc + Bin.headlen() )
+	var buf	=new ArrayBuffer( Math.ceil(clen * Bin.bpc / 8) + Bin.headlen() )
 
 	this.setdataviews( buf )
 
@@ -109,6 +119,8 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 	this.set("id", Bin.id )
 	this.set("r", r )
 	this.setloc( loc )
+
+	this.cellsl	=clen
 
 	return buf
 }
@@ -162,10 +174,9 @@ Bin.prototype. setloc	=function( loc )
 }
 
 
-/** Location object returned can change later. Don't reuse it outside of class.
- * Designed like this just to save on garbage collection */
+/** @arg loc -provided loc instance to save into */
 
-Bin.prototype. getloc	=function()
+Bin.prototype. getloc	=function( loc )
 {
 	var C	=this.constructor
 
@@ -173,7 +184,7 @@ Bin.prototype. getloc	=function()
 
 	var get	=this.dvs.loc["getInt"+loclen]. bind(this.dvs.loc)
 
-	return this._loc.setxy( get( loclen>>3 ,true), get( loclen>>2 ,true), get(0 ,true) )
+	return loc.setxy( get( loclen>>3 ,true), get( loclen>>2 ,true), get(0 ,true) )
 }
 
 
@@ -195,7 +206,14 @@ Bin.prototype. setval	=function( ic, bmapv, val )
 
 	var byteoffs	=bitoffs >> 3
 
-	var data	=this.dvs.cells.getUint32( byteoffs ,true)
+	try
+	{
+		var data	=this.dvs.cells.getUint32( byteoffs ,true)
+	}
+	catch(err)
+	{
+		console.error("bin.setval ERROR!! Must check it out")
+	}
 
 	if( typeof val === "string" )
 	{
@@ -218,7 +236,14 @@ Bin.prototype. getval	=function( ic, bmapv )
 
 	var byteoffs	=bitoffs >> 3
 
-	var data	=this.dvs.cells.getUint32( byteoffs, true)
+	try
+	{
+		var data	=this.dvs.cells.getUint32( byteoffs, true)
+	}
+	catch(err)
+	{
+		console.error("bin.getval ERROR!! Must check it out.")
+	}
 
 	return Bin.gval( data, bitoffs - (byteoffs<<3), bmapv.bits )
 }
@@ -518,7 +543,7 @@ Bin.prototype. setdataviews	=function( buf )
 {
 	var C	=this.constructor
 
-	var start	=0
+	var struct	=C._structo
 
 	for(var dvvals of C._structarr )
 	{
@@ -531,7 +556,7 @@ Bin.prototype. setdataviews	=function( buf )
 		start	+= len
 	}
 
-	this.dvs.cells	=new DataView( buf, start )
+	this.dvs.cells	=new DataView( buf, start >> 3)
 }
 
 

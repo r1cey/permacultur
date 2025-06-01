@@ -4,7 +4,15 @@
 
 export default class Obj
 {
+	map
+
 	o	={}
+
+
+	constructor( map )
+	{
+		this.map	=map
+	}
 }
 
 

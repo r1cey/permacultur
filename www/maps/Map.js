@@ -1,4 +1,8 @@
-var Map	=( Base ) => class extends Base
+import ShMap	from "../shared/maps/Map.js"
+
+
+
+export default class Map extends ShMap
 {
 	maps	// might not be necessary
 			// maps might have canvas element instead
@@ -8,7 +12,7 @@ var Map	=( Base ) => class extends Base
 
 
 
-	static Msg	=Base
+	// static Msg	=Base // ?
 
 
 	/** Get two points which make a line, an X value of point on that line,
@@ -21,5 +25,3 @@ var Map	=( Base ) => class extends Base
 		return m*x + y1 - m*x1
 	}
 }
-
-export default Map

@@ -2,7 +2,10 @@
 
 import SrvS from './ServSend.js'
 
-import Map from './shared/maps/Ground.js'
+import Gr from './maps/Ground.js'
+import Tr from './maps/Trees.js'
+
+
 
 export default class Serv extends SrvS
 {
@@ -14,13 +17,6 @@ export default class Serv extends SrvS
 
 	ws
 
-	send	=new Send(this)
-
-	s	=this.send
-
-	get	=new Get(this)
-
-	g	=this.get
 
 	constructor(client)
 	{
@@ -81,6 +77,14 @@ Serv.prototype. login	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+Serv.prototype. sendjson	=function( o )
+{
+	this.ws.send(JSON.stringify( o ))
+}
+
+
+
 Serv.prototype. onmsg	=function( ev )
 {	
 	let msg	=ev.data
@@ -89,32 +93,34 @@ Serv.prototype. onmsg	=function( ev )
 
 	var cl	=this.cl
 
-	// debugger
-
 	if(msg instanceof ArrayBuffer)
 	{
 		// debugger
 
-		let code	=Map.codefrombuf( msg )
+		let BinM	=this.cl.maps.gr.constructor.Bin
 
-		if( Map.timefromcode( code ))
+		let code	=BinM.getcode( msg )
+
+		if( code === BinM.code )
 		{
-			
+			this.onmapbin( msg )
 		}
-
-		this.deenc.onbuf( msg )
+		else if( code === 2 )
+		{
+			this.onmapshiftbin( msg )
+		}
 	}
 	else if(typeof msg === 'string')
 	{
 		msg	=JSON.parse(ev.data)
 
-		let prop
+		let key
 
-		for(prop in msg)
+		for(key in msg)
 		{
-			this["on_"+prop]?.( msg[prop] )
+			this["on_"+key]?.( msg[key] )
 		}
-		// console.log( `Server Msg: not found! ${prop}`)
+		// console.error( `srv.onmsg: not found! ${key}`)
 	}
 }
 
@@ -123,12 +129,39 @@ Serv.prototype. onmsg	=function( ev )
 
 
 
-Serv.prototype. onfullbuf	=function( bufarr, code )
+Serv.prototype. onmapbin	=function( buf )
 {
-	var dir	=Map.dirfromcode( code )
+	var mapbuf	=this.mapbuf
 
-	if(dir)
+	var maps	=this.cl.maps
+
+	var Bins	=[ maps.gr.constructor.Bin, maps.tr.constructor.Bin ]
+
+	var bin
+
+	var id	=Bins[0].getid( buf )
+
+	for(var i =0,len= Bins.length ;i<len;i++)
 	{
+		if( id === Bins[i].id )
+		{
+			bin	=new Bins[i]( buf )
 
+			break
+		}
+	}
+
+	if( i >= len )
+	{
+		console.error(`srv.onmapbin : wrong id : ${id}`)
+
+		return
+	}
+
+	if( mapbuf.add( bin.get("loc"), bin.get("r") ) )
+	{
+		mapbuf.bins[i]	=bin
+
+		mapbuf.isready()
 	}
 }

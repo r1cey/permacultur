@@ -43,7 +43,7 @@ SSe.prototype. newpl	=function( pl )
 	{
 		if(this.cls.o[n].pl.seespl( pl ))
 		{
-			this.cls.o[n].send.newpl( pl )
+			this.cls.o[n].send_newpl( pl )
 		}
 	}
 }

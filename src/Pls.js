@@ -23,9 +23,20 @@ export default class Pls
 
 	s( n, pl)	{ this.o[n]	=pl }
 
+	jsonrules
+
 	constructor( game )
 	{
 		this.game	=game
+
+		this.jsonrules	=json.newrules(
+		{
+			""	:
+			{
+				rev	:( val )=> new Pl( game )
+			}
+		}
+	)
 	}
 }
 
@@ -41,18 +52,13 @@ Pls.prototype. read	=async function( name, map )
 
 	var pa	=this.conf.dir+name+'.json'
 
-	var pla	=await fs.readjson( pa )
+	var pl	=await fs.readjson( pa, json.newreviver(this.jsonrules) )
 				
-	if(pla)
+	if(pl)
 	{
-		var pl	=new Pl( pla, game )
+		this.o[pla.name]	=pl
 
-		if( pl )
-		{
-			this.o[pla.name]	=pl
-
-			return pl
-		}
+		return pl
 	}
 }
 
@@ -65,19 +71,19 @@ Pls.prototype. left	=function()
 
 
 
-Pls.prototype. new	=function( pla )
+Pls.prototype. new	=function( plmsg )
 {
-	console.log( `Adding new player to game: ${pla.name}` )
+	console.log( `Creating new player: ${plmsg.name}` )
 
 	var g=this.game
 
 	var map	=g.maps.ground
 
-	var pl	=new Pl( pla, g )
+	var pl	=new Pl( plmsg, g )
 
 	var loc	=new Loc(0,0,0)
 
-	while( map.gcello(loc)?.pl )
+	while( map.obj.get(loc)?.pl )
 	{
 		loc.randh(8)
 	}
@@ -88,9 +94,9 @@ Pls.prototype. new	=function( pla )
 
 	pl.save( this.conf.dir )
 
-	map.scello(loc).pl	=pl
+	map.obj.set(loc).pl	=pl
 
-	g.srv?.send.newpl( pl )
+	g.srv?.send_newpl( pl )
 
 	return pl
 }

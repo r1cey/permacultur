@@ -8,6 +8,20 @@ export default class Pl extends PV
 	vision	=50
 
 	water	=1
+
+
+	constructor( pl )
+	{
+		for(var key in pl )
+		{
+			if( key in this )	this[key]	=pl[key]
+
+			switch( key )
+			{
+				case "cl" :	this.cl	=Number(Boolean(this.cl))
+			}
+		}
+	}
 }
 
 /*
@@ -226,8 +240,10 @@ Pl.prototype. subwater	=function( n )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/*
-Pl.prototype. toJSON	=function(key)
+
+Pl.prototype. toJSON	=function( key )
 {
-	return this
-}*/
+	var msg	=new Player( this )
+
+	return msg
+}

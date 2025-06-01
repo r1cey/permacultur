@@ -3,11 +3,11 @@ import fs from 'fs/promises'
 
 
 
-export async function readjson	( url )
+export async function readjson	( url, reviver )
 {
 	try
 	{
-		var o	=JSON.parse(await fs.readFile(url, 'utf8'))
+		var o	=JSON.parse(await fs.readFile(url, 'utf8'), reviver )
 	}
 	catch(err)
 	{
@@ -50,9 +50,9 @@ export async function readdir	( path )
 
 
 
-export async function savejson	( path, o, fun )
+export async function savejson	( path, o, replacer )
 {
-	var json	=JSON.stringify( o, fun )
+	var json	=JSON.stringify( o, replacer )
 
 	return await savefile( path, json )
 }

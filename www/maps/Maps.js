@@ -1,4 +1,4 @@
-import ShMaps	from '../shared/maps/newMaps.js'
+import newShMaps	from '../shared/maps/Maps.js'
 import Map	from '../shared/maps/Map.js'
 import Trees	from './Trees.js'
 import Ground	from './Ground.js'
@@ -6,7 +6,7 @@ import Ground	from './Ground.js'
 
 
 
-export default class M extends ShMaps( Ground, Trees )
+export default class M extends newShMaps( Ground, Trees )
 {
 	cl
 
