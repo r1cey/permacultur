@@ -3,7 +3,8 @@ import Loc	from "../Loc.js"
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** bmapa	-Bitmap array for values. No value must take more than 24 bits!
+/** bmapa	-Bitmap array for values.
+ * MUST have the total number of bits divisible by 8.
 	 * name	-used for looking up
 	 * bits -bit length of this value.
 	 * valsa	-array of named values
@@ -66,7 +67,7 @@ class Bin
 	////----
 
 	/** DataViews */
-	dvs	={ cells :null }
+	dvs	={}
 
 	/** Structure of the header element of binary data.
 	 * Code value has to come first. Id value has to come second.
@@ -111,7 +112,7 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
 	var Bin	=this.constructor
 
-	var buf	=new ArrayBuffer( Math.ceil(clen * Bin.bpc / 8) + Bin.headlen() )
+	var buf	=new ArrayBuffer( clen * Bin.bpc + Bin.headlen() )
 
 	this.setdataviews( buf )
 
@@ -280,60 +281,33 @@ Bin.prototype. getbuf	=function()
 
 Bin.prototype. setcell	=function( ic, valarr )
 {
-	var C	=this.constructor
-
-	var bpc	=C.bpc
-
-	var bitoffs	=this.getcellsoffs( ic )
-
-	var end	=bitoffs + bpc
-
-	var byteoffs	=bitoffs >> 3
-
-	var relbitoffs	=bitoffs - (byteoffs<<3)
+	var byteoffs	=this.getcellsoffs( ic ) >> 3
 
 	for(var val of valarr )
 	{
-		var dword	=this.dvs.cells.getUint32( byteoffs, true)
+		this.dvs.cells.setUint8( byteoffs, val )
 
-		var readend	=(byteoffs<<3) + relbitoffs + 16
-
-		var len	=end < readend	? 16 - readend + end	: 16
-
-		val	=C.sval( dword, relbitoffs, len, val )
-
-		this.dvs.cells.setUint32( byteoffs, val ,true)
-
-		byteoffs	+= 2
+		byteoffs	++
 	}
 }
 
 
 /** Get binary value of a cell.
- * @arg [bitoffs]	-Precise bit offset from the beginning of data can come precalculated.
- * @return {array} - The binary value broken down in 16 bit intervals using little endian */
+ * @return {array} - The binary value broken down in byte intervals */
 
 Bin.prototype. getcell	=function( ic )
 {
 	var C	=this.constructor
 
-	var bpc	=C.bpc
-
-	var bitoffs	=this.getcellsoffs( ic )
-
 	var vals	=[]
 	
-	var byteoffs	=bitoffs >> 3
+	var byteoffs	=this.getcellsoffs( ic ) >> 3
 
-	var relbitoffs	=bitoffs - (byteoffs<<3)
-
-	for(var max= bitoffs+C.bpc ; byteoffs<<3 < max ; byteoffs += 2 )
+	for(var max= byteoffs+C.bpc ; byteoffs < max ; byteoffs ++ )
 	{
-		var dword	=this.dvs.cells.getUint32( byteoffs ,true)
+		var byte	=this.dvs.cells.getUint8( byteoffs )
 
-		var readend	=(byteoffs<<3) + relbitoffs + 16
-
-		vals.push( C.gval( dword, relbitoffs, readend < max ? 16 : 16 - readend + max ) )
+		vals.push( byte )
 	}
 
 	return vals
@@ -454,34 +428,32 @@ function prep_bmapa( arr, offset=0 )
 	{
 		prop.offset	=offset
 
-		//calculate prop.bits
+		if( prop.subd )
 		{
-			if( prop.subd )
+			prop.bits	=prep_bmapa( prop.subd, offset )
+		}
+		else if( prop.condsubd )
+		{
+			for(var cond in prop.condsubd )
 			{
-				prop.bits	=prep_bmapa( prop.subd, offset )
+				prop.bits	=prep_bmapa( prop.condsubd[cond], offset )
 			}
-			else if( prop.condsubd )
+		}
+		else	//edge value
+		{
+			if( prop.valsa )	//create valso
 			{
-				for(var cond in prop.condsubd )
+				prop.valso	={}
+
+				for(var iv =0,lenv= prop.valsa.length ;iv<lenv;iv++)
 				{
-					prop.bits	=prep_bmapa( prop.condsubd[cond], offset )
+					if(typeof prop.valsa[iv] == "string" )
+					{
+						prop.valso[prop.valsa[iv]]	=iv
+					}
 				}
 			}
 		}
-
-		if( prop.valsa )	//create valso
-		{
-			prop.valso	={}
-
-			for(var iv =0,lenv= prop.valsa.length ;iv<lenv;iv++)
-			{
-				if(typeof prop.valsa[iv] == "string" )
-				{
-					prop.valso[prop.valsa[iv]]	=iv
-				}
-			}
-		}
-
 		bits	+= prop.bits
 
 		offset	+= prop.bits

@@ -12,6 +12,8 @@ export default class Pl extends PV
 
 	constructor( pl )
 	{
+		super()
+		
 		if( pl )	this.set( pl )
 	}
 }

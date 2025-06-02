@@ -17,9 +17,7 @@ const ClPl =(c) => class extends c
 
 	constructor( msg, lcl )
 	{
-		super()
-
-		this.fromJSON( msg )
+		super( msg )
 
 		this.lcl	=lcl
 

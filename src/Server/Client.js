@@ -25,6 +25,8 @@ export default class Client extends ClG
 
 	constructor(ws, pl, srv )
 	{
+		super()
+
 		Object.assign(this,{ srv, ws, pl })
 
 		if( pl && ws )
