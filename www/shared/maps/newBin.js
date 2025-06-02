@@ -21,9 +21,7 @@ export default function( id, bmapa, structadd )
 	{
 		static id	=id
 
-		static bpc	=prep_bmapa( bmapa )
-
-		static bmap	=build_bmap( bmapa )
+		static bmap	=build_bmap( prep_bmapa( bmapa) )
 	}
 
 	if( structadd )	C._structarr	=Bin._structarr.concat( structadd )
@@ -59,11 +57,6 @@ class Bin
 	@static
 	@var id */
 
-	/** Bytes per cell.
-	 * Defined in derived class.
-	@static
-	@var bpc */
-
 	////----
 
 	/** DataViews */
@@ -79,9 +72,10 @@ class Bin
 	/** Reverse lookup for data structure values */
 	static _structo	={ }
 
-	/**Number of cells. If cell is less than 8 bits long,
-	 * automatic calculation from buffer will not work properly*/
-	cellsl	=0
+	arrs	=[]
+
+	/**Number of cells.*/
+	get cellsl()	{return this.arrs[0].length }
 
 	
 	/** Defined in derived class.
@@ -418,10 +412,109 @@ Bin.sval	=function( code, start, len, val )
 /** Call it to make sure that all bmap data is filled properly and calculate bpc.
  * Recursive function; is called on certain inner arrays too.
  * @arg [offset=0]	-Don't use when calling manually. Needed for recursion.
- * @return the total number of bits in arr */
+ * @return changed bmap array split into typedarray arrays */
 
-function prep_bmapa( arr, offset=0 )
+function prep_bmapa( bmapa, offset=0 )
 {
+	var arrs	=[]
+
+	var starta	=[0]
+
+	const MAX	=32
+
+	var enda	=[]
+
+	var starti	=0
+
+
+
+	function slice( bmapa, starti, offset, MAX )
+	{
+		var arr	=[]
+
+		var bitlen	=offset
+
+		for(var i = starti ; i < bmapa.length ; i++ )
+		{
+			if( bmapa[i].subd )
+			{
+				split( bmapa[i].subd, [], bitlen, 0, MAX )
+			}
+			else
+			{
+				bitlen	+= bmapa[i].bits
+
+				if( bitlen <= MAX )
+				{
+					arr.push( bmapa[i] )
+				}
+				else
+				{
+					return arr
+				}
+			}
+		}
+		return arr
+	}
+	
+
+	return arrs
+
+	function find_end( start, MAX )
+	{
+
+	}
+
+
+
+
+	find_end( bmapa, starta, 0, MAX, end )
+
+
+	function find_end2( bmapa, starta, num, MAX, enda )
+	{
+		for(var i =starta[0]; i < bmapa.length ; i++ )
+		{
+			if( val.subd )
+			{
+				find_end( val.subd, starta)
+			}
+			else
+			{
+				num	+= bmapa[i].bits
+
+				if( num > MAX )
+				{
+					enda.push( i - 1 )
+
+					return
+				}
+			}
+		}
+
+		enda.push( i - 1 )
+	}
+
+
+
+
+
+	for(var entry of bmapa )
+	{
+		var 
+		if( entry.subd )
+		{
+			arrs[i]
+		}
+	}
+
+
+
+	var keys	={}
+
+	do{
+		r { arr, keys }	=split( bmapa, keys )
+
 	var bits	=0
 
 	for(var prop of arr )
@@ -460,6 +553,12 @@ function prep_bmapa( arr, offset=0 )
 	}
 
 	return bits
+
+
+	function split( arrout, arrin )
+	{
+
+	}
 }
 
 
