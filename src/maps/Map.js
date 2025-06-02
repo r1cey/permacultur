@@ -25,6 +25,8 @@ export default class Map extends ShMap
 
 	constructor( game )
 	{
+		super()
+		
 		this.game	=game
 	}
 }

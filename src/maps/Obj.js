@@ -32,7 +32,7 @@ Obj.prototype. read	=async function( path )
 {
 	var map	=this.map
 
-	var o	=await fs.readjson( path+'.json', json.newreviver() )
+	var o	=await fs.readjson( path+'.json', json.newrevivr() )
 
 	var proms	=[]
 

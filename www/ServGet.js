@@ -340,8 +340,8 @@ Mapbuf.prototype. isready	=function()
 		if( ! val )	return false
 	}
 
-	this.srv.cl.setmaps({ gr :[ this.bins[0],this.objs[0] ],
-							tr :[ this.bins[1],this.objs[1] ] })
+	this.srv.cl.setmaps( this.bins[0], this.objs[0],
+							this.bins[1], this.objs[1] )
 
 	return true
 }

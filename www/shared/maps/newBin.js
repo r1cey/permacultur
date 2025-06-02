@@ -543,7 +543,7 @@ Bin.prototype. setdataviews	=function( buf )
 {
 	var C	=this.constructor
 
-	var struct	=C._structo
+	var start	=0
 
 	for(var dvvals of C._structarr )
 	{

@@ -4,6 +4,8 @@ import ClG from './ClientGet.js'
 
 import Map	from "../maps/Ground.js"
 
+import * as json from "../../www/shared/json.js"
+
 
 export default class Client extends ClG
 {
@@ -47,12 +49,7 @@ Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var msg	=JSON.parse( data.toString() )/* ,( key, val )=>
-	{
-		if( key.startsWith( "loc" ))	return new Loc().seta(val)
-
-		return val
-	})*/
+	var msg	=JSON.parse( data.toString() , json.newrevivr())
 
 	for(var prop in msg )
 	{

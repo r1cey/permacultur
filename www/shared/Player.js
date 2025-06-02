@@ -12,15 +12,7 @@ export default class Pl extends PV
 
 	constructor( pl )
 	{
-		for(var key in pl )
-		{
-			if( key in this )	this[key]	=pl[key]
-
-			switch( key )
-			{
-				case "cl" :	this.cl	=Number(Boolean(this.cl))
-			}
-		}
+		if( pl )	this.set( pl )
 	}
 }
 
@@ -238,12 +230,3 @@ Pl.prototype. subwater	=function( n )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-Pl.prototype. toJSON	=function( key )
-{
-	var msg	=new Player( this )
-
-	return msg
-}

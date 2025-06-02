@@ -1,4 +1,4 @@
-// import NS from '../../www/shared/NSpace.js'
+import * as json from '../../www/shared/json.js'
 
 import Loc from '../../www/shared/Loc.js'
 
@@ -20,7 +20,7 @@ export default class ClS
 
 ClS.prototype. setpl	=function()
 {
-	this.sendjson({ setpl: this.pl })
+	this.sendjson({ setpl: this.pl }, json.newreplcr())
 }
 
 
@@ -39,6 +39,15 @@ ClS.prototype. setmap	=function()
 
 	this.sendbin( slicedtr.bin.getbuf())
 
+	var jsonrule	=json.newrules(
+		{
+			pl	:
+			{
+				rep	:( val )=> this.pl.name===val.name ? val.name : val
+			}
+		}
+	)
+
 	this.sendjson(
 		{
 			setmap:
@@ -49,20 +58,7 @@ ClS.prototype. setmap	=function()
 				,
 				r	:pl.vision
 			}
-		},( key, val )=>
-		{
-			switch(key)
-			{
-				case 'pl' :
-
-					if( this.pl.name === val.name )
-					{
-						return 0
-					}
-			}
-			
-			return val
-		})
+		}, jsonrule )
 }
 
 

@@ -4,11 +4,16 @@ export default class Color
 	s
 	l
 
-	constructor( h,s,l )
+	constructor( ...args )
 	{
-		this.h	=h
-		this.s	=s
-		this.l	=l
+		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
+
+		else
+		{
+			this.h	=args[0] ?? 0
+			this.s	=args[1] ?? 0
+			this.l	=args[2] ?? 0
+		}
 	}
 }
 

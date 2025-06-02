@@ -2,7 +2,7 @@ import Loc from "./Loc.js"
 import Col from "./Color.js"
 
 
-var keys	=
+var rules	=
 {
 	loc :
 	{
@@ -15,38 +15,62 @@ var keys	=
 	cl	:
 	{
 		rep	:( val )=> val ? 1 : 0
+	},
+	game	:
+	{
+		rep	:( val )=> undefined
 	}
 }
 
-export function newreplacer()
+
+export function newreplcr( newrules )
 {
+	var r	=newrules || rules
+
 	return function( key, val )
 	{
-		if( keys[key]?.rep )	return keys[key].rep( val )
+		if( r[key]?.rep )	return r[key].rep( val )
 
 		else	return val
 	}
 }
 
 
-export function newreviver()
+export function newrevivr( newrules )
 {
+	var r	=newrules || rules
+
 	return function( key, val, str )
 	{
-		if( keys[key]?.rev )	return keys[key].rev( val )
+		if( r[key]?.rev )	return r[key].rev( val )
 
 		else	return val
 	}
 }
 
 
-export function add( newkeys )
+export function newrules( newrules )
 {
-	for(var key in newkeys )
+	var r	={}
+
+	for(var key in newrules )
 	{
-		for(var ty in newkeys[key] )
+		r[key]	={}
+
+		for(var ty in newrules[key] )
 		{
-			keys[key][ty]	=newkeys[key][ty]
+			r[key][ty]	=newrules[key][ty]
+		}
+	}	
+	for(var key in rules )
+	{
+		r[key]	??={}
+
+		for(var ty in rules[key] )
+		{
+			r[key][ty]	??=rules[key][ty]
 		}
 	}
+
+	return r
 }

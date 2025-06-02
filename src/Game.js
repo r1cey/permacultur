@@ -51,8 +51,6 @@ export default class G
 		pa	:'./conf.js'
 	}
 
-	json	=new Json( this, )
-
 	maps	=new Maps( this)
 
 	min15int

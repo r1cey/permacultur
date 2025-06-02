@@ -4,6 +4,7 @@ import SrvS from './ServSend.js'
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
+import * as json from './shared/json.js'
 
 
 
@@ -78,9 +79,9 @@ Serv.prototype. login	=function( o )
 
 
 
-Serv.prototype. sendjson	=function( o )
+Serv.prototype. sendjson	=function( o, replcr )
 {
-	this.ws.send(JSON.stringify( o ))
+	this.ws.send(JSON.stringify( o, replcr ))
 }
 
 
@@ -112,7 +113,7 @@ Serv.prototype. onmsg	=function( ev )
 	}
 	else if(typeof msg === 'string')
 	{
-		msg	=JSON.parse(ev.data)
+		msg	=JSON.parse(ev.data, json.newrevivr() )
 
 		let key
 

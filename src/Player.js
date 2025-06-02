@@ -55,13 +55,11 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 
 
-	constructor( game )
+	constructor( pl, game )
 	{
-		super()
+		super( pl )
 
 		this.game	=game
-
-		// if( msg )	this.fromJSON( msg )
 	}
 
 	/*static Slp	=PlSlp

@@ -22,17 +22,13 @@ export default class PlVis
 
 
 
-PlVis.prototype. fromJSON	=function( plmsg )
+PlVis.prototype. set	=function( pl )
 {
-	for(var key in plmsg )
+	for(var key in pl )
 	{
-		if( this[key]?.fromJSON )
+		if( key in this )
 		{
-			this[key].fromJSON( plmsg[key] )
-		}
-		else if( key in this )
-		{
-			this[key]	=plmsg[key]
+			this[key]	=pl[key]
 		}
 	}
 

@@ -6,6 +6,10 @@ import { WebSocketServer, WebSocket } from "ws"
 import Cls from "./Clients.js"
 import ServSend from './ServSend.js'
 
+import * as json from "../../www/shared/json.js"
+
+
+
 export default class Server extends ServSend
 {
 	game
@@ -102,7 +106,7 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 
 	try
 	{
-		var plmsg	=JSON.parse( str )
+		var plmsg	=JSON.parse( str, json.newrevivr() )
 	}
 	catch(err)
 	{

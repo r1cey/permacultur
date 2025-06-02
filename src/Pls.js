@@ -4,6 +4,10 @@ import Loc	from '../www/shared/Loc.js'
 
 import * as fs from './fs.js'
 
+import * as json from "../www/shared/json.js"
+
+
+
 export default class Pls
 {
 	game
@@ -33,7 +37,7 @@ export default class Pls
 		{
 			""	:
 			{
-				rev	:( val )=> new Pl( game )
+				rev	:( val )=> new Pl( val, game )
 			}
 		}
 	)
@@ -52,10 +56,12 @@ Pls.prototype. read	=async function( name, map )
 
 	var pa	=this.conf.dir+name+'.json'
 
-	var pl	=await fs.readjson( pa, json.newreviver(this.jsonrules) )
+	var plfile	=await fs.readjson( pa, json.newrevivr() )
 				
-	if(pl)
+	if(plfile)
 	{
+		var pl	=new Pl( plfile, game )
+
 		this.o[pla.name]	=pl
 
 		return pl

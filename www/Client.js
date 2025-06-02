@@ -84,11 +84,17 @@ Client.prototype. setmaps	=function( grbin, grobj, trbin, trobj )
 {
 	var maps	=this.maps
 
-	// debugger
+	debugger
 
-	maps.setbuf( buf, code )
+	maps.gr.setbuf( grbin )
 
-	if( maps.ready() )
+	maps.gr.obj.o	=grobj
+
+	maps.tr.setbuf( grbin )
+
+	maps.tr.obj.o	=grobj
+
+	// if( maps.ready() )
 	{
 		let can	=this.html.can
 
