@@ -414,34 +414,208 @@ Bin.sval	=function( code, start, len, val )
  * @arg [offset=0]	-Don't use when calling manually. Needed for recursion.
  * @return changed bmap array split into typedarray arrays */
 
-function prep_bmapa( bmapa, offset=0 )
+function prep_bmapa( bmapao, offset=0 )
 {
+	var bmapflat	=[]
+
+	flat( bmapao, bmapflat )
+
+	var bmapabins	=fit_in_bins( bmapflat, [8,16,32])
+
+	"2"
+	
+
+	function flat( bmapao, bmapflat, pref ="" )
+	{
+		var bits	=0
+
+		for(var val of bmapao )
+		{
+			if( val.subd )
+			{
+				bits	+= flat( val.subd, bmapflat, val.name+"_" )
+			}
+			else if( val.condsubd )
+			{
+				var o	={
+					name	:bmapflat[bmapflat.length-1].name ,
+					condsubd	:{},
+					bits	:0
+				}
+
+				var size, maxsize	=0
+
+				for(var cond in val.condsubd )
+				{
+					o.condsubd[cond]	=[]
+
+					size	=flat( val.condsubd[cond], o.condsubd[cond], o.name+"_"+cond+"_" )
+
+					if( size > maxsize )	maxsize	=size
+				}
+
+				o.bits	=maxsize
+
+				bmapflat.push( o )
+			}
+			else
+			{
+				bmapflat.push( {
+					name	:pref+val.name ,
+					bits	:val.bits ,
+					valsa	:val.valsa ,
+					valso	:valslookup( val.valsa )
+				} )
+
+				bits	+= val.bits
+			}
+		}
+
+		return bits
+	}
+
+
+	/**@return -{ size , vals :[] }[] */
+	function fit_in_bins( vals, binlens )
+	{
+		vals.sort(( a, b )=> b.bits-a.bits )
+
+		binlens.sort(( a, b )=> a - b )
+
+		var	bins	=[]	// bin=
+
+		for(var val of vals )
+		{
+			var bestbin	=null
+
+			var mingap	=binlens.at(-1)
+
+			for(var bin of bins )
+			{
+				var bitsused	=bin.vals.reduce(( offset, val )=> offset+val.bits , 0 )
+
+				if( bitsused + val.bits <= bin.size )
+				{
+					var gap	=bin.size - ( bitsused + val.bits )
+
+					if( gap < mingap )
+					{
+						mingap	=gap
+
+						bestbin	=bin
+					}
+				}
+			}
+
+			if( bestbin )	bestbin.vals.push( val )
+
+			else
+			{
+				for(var binlen of binlens )
+				{
+					if( val.bits <= binlen )
+					{
+						bins.push({ size :binlen, vals :[ val ] })
+
+						break
+					}
+				}
+			}
+		}
+
+		return bins
+	}
+
+
+	function valslookup( valsa )
+	{
+		if( ! valsa )	return
+
+		var valso	={}
+
+		for(var iv =0,lenv= valsa.length ;iv<lenv;iv++)
+		{
+			if(typeof valsa[iv] == "string" )
+			{
+				valso[valsa[iv]]	=iv
+			}
+		}
+
+		return valso
+	}
+
+
+
+/*
 	var arrs	=[]
 
-	var starta	=[0]
+	var starta	=[]
 
-	const MAX	=32
+	const MAX	=22
 
 	var enda	=[]
 
 	var starti	=0
 
+	debugger
 
-
-	function slice( bmapa, starti, offset, MAX )
+	do
 	{
 		var arr	=[]
 
+		slice( bmapa, starta, 0, arr, MAX )
+
+		arrs.push(arr)
+	}
+	while( starta[0] !== 0 )
+
+	console.log(1)
+
+
+
+	function slice( bmapa, starta, offset, arr, MAX, curdepth =0 )
+	{
 		var bitlen	=offset
 
-		for(var i = starti ; i < bmapa.length ; i++ )
+		starta[curdepth]	??=0
+
+		for(var i = starta[curdepth] ; i < bmapa.length ; i++ )
 		{
+			var val	=bmapa[i]
+
+			starta[curdepth]	=i
+
 			if( bmapa[i].subd )
 			{
-				split( bmapa[i].subd, [], bitlen, 0, MAX )
+				var arr2	=[]
+
+				bitlen	+= slice( bmapa[i].subd, starta, bitlen, arr2, MAX, curdepth+1 )
+
+				if( arr2.length )
+				{
+					arr.push({
+							name	:bmapa[i].name ,
+							subd	:arr2
+						})
+					
+					if( starta[curdepth + 1] )
+					{
+						return bitlen
+					}
+				}
+				else
+				{
+					return bitlen
+				}
+			}
+			else if( bmapa[i].condsubd )
+			{
+
 			}
 			else
 			{
+				bmapa[i].offset	=bitlen
+
 				bitlen	+= bmapa[i].bits
 
 				if( bitlen <= MAX )
@@ -450,72 +624,19 @@ function prep_bmapa( bmapa, offset=0 )
 				}
 				else
 				{
-					return arr
+					// starta[curdepth]	=i
+
+					return bitlen
 				}
 			}
 		}
-		return arr
+
+		starta[curdepth]	=0
+
+		return bitlen
 	}
 	
 
-	return arrs
-
-	function find_end( start, MAX )
-	{
-
-	}
-
-
-
-
-	find_end( bmapa, starta, 0, MAX, end )
-
-
-	function find_end2( bmapa, starta, num, MAX, enda )
-	{
-		for(var i =starta[0]; i < bmapa.length ; i++ )
-		{
-			if( val.subd )
-			{
-				find_end( val.subd, starta)
-			}
-			else
-			{
-				num	+= bmapa[i].bits
-
-				if( num > MAX )
-				{
-					enda.push( i - 1 )
-
-					return
-				}
-			}
-		}
-
-		enda.push( i - 1 )
-	}
-
-
-
-
-
-	for(var entry of bmapa )
-	{
-		var 
-		if( entry.subd )
-		{
-			arrs[i]
-		}
-	}
-
-
-
-	var keys	={}
-
-	do{
-		r { arr, keys }	=split( bmapa, keys )
-
-	var bits	=0
 
 	for(var prop of arr )
 	{
@@ -558,7 +679,7 @@ function prep_bmapa( bmapa, offset=0 )
 	function split( arrout, arrin )
 	{
 
-	}
+	}*/
 }
 
 
