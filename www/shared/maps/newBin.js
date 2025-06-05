@@ -21,7 +21,9 @@ export default function( id, bmapa, structadd )
 	{
 		static id	=id
 
-		static bmap	=build_bmap( prep_bmapa( bmapa) )
+		static bmapbins	=build_bmapbins( bmapa)
+
+		static bmap	=build_bmap( this.bmapbins )
 	}
 
 	if( structadd )	C._structarr	=Bin._structarr.concat( structadd )
@@ -409,349 +411,6 @@ Bin.sval	=function( code, start, len, val )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Call it to make sure that all bmap data is filled properly and calculate bpc.
- * Recursive function; is called on certain inner arrays too.
- * @arg [offset=0]	-Don't use when calling manually. Needed for recursion.
- * @return changed bmap array split into typedarray arrays */
-
-function prep_bmapa( bmapao, offset=0 )
-{
-	var bmapflat	=[]
-
-	flat( bmapao, bmapflat )
-
-	var bmapabins	=fit_in_bins( bmapflat, [8,16,32])
-
-	"2"
-	
-
-	function flat( bmapao, bmapflat, pref ="" )
-	{
-		var bits	=0
-
-		for(var val of bmapao )
-		{
-			if( val.subd )
-			{
-				bits	+= flat( val.subd, bmapflat, val.name+"_" )
-			}
-			else if( val.condsubd )
-			{
-				var o	={
-					name	:bmapflat[bmapflat.length-1].name ,
-					condsubd	:{},
-					bits	:0
-				}
-
-				var size, maxsize	=0
-
-				for(var cond in val.condsubd )
-				{
-					o.condsubd[cond]	=[]
-
-					size	=flat( val.condsubd[cond], o.condsubd[cond], o.name+"_"+cond+"_" )
-
-					if( size > maxsize )	maxsize	=size
-				}
-
-				o.bits	=maxsize
-
-				bmapflat.push( o )
-			}
-			else
-			{
-				bmapflat.push( {
-					name	:pref+val.name ,
-					bits	:val.bits ,
-					valsa	:val.valsa ,
-					valso	:valslookup( val.valsa )
-				} )
-
-				bits	+= val.bits
-			}
-		}
-
-		return bits
-	}
-
-
-	/**@return -{ size , vals :[] }[] */
-	function fit_in_bins( vals, binlens )
-	{
-		vals.sort(( a, b )=> b.bits-a.bits )
-
-		binlens.sort(( a, b )=> a - b )
-
-		var	bins	=[]	// bin=
-
-		for(var val of vals )
-		{
-			var bestbin	=null
-
-			var mingap	=binlens.at(-1)
-
-			for(var bin of bins )
-			{
-				var bitsused	=bin.vals.reduce(( offset, val )=> offset+val.bits , 0 )
-
-				if( bitsused + val.bits <= bin.size )
-				{
-					var gap	=bin.size - ( bitsused + val.bits )
-
-					if( gap < mingap )
-					{
-						mingap	=gap
-
-						bestbin	=bin
-					}
-				}
-			}
-
-			if( bestbin )	bestbin.vals.push( val )
-
-			else
-			{
-				for(var binlen of binlens )
-				{
-					if( val.bits <= binlen )
-					{
-						bins.push({ size :binlen, vals :[ val ] })
-
-						break
-					}
-				}
-			}
-		}
-
-		return bins
-	}
-
-
-	function valslookup( valsa )
-	{
-		if( ! valsa )	return
-
-		var valso	={}
-
-		for(var iv =0,lenv= valsa.length ;iv<lenv;iv++)
-		{
-			if(typeof valsa[iv] == "string" )
-			{
-				valso[valsa[iv]]	=iv
-			}
-		}
-
-		return valso
-	}
-
-
-
-/*
-	var arrs	=[]
-
-	var starta	=[]
-
-	const MAX	=22
-
-	var enda	=[]
-
-	var starti	=0
-
-	debugger
-
-	do
-	{
-		var arr	=[]
-
-		slice( bmapa, starta, 0, arr, MAX )
-
-		arrs.push(arr)
-	}
-	while( starta[0] !== 0 )
-
-	console.log(1)
-
-
-
-	function slice( bmapa, starta, offset, arr, MAX, curdepth =0 )
-	{
-		var bitlen	=offset
-
-		starta[curdepth]	??=0
-
-		for(var i = starta[curdepth] ; i < bmapa.length ; i++ )
-		{
-			var val	=bmapa[i]
-
-			starta[curdepth]	=i
-
-			if( bmapa[i].subd )
-			{
-				var arr2	=[]
-
-				bitlen	+= slice( bmapa[i].subd, starta, bitlen, arr2, MAX, curdepth+1 )
-
-				if( arr2.length )
-				{
-					arr.push({
-							name	:bmapa[i].name ,
-							subd	:arr2
-						})
-					
-					if( starta[curdepth + 1] )
-					{
-						return bitlen
-					}
-				}
-				else
-				{
-					return bitlen
-				}
-			}
-			else if( bmapa[i].condsubd )
-			{
-
-			}
-			else
-			{
-				bmapa[i].offset	=bitlen
-
-				bitlen	+= bmapa[i].bits
-
-				if( bitlen <= MAX )
-				{
-					arr.push( bmapa[i] )
-				}
-				else
-				{
-					// starta[curdepth]	=i
-
-					return bitlen
-				}
-			}
-		}
-
-		starta[curdepth]	=0
-
-		return bitlen
-	}
-	
-
-
-	for(var prop of arr )
-	{
-		prop.offset	=offset
-
-		if( prop.subd )
-		{
-			prop.bits	=prep_bmapa( prop.subd, offset )
-		}
-		else if( prop.condsubd )
-		{
-			for(var cond in prop.condsubd )
-			{
-				prop.bits	=prep_bmapa( prop.condsubd[cond], offset )
-			}
-		}
-		else	//edge value
-		{
-			if( prop.valsa )	//create valso
-			{
-				prop.valso	={}
-
-				for(var iv =0,lenv= prop.valsa.length ;iv<lenv;iv++)
-				{
-					if(typeof prop.valsa[iv] == "string" )
-					{
-						prop.valso[prop.valsa[iv]]	=iv
-					}
-				}
-			}
-		}
-		bits	+= prop.bits
-
-		offset	+= prop.bits
-	}
-
-	return bits
-
-
-	function split( arrout, arrin )
-	{
-
-	}*/
-}
-
-
-
-function build_bmap( bmapa )
-{
-	var bmap	={}
-
-	for(var prop of bmapa )
-	{
-		if( prop.subd )	bmap[prop.name]	=build_bmap( prop.subd )
-		
-		else if( prop.condsubd )
-		{
-			for(var cond in prop.condsubd )
-			{
-				bmap[cond]	=build_bmap( prop.condsubd[cond] )
-			}
-		}
-		else
-		{
-			bmap[prop.name]	=
-			{
-				offset	:prop.offset
-				,
-				bits	:prop.bits
-				,
-				valsa	:prop.valsa
-				,
-				valso	:prop.valso
-			}
-		}
-	}
-
-	return bmap
-}
-
-
-
-Bin. build_structo	=function()
-{
-	var C	=this
-
-	for(var val of C._structarr )
-	{
-		C._structo[val[0]]	=val[1]
-	}
-}
-
-
-
-Bin.prototype. setdataviews	=function( buf )
-{
-	var C	=this.constructor
-
-	var start	=0
-
-	for(var dvvals of C._structarr )
-	{
-		var name	=dvvals[0]
-
-		var len	=dvvals[1] + (name==="loc")*(dvvals[1]<<1)
-
-		this.dvs[name]	=new DataView( buf, start>>3, len>>3 )
-
-		start	+= len
-	}
-
-	this.dvs.cells	=new DataView( buf, start >> 3)
-}
-
-
 
 Bin. headlen	=function()
 {
@@ -767,26 +426,6 @@ Bin. headlen	=function()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-throw Error(666)
-
-Bin.prototype. set	=function( buf, cellsl )
-{
-	var Class	=this.constructor
-
-	cellsl	??=parseInt( (buf.byteLength - Class.headlen) / Class.bpc )
-
-	this.head	=Class.newheadarr( buf )
-
-	this.head[0]	=Class.id
-
-	this.cells	=new Class.Arr( buf, Class.headlen, cellsl )
-
-	return this
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
 
 
 /** @arg ibmp	- Can be number or string
@@ -894,3 +533,400 @@ Bin. diredgesize	=function( r )
 
 	return Bin.headlen + Bin.Arr.BYTES_PER_ELEMENT * Loc.diredgesize(r)
 }*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Call it to make sure that all bmap data is filled properly and calculate bpc.
+ * Recursive function; is called on certain inner arrays too.
+ * @arg [offset=0]	-Don't use when calling manually. Needed for recursion.
+ * @return changed bmap array split into typedarray arrays */
+
+function build_bmapbins( bmapao )
+{
+	var bmapflat	=[]
+
+	bmap_flat( bmapao, bmapflat )
+
+	var bmapbins	=fit_in_bins( bmapflat, 32 )
+
+	return bmapbins
+}
+
+
+/** Sets offsets too */
+
+function build_bmap( bmapbins )
+{
+	var bmap	={}
+
+	for(var i =0, len =bmapbins.length;i<len;i++)
+	{
+		var bin	=bmapbins[i]
+
+		var offset	=0
+
+		for(var val of bin.vals )
+		{
+			if( val.condsubd )
+			{
+				for(var cond in val.condsubd )
+				{
+					let inval, inoffset	=0
+
+					for(inval of val.condsubd[cond] )
+					{
+						inval.offset	=offset + inoffset
+
+						build_keys( bmap, inval.path, inval )
+
+						inval.bin_i	=i
+
+						inoffset	+= inval.bits
+					}
+				}
+			}
+			else
+			{
+				val.offset	=offset
+
+				build_keys( bmap, val.path, val )
+
+				val.bin_i	=i
+			}
+
+			offset	+= val.bits
+		}
+	}
+
+	return bmap
+}
+
+
+
+Bin. build_structo	=function()
+{
+	var C	=this
+
+	for(var val of C._structarr )
+	{
+		C._structo[val[0]]	=val[1]
+	}
+}
+
+
+
+Bin.prototype. setdataviews	=function( buf )
+{
+	var C	=this.constructor
+
+	var start	=0
+
+	for(var dvvals of C._structarr )
+	{
+		var name	=dvvals[0]
+
+		var len	=dvvals[1] + (name==="loc")*(dvvals[1]<<1)
+
+		this.dvs[name]	=new DataView( buf, start>>3, len>>3 )
+
+		start	+= len
+	}
+
+	this.dvs.cells	=new DataView( buf, start >> 3)
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Recursive function.
+ * Also calculates valso !
+ * @arg {array} bmapflat	-To add to
+ * @return -number of bits */
+
+function bmap_flat( bmapao, bmapflat, pref ="" )
+{
+	var bits	=0
+
+	for(var val of bmapao )
+	{
+		if( val.subd )
+		{
+			bits	+= bmap_flat( val.subd, bmapflat, val.name+"_" )
+		}
+		else if( val.condsubd )
+		{
+			val.path	=pref
+
+			let maxsize	=0
+
+			for(let cond in val.condsubd )
+			{
+				let flat	=[]
+
+				let size	=bmap_flat( val.condsubd[cond], flat, pref+cond+"_" )
+
+				val.condsubd[cond]	=flat
+
+				if( size > maxsize )	maxsize	=size
+			}
+
+			val.bits	=maxsize
+
+			bmapflat.push( val )
+		}
+		else
+		{
+			val.path	=pref+val.name
+
+			val.valso	=build_valslookup( val.valsa )
+
+			bmapflat.push( val )
+
+			bits	+= val.bits
+		}
+	}
+
+	return bits
+}
+
+
+/**@return -{ size , vals :[] }[] */
+
+function fit_in_bins( vals, binsize )
+{
+	vals.sort(( a, b )=> b.bits-a.bits )
+
+	var	bins	=[]
+
+	for(var val of vals )
+	{
+		var bestbin	=null
+
+		var mingap	=binsize
+
+		for(var bin of bins )
+		{
+			var bitsused	=bin.vals.reduce(( offset, val )=> offset+val.bits , 0 )
+
+			if( bitsused + val.bits <= bin.size )
+			{
+				var gap	=bin.size - ( bitsused + val.bits )
+
+				if( gap < mingap )
+				{
+					mingap	=gap
+
+					bestbin	=bin
+				}
+			}
+		}
+
+		if( bestbin )	bestbin.vals.push( val )
+
+		else
+		{
+			if( val.bits <= binsize )
+			{
+				bins.push({ size :binsize, vals :[ val ] })
+			}
+			else
+			{
+				return bins	// should be empty
+			}
+		}
+	}
+
+	bins.splice( bins.length-1, 1, split_bin( bins.at(-1), ))
+
+	return bins.flat()
+}
+
+
+/** Put o at path in root object */
+
+function build_keys( root, path, o )
+{
+	path	=path.split('_')
+
+	var prop	=root
+
+	for(var i =0, len =path.length-1 ;i<len;i++)
+	{
+		var key	=path[i]
+
+		if( ! prop[key] )
+		{
+			prop[key]	={}
+		}
+
+		prop	=prop[key]
+	}
+
+	prop[path[i]]	=o
+
+	return root
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+function build_valslookup( valsa )
+{
+	if( ! valsa )	return
+
+	var valso	={}
+
+	for(var iv =0,lenv= valsa.length ;iv<lenv;iv++)
+	{
+		if(typeof valsa[iv] == "string" )
+		{
+			valso[valsa[iv]]	=iv
+		}
+	}
+
+	return valso
+}
+
+
+
+function split_bin( bin )
+{
+	var max	=bin.size
+
+	var bitsum	=bin.vals.reduce(( offset, val )=> offset+val.bits , 0 )
+
+	var bytes	=1
+
+	for(var top =8 ; top <= max ; top += 8 )
+	{
+		if( 8*bytes === top )
+		{
+			if( bitsum <= top )
+			{
+				return { size :top, vals :bin.vals }
+			}
+
+			bytes	<<= 1
+		}
+		else if( bitsum <= top )
+		{
+			var bins	=fit_in_bins( bin.vals, 8*(bytes>>1) )
+
+			if( ! bins.length )	return bin
+
+			return bins
+		}
+	}
+
+	return bin
+}
+
+
+/*/*
+	function slice( bmapa, starta, offset, arr, MAX, curdepth =0 )
+	{
+		var bitlen	=offset
+
+		starta[curdepth]	??=0
+
+		for(var i = starta[curdepth] ; i < bmapa.length ; i++ )
+		{
+			var val	=bmapa[i]
+
+			starta[curdepth]	=i
+
+			if( bmapa[i].subd )
+			{
+				var arr2	=[]
+
+				bitlen	+= slice( bmapa[i].subd, starta, bitlen, arr2, MAX, curdepth+1 )
+
+				if( arr2.length )
+				{
+					arr.push({
+							name	:bmapa[i].name ,
+							subd	:arr2
+						})
+					
+					if( starta[curdepth + 1] )
+					{
+						return bitlen
+					}
+				}
+				else
+				{
+					return bitlen
+				}
+			}
+			else if( bmapa[i].condsubd )
+			{
+
+			}
+			else
+			{
+				bmapa[i].offset	=bitlen
+
+				bitlen	+= bmapa[i].bits
+
+				if( bitlen <= MAX )
+				{
+					arr.push( bmapa[i] )
+				}
+				else
+				{
+					// starta[curdepth]	=i
+
+					return bitlen
+				}
+			}
+		}
+
+		starta[curdepth]	=0
+
+		return bitlen
+	}
+*/
+
+
+/*for(var prop of arr )
+	{
+		prop.offset	=offset
+
+		if( prop.subd )
+		{
+			prop.bits	=prep_bmapa( prop.subd, offset )
+		}
+		else if( prop.condsubd )
+		{
+			for(var cond in prop.condsubd )
+			{
+				prop.bits	=prep_bmapa( prop.condsubd[cond], offset )
+			}
+		}
+		else	//edge value
+		{
+			if( prop.valsa )	//create valso
+			{
+				prop.valso	={}
+
+				for(var iv =0,lenv= prop.valsa.length ;iv<lenv;iv++)
+				{
+					if(typeof prop.valsa[iv] == "string" )
+					{
+						prop.valso[prop.valsa[iv]]	=iv
+					}
+				}
+			}
+		}
+		bits	+= prop.bits
+
+		offset	+= prop.bits
+	}
+
+	return bits
+*/
