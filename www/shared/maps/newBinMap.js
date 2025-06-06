@@ -62,11 +62,7 @@ export default function( id, bmap )
 
 		Bin.prototype.setbuf. call(this, buf )
 
-		var cellsl	=C.r2cells( this.get("r") )
-
-		this.cellsl	=cellsl
-
-		if( Math.ceil(cellsl * C.bpc / 8) + C.headlen() !== buf.byteLength )	throw new Error()
+		if( this.cellsl !== C.r2cells( this.get("r") ) )	throw new Error()
 
 		return cellsl
 	}

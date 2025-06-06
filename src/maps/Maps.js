@@ -181,6 +181,6 @@ Ms.prototype. forcell	=function( fun )
 
 Ms.prototype. gshiftboards	=function( loc, r, delta, timecode )
 {
-	return { gr :this.gr.newshiftbufs( loc, r, delta, timecode ),
-				tr :this.tr.newshiftbufs( loc, r, delta, timecode ) }
+	return { gr :this.gr.newshiftboard( loc, r, delta, timecode ),
+				tr :this.tr.newshiftboard( loc, r, delta, timecode ) }
 }

@@ -33,13 +33,15 @@ export default class Map extends newBoard(newBinMap)
 
 Map.prototype. build	=function( r, maxc =0, loc =new Loc(0,0,0) )
 {
-	var C	=this.constructor
+	var Map	=this.constructor
 
-	this.bin	=new C.Bin( r, maxc, loc )
+	this.bin	=new Map.Bin( r, maxc, loc )
 
 	this._r	=this.bin.get("r")
 
 	this._loc	=new Loc()
+
+	this.obj.ready	=true
 }
 
 
@@ -79,16 +81,20 @@ Map.prototype. setbuf	=function( buf )
 }
 
 
+/** TODO */
+
 Map.prototype. setobj	=function( o, loc, r )
 {
-	this.obj.o
+	this.obj.o	=o
+
+	this.obj.ready	=true
 }
 
 
 
 Map.prototype. isready	=function()
 {
-	return Boolean( this.bin?.getbuf() )
+	return this.bin?.getbuf() && this.obj.ready
 }
 
 
@@ -140,14 +146,6 @@ Map.prototype. printarr	=function( ibuf , r=6, c )
 Map.prototype. getloc	=function()
 {
 	return this.bin.getloc( this._loc )
-}
-
-
-/**@arg {string[]} valname */
-
-Map.prototype. cmpbinval	=function( loc, valname, strval )
-{
-	this.bin.cmpval( this.ic(loc), valname, strval )
 }
 
 
@@ -287,7 +285,7 @@ Map.prototype. loch	=function( loc )
 
 Map.prototype. copycell	=function( loc, map2, loc2 )
 {
-	this.setcell_b( loc, map2.getcell_b( loc2 ) )
+	this.sbincell( loc, map2.gbincell( loc2 ) )
 
 	var str2	=loc2.tovstr()
 
@@ -308,7 +306,7 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 
 
 
-Map.prototype. getcell_b	=function( loc )
+Map.prototype. gbincell	=function( loc )
 {
 	return this.bin.getcell( this.ic(loc) )
 }
@@ -318,7 +316,7 @@ Map.prototype. gcell_b	=Map.prototype. getcell_b
 
 
 
-Map.prototype. 	setcell_b=function( loc, vals )
+Map.prototype. 	sbincell=function( loc, vals )
 {
 	this.bin.setcell( this.ic(loc), vals )
 }

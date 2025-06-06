@@ -24,9 +24,9 @@ G.prototype. gen	=function( r, maxc, trees )
 {
 	var gr	=this
 	
-	trees.build( r, maxc, new Loc( 0, 0, 1 ))
-
 	gr.build( r, maxc, new Loc(0,0,0) )
+
+	trees.build( r, maxc, new Loc( 0, 0, 1 ))
 
 	this.allsoil()
 

@@ -2,6 +2,7 @@ import newTrees from "./newTrees.js"
 
 import V from "../Vec.js"
 
+import BoMS	from "./BoardMShift.js"
 
 
 class Br
@@ -27,6 +28,8 @@ export default function( Map )
 	class TM extends newTrees(Map)
 	{
 		static Br	=Br
+
+		static MapShiftBo	=newTrees( BoMS )
 	}
 
 

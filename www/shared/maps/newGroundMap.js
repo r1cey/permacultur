@@ -1,4 +1,6 @@
-import newGround from "./newGround.js"
+import newGround	from "./newGround.js"
+
+import BoMS	from "./BoardMShift.js"
 
 
 
@@ -6,7 +8,7 @@ export default function( Map )
 {
 	class GM extends newGround(Map)
 	{
-
+		static MapShiftBo	=newGround( BoMS )
 	}
 
 	///////////////////////////////////////////////////////////////////////////

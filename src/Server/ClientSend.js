@@ -114,7 +114,7 @@ ClS.prototype. clplmov	=function( delta )
 	{
 		this.sendbin( boards[n].getbuf() )
 
-		msg.cells[n]	=boards[n].o
+		msg.cells[n]	=boards[n].obj
 	}
 
 	this.sendjson({ clplmov : msg })

@@ -8,6 +8,9 @@ import Pl	from '../Player.js'
 
 import Loc	from "../../www/shared/Loc.js"
 
+import newBo	from "../../www/shared/maps/newBoard.js"
+import newBinMShift	from "../../www/shared/maps/newBinMapShift.js"
+
 
 
 export default class Map extends ShMap
@@ -26,7 +29,7 @@ export default class Map extends ShMap
 	constructor( game )
 	{
 		super()
-		
+
 		this.game	=game
 	}
 }
@@ -96,20 +99,29 @@ Map.prototype. save	=async function( dir ="")
 		this.game?.server?.send_mapset_( this, name, loc, vals )
 	}
 
-/*
-	newshiftbufs ( loc, r, delta, timecode )
+
+	Map.prototype. newshiftboard	=function( loc, r, delta, timecode )
 	{
-		var bufs	=[]
-
-		for(var i =0,len= this.bufs.length ;i<len;i++)
-		{
-			bufs[i]	=this.bufs[i].new
-		}
-
+		var Map	=this.constructor
 
 		var cellslen	=(r << 1) + 1
+
+		var dir	=Loc.dirv2dirh( delta )
+
+		var bo	=new Map.MapShiftBo( cellslen, loc, r, dir, timecode )
+
+		var i	=0
+
+		this.fordiredge(( v )=>
+		{
+			bo.bin.setcell( i, this.gbincell( v ))
+			
+			bo.obj.push( this.obj.get(v) )
+
+		},	dir, r, loc)
+
+		return bo
 	}
-*/
 
 
 ///////////////////////////////////////////////////////////////////////////

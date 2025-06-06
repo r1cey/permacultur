@@ -4,16 +4,17 @@ import Loc	from "../Loc.js"
 ///////////////////////////////////////////////////////////////////////////////
 
 /** bmapa	-Bitmap array for values.
- * MUST have the total number of bits divisible by 8.
+ * Each value will have these properties.
 	 * name	-used for looking up
 	 * bits -bit length of this value.
 	 * valsa	-array of named values
 	 * subd	-subdivision
 	 * condsubd	-conditional subdivision based on value of previous section.
-	 * 		Make sure total bits counts match.
 	 * 		Each subdivision must be an array.
+	 * bin_i	-index of the array where the value is stored
 	 * valso	-automatically created reverse lookup of named values
-	 * offset	-automatically calculated bit offset from the beginning */
+	 * offset	-automatically calculated bit offset from the beginning
+	 * path	-used for intermediary building */
 
 export default function( id, bmapa, structadd )
 {
@@ -58,6 +59,13 @@ class Bin
 	 * Defined in derived class.
 	@static
 	@var id */
+	
+	/** Defined in derived class.
+	@static
+	@var bmap */
+
+	/**Number of cells.*/
+	cellsl	=0
 
 	////----
 
@@ -74,16 +82,11 @@ class Bin
 	/** Reverse lookup for data structure values */
 	static _structo	={ }
 
-	arrs	=[]
+	arrs	=[[]]
 
-	/**Number of cells.*/
-	get cellsl()	{return this.arrs[0].length }
-
-	
-	/** Defined in derived class.
+	/** Defined in derived class
 	@static
-	@var bmap */
-
+	@var {BitmapBin[]} bmapbins */
 	////----
 }
 
@@ -108,31 +111,52 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
 	var Bin	=this.constructor
 
-	var buf	=new ArrayBuffer( clen * Bin.bpc + Bin.headlen() )
+	var buf	=new ArrayBuffer( Bin.headlen() + clen * Bin.bpc() )
 
-	this.setdataviews( buf )
+	this.setbuf( buf, clen )
 
 	this.set("code", Bin.code)
 	this.set("id", Bin.id )
 	this.set("r", r )
 	this.setloc( loc )
 
-	this.cellsl	=clen
-
 	return buf
 }
 
 
 /** @arg {ArrayBuffer} buf
+ * @arg [clen]
  * @ret {Bin} */
 
-Bin.prototype. setbuf	=function( buf )
+Bin.prototype. setbuf	=function( buf, clen )
 {
 	var C	=this.constructor
 
 	this.setdataviews( buf )
 
+	clen	??=C.getlen( buf )
+
+	var offset	=C.headlen()
+
+	for(var i =0, len =Bin.bmapbins.length ;i<len;i++)
+	{
+		var bmbin	=Bin.bmapbins[i]
+
+		this.arrs[i]	=new globalThis["Uint"+bmbin.size+"Array"]( buf, offset, clen )
+
+		offset	+= clen * ( bmbin.size >> 3 )
+	}
+
+	this.cellsl	=clen
+
 	return this
+}
+
+
+
+Bin.prototype. getbuf	=function()
+{
+	return this.dvs.code?.buffer
 }
 
 
@@ -197,52 +221,19 @@ Bin.prototype. setval_str	=function( ic, bmapv, valstr )
 
 Bin.prototype. setval	=function( ic, bmapv, val )
 {
-	var bitoffs	=this.getcellsoffs( ic, bmapv.offset )
+	var data	=this.arrs[bmapv.bin_i]
 
-	// reminder that bitlen can't be more than 24 bits
-
-	var byteoffs	=bitoffs >> 3
-
-	try
-	{
-		var data	=this.dvs.cells.getUint32( byteoffs ,true)
-	}
-	catch(err)
-	{
-		console.error("bin.setval ERROR!! Must check it out")
-	}
-
-	if( typeof val === "string" )
-	{
-		throw new Error("find where the mistake is. Not supposed to be string")
-	}
-
-	this.dvs.cells.setUint32( byteoffs, Bin.sval( data, bitoffs - (byteoffs<<3), bmapv.bits, val ), true)
+	this.arrs[bmapv.bin_i]	=Bin.sval( data, bmapv.offset, bmapv.bits, val )
 }
 
 
 /** Get binary value.
- * Doesn't check if subdivision choice matches the written value in the buffer.
+ * Doesn't check if cond subdivision choice matches the written value in the buffer.
  * Use separate method for that. */
 
 Bin.prototype. getval	=function( ic, bmapv )
 {
-	var bitoffs	=this.getcellsoffs( ic, bmapv.offset )
-
-	// reminder that bitlen can't be more than 24 bits
-
-	var byteoffs	=bitoffs >> 3
-
-	try
-	{
-		var data	=this.dvs.cells.getUint32( byteoffs, true)
-	}
-	catch(err)
-	{
-		console.error("bin.getval ERROR!! Must check it out.")
-	}
-
-	return Bin.gval( data, bitoffs - (byteoffs<<3), bmapv.bits )
+	return Bin.gval( this.arrs[bmapv.bin_i], bmapv.offset, bmapv.bits )
 }
 
 Bin.prototype. gval	=Bin.prototype. getval
@@ -267,43 +258,31 @@ Bin. getmaxval	=function( bmapv )
 }
 
 
-
-Bin.prototype. getbuf	=function()
-{
-	return this.dvs.cells?.buffer
-}
-
-
+/** AFTER RELEASE, GET RID OF TO MAKE FASTER 
+ * this.arrs and valarr must have same length */
 
 Bin.prototype. setcell	=function( ic, valarr )
 {
-	var byteoffs	=this.getcellsoffs( ic ) >> 3
-
-	for(var val of valarr )
+	for(var i=0,len= this.arrs.length ;i<len;i++)
 	{
-		this.dvs.cells.setUint8( byteoffs, val )
-
-		byteoffs	++
+		this.arrs[i][ic]	=valarr[i]
 	}
 }
 
 
 /** Get binary value of a cell.
- * @return {array} - The binary value broken down in byte intervals */
+ * AFTER RELEASE, GET RID OF TO MAKE FASTER
+ * @return {array} - */
 
 Bin.prototype. getcell	=function( ic )
 {
 	var C	=this.constructor
 
 	var vals	=[]
-	
-	var byteoffs	=this.getcellsoffs( ic ) >> 3
 
-	for(var max= byteoffs+C.bpc ; byteoffs < max ; byteoffs ++ )
+	for(var cells of this.arrs )
 	{
-		var byte	=this.dvs.cells.getUint8( byteoffs )
-
-		vals.push( byte )
+		vals.push( cells[ic] )
 	}
 
 	return vals
@@ -313,71 +292,10 @@ Bin.prototype. getcell	=function( ic )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Get bmap entry.
- * @arg {string[]} names 
- * @return {object} *
 
-Bin. getbmapval	=function( names )
+Bin. getlen	=function( buf )
 {
-	var C	=this
-
-	var bmapv
-
-	var bmapa	=C.bmap
-
-	// for(var inm =0,lenn= names.length ;inm<lenn;inm++)
-	for(var name of names )
-	{
-		for(var bmap of bmapa )
-		{
-			var condsubd	=bmap.condsubd
-
-			if( name === bmap.name )
-			{
-				bmapa	=bmap.subd
-
-				bmapv	=bmap
-
-				break
-			}
-			else if( condsubd )
-			{
-				var foundin_condsubd	=false
-
-				for(var cond in condsubd )
-				{
-					if( name === cond )
-					{
-						bmapa	=condsubd[cond]
-
-						bmapv	=bmap
-
-						foundin_condsubd	=true
-
-						break
-					}
-				}
-
-				if( foundin_condsubd )
-				{
-					break
-				}
-			}
-		}
-	}
-
-	// if( bmap.name !== name )	throw new Error()	//used for testing
-
-	return bmapv
-}*/
-
-
-/** Get bit offset from the beginning of cells array
- * @arg [off=0]	-Offset from the beginning of cell */
-
-Bin.prototype. getcellsoffs	=function( ic, off =0 )
-{
-	return this.constructor.bpc * ic + off
+	return ( buf.byteLength - this.headlen() ) / this.bpc()
 }
 
 
@@ -421,6 +339,21 @@ Bin. headlen	=function()
 		len	+= val[1] + (val[0]==="loc")*(val[1]<<1)
 	}
 	return len >> 3
+}
+
+
+/** @return -bytes per cell */
+
+Bin. bpc	=function()
+{
+	var bpc	=0
+
+	for(var bmbin of Bin.bmapbins )
+	{
+		bpc	+= bmbin.size
+	}
+
+	return bpc>>3
 }
 
 
@@ -804,7 +737,7 @@ function split_bin( bin )
 
 	for(var top =8 ; top <= max ; top += 8 )
 	{
-		if( 8*bytes === top )
+		if( bytes<<3 === top )
 		{
 			if( bitsum <= top )
 			{
@@ -815,7 +748,7 @@ function split_bin( bin )
 		}
 		else if( bitsum <= top )
 		{
-			var bins	=fit_in_bins( bin.vals, 8*(bytes>>1) )
+			var bins	=fit_in_bins( bin.vals, bytes<<2 )//8*bytes/2
 
 			if( ! bins.length )	return bin
 
