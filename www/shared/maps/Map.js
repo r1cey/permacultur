@@ -20,10 +20,8 @@ export default class Map extends newBoard(newBinMap)
 
 	/** tricky buffer, ONLY access it through
 	 * getloc() because it can be changed to anything.
-	 * It's not defined from start because if bin arrives before obj,
-	 * I need to see that loc wasn't defined yet
 	 *@type {Loc} */	
-	_loc
+	_loc	=new Loc()
 }
 
 
@@ -35,13 +33,7 @@ Map.prototype. build	=function( r, maxc =0, loc =new Loc(0,0,0) )
 {
 	var Map	=this.constructor
 
-	this.bin	=new Map.Bin( r, maxc, loc )
-
-	this._r	=this.bin.get("r")
-
-	this._loc	=new Loc()
-
-	this.obj.ready	=true
+	this.setbin( new Map.Bin( r, maxc, loc ) )
 }
 
 
@@ -50,9 +42,9 @@ Map.prototype. setbuf	=function( buf )
 {
 	var C	=this.constructor
 
-	this.bin	=new C.Bin( buf )
+	this.setbin( new C.Bin( buf ) )
 
-	if(this._r)
+	/*if(this._r)
 	{
 		if( this._r !== this.bin.get("r") )
 		{
@@ -77,11 +69,20 @@ Map.prototype. setbuf	=function( buf )
 	else
 	{
 		this._loc	=new Loc()
-	}
+	}*/
 }
 
 
-/** TODO */
+
+Map.prototype. setbin	=function( bin )
+{
+	this.bin	=bin
+
+	this._r	=this.bin.get("r")
+}
+
+
+/** TODO *
 
 Map.prototype. setobj	=function( o, loc, r )
 {
@@ -95,7 +96,7 @@ Map.prototype. setobj	=function( o, loc, r )
 Map.prototype. isready	=function()
 {
 	return this.bin?.getbuf() && this.obj.ready
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////

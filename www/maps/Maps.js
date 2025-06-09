@@ -24,7 +24,7 @@ export default class M extends ShMaps
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
+/*
 M.prototype. onbuf	=function( buf )
 {
 	var id	=Map.codefrombuf( buf )
@@ -46,13 +46,15 @@ M.prototype. onbuf	=function( buf )
 		})
 	}
 }
+*/
+
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 M.prototype. setbuf	=function( buf, code )
 {
 	code	??=Ground.codefrombuf( buf )
@@ -60,7 +62,7 @@ M.prototype. setbuf	=function( buf, code )
 	var{ map, ibuf }	=this.frombid(code)
 
 	map.setbuf( buf, ibuf )
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////

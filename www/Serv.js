@@ -1,10 +1,10 @@
-// import Msg from './shared/Msg.js'
-
 import SrvS from './ServSend.js'
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
 import * as json from './shared/json.js'
+import Pl from "./Player.js"
+import Loc from "./shared/Loc.js"
 
 
 
@@ -18,12 +18,27 @@ export default class Serv extends SrvS
 
 	ws
 
+	rules
+
+	rev
+
 
 	constructor(client)
 	{
 		super()
 
 		this.cl	=client
+
+		this.rules	=json.newrules(
+			{
+				pl	:
+				{
+					rev :( val )=> typeof val==="string" ? client.pl : new Pl(val,client)
+				}
+			}
+		)
+
+		this.rev	=json.newrevivr( this.rules )
 	}
 }
 
@@ -113,7 +128,7 @@ Serv.prototype. onmsg	=function( ev )
 	}
 	else if(typeof msg === 'string')
 	{
-		msg	=JSON.parse(ev.data, json.newrevivr() )
+		msg	=JSON.parse(ev.data, this.rev )
 
 		let key
 
@@ -159,7 +174,7 @@ Serv.prototype. onmapbin	=function( buf )
 		return
 	}
 
-	if( mapbuf.add( bin.get("loc"), bin.get("r") ) )
+	if( mapbuf.add( bin.getloc(new Loc()), bin.get("r") ) )
 	{
 		mapbuf.bins[i]	=bin
 

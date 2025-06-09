@@ -89,6 +89,12 @@ export default function( Map )
 	}
 
 
+	GM.prototype. getveglvl	=function( loc )
+	{
+		return this.getveglvl_i( this.ic(loc))
+	}
+
+
 	///////////////////////////////////////////////////////////////////////////
 
 

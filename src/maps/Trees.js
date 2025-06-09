@@ -50,7 +50,7 @@ T.prototype. gentrees	=function( gr )
 	{
 		gr.fore(( loc )=>
 		{
-			if( gr.getvegty(loc) === Gr.e.veg.apple && gr.getveglvl(loc) >= lvl )
+			if( gr.getvegty(loc) === "apple" && gr.getveglvl(loc) >= lvl )
 			{
 				this.growtree( loc, 5 )
 			}

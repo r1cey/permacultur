@@ -2,7 +2,7 @@ import V from '../../www/shared/Vec.js'
 
 import ClG from './ClientGet.js'
 
-import Map	from "../maps/Ground.js"
+import MapG	from "../maps/Ground.js"
 
 import * as json from "../../www/shared/json.js"
 
@@ -15,7 +15,7 @@ export default class Client extends ClG
 
 	srv
 
-	tc	=new Timecode( Map.Bin.timecodelen )
+	tc	=new Timecode( MapG.Bin.timecodelen )
 
 	rtcstate	=new Map()
 	// 1:	master

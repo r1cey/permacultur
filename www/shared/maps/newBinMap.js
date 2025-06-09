@@ -64,7 +64,7 @@ export default function( id, bmap )
 
 		if( this.cellsl !== C.r2cells( this.get("r") ) )	throw new Error()
 
-		return cellsl
+		return this.cellsl
 	}
 
 

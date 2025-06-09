@@ -19,6 +19,8 @@ export default class SG
 
 /********
  * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "on_" PREFIXES 
+ * 
+ * ALSO, FRIENDLY REMINDER THAT ALL MESSAGES WILL COME AFTER JSON REVIVER!
  * ***/
 
 
@@ -50,7 +52,7 @@ SG.prototype. setpl	=function( plmsg )
 
 
 /** This is what you see.
- * @arg o
+ * @arg msg
  * @arg o.loc
  * @arg o.r
  * @arg {Array} o.obj	-[gr, tr]
@@ -58,9 +60,9 @@ SG.prototype. setpl	=function( plmsg )
 
 SG.prototype. setmap	=function( msg )
 {
-	if( this.mapbuf.add( new Loc(o.loc), o.r ) )
+	if( this.mapbuf.add( msg.loc, msg.r ) )
 	{
-		this.mapbuf.objs	=o.obj
+		this.mapbuf.objs	=msg.obj
 
 		this.mapbuf.isready()
 	}
@@ -284,8 +286,8 @@ class Mapbuf
 
 	r
 
-	bins	=[]
-	objs	=[]
+	bins	=[0,0]
+	objs	=[0,0]
 
 
 	constructor( srv )

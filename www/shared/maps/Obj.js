@@ -8,8 +8,6 @@ export default class Obj
 
 	o	={}
 
-	ready	=false
-
 
 	constructor( map )
 	{

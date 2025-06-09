@@ -58,7 +58,7 @@ ClS.prototype. setmap	=function()
 				,
 				r	:pl.vision
 			}
-		}, jsonrule )
+		}, json.newreplcr(jsonrule) )
 }
 
 

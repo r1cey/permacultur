@@ -106,6 +106,13 @@ export default function( Map )
 	}
 
 
+
+	TM.prototype. getbrdir	=function( loc )
+	{
+		return getbrdir_i( this.ic(loc))
+	}
+
+
 	///////////////////////////////////////////////////////////////////////////
 
 

@@ -25,3 +25,4 @@ export default class Map extends ShMap
 		return m*x + y1 - m*x1
 	}
 }
+

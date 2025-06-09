@@ -101,7 +101,7 @@ Bin. getcode	=function( buf )
 
 Bin. getid	=function( buf )
 {
-	return new DataView( buf )["getUint"+this._structarr[1][1]](0, true)
+	return new DataView( buf, this._structarr[0][1]>>3 )["getUint"+this._structarr[1][1]](0, true)
 }
 
 
@@ -109,14 +109,14 @@ Bin. getid	=function( buf )
 
 Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 {
-	var Bin	=this.constructor
+	var C	=this.constructor
 
-	var buf	=new ArrayBuffer( Bin.headlen() + clen * Bin.bpc() )
+	var buf	=new ArrayBuffer( C.headlen() + clen * C.bpc() )
 
-	this.setbuf( buf, clen )
+	Bin.prototype.setbuf. call(this, buf, clen )
 
-	this.set("code", Bin.code)
-	this.set("id", Bin.id )
+	this.set("code", C.code)
+	this.set("id", C.id )
 	this.set("r", r )
 	this.setloc( loc )
 
@@ -130,13 +130,13 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 
 Bin.prototype. setbuf	=function( buf, clen )
 {
-	var C	=this.constructor
+	var Bin	=this.constructor
 
 	this.setdataviews( buf )
 
-	clen	??=C.getlen( buf )
+	clen	??=Bin.getlen( buf )
 
-	var offset	=C.headlen()
+	var offset	=Bin.headlen()
 
 	for(var i =0, len =Bin.bmapbins.length ;i<len;i++)
 	{
@@ -221,9 +221,9 @@ Bin.prototype. setval_str	=function( ic, bmapv, valstr )
 
 Bin.prototype. setval	=function( ic, bmapv, val )
 {
-	var data	=this.arrs[bmapv.bin_i]
+	var data	=this.arrs[bmapv.bin_i][ic]
 
-	this.arrs[bmapv.bin_i]	=Bin.sval( data, bmapv.offset, bmapv.bits, val )
+	this.arrs[bmapv.bin_i][ic]	=Bin.sval( data, bmapv.offset, bmapv.bits, val )
 }
 
 
@@ -233,7 +233,7 @@ Bin.prototype. setval	=function( ic, bmapv, val )
 
 Bin.prototype. getval	=function( ic, bmapv )
 {
-	return Bin.gval( this.arrs[bmapv.bin_i], bmapv.offset, bmapv.bits )
+	return Bin.gval( this.arrs[bmapv.bin_i][ic], bmapv.offset, bmapv.bits )
 }
 
 Bin.prototype. gval	=Bin.prototype. getval
@@ -348,7 +348,7 @@ Bin. bpc	=function()
 {
 	var bpc	=0
 
-	for(var bmbin of Bin.bmapbins )
+	for(var bmbin of this.bmapbins )
 	{
 		bpc	+= bmbin.size
 	}

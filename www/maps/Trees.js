@@ -1,6 +1,6 @@
-import newShTr	from "../shared/maps/newTrees.js"
+import newShTrM	from "../shared/maps/newTreesMap.js"
 import Map	from './Map.js'
-import newBin from "../shared/maps/newBinMap.js"
+import newBinM from "../shared/maps/newBinMap.js"
 import Gr from "./Ground.js"
 
 import V	from "../shared/Vec.js"
@@ -8,7 +8,7 @@ import Col	from "../shared/Color.js"
 
 
 
-const TrBase	=newShTr( Map )
+const TrBase	=newShTrM( Map )
 
 
 var bmap	=
@@ -19,7 +19,7 @@ var bmap	=
 		bits	:Gr.Bin.bmap.plfl.plant.lvl.bits
 	},
 	{
-		name	:"lvs"	// what's that?
+		name	:"lvs"	// leaves
 		,
 		bits	:1
 	}
@@ -29,13 +29,15 @@ var bmap	=
 export default class Tr extends TrBase
 {
 	/** Additional binary map for faster client drawing. */
-	bincl	=newBin( 0, bmap )
+	bincl
 
 	can	=new OffscreenCanvas(0,0)
 	
 	ctx	=this.can.getContext('2d')
 
 	_path	=new Path2D()	//used to draw branches
+
+	static Bincl	=newBinM( 0, bmap )
 }
 
 
@@ -43,39 +45,29 @@ export default class Tr extends TrBase
 
 
 
-Tr.prototype. setbuf	=function( buf, code )
+Tr.prototype. setbin	=function( bin )
 {
-	TrBase.prototype.setbuf.call( this, buf, code )
-
 	var map	=this
 
-	if( ! map.bufs[Tr.ibfromp.branch] )
-	{
-		return
-	}
+	TrBase.prototype.setbin. call(this, bin )
 
-	var i	=Tr.Bufs.length - 1
-
-	map.bufs[i]	=new (Tr.Bufs[i])().new( map.cellsl() )
-
-	map.setloc( map.getloc() )
+	this.bincl	=new Tr.Bincl( this._r, bin.cellsl, this.getloc() )
 
 	var v	=new V()
 
 	map.fore(( loc )=>
 	{
-		var ic	=map.i(loc)
+		var ic	=map.ic(loc)
 		
-		var brt	=map.getbranchti(ic)
-
-		if( brt === Tr.e.branch.stem || brt === Tr.e.branch.b )
+		switch( map.getfloorty_i(ic) )
 		{
-			map.paintleaves( loc, v )
+			case "branch" :
 
-			if( brt === Tr.e.branch.b )
-			{
 				map.endbranchcalc( loc, v )
-			}
+
+			case "trunk" :
+
+				map.paintleaves( loc, v )
 		}
 	})
 
@@ -119,17 +111,17 @@ Tr.prototype. draw	=function( can, pl )
 	{
 		if( ! this.inside(loc) )	return
 
-		var ic	=map.i( loc )
+		var ic	=map.ic( loc )
 
 		// vsq.set(loc).tosqc( can )
 
-		switch( map.getbranchti( ic ))
+		switch( map.getfloorty_i( ic ))
 		{
-			case Tr.e.branch.stem :
+			case "trunk" :
 
 				can.maps.gr.drawstem( can, loc, null, ic, col )
 			break;
-			case Tr.e.branch.b :
+			case "branch" :
 
 				drawbranch( loc, ic )
 			break;
@@ -157,7 +149,7 @@ Tr.prototype. draw	=function( can, pl )
 
 	function drawbranch( loc, ic )
 	{
-		var odir	=map.getbranchdi( ic )
+		var odir	=map.getbrdir_i( ic )
 
 		// var ctx	=map.ctx
 
@@ -166,7 +158,7 @@ Tr.prototype. draw	=function( can, pl )
 		ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.3
 
 
-		var lvl	=map.getbrsizei(ic)
+		var lvl	=map.getbrsize_i(ic)
 
 		// if(lvl===1)	debugger
 
@@ -280,7 +272,11 @@ Tr.prototype. draw	=function( can, pl )
 
 Tr.prototype. setbrsize	=function( loc, size )
 {
-	this.setbprop( this.i(loc), 'size', 0, size )
+	this.setbrsize_i( this.ic(loc), size )
+}
+Tr.prototype. setbrsize_i	=function( ic, size )
+{
+	this.bincl.setval( ic, Tr.Bincl.bmap.size, size )
 }
 
 
@@ -288,11 +284,11 @@ Tr.prototype. setbrsize	=function( loc, size )
 
 Tr.prototype. getbrsize	=function( loc )
 {
-	return this.getbrsizei(this.i(loc))
+	return this.getbrsize_i(this.ic(loc))
 }
-Tr.prototype. getbrsizei	=function( ic )
+Tr.prototype. getbrsize_i	=function( ic )
 {
-	return this.getbprop( ic, "size", 0 )
+	return this.bincl.getval( ic, Tr.Bincl.bmap.size )
 }
 
 
@@ -300,11 +296,11 @@ Tr.prototype. getbrsizei	=function( ic )
 
 Tr.prototype. setleaves	=function( loc, val )
 {
-	this.setleavesi( this.i(loc), val )
+	this.setleaves_i( this.ic(loc), val )
 }
-Tr.prototype. setleavesi	=function( ic, val )
+Tr.prototype. setleaves_i	=function( ic, val )
 {
-	this.setbprop(ic, "lvs", 0, val )
+	this.bincl.setval( ic, Tr.Bincl.bmap.lvs, val )
 }
 
 
@@ -312,11 +308,11 @@ Tr.prototype. setleavesi	=function( ic, val )
 
 Tr.prototype. getleaves	=function( loc )
 {
-	return this.getleavesi( this.i(loc) )
+	return this.getleaves_i( this.ic(loc) )
 }
-Tr.prototype. getleavesi	=function( ic )
+Tr.prototype. getleaves_i	=function( ic )
 {
-	return this.getbprop( ic, "lvs", 0 )
+	return this.bincl.getval( ic, Tr.Bincl.bmap.lvs )
 }
 
 
@@ -330,41 +326,37 @@ Tr.prototype. shift	=function( dir, ...args )
 
 	var v	=new V()
 
-	var brts	=Tr.e.branch
-
 	map.fordiredge(( loc )=>
 	{
-		var ic	=map.i(loc)
+		var ic	=map.ic(loc)
 		
-		var brt	=map.getbranchti( ic )
-
-		switch( brt )
+		switch( map.getfloorty_i( ic ) )
 		{
-			case brts.none :
+			case "none" :
 
 				for(var dir=0; dir<6; dir++)
 				{
 					if( ! map.inside( v.set(loc).neighh(dir) ))	continue
 
-					switch( map.getbranchti( v ))
+					switch( map.getfloorty( v ))
 					{
-						case brts.stem :
-						case brts.b :
+						case "trunk" :
+						case "branch" :
 
-							map.setleavesi( ic, 1 )
+							map.setleaves_i( ic, 1 )
 
 							break
 					}
 				}
 			break
-			case brts.stem :
-			case brts.b :
+			case "trunk" :
+			case "branch" :
 
 				map.paintleaves( loc, v )
 
 				if( brt !== brts.b )	break
 
-				if( map.getbrsizei(ic) )	break
+				if( map.getbrsize_i(ic) )	break
 
 				if( ! map.endbranchcalc( loc, v ))
 				{
@@ -393,11 +385,11 @@ Tr.prototype. paintleaves	=function( loc, v )
 	{
 		if( this.inside( v.set(loc).neighh(dir) ))
 		{
-			var ic	=this.i(v)
+			var ic	=this.ic(v)
 
 			// if( this.getbranchti( ic ) === Tr.e.branch.none )
 			{
-				this.setleavesi( ic , 1 )
+				this.setleaves_i( ic , 1 )
 			}
 		}
 	}
@@ -413,7 +405,7 @@ Tr.prototype. endbranchcalc	=function( loc, v )
 
 	for(var dir=0; dir<6; dir++ )
 	{
-		if( map.nextbranch( v.set(loc).neighh(dir), dir ))
+		if( map.isnextbr( v.set(loc).neighh(dir), dir ))
 		{
 			return false
 		}
@@ -427,11 +419,11 @@ Tr.prototype. endbranchcalc	=function( loc, v )
 	{
 		map.setbrsize( v, size )
 
-		v.neighh( V.rotopph( map.getbranchd( v )))
+		v.neighh( V.rotopph( map.getbrdir( v )))
 
 		if( ! map.inside(v) ) break
 
-		if( map.getbrancht( v ) !== Tr.e.branch.b )	break
+		if( map.getfloorty( v ) !== "branch" )	break
 
 		size ++
 
@@ -459,9 +451,9 @@ Tr.prototype. calcbrsizes	=function( loc )
 
 		var ic	=map.i( loc )
 
-		if( map.nextbranchi( ic, dir ))
+		if( map.isnextbr_i( ic, dir ))
 		{
-			var size2	=map.getbrsizei( ic ) || map.calcbrsizes( loc )
+			var size2	=map.getbrsize_i( ic ) || map.calcbrsizes( loc )
 
 			if( size2 >= size )
 			{

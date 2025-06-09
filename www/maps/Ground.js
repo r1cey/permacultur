@@ -1,4 +1,4 @@
-import newShGr	from "../shared/maps/newGround.js"
+import newShGrM	from "../shared/maps/newGroundMap.js"
 import Map	from './Map.js'
 
 import V	from "../shared/Vec.js"
@@ -7,7 +7,7 @@ import Col	from "../shared/Color.js"
 
 
 
-export default class Gr extends newShGr( Map )
+export default class Gr extends newShGrM( Map )
 {
 }
 
@@ -66,53 +66,62 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 	var max
 
-	var lvl	=map.getsoilhumi( ic )
+	var lvl
 
-	if( lvl >= 0 )
+	switch( map.getwsr_i( ic ) )
 	{
-		col.sethsl( 57, 16, 42)	// 2, 47, 10
+		case "soil" :
 
-		max	=Gr.maxhum()
+			lvl	=map.getsoilhum_i( ic )
 
-		col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
+			col.sethsl( 57, 16, 42)	// 2, 47, 10
 
-		can.fillhex( vsq, col.str() )
+			max	=Gr.maxhum()
 
-		if( can.showlvls )
-		{
-			can.ctx.fillStyle="#FFFFFF"
+			col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
 
-			can.ctx.fillText( lvl, vsq.x, vsq.y )
-		}
+			can.fillhex( vsq, col.str() )
 
-		if( map.isvegi( ic ))
-		{
-			switch( map.getvegti( ic ) )
+			if( can.showlvls )
 			{
-				case Gr.e.veg.apple:
+				can.ctx.fillStyle="#FFFFFF"
 
-					map.drawstem( can, loc, vsq, ic, col )
+				can.ctx.fillText( lvl, vsq.x, vsq.y )
 			}
-		}
-	}
-	else if( lvl =map.gwateri(ic) )
-	{
-		col.sethsl( 179, 34, 45 )	// 269, 45, 10
 
-		max	=Gr.maxwater()-1
+			switch( map.getplfl_i( ic ))
+			{
+				case "plant" :
 
-		lvl--
+					switch( map.getvegty_i( ic ) )
+					{
+						case "apple":
 
-		col.add( lvl*90/max, lvl*11/max, lvl*(-35)/max )
+							map.drawstem( can, loc, vsq, ic, col )
+					}
+			}
+		break
 
-		can.fillhex( vsq, col.str() )
+		case "water" :
 
-		if( can.showlvls )
-		{
-			can.ctx.fillStyle="#FFFFFF"
+			lvl =map.getwaterlvl_i(ic)
+		
+			col.sethsl( 179, 34, 45 )	// 269, 45, 10
 
-			can.ctx.fillText( lvl, vsq.x, vsq.y )
-		}
+			max	=Gr.maxwater()-1
+
+			lvl--
+
+			col.add( lvl*90/max, lvl*11/max, lvl*(-35)/max )
+
+			can.fillhex( vsq, col.str() )
+
+			if( can.showlvls )
+			{
+				can.ctx.fillStyle="#FFFFFF"
+
+				can.ctx.fillText( lvl, vsq.x, vsq.y )
+			}
 	}
 
 	if( can.showslopes )
@@ -147,7 +156,7 @@ Gr.prototype. drawstem	=function( can, loc, vsq, ic, col )
 
 	ic	??=map.i(loc)
 
-	var lvl	=map.getveglvli(ic)
+	var lvl	=map.getveglvl_i(ic)
 
 	var max	=Gr.maxveglvl()
 

@@ -118,6 +118,11 @@ export default function( Base )
 	}
 
 	
+	Gr.prototype. getwsr_i	=function( ic )
+	{
+		return this.bin.getval_str( ic, Gr.Bin.bmap.wsr.ty )
+	}
+	
 
 	Gr.prototype. setsoil_i	=function( ic, lvl )
 	{
@@ -168,6 +173,12 @@ export default function( Base )
 		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.plant.ty, type )
 
 		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.lvl, lvl )
+	}
+
+
+	Gr.prototype. getplfl_i	=function( ic )
+	{
+		return this.bin.getval_str( ic, Gr.Bin.bmap.plfl.ty )
 	}
 
 

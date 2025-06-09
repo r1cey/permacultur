@@ -84,13 +84,11 @@ Client.prototype. setmaps	=function( grbin, grobj, trbin, trobj )
 {
 	var maps	=this.maps
 
-	debugger
-
-	maps.gr.setbuf( grbin )
+	maps.gr.setbin( grbin )
 
 	maps.gr.obj.o	=grobj
 
-	maps.tr.setbuf( grbin )
+	maps.tr.setbin( trbin )
 
 	maps.tr.obj.o	=grobj
 

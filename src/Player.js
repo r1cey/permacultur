@@ -1,11 +1,11 @@
 import PlMsg from '../www/shared/Player.js'
 import V from '../www/shared/Vec.js'
 
-import NS from '../www/shared/NSpace.js'
-
 import Loc from './Loc.js'
 
 import * as fs	from './fs.js'
+
+import * as json from "../www/shared/json.js"
 
 /*
 const SrvPl	=(c) => class extends c
@@ -86,7 +86,7 @@ Player.prototype. save	=async function( dir )
 {
 	var pa	=dir+this.name+'.json'
 
-	await fs.savejson( pa, this )
+	await fs.savejson( pa, this, json.newreplcr() )
 }
 
 
