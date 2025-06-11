@@ -37,7 +37,9 @@ const ClPl =(c) => class extends c
 	{
 		var pl	=this
 
-		var oldloc	=this.loc.c()
+		var newpos	=new Loc()
+
+		var newloc	=new Loc()
 
 		var dv	=this.dest.c().subv(this.pos)
 
@@ -47,7 +49,7 @@ const ClPl =(c) => class extends c
 		}
 		else if(dv.disth() < 0.1 )
 		{
-			this.pos.set(this.dest)
+			newpos.set(this.dest)
 		}
 		else
 		{
@@ -67,35 +69,39 @@ const ClPl =(c) => class extends c
 
 			if( pl.water <= 0 )	mul=0.08
 
-			this.pos.addv(dv.mul( mul ))
+			newpos.set(this.pos).addv(dv.mul( mul ))
 		}
 		
-		this.loc.set( this.pos ).roundh()
+		newloc.set( newpos ).roundh()
 
-		// console.log(this.pos, this.loc, oldloc)
-
-		if( this.loc.eq( oldloc ) )
+		if( ! this.loc.eq( newloc ) )
 		{
-			return false
+			if( this.onmov( newloc ) )
+			{
+				this.pos.set( newpos )
+
+				this.loc.set( newloc )
+			}
 		}
-		
-		return true
 	}
+
+
+	onmov()	{return true }
 }
 
 
 
 class PlVis extends ClPl( PlVSh )
 {
-	step( dt )
+	onmov( newloc )
 	{
-		if( super.step( dt ))
+		if( ! this.lcl.pl.sees( newloc ))
 		{
-			if( ! this.lcl.pl.sees( this.loc ))
-			{
-				delete this.lcl.vispls[this.name]
-			}
+			delete this.lcl.vispls[this.name]
 		}
+		
+		return true
+
 		/*var clpl	=this.lcl.pl
 
 		if( ! (clpl.sees(this.loc) || clpl.sees(this.dest)) )
@@ -115,19 +121,23 @@ PlVis.prototype. newcl	=function()
 
 export default class Player extends ClPl( PlSh )
 {
+	/** Is tile move acknowledged from server? */
+	ismovack	=true
+
 	static Vis	=PlVis
 
 
-	step( dt )
+	onmov( newloc )
 	{
-		if( super.step( dt ))
+		if( this.ismovack )
 		{
-			// this.lcl.srv.s.json({ mov: { dir: }})
+			this.ismovack	=false
 
-			this.lcl.srv.s.mov( this.loc )
+			this.lcl.srv.send_mov( newloc )
 
-			// pl.moved( V.dirv2dirh( oldloc.neg().addv(pl.loc) ) )
+			return true
 		}
+		return false
 	}
 }
 

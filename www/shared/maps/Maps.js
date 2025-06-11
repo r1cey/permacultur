@@ -16,24 +16,28 @@
 
 export default class Maps
 {
-	ground
+	/** Define in derived
+	@var ground */
 	
 	get gr()	{return this.ground }
 
-	trees
+	/** Define in derived
+	@var trees */
 
 	get tr()	{return this.trees }
 
-	Tr()	{return this.ground.constructor }
 
-	Gr()	{return this.trees.constructor }
+	/** Define in derived
+	@static
+	@var Ground */
+
+	/** Define in derived
+	@static
+	@var Trees */
 
 
-	constructor( gr, tr )
+	constructor()
 	{
-		this.ground	=gr
-
-		this.trees	=tr
 	}
 }
 

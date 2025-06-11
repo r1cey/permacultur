@@ -114,7 +114,7 @@ export default function( Base )
 
 	Gr.prototype. nemptycell_i	=function( ic )
 	{
-		return Boolean( this.bin.getval( ic, Gr.Bin.bmap.wsr.ty ) )
+		return this.bin.getval( ic, Gr.Bin.bmap.wsr.ty )
 	}
 
 	
@@ -122,7 +122,7 @@ export default function( Base )
 	{
 		return this.bin.getval_str( ic, Gr.Bin.bmap.wsr.ty )
 	}
-	
+
 
 	Gr.prototype. setsoil_i	=function( ic, lvl )
 	{

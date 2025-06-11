@@ -106,9 +106,11 @@ Map.prototype. isready	=function()
  *Can optimize by making special case for server maps by testing for
  *distance from 0,0 */
 
-Map.prototype. isplmov	=function( dest )
+Map.prototype. isplmov	=function( dest, pl )
 {
-	return ! this.obj.g(dest)?.pl && this.inside( dest )
+	var mpl	=this.obj.g(dest)?.pl
+
+	return ( ! mpl || mpl === pl ) && this.inside( dest )
 }
 
 

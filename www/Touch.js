@@ -76,6 +76,8 @@ Touch.prototype. onmove	=function( ev )
 {
 	var tch	=this
 
+	// console.log(tch.pos)
+
 	tch.pos.setev( ev )
 
 	return tch.stopslct(ev)

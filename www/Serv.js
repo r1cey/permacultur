@@ -18,9 +18,9 @@ export default class Serv extends SrvS
 
 	ws
 
-	rules
+	rev	//reviver
 
-	rev
+	buf	=new Buf(this)
 
 
 	constructor(client)
@@ -29,7 +29,7 @@ export default class Serv extends SrvS
 
 		this.cl	=client
 
-		this.rules	=json.newrules(
+		var rules	=json.newrules(
 			{
 				pl	:
 				{
@@ -38,7 +38,7 @@ export default class Serv extends SrvS
 			}
 		)
 
-		this.rev	=json.newrevivr( this.rules )
+		this.rev	=json.newrevivr( rules )
 	}
 }
 
@@ -113,17 +113,15 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		// debugger
 
-		let BinM	=this.cl.maps.gr.constructor.Bin
+		let code	=Gr.Bin.getcode( msg )
 
-		let code	=BinM.getcode( msg )
+		switch( code )
+		{
+			case Gr.Bin.code :
 
-		if( code === BinM.code )
-		{
-			this.onmapbin( msg )
-		}
-		else if( code === 2 )
-		{
-			this.onmapshiftbin( msg )
+			case Gr.MapShiftBo.Bin.code :
+		
+				this.buf.addbinbuf( msg, code )
 		}
 	}
 	else if(typeof msg === 'string')
@@ -145,39 +143,67 @@ Serv.prototype. onmsg	=function( ev )
 
 
 
-Serv.prototype. onmapbin	=function( buf )
+class Buf
 {
-	var mapbuf	=this.mapbuf
+	a	=[]
+}
 
-	var maps	=this.cl.maps
 
-	var Bins	=[ maps.gr.constructor.Bin, maps.tr.constructor.Bin ]
 
-	var bin
+Buf.prototype. addbinbuf	=function( bbuf, code )
+{
+	var id	=Gr.Bin.getid( bbuf )
 
-	var id	=Bins[0].getid( buf )
-
-	for(var i =0,len= Bins.length ;i<len;i++)
+	for(var Class of [Gr, Tr] )
 	{
-		if( id === Bins[i].id )
-		{
-			bin	=new Bins[i]( buf )
+		if( Class.Bin.id === id )	break
+	}
 
-			break
+	var Bins	=[ Class.Bin, Class.MapShiftBo.Bin ]
+
+	for(var Bin of Bins )
+	{
+		if( Bin.code === code )	break
+	}
+
+	var bin	=new Bin(bbuf)
+
+	var loc	=bin.getloc(new Loc())
+
+	var r	=bin.get("r")
+
+	var dir	=code === Bins[1].code ? bin.get("dir") : -1
+
+	for(var i=0,len= this.a.length ;i<len;i++)
+	{
+		var buf	=this.a[i]
+
+		if( loc.eq(buf.loc) && r === buf.r && dir === buf.dir )
+		{
+			buf[Class.name]	=bin
+
+			return this.iscomplete( i, buf )
 		}
 	}
 
-	if( i >= len )
+	this.a.push({ loc, r, dir, [Class.name] : bin })
+}
+
+
+
+Buf.prototype. iscomplete	=function( i, buf )
+{
+	if( buf.Gr && buf.Tr )
 	{
-		console.error(`srv.onmapbin : wrong id : ${id}`)
+		if( buf.dir >= 0 )
+		{
+			this.srv.cl.maps.shift( buf )
+		}
+		else
+		{
+			this.cl.setmaps( buf.Gr, , buf.Tr )
+		}
 
-		return
-	}
-
-	if( mapbuf.add( bin.getloc(new Loc()), bin.get("r") ) )
-	{
-		mapbuf.bins[i]	=bin
-
-		mapbuf.isready()
+		this.a.splice( i, 1 )
 	}
 }

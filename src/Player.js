@@ -128,7 +128,7 @@ Player.prototype. mov	=function( newloc )
 
 	var map	=this.map()
 
-	if( ! map.isplmov( newloc ))
+	if( ! map.isplmov( newloc, pl ))
 	{
 		pl.cl?.send_error( "Can't move there." )
 
@@ -149,7 +149,7 @@ Player.prototype. mov	=function( newloc )
 		return true
 	})
 
-	map.deloprop( loc, "pl" )
+	map.obj.del( loc, "pl" )
 
 	// var dir	=Loc.dirv2dirh(loc.subv(newloc).neg())
 
@@ -157,7 +157,7 @@ Player.prototype. mov	=function( newloc )
 
 	pl.loc	=newloc
 
-	map.scello(newloc).pl	=this
+	map.obj.set(newloc).pl	=this
 
 	this.srv()?.send_plmov( this, newloc, oldloc )
 
@@ -167,9 +167,9 @@ Player.prototype. mov	=function( newloc )
 
 		map.fore(( loc )=>
 		{
-			if( map.gwater(loc) )
+			if( map.iswater(loc) )
 			{
-				pl.setwater( 1 )
+				// pl.setwater( 1 )	// reinstate later
 
 				return true
 			}

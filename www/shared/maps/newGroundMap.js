@@ -14,15 +14,19 @@ export default function( Map )
 	///////////////////////////////////////////////////////////////////////////
 
 
-	GM.prototype. isplmov	=function( dest )
+	GM.prototype. isplmov	=function( dest, pl )
 	{
 		var ic	=this.ic(dest)
 
-		return this.nemptycell_i(ic) && Map.prototype.isplmov.call(this, dest) &&
+		var plfl	=GM.Bin.bmap.plfl
+
+		return this.nemptycell_i(ic) && Map.prototype.isplmov.call(this, dest, pl ) &&
 		
-			! ( this.bin.cmpval( ic, ["plfl","plant","ty"], "apple" ) &&
+			! ( this.bin.getval( ic, plfl.ty ) === "plant" &&
+				
+				this.bin.getval( ic, plfl.plant.ty ) === "apple" &&
 			
-				this.bin.gval( ic, ["plfl","plant","lvl"] ) > 1 )
+				this.bin.getval( ic, plfl.plant.lvl ) > 1 )
 	}
 
 

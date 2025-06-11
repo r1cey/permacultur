@@ -71,7 +71,7 @@ SS.prototype. newplayer	=function( o )
 
 SS.prototype. mov	=function( loc )
 {
-	this.sendjson({ mov: { loc: loc.newarr() } })
+	this.sendjson({ mov: { loc } })
 }
 
 

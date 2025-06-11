@@ -99,7 +99,7 @@ Can.prototype. start	=function()
 
 	// var el	=can.el
 	
-	if(can.time)	return
+	if( can.time )	return
 	
 	var html	=can.html
 
@@ -143,7 +143,7 @@ Can.prototype. start	=function()
 
 Can.prototype. stop	=function()
 {
-	can.animate	=false
+	this.animate	=false
 }
 
 
@@ -267,7 +267,7 @@ Can.prototype. frame	=function(now)
 		
 		tch.last.set(tch.pos)
 
-		if( pl.gmap().isplmov( destloc ) )
+		if( pl.gmap().isplmov( destloc, pl ) )
 		{
 			pl.dest.setv( dest )
 		}

@@ -23,9 +23,10 @@ export default class ClG extends ClS
 
 ClG.prototype. mov	=function( o )
 {
-	var loc	=Loc.fromJSON( o.loc )
+	// var loc	=Loc.fromJSON( o.loc )
 	
-	if( loc )	this.pl.mov( loc )
+	// if( loc )	
+		this.pl.mov( o.loc )
 }
 
 /** Relay WRTC message between clients through the server.

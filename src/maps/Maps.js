@@ -23,11 +23,15 @@ export default class Ms extends shMaps
 	game
 
 
+	static Ground	=Ground
+
+	static Trees	=Trees
 
 
 	constructor( game )
 	{
-		super(new Ground( game ) ,new Trees( game ))
+		this.ground	=new Ground( game )
+		this.trees	=new Trees( game )
 
 		this.game	=game
 	}

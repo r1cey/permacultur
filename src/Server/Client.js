@@ -22,6 +22,7 @@ export default class Client extends ClG
 	// 2:	slave
 	// BDSM
 
+	jsonrev	//json reviver
 
 	constructor(ws, pl, srv )
 	{
@@ -39,6 +40,8 @@ export default class Client extends ClG
 		ws.on( 'message', this.onmsg. bind(this))
 
 		ws.on('close', this.onclose. bind(this))
+
+		this.jsonrev	=json.newrevivr()
 	}
 }
 
@@ -51,7 +54,7 @@ Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var msg	=JSON.parse( data.toString() , json.newrevivr())
+	var msg	=JSON.parse( data.toString() , this.jsonrev )
 
 	for(var prop in msg )
 	{

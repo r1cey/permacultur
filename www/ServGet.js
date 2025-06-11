@@ -8,9 +8,7 @@ import Maps	from './maps/Maps.js'
 
 export default class SG
 {
-	mapbuf	=new Mapbuf(this)
-
-	// mapshbuf	=new Mapshbuf()
+	
 }
 
 
@@ -60,6 +58,8 @@ SG.prototype. setpl	=function( plmsg )
 
 SG.prototype. setmap	=function( msg )
 {
+	this.buf.addobj( msg )
+
 	if( this.mapbuf.add( msg.loc, msg.r ) )
 	{
 		this.mapbuf.objs	=msg.obj
@@ -352,204 +352,11 @@ Mapbuf.prototype. isready	=function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/*
-Deencap.prototype. onbuf	=function( buf )
+
+class Mapshbuf extends Mapbuf
 {
-	var Map	=Maps.Ground
-
-	var code	=Map.codefrombuf( buf )
-
-	var time	=Map.timefromcode( code )
-
-	var deenc_inst	=this.getdeencinst( time )
-
-	var id	=Map.idfromcode( code ) - 1
-
-	deenc_inst.bufarr[id]	=buf
-
-	this.ready( time )
-
-	/*let movcode	=code>>8
-
-	if(movcode)
-	{
-		cl.maps.shift( msg, movcode )
-	}
-	else
-	{
-		cl.setbuf( msg, code )
-	}*
 }
 
-
-
-Deencap.prototype. onobj	=function( o )
-{
-	var deenc_inst	=this.getdeencinst( o.timecode )
-
-	deenc_inst.o	=o
-
-	this.ready( o.timecode )
-}
-
-
-/** Never call directly. Is checked by .ready() method */
-/*
-Deencap.prototype. onready	=function( timecode )
-{
-	var inst	=this.times[timecode]
-
-	if( "delta" in inst.o )
-	{
-		this.srv.onmapshift( inst )
-	}
-	else
-	{
-		this.srv.onnewmap( inst )
-	}
-}
-
-
-/*
-Msb.prototype. addbuf	=function( buf, code, movcode )
-{
-	var ms	=this
-
-	// debugger
-
-	var Map	=ms.srv.cl.maps.gr.constructor
-
-	code	??=Map.codefrombuf( buf )
-
-	movcode	??=code>>8
-
-	var timecode	=code & 255
-
-	if( ! ms.timecode )
-	{
-		ms.timecode	=timecode
-	}
-
-	if( ms.timecode !== timecode )	return
-	
-	var head	=Map.Bufs[0].newheadarr( buf )
-
-	var ibuf	=movcode<3 ? movcode-1 : movcode-3
-
-	var imap	=movcode<3 ? 0 : 1
-
-	this.bufs[imap][ibuf]	=buf
-	
-	this.ifready()
-}
-
-
-
-
-Msb.prototype. ifready	=function()
-{
-	var maps	=this.srv.cl.maps
-
-	// debugger
-
-	var { bufs, o }	=this
-
-	maps.fore(( map )=>
-	{
-		var h	=map.getloc().h
-
-		var len	=map.constructor.Msg.Bufs.length
-
-		for(var i=0; i<len; i++)
-		{
-			if( ! bufs[h][i] )	return
-		}
-	})
-
-	if( ! o )	return
-
-	/** Enter checks for information in buffer here *
-
-	var pl	=this.srv.cl.pl
-
-	var loc	=Loc.seta(o.loc)
-
-	if( ! pl.loc.eq( loc ) )
-	{
-		console.log( `RECEIVED WRONG LOCATION!!!`)
-
-		pl.dest.set(loc)
-	}
-	if( pl.vision !== o.r )
-	{
-		console.log(`VISION CHANGED UNEXPECTEDLY! Might be lag. Deal with it.`)
-
-		pl.vision	=o.r
-	}
-
-	var arrs	=[]
-
-	for(var im=0; im<bufs.length; im++)
-	{
-		arrs[im]	=[]
-
-		var map	=im ? maps.tr : maps.gr
-
-		for(var ib=0; ib<bufs[im].length; ib++)
-		{
-			arrs[im][ib]	=new map.bufs[ib].constructor.Arr(
-				
-				bufs[im][ib], 12, (o.r<<1)+1
-			)
-		}
-	}
-
-	maps.shift( arrs, o.cells, Loc.dirv2dirh(Loc.seta(o.delta)) )
-
-	this.timecode	=0
-
-	this.bufs[0].length	=0
-	this.bufs[1].length	=0
-	
-	this.o	=null
-}*/
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-/** @todo Should add actual data checks. To see that everything matches. */
-/*
-Deencap.prototype. ready	=function( timecode )
-{
-	var inst	=this.times[timecode]
-
-	if( ! inst.o ) return false
-
-	for(var i =0,len= Maps.maxid()-1 ;i<len;i++)
-	{
-		if( ! inst.bufarr[i] )	return false
-	}
-
-	this.onready( timecode )
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-Deencap.prototype. getdeencinst	=function( timecode )
-{
-	var inst	=this.times[timecode]
-
-	if( ! inst )
-	{
-		inst	=this.times[timecode]	=new Deencap.Instance()
-	}
-
-	return inst
-}
-*/
 
 ///////////////////////////////////////////////////////////////////////////////
 
