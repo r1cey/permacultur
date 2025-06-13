@@ -30,6 +30,8 @@ export default class Ms extends shMaps
 
 	constructor( game )
 	{
+		super()
+
 		this.ground	=new Ground( game )
 		this.trees	=new Trees( game )
 
@@ -183,8 +185,8 @@ Ms.prototype. forcell	=function( fun )
 
 /** When player moves, get the additional cells he sees. */
 
-Ms.prototype. gshiftboards	=function( loc, r, delta, timecode )
+Ms.prototype. gshiftboards	=function( loc, r, dir )
 {
-	return { gr :this.gr.newshiftboard( loc, r, delta, timecode ),
-				tr :this.tr.newshiftboard( loc, r, delta, timecode ) }
+	return { gr :this.gr.newshiftboard( loc, r, dir ),
+				tr :this.tr.newshiftboard( loc, r, dir ) }
 }

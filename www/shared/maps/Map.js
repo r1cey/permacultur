@@ -17,11 +17,6 @@ export default class Map extends newBoard(newBinMap)
 	_r	=0
 
 	////
-
-	/** tricky buffer, ONLY access it through
-	 * getloc() because it can be changed to anything.
-	 *@type {Loc} */	
-	_loc	=new Loc()
 }
 
 
@@ -139,16 +134,6 @@ Map.prototype. printarr	=function( ibuf , r=6, c )
 	, r, c )
 
 	console.log(str)
-}
-
-
-/** Location instance returned is only changed when this function is called.
- * Don't reuse it outside of class.
- * Designed like this just to save on garbage collection */
-
-Map.prototype. getloc	=function()
-{
-	return this.bin.getloc( this._loc )
 }
 
 
@@ -314,7 +299,6 @@ Map.prototype. gbincell	=function( loc )
 	return this.bin.getcell( this.ic(loc) )
 }
 
-Map.prototype. gcell_b	=Map.prototype. getcell_b
 
 
 
@@ -565,7 +549,7 @@ Map.prototype. fordiredge	=function( fun, dir, r, c )
  * @arg {Function}	parse	- parsing function to call on each object added
  */
 
-Map.prototype. shift	=function( dir, arrs, objs, parse )
+Map.prototype. shift	=function( dir, board )
 {
 	var map	=this
 
@@ -602,65 +586,17 @@ Map.prototype. shift	=function( dir, arrs, objs, parse )
 		}
 	}
 
-	var ic	=0
-
-	var bufs	=map.bufs
-
-	var len	=map.constructor.Msg.Bufs.length
+	var boic	=0	//board index cell
 
 	map.fordiredge(( v )=>
 	{
-		var mapi	=map.i(v)
+		this.bin.setcell( this.ic(v), board.bin.getcell( boic ) )
 
-		for(var ib=0; ib<len; ib++)
-		{
-			bufs[ib].cells[mapi]	=arrs[ib][ic]
-		}
+		this.obj.o[v.tovstr()]	=board.obj[boic]
 
-		if( objs[ic] )
-		{
-			map.o[v.tovstr()]	=parse( objs[ic] )
-		}
-		else
-		{
-			delete map.o[v.tovstr()]
-		}
-
-		/*
-		if( ! cells[ic] )
-		{
-			cells[ic]	=new Uint8Array(map.bufs.length)
-		}
-
-
-		for(var ib=0; ib<map.bufs.length; ib++)
-		{
-			map.bufs[ib].cells[mapi]	=cells[ic][ib]
-			
-			// map.scellc( ib, v, ccodes[i] )
-		}
-
-		mapi	=v.tovstr()
-
-		if( cells[ic][ib] )
-		{
-			map.o[mapi]	=parse( cells[ic][ib] )
-		}
-		else
-		{
-			delete map.o[mapi]
-		}*/
-
-		ic++
+		boic ++
 	}
 	, dir )
-}
-
-
-
-Map.prototype.setloc	=function( loc )
-{
-	this.bin.setloc( loc )
 }
 
 

@@ -69,12 +69,12 @@ class Bin
 
 	////----
 
-	/** DataViews */
-	dvs	={}
+	/** TypedArrays for bin data */
+	arrs	={}
 
 	/** Structure of the header element of binary data.
 	 * Code value has to come first. Id value has to come second.
-	 * {vals} = [ name , valid bits number for DataVew get and set functions ]
+	 * {vals} = [ name , valid bits number for TypedArray types ]
 	 * @type {vals[]} */
 	static _structarr	=
 		[ ["code",16],["id",16],["r",16],["loc",16] ]
@@ -82,11 +82,12 @@ class Bin
 	/** Reverse lookup for data structure values */
 	static _structo	={ }
 
-	arrs	=[[]]
+	cells	=[[]]
 
 	/** Defined in derived class
 	@static
 	@var {BitmapBin[]} bmapbins */
+
 	////----
 }
 
@@ -107,7 +108,7 @@ Bin. getid	=function( buf )
 
 /** @ret {ArrayBuffer} */
 
-Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
+Bin.prototype. newbuf	=function( clen, loc =new Loc(0,0,0), r )
 {
 	var C	=this.constructor
 
@@ -115,9 +116,9 @@ Bin.prototype. newbuf	=function( clen, r, loc =new Loc(0,0,0) )
 
 	Bin.prototype.setbuf. call(this, buf, clen )
 
-	this.set("code", C.code)
-	this.set("id", C.id )
-	this.set("r", r )
+	this.arrs.code[0]	=C.code
+	this.arrs.id[0]	=C.id
+	this.setr( C.r )
 	this.setloc( loc )
 
 	return buf
@@ -338,7 +339,7 @@ Bin. headlen	=function()
 	{
 		len	+= val[1] + (val[0]==="loc")*(val[1]<<1)
 	}
-	return len >> 3
+	return Math.ceil( (len >> 3) / 4 ) << 2
 }
 
 
@@ -550,7 +551,7 @@ Bin. build_structo	=function()
 
 
 
-Bin.prototype. setdataviews	=function( buf )
+Bin.prototype. setarrs	=function( buf )
 {
 	var C	=this.constructor
 
@@ -560,9 +561,15 @@ Bin.prototype. setdataviews	=function( buf )
 	{
 		var name	=dvvals[0]
 
-		var len	=dvvals[1] + (name==="loc")*(dvvals[1]<<1)
+		var len	=dvvals[1]
+		
+		if(name==="loc")
+		{
+			len	*= 3
 
-		this.dvs[name]	=new DataView( buf, start>>3, len>>3 )
+			this.arrs.loc	=new globalThis["Int"+dvvals[1]+"Array"]( buf, start>>3, 3 )
+		}
+		else	this.arrs[name]	=new globalThis["Uint"+dvvals[1]+"Array"]( buf, start>>3, 1 )
 
 		start	+= len
 	}

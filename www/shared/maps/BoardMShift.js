@@ -7,11 +7,19 @@ export default class BMS	extends newBo(newBinMS)
 {
 
 
-	constructor( cellsl, loc, r, dir, timecode )
+	constructor( ...args )
 	{
-		if( cellsl )
+		super()
+
+		if( args[0] > 0 )
 		{
-			this.bin =BMS.newBin( cellsl, loc, r, dir, timecode )
+			this.bin =new this.constructor.Bin( ...args )
+		}
+		else if( args[0] instanceof this.constructor.Bin )
+		{
+			this.bin	=args[0]
+
+			this.obj	=args[1]
 		}
 	}
 }

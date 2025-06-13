@@ -32,7 +32,7 @@ class Br extends ShTrees.Br
 
 T.prototype. gen	=function( gr )
 {
-	this.newbufs( gr._r, 0, new Loc(0,0,1) )
+	this.newbuf( gr._r, 0, new Loc(0,0,1) )
 
 	this.gentrees( gr )
 }

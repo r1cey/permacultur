@@ -16,9 +16,13 @@ export default function( id, bmap )
 		static code	=2
 
 
-		constructor( clen, r, loc, dir )
+		constructor( ...args )
 		{
-			if( clen )	this.newbuf( clen, r, loc, dir )
+			super()
+
+			if( args[0] instanceof ArrayBuffer )	this.setbuf( ...args )
+
+			else if( args[0] > 0 || args[1] > 0 )	this.newbuf( ...args )
 		}
 	}
 
@@ -27,9 +31,9 @@ export default function( id, bmap )
 
 
 
-	BMS.prototype. newbuf	=function( clen, r, loc, dir )
+	BMS.prototype. newbuf	=function( clen, loc, r, dir )
 	{
-		var buf	=Bin.prototype.newbuf.call(this, clen, r, loc )
+		var buf	=Bin.prototype.newbuf.call(this, clen, loc, r )
 
 		this.set("dir", dir )
 

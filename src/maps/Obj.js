@@ -63,4 +63,6 @@ Obj.prototype. read	=async function( path )
 	}
 
 	await Promise.all( proms )
+
+	this.o	=o
 }

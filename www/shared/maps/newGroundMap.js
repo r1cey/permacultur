@@ -41,6 +41,13 @@ export default function( Map )
 
 
 
+	GM.prototype. getwsr	=function( loc )
+	{
+		return this.getwsr_i(this.ic(loc))
+	}
+
+
+
 	GM.prototype. setsoil	=function( loc, lvl )
 	{
 		if( lvl < 0 )	lvl	=0
@@ -77,6 +84,14 @@ export default function( Map )
 	GM.prototype. iswater	=function(loc)
 	{
 		return this.iswater_i(this.ic(loc))
+	}
+
+
+	GM.prototype. getwaterlvl	=function( loc )
+	{
+		var ic	=this.ic(loc)
+
+		return (this.getwsr_i(ic) === "water") * this.getwaterlvl_i(ic)
 	}
 
 

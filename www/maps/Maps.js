@@ -11,11 +11,13 @@ export default class M extends ShMaps
 	cl
 
 
-
-
 	constructor( cl )
 	{
-		super(new Ground() ,new Trees())
+		super()
+
+		this.ground	=new Ground()
+
+		this.trees	=new Trees()
 		
 		this.cl	=cl
 	}
@@ -69,27 +71,9 @@ M.prototype. setbuf	=function( buf, code )
 
 
 
-M.prototype. shift	=function( arrs, cellso, dir )
+M.prototype. shift	=function( grbin, grobj, trbin, trobj, dir )
 {
-	// code	??=Ground.codefrombuf(bufs)>>8
+	this.gr.shift( dir, new Ground.MapShiftBo( grbin, grobj ) )
 
-	this.fore(( map )=>
-	{
-		var h	=map.getloc().h
-
-		map.shift( dir, arrs[h], cellso[h], ( o )=>
-		{
-			for( p in o )
-			{
-				switch( p )
-				{
-					case 'pl' :
-	
-						o[p]	=new Pl.Vis( o[p], this.cl )
-				}
-			}
-	
-			return o
-		})
-	})
+	this.tr.shift( dir, new Trees.MapShiftBo( trbin, trobj ) )
 }

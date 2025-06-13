@@ -68,7 +68,7 @@ V.dirvh	=[new V(1,0),new V(1,-1),new V(0,-1),new V(-1,0),new V(-1,1),new V(0,1)]
 
 V.dirv2dirh	=function(v)
 {
-	for(let dir=0, len=V.dirvh.length; dir<len; dir++)
+	for(var dir=0, len=V.dirvh.length; dir<len; dir++)
 	{
 		if( V.dirvh[dir].eq(v))
 		{

@@ -47,12 +47,11 @@ ClS.prototype. setmap	=function()
 			}
 		}
 	)
-
 	this.sendjson(
 		{
 			setmap:
 			{
-				obj	:[slicedgr.obj.o, slicedtr.obj.o]
+				obj	:{ gr :slicedgr.obj.o, tr :slicedtr.obj.o }
 				,
 				loc	:pl.loc
 				,
@@ -93,137 +92,28 @@ ClS.prototype. clplmov	=function( delta )
 {
 	var pl	=this.pl
 
-	var timecode	=this.tc.next()
-
 	var msg	=
 	{
-		timecode,
-		loc	:pl.loc,
-		delta,
-		r	:pl.vision,
-		cells	:
+		loc	:pl.loc ,
+		dir	:Loc.dirv2dirh( delta ) ,
+		r	:pl.vision ,
+		obj	:
 		{
-			gr	:null,
-			tr	:null
+			gr	:0 ,
+			tr	:0
 		}
 	}
 
-	var boards	=this.game().maps.gshiftboards( msg.loc, msg.r, delta, msg.timecode )
+	var boards	=this.srv.game.maps.gshiftboards( msg.loc, msg.r, msg.dir )
 
 	for(var n in boards )
 	{
-		this.sendbin( boards[n].getbuf() )
+		this.sendbin( boards[n].bin.getbuf() )
 
-		msg.cells[n]	=boards[n].obj
+		msg.obj[n]	=boards[n].obj
 	}
 
 	this.sendjson({ clplmov : msg })
-
-	/*
-	var{ loc }	=pl
-
-	var r	=pl.vision
-
-	// var dir	=newloc.c().subv( pl.loc )
-
-	var cellso	=[[],[]]
-
-	var msg	=
-	{
-		timecode, loc, delta , r
-		,
-		cells	:cellso
-	}
-
-	/* prepare binary buffers *
-
-	var bcodes	=[[],[]]	// binary codes
-
-	var maps	=this.srv.game.maps
-
-	maps.fore(( map )=>
-	{
-		var Map	=map.constructor
-
-		for(var ib =0;ib< map.bufs.length ;ib++)
-		{
-			var Buf	=Map.Bufs[ib]
-
-			var mhead	=map.head
-
-			var cellslen	=(r << 1) + 1
-
-			var buf	=new ArrayBuffer( Buf.headlen + Buf.Arr.BYTES_PER_ELEMENT * cellslen)
-
-			var head	=Buf.newheadarr( buf )
-
-			arr[0]	=(mhead[0]<<8) + dir
-			arr[1]	=loc.h
-			arr[2]	=loc.x
-			arr[3]	=loc.y
-
-			var cells	=new Buf.Arr( buf , Buf.headlen ,  cellslen )
-
-			bcodes[map.getloc().h][ib]	=cells
-		}
-	})
-
-	/* fill cells data *
-
-	var ic	=0
-
-	var h, ib, len, cello
-
-	maps.gr.fordiredge(( loc )=>
-	{
-		maps.fore((map)=>
-		{
-			h	=map.getloc().h
-	
-			var bufs	=map.bufs
-	
-			for( ib =0,len= bufs.length ;ib<len;ib++)
-			{
-				bcodes[h][ib][ic]	=map.gcellc( ib, loc )
-			}
-
-			cello	=map.gcello( loc )
-
-			if( cello )
-			{
-				cellso[h][ic]	={}
-
-				for(var prop in cello )
-				{
-					switch( prop )
-					{
-						case 'pl' :
-
-							cellso[h][ic].pl	=cello.pl.newmsgvis()
-						break;
-						default:
-
-							cellso[h][ic][prop]	=cello[prop]
-					}
-				}
-			}
-
-			ic ++
-		})
-	},
-	dir, r, loc )
-
-	/* send *
-
-	for(var h =0;h< 2 ;h++)
-	{
-		for(var ib =0,len= carrs[h].length ;ib<len;ib++)
-		{
-			this.send_binary( bcodes[h][ib].buffer )
-		}
-	}
-
-	this.s.json({ clplmov: o })*/
 }
 
 

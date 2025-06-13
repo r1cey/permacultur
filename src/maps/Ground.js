@@ -52,17 +52,19 @@ G.prototype. gen	=function( r, maxc, trees )
 	{
 		ic	=gr.ic(loc)
 
-		if( gr.iswater_i( ic ) )
-		{	
-			gr.genwaterdepth( loc, ic )
-		}
-		else if( gr.issoil_i( ic ) )
+		switch( gr.getwsr_i( ic ))
 		{
-			// lvl	=gr.genhum( loc, ic )
+			case "water" :
+		
+				gr.genwaterdepth( loc, ic )
+			break
+			case "soil" :
+		
+				lvl	=gr.genhum( loc, ic )
 
-			// lvl	=gr.gentree( loc, lvl, ic )
+				lvl	=gr.gentree( loc, lvl, ic )
 
-			// if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
+				if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
 		}
 	})
 }

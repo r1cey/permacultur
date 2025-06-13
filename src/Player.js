@@ -159,7 +159,7 @@ Player.prototype. mov	=function( newloc )
 
 	map.obj.set(newloc).pl	=this
 
-	this.srv()?.send_plmov( this, newloc, oldloc )
+	this.srv()?.send_plmov( this, oldloc )
 
 	if( newloc.h === 0 )
 	{

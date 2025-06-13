@@ -350,11 +350,12 @@ Tr.prototype. shift	=function( dir, ...args )
 				}
 			break
 			case "trunk" :
+
+				map.paintleaves( loc, v )
+			break
 			case "branch" :
 
 				map.paintleaves( loc, v )
-
-				if( brt !== brts.b )	break
 
 				if( map.getbrsize_i(ic) )	break
 

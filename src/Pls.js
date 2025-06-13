@@ -27,20 +27,20 @@ export default class Pls
 
 	s( n, pl)	{ this.o[n]	=pl }
 
-	jsonrules
+	
+	rev
 
 	constructor( game )
 	{
 		this.game	=game
 
-		this.jsonrules	=json.newrules(
-		{
-			""	:
+		this.rev	=json.newrevivr( json.newrules(
 			{
-				rev	:( val )=> new Pl( val, game )
-			}
-		}
-	)
+				""	:
+				{
+					rev	:( val )=> new Pl( val, game )
+				}
+			} ) )
 	}
 }
 
@@ -56,13 +56,11 @@ Pls.prototype. read	=async function( name, map )
 
 	var pa	=this.conf.dir+name+'.json'
 
-	var plfile	=await fs.readjson( pa, json.newrevivr() )
+	var pl	=await fs.readjson( pa, this.rev )
 				
-	if(plfile)
+	if(pl)
 	{
-		var pl	=new Pl( plfile, game )
-
-		this.o[pla.name]	=pl
+		this.o[pl.name]	=pl
 
 		return pl
 	}

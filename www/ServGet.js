@@ -53,19 +53,12 @@ SG.prototype. setpl	=function( plmsg )
  * @arg msg
  * @arg o.loc
  * @arg o.r
- * @arg {Array} o.obj	-[gr, tr]
+ * @arg {obj} o.obj	-{gr, tr}
  */
 
 SG.prototype. setmap	=function( msg )
 {
 	this.buf.addobj( msg )
-
-	if( this.mapbuf.add( msg.loc, msg.r ) )
-	{
-		this.mapbuf.objs	=msg.obj
-
-		this.mapbuf.isready()
-	}
 }
 
 
@@ -125,18 +118,17 @@ SG.prototype. water	=function( lvl )
 
 /** Your player moved here. New information added.
  * @arg {Object}	msg
- * @arg 			msg.timecode	- used to sync with buffer updates
  * @arg				msg.loc	- new location
- * @arg 			msg.delta	- direction of movement
  * @arg 			msg.r	- radius of visible map
- * @arg {Object} 	msg.cells
- * @arg {Array}		msg.cells.gr	- cells in order, empty cells are empty entries
- * @arg {Array} 	msg.cells.tr
+ * @arg 			msg.dir	- direction of movement
+ * @arg {Object} 	msg.obj
+ * @arg {Array}		msg.obj.gr	- cells in order, empty cells are empty entries
+ * @arg {Array} 	msg.obj.tr
  */
 
 SG.prototype. clplmov	=function( msg )
 {
-	this.deenc.onobj( msg )
+	this.buf.addobj( msg )
 }
 
 

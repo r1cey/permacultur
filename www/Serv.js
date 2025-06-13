@@ -146,6 +146,14 @@ Serv.prototype. onmsg	=function( ev )
 class Buf
 {
 	a	=[]
+
+	srv
+
+	
+	constructor( srv )
+	{
+		this.srv	=srv
+	}
 }
 
 
@@ -185,23 +193,44 @@ Buf.prototype. addbinbuf	=function( bbuf, code )
 			return this.iscomplete( i, buf )
 		}
 	}
-
 	this.a.push({ loc, r, dir, [Class.name] : bin })
+}
+
+
+
+Buf.prototype. addobj	=function({ loc, dir, r, obj })
+{
+	dir	??=-1
+
+	for(var i=0,len= this.a.length ;i<len;i++)
+	{
+		var buf	=this.a[i]
+
+		if( loc.eq(buf.loc) && r === buf.r && dir === buf.dir )
+		{
+			buf.obj	=obj
+
+			return this.iscomplete( i, buf )
+		}
+	}
+	this.a.push({ loc, r, dir, obj })
 }
 
 
 
 Buf.prototype. iscomplete	=function( i, buf )
 {
-	if( buf.Gr && buf.Tr )
+	if( buf.Gr && buf.Tr && buf.obj )
 	{
 		if( buf.dir >= 0 )
 		{
-			this.srv.cl.maps.shift( buf )
+			this.srv.cl.pl.ismovack	=true
+
+			this.srv.cl.maps.shift( buf.Gr, buf.obj.gr , buf.Tr, buf.obj.tr, buf.dir )
 		}
 		else
 		{
-			this.cl.setmaps( buf.Gr, , buf.Tr )
+			this.srv.cl.setmaps( buf.Gr, buf.obj.gr , buf.Tr, buf.obj.tr )
 		}
 
 		this.a.splice( i, 1 )

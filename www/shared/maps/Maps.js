@@ -58,9 +58,11 @@ Maps.prototype. fromh	=function( h )
 
 Maps.prototype. fromid	=function( id )
 {
-	if( id === this.gr.constructor.id )	return this.gr
+	if( id === this.gr.bin.constructor.id )	return this.gr
 
-	if( id === this.tr.constructor.id )	return this.tr
+	if( id === this.tr.bin.constructor.id )	return this.tr
+
+	console.error( "Maps.fromid", id )
 }
 
 

@@ -100,23 +100,25 @@ Map.prototype. save	=async function( dir ="")
 	}
 
 
-	Map.prototype. newshiftboard	=function( loc, r, delta, timecode )
+	Map.prototype. newshiftboard	=function( loc, r, dir )
 	{
 		var Map	=this.constructor
 
 		var cellslen	=(r << 1) + 1
 
-		var dir	=Loc.dirv2dirh( delta )
+		var bo	=new Map.MapShiftBo( cellslen, loc, r, dir )
 
-		var bo	=new Map.MapShiftBo( cellslen, loc, r, dir, timecode )
+		var ic	=0
 
-		var i	=0
+		bo.obj.length	=cellslen
 
 		this.fordiredge(( v )=>
 		{
-			bo.bin.setcell( i, this.gbincell( v ))
+			bo.bin.setcell( ic, this.gbincell( v ))
 			
-			bo.obj.push( this.obj.get(v) )
+			bo.obj[ic]	= this.obj.get(v)
+
+			ic ++
 
 		},	dir, r, loc)
 

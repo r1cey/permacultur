@@ -50,7 +50,7 @@ export default function( id, bmap )
 
 		var c	=C.r2cells( r )
 
-		return Bin.prototype.newbuf. call(this, c , r , loc )
+		return Bin.prototype.newbuf. call(this, c , loc, r )
 	}
 
 
@@ -62,9 +62,27 @@ export default function( id, bmap )
 
 		Bin.prototype.setbuf. call(this, buf )
 
-		if( this.cellsl !== C.r2cells( this.get("r") ) )	throw new Error()
+		if( this.cellsl !== C.r2cells( this.getr()) ) throw new Error()
 
 		return this.cellsl
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+
+	BM.prototype. ic	=function( loc )
+	{
+		let r	=this.getr()
+
+		let rsize	=r*(r+1)
+
+		var v	=this.getloc().neg().addv(loc)
+
+		return (v.x>=0 && v.y<0) * (v.x*r - v.y) +
+			(v.y>=0 && v.z()<0) * (rsize + v.y*r - v.z()) +
+			(v.z()>=0 && v.x<0) * (rsize*2 + v.z()*r - v.x);
 	}
 
 

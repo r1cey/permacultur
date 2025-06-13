@@ -57,7 +57,7 @@ const ClPl =(c) => class extends c
 
 			let map	=this.lcl.maps.gr
 
-			switch( map.gwater( pl.loc ) )
+			switch( map.getwaterlvl( pl.loc ) )
 			{
 				case 1:
 					mul	=0.17
@@ -83,6 +83,7 @@ const ClPl =(c) => class extends c
 				this.loc.set( newloc )
 			}
 		}
+		else	this.pos.set( newpos )
 	}
 
 

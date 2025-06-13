@@ -92,6 +92,10 @@ Loc.prototype. toString	=function()
 
 
 
+Loc.prototype. addloc	=function( loc )
+{
+	return this.add( loc.x, loc.y, loc.h)
+}
 Loc.prototype. add	=function( x, y, h =0 )
 {
 	this.x	+= x
@@ -101,7 +105,7 @@ Loc.prototype. add	=function( x, y, h =0 )
 }
 Loc.prototype. addv	=function( v )
 {
-	return this.add( v.x, v.y, v.h)
+	return this.add( v.x, v.y, 0 )
 }
 
 Loc.prototype. sub	=function( x, y, h =0 )
