@@ -132,6 +132,13 @@ SG.prototype. clplmov	=function( msg )
 }
 
 
+/** { loc } */
+
+SG.prototype. movrej	=function( msg )
+{
+	this.cl.pl.rejmov()
+}
+
 
 /** A visible player moved.
  * If it was seen before, only need name.

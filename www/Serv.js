@@ -105,7 +105,7 @@ Serv.prototype. onmsg	=function( ev )
 {	
 	let msg	=ev.data
 
-	console.log( 'Recvd: '+msg)
+	// console.log( 'Recvd: '+msg)
 
 	var cl	=this.cl
 
@@ -133,6 +133,8 @@ Serv.prototype. onmsg	=function( ev )
 		for(key in msg)
 		{
 			this["on_"+key]?.( msg[key] )
+
+			console.log(key)
 		}
 		// console.error( `srv.onmsg: not found! ${key}`)
 	}

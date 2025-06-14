@@ -81,7 +81,6 @@ export default class M
 
 
 
-
 M.prototype. addopt	=function( str, act, check )
 {
 	var menu	=this

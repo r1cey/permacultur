@@ -34,6 +34,8 @@ Obj.prototype. read	=async function( path )
 
 	var o	=await fs.readjson( path+'.json', json.newrevivr() )
 
+	if( ! o )	return
+
 	var proms	=[]
 
 	for(var locst in o)

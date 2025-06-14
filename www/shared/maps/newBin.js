@@ -64,6 +64,10 @@ class Bin
 	@static
 	@var bmap */
 
+	////----
+
+	cells	=[[]]
+
 	/**Number of cells.*/
 	cellsl	=0
 
@@ -82,11 +86,14 @@ class Bin
 	/** Reverse lookup for data structure values */
 	static _structo	={ }
 
-	cells	=[[]]
-
 	/** Defined in derived class
 	@static
 	@var {BitmapBin[]} bmapbins */
+
+	/** tricky buffer, ONLY access it through
+	 * getloc() because it can be changed to anything.
+	 *@type {Loc} */	
+	_loc	=new Loc()
 
 	////----
 }
@@ -118,7 +125,7 @@ Bin.prototype. newbuf	=function( clen, loc =new Loc(0,0,0), r )
 
 	this.arrs.code[0]	=C.code
 	this.arrs.id[0]	=C.id
-	this.setr( C.r )
+	this.setr( r )
 	this.setloc( loc )
 
 	return buf
@@ -133,7 +140,7 @@ Bin.prototype. setbuf	=function( buf, clen )
 {
 	var Bin	=this.constructor
 
-	this.setdataviews( buf )
+	this.setarrs( buf )
 
 	clen	??=Bin.getlen( buf )
 
@@ -143,7 +150,7 @@ Bin.prototype. setbuf	=function( buf, clen )
 	{
 		var bmbin	=Bin.bmapbins[i]
 
-		this.arrs[i]	=new globalThis["Uint"+bmbin.size+"Array"]( buf, offset, clen )
+		this.cells[i]	=new globalThis["Uint"+bmbin.size+"Array"]( buf, offset, clen )
 
 		offset	+= clen * ( bmbin.size >> 3 )
 	}
@@ -157,56 +164,54 @@ Bin.prototype. setbuf	=function( buf, clen )
 
 Bin.prototype. getbuf	=function()
 {
-	return this.dvs.code?.buffer
+	return this.cells[0].buffer
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** Remnants of previous DataView solution */
 
 Bin.prototype. get	=function( dataname )
 {
-	var C	=this.constructor
-
-	return this.dvs[dataname]["getUint"+C._structo[dataname]]( 0,true)
+	return this.arrs[dataname][0]
 }
-
 
 Bin.prototype. set	=function( dataname, val )
 {
-	var C	=this.constructor
+	this.arrs[dataname][0]	=val
+}
 
-	this.dvs[dataname]["setUint"+C._structo[dataname]]( 0, val ,true)
+
+
+Bin.prototype. getr	=function()
+{
+	return this.arrs.r[0]
+}
+Bin.prototype. setr	=function(val)
+{
+	this.arrs.r[0]	=val
 }
 
 
 
 Bin.prototype. setloc	=function( loc )
 {
-	var C	=this.constructor
-
-	var loclen	=C._structo.loc
-
-	var set	=this.dvs.loc["setInt"+loclen]. bind(this.dvs.loc)
-
-	set( 0, loc.h ,true)
-	set( loclen >> 3 , loc.x ,true)
-	set( loclen >> 2 , loc.y ,true)
+	this.arrs.loc[0]	=loc.h
+	this.arrs.loc[1]	=loc.x
+	this.arrs.loc[2]	=loc.y
 }
 
+/** Location instance returned is only changed when this function is called.
+ * Don't reuse it outside of class.
+ * Designed like this just to save on garbage collection */
 
-/** @arg loc -provided loc instance to save into */
-
-Bin.prototype. getloc	=function( loc )
+Bin.prototype. getloc	=function()
 {
-	var C	=this.constructor
+	var loc	=this.arrs.loc
 
-	var loclen	=C._structo.loc
-
-	var get	=this.dvs.loc["getInt"+loclen]. bind(this.dvs.loc)
-
-	return loc.setxy( get( loclen>>3 ,true), get( loclen>>2 ,true), get(0 ,true) )
+	return this._loc.setxy( loc[1], loc[2], loc[0] )
 }
 
 
@@ -222,9 +227,9 @@ Bin.prototype. setval_str	=function( ic, bmapv, valstr )
 
 Bin.prototype. setval	=function( ic, bmapv, val )
 {
-	var data	=this.arrs[bmapv.bin_i][ic]
+	var data	=this.cells[bmapv.bin_i][ic]
 
-	this.arrs[bmapv.bin_i][ic]	=Bin.sval( data, bmapv.offset, bmapv.bits, val )
+	this.cells[bmapv.bin_i][ic]	=Bin.sval( data, bmapv.offset, bmapv.bits, val )
 }
 
 
@@ -234,7 +239,7 @@ Bin.prototype. setval	=function( ic, bmapv, val )
 
 Bin.prototype. getval	=function( ic, bmapv )
 {
-	return Bin.gval( this.arrs[bmapv.bin_i][ic], bmapv.offset, bmapv.bits )
+	return Bin.gval( this.cells[bmapv.bin_i][ic], bmapv.offset, bmapv.bits )
 }
 
 Bin.prototype. gval	=Bin.prototype. getval
@@ -264,9 +269,9 @@ Bin. getmaxval	=function( bmapv )
 
 Bin.prototype. setcell	=function( ic, valarr )
 {
-	for(var i=0,len= this.arrs.length ;i<len;i++)
+	for(var i=0,len= this.cells.length ;i<len;i++)
 	{
-		this.arrs[i][ic]	=valarr[i]
+		this.cells[i][ic]	=valarr[i]
 	}
 }
 
@@ -277,11 +282,9 @@ Bin.prototype. setcell	=function( ic, valarr )
 
 Bin.prototype. getcell	=function( ic )
 {
-	var C	=this.constructor
-
 	var vals	=[]
 
-	for(var cells of this.arrs )
+	for(var cells of this.cells )
 	{
 		vals.push( cells[ic] )
 	}
@@ -330,6 +333,7 @@ Bin.sval	=function( code, start, len, val )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @todo Replace with variable  */
 
 Bin. headlen	=function()
 {
@@ -573,8 +577,6 @@ Bin.prototype. setarrs	=function( buf )
 
 		start	+= len
 	}
-
-	this.dvs.cells	=new DataView( buf, start >> 3)
 }
 
 

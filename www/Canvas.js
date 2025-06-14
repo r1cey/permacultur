@@ -307,32 +307,44 @@ Can.prototype. clicked	=function( possqel )
 
 		let loc	=menu.loc
 
-		if( loc.disth( ploc) !== 1 )	return
-		
-		let map	=pl.gmap()
-
-		if( map.climbable( loc ))
+		if( loc.eq(ploc) )
 		{
 			menu.addopt(
 				
-				"climb"
+				"equipment"
 				,
 				()=>
 				{
-					can.pl.climb(loc)
+					console.log("eq")
 				}
 			)
 		}
-
-		switch(loc.h)
+		else if( loc.disth( ploc) === 1 )
 		{
-			case 0 :
+			let map	=pl.gmap()
 
-				// map	=can.maps.gr
+			if( map.climbable( loc ))
+			{
+				menu.addopt(
+					
+					"climb"
+					,
+					()=>
+					{
+						can.pl.climb(loc)
+					}
+				)
+			}
 
-				
+			switch(loc.h)
+			{
+				case 0 :
+
+					// map	=can.maps.gr
+
+					
+			}
 		}
-
 		menu.show()
 
 		if( menu.ready )	can.menu	=menu
@@ -727,4 +739,20 @@ Can.prototype. drawdbug	=function(x, y)
 	ctx.lineWidth	=2
 	ctx.arc( x, y, 10, 0, 6 )
 	ctx.stroke()
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Canvas related pixels to map location.
+ * Changes parameter loc vector */
+
+Can.prototype. cansq2maph	=function( locsq )
+{
+	locsq.tohexc( this ).addv( this.crn ).roundh()
+
+	locsq.h	=this.pl.loc.h
+
+	return locsq
 }

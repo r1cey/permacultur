@@ -117,6 +117,12 @@ ClS.prototype. clplmov	=function( delta )
 }
 
 
+ClS.prototype. movrej	=function( newloc )
+{
+	this.sendjson({ movrej :newloc })
+}
+
+
 /** New player born. */
 
 ClS.prototype. newpl	=function( pl2 )

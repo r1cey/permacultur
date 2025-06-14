@@ -111,6 +111,17 @@ export default function( Base )
 	///////////////////////////////////////////////////////////////////////////
 
 
+	
+	Gr.prototype. climbable	=function( loc )
+	{
+		var ic	=this.ic(loc)
+
+		return this.getvegty_i(ic) === "apple" && this.getveglvl_i(ic) > 3
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
 
 	Gr.prototype. nemptycell_i	=function( ic )
 	{
@@ -313,12 +324,6 @@ for(var n in def)
 
 
 
-G.prototype. climbable	=function( loc )
-{
-	var ic	=this.i(loc)
-
-	return this.getvegti(ic) === G.e.veg.apple && this.getveglvli(ic) > 3
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,7 @@ G.prototype. gen	=function( r, maxc, trees )
 
 	// this.randomwater()
 
+	/*
 	this.makeriver( 1, 3 )
 
 	this.makeriver( 4, 3 )
@@ -67,6 +68,7 @@ G.prototype. gen	=function( r, maxc, trees )
 				if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
 		}
 	})
+				*/
 }
 
 

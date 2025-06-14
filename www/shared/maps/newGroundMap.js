@@ -22,9 +22,9 @@ export default function( Map )
 
 		return this.nemptycell_i(ic) && Map.prototype.isplmov.call(this, dest, pl ) &&
 		
-			! ( this.bin.getval( ic, plfl.ty ) === "plant" &&
+			! ( this.bin.getval_str( ic, plfl.ty ) === "plant" &&
 				
-				this.bin.getval( ic, plfl.plant.ty ) === "apple" &&
+				this.bin.getval_str( ic, plfl.plant.ty ) === "apple" &&
 			
 				this.bin.getval( ic, plfl.plant.lvl ) > 1 )
 	}

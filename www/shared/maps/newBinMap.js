@@ -90,6 +90,12 @@ export default function( id, bmap )
 
 
 
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+
 	BM.r2cells	=function(r)
 	{
 		let cells=1

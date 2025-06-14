@@ -2,6 +2,7 @@ import Con from './Console.js'
 import Can from './Canvas.js'
 import Menu	from "./Menu.js"
 import Imgs	from "./Imgs.js"
+import Inv from "./Inventory.js"
 
 export default class Html
 {
@@ -33,6 +34,8 @@ export default class Html
 		,
 		delay	:100
 	}
+
+	inv	=new Inv(this)
 
 	constructor( cl )
 	{

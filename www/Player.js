@@ -1,5 +1,5 @@
-import PlSh from './shared/Player.js'
-import PlVSh from './shared/PlVis.js'
+import PlSh from './shared/player/Player.js'
+import PlVSh from './shared/player/PlVis.js'
 import PCl from './PeerCl.js'
 import Loc from './shared/Loc.js'
 
@@ -128,22 +128,35 @@ export default class Player extends ClPl( PlSh )
 	static Vis	=PlVis
 
 
-	onmov( newloc )
-	{
-		if( this.ismovack )
-		{
-			this.ismovack	=false
-
-			this.lcl.srv.send_mov( newloc )
-
-			return true
-		}
-		return false
-	}
+	
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+Player.prototype. onmov	=function( newloc )
+{
+	if( this.ismovack )
+	{
+		this.ismovack	=false
+
+		this.lcl.srv.send_mov( newloc )
+
+		return true
+	}
+	return false
+}
+
+
+
+Player.prototype. rejmov	=function()
+{
+	this.dest.set( this.loc )
+
+	this.ismovack	=true
+}
 
 
 

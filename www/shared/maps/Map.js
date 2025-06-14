@@ -14,7 +14,9 @@ export default class Map extends newBoard(newBinMap)
 {
 	obj	=new Obj(this)
 
-	_r	=0
+	get _r()	{return this.bin.getr()}
+
+	bin2	//optional additional binmap for local calculations
 
 	////
 }
@@ -38,33 +40,6 @@ Map.prototype. setbuf	=function( buf )
 	var C	=this.constructor
 
 	this.setbin( new C.Bin( buf ) )
-
-	/*if(this._r)
-	{
-		if( this._r !== this.bin.get("r") )
-		{
-			console.error( `Map.setbuf: radius doesn't match`)
-
-			return false
-		}
-	}
-	else
-	{
-		this._r	=this.bin.get("r")
-	}
-	if( this._loc )
-	{
-		if( ! this._loc.eq( this.bin.getloc(new Loc()) ) )
-		{
-			console.error( `Map.setbuf: location doesn't match`)
-
-			return false
-		}
-	}
-	else
-	{
-		this._loc	=new Loc()
-	}*/
 }
 
 
@@ -72,8 +47,6 @@ Map.prototype. setbuf	=function( buf )
 Map.prototype. setbin	=function( bin )
 {
 	this.bin	=bin
-
-	this._r	=this.bin.get("r")
 }
 
 
@@ -273,7 +246,16 @@ Map.prototype. loch	=function( loc )
 
 Map.prototype. copycell	=function( loc, map2, loc2 )
 {
-	this.sbincell( loc, map2.gbincell( loc2 ) )
+	var ic	=this.ic(loc)
+
+	var ic2	=map2.ic(loc2)
+
+	this.bin.setcell( ic, map2.bin.getcell( ic2 ) )
+
+	if( this.bin2 && map2.bin2 )
+	{
+		this.bin2.setcell( ic, map2.bin2.getcell( ic2 ) )
+	}
 
 	var str2	=loc2.tovstr()
 
@@ -406,13 +388,7 @@ Map.prototype. code_s	=function( code, n, i, val )
 
 Map.prototype. i	=function( loc )
 {
-	let rsize	=this._r*(this._r+1)
-
-	var v	=this.getloc().neg().addv(loc)
-
-	return (v.x>=0 && v.y<0) * (v.x*this._r - v.y) +
-		(v.y>=0 && v.z()<0) * (rsize + v.y*this._r - v.z()) +
-		(v.z()>=0 && v.x<0) * (rsize*2 + v.z()*this._r - v.x);
+	return this.bin.ic( loc )
 }
 
 Map.prototype. ic	=Map.prototype.i

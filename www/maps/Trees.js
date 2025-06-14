@@ -29,7 +29,7 @@ var bmap	=
 export default class Tr extends TrBase
 {
 	/** Additional binary map for faster client drawing. */
-	bincl
+	bin2
 
 	can	=new OffscreenCanvas(0,0)
 	
@@ -51,7 +51,7 @@ Tr.prototype. setbin	=function( bin )
 
 	TrBase.prototype.setbin. call(this, bin )
 
-	this.bincl	=new Tr.Bincl( this._r, bin.cellsl, this.getloc() )
+	this.bin2	=new Tr.Bincl( this._r, bin.cellsl, this.getloc() )
 
 	var v	=new V()
 
@@ -276,7 +276,7 @@ Tr.prototype. setbrsize	=function( loc, size )
 }
 Tr.prototype. setbrsize_i	=function( ic, size )
 {
-	this.bincl.setval( ic, Tr.Bincl.bmap.size, size )
+	this.bin2.setval( ic, Tr.Bincl.bmap.size, size )
 }
 
 
@@ -288,7 +288,7 @@ Tr.prototype. getbrsize	=function( loc )
 }
 Tr.prototype. getbrsize_i	=function( ic )
 {
-	return this.bincl.getval( ic, Tr.Bincl.bmap.size )
+	return this.bin2.getval( ic, Tr.Bincl.bmap.size )
 }
 
 
@@ -300,7 +300,7 @@ Tr.prototype. setleaves	=function( loc, val )
 }
 Tr.prototype. setleaves_i	=function( ic, val )
 {
-	this.bincl.setval( ic, Tr.Bincl.bmap.lvs, val )
+	this.bin2.setval( ic, Tr.Bincl.bmap.lvs, val )
 }
 
 
@@ -312,7 +312,7 @@ Tr.prototype. getleaves	=function( loc )
 }
 Tr.prototype. getleaves_i	=function( ic )
 {
-	return this.bincl.getval( ic, Tr.Bincl.bmap.lvs )
+	return this.bin2.getval( ic, Tr.Bincl.bmap.lvs )
 }
 
 

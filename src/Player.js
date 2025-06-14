@@ -1,4 +1,4 @@
-import PlMsg from '../www/shared/Player.js'
+import PlMsg from '../www/shared/player/Player.js'
 import V from '../www/shared/Vec.js'
 
 import Loc from './Loc.js'
@@ -130,7 +130,7 @@ Player.prototype. mov	=function( newloc )
 
 	if( ! map.isplmov( newloc, pl ))
 	{
-		pl.cl?.send_error( "Can't move there." )
+		pl.cl?.send_movrej( newloc )
 
 		return
 	}

@@ -1,5 +1,6 @@
 import Loc from "./Loc.js"
 import Col from "./Color.js"
+import Hands from "./player/Hands.js"
 
 
 var rules	=
@@ -19,6 +20,10 @@ var rules	=
 	game	:
 	{
 		rep	:( val )=> undefined
+	},
+	hands	:
+	{
+		rev:( val )=>new Hands()
 	}
 }
 
