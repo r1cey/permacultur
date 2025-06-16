@@ -1,12 +1,12 @@
 import { WebSocketServer, WebSocket } from "ws"
 // import * as fs from './Files.js'
-// import Col from '../www/shared/Color.js'
-// import Vec from '../www/shared/Vec.js'
+// import Col from '../www/game/shared/Color.js'
+// import Vec from '../www/game/shared/Vec.js'
 // import Player from './Player.js'
 import Cls from "./Clients.js"
 import ServSend from './ServSend.js'
 
-import * as json from "../../www/shared/json.js"
+import * as json from "../../www/game/shared/json.js"
 
 
 

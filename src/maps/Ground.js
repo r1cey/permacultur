@@ -1,8 +1,8 @@
-import newShGr	from '../../www/shared/maps/newGroundMap.js'
+import newShGr	from '../../www/game/shared/maps/newGroundMap.js'
 import Map	from './Map.js'
 
-import Loc from  '../../www/shared/Loc.js'
-import Vec from  '../../www/shared/Vec.js'
+import Loc from  '../../www/game/shared/Loc.js'
+import Vec from  '../../www/game/shared/Vec.js'
 
 
 var ShGr	=newShGr(Map)

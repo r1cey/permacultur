@@ -1,10 +1,10 @@
 import Pl	from './Player.js'
 
-import Loc	from '../www/shared/Loc.js'
+import Loc	from '../www/game/shared/Loc.js'
 
 import * as fs from './fs.js'
 
-import * as json from "../www/shared/json.js"
+import * as json from "../www/game/shared/json.js"
 
 
 

@@ -1,8 +1,8 @@
-import ShObj	from "../../www/shared/maps/Obj.js"
+import ShObj	from "../../www/game/shared/maps/Obj.js"
 
 import * as fs	from '../fs.js'
 
-import * as json from "../../www/shared/json.js"
+import * as json from "../../www/game/shared/json.js"
 
 
 

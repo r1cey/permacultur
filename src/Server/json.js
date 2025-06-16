@@ -1,4 +1,4 @@
-import * as json from "../../www/shared/json.js"
+import * as json from "../../www/game/shared/json.js"
 
 import Pl from "../Player.js"
 

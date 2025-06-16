@@ -1,4 +1,4 @@
-import Loc from './shared/Loc.js'
+import Loc from '../game/shared/Loc.js'
 
 
 

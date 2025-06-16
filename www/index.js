@@ -1,6 +1,6 @@
 // import './utils.js'
 
-import Client from "./Client.js"
+import Client from "./game/Client.js"
 
 window.cl	=new Client()
 

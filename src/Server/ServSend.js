@@ -1,6 +1,6 @@
-// import NS from '../../www/shared/NSpace.js'
+// import NS from '../../www/game/shared/NSpace.js'
 
-import Loc from "../../www/shared/Loc.js"
+import Loc from "../../www/game/shared/Loc.js"
 
 
 /********

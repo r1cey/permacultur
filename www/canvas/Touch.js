@@ -1,4 +1,4 @@
-import V	from '../../shared/Vec.js'
+import V	from '../game/shared/Vec.js'
 
 export default class Touch
 {

@@ -1,10 +1,10 @@
-import V from '../../www/shared/Vec.js'
+import V from '../../www/game/shared/Vec.js'
 
 import ClG from './ClientGet.js'
 
 import MapG	from "../maps/Ground.js"
 
-import * as json from "../../www/shared/json.js"
+import * as json from "../../www/game/shared/json.js"
 
 
 export default class Client extends ClG

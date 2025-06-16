@@ -1,5 +1,5 @@
 import * as fs	from '../fs.js'
-import shMaps	from '../../www/shared/maps/Maps.js'
+import shMaps	from '../../www/game/shared/maps/Maps.js'
 
 import Ground from './Ground.js'
 import Trees from './Trees.js'

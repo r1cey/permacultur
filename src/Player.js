@@ -1,11 +1,11 @@
-import PlMsg from '../www/shared/player/Player.js'
-import V from '../www/shared/Vec.js'
+import PlMsg from '../www/game/shared/player/Player.js'
+import V from '../www/game/shared/Vec.js'
 
 import Loc from './Loc.js'
 
 import * as fs	from './fs.js'
 
-import * as json from "../www/shared/json.js"
+import * as json from "../www/game/shared/json.js"
 
 /*
 const SrvPl	=(c) => class extends c

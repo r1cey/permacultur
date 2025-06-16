@@ -1,4 +1,4 @@
-import Html	from './Html.js'
+import Html	from '../Html.js'
 import Serv	from './Serv.js'
 import Player	from './Player.js'
 import PCl	from './PeerCl.js'

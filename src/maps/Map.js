@@ -1,4 +1,4 @@
-import ShMap	from "../../www/shared/maps/Map.js"
+import ShMap	from "../../www/game/shared/maps/Map.js"
 
 import Obj	from "./Obj.js"
 
@@ -6,10 +6,10 @@ import * as fs	from '../fs.js'
 
 import Pl	from '../Player.js'
 
-import Loc	from "../../www/shared/Loc.js"
+import Loc	from "../../www/game/shared/Loc.js"
 
-import newBo	from "../../www/shared/maps/newBoard.js"
-import newBinMShift	from "../../www/shared/maps/newBinMapShift.js"
+import newBo	from "../../www/game/shared/maps/newBoard.js"
+import newBinMShift	from "../../www/game/shared/maps/newBinMapShift.js"
 
 
 

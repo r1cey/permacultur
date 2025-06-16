@@ -1,8 +1,8 @@
-import newShTrees	from '../../www/shared/maps/newTreesMap.js'
+import newShTrees	from '../../www/game/shared/maps/newTreesMap.js'
 import Map	from './Map.js'
 
-import Loc from  '../../www/shared/Loc.js'
-import V from  '../../www/shared/Vec.js'
+import Loc from  '../../www/game/shared/Loc.js'
+import V from  '../../www/game/shared/Vec.js'
 
 import Gr	from './Ground.js'
 
