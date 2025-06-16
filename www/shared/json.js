@@ -23,7 +23,7 @@ var rules	=
 	},
 	hands	:
 	{
-		rev:( val )=>new Hands()
+		rev:( val )=>new Hands(val)
 	}
 }
 

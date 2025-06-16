@@ -1,6 +1,7 @@
 import Loc from "../Loc.js"
-
 import Col from '../Color.js'
+
+import Hands from "./Hands.js"
 
 
 /** Class for visible players. Has limited information. */
@@ -19,7 +20,7 @@ export default class PlVis
 
 	sleep	=0
 
-	hands	=new Hands(this)
+	hands	=new Hands()
 }
 
 

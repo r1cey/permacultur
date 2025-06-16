@@ -1,5 +1,5 @@
 import Con from './Console.js'
-import Can from './Canvas.js'
+import Can from './canvas/Canvas.js'
 import Menu	from "./Menu.js"
 import Imgs	from "./Imgs.js"
 import Inv from "./Inventory.js"
