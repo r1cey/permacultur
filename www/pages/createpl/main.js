@@ -1,9 +1,7 @@
-// import Col from '../shared/Color.js'
+import P from '../Page.js'
 
-export default class Page
+export default class Page extends P
 {
-	el
-
 	inputels	=[,,]
 
 	get elname()

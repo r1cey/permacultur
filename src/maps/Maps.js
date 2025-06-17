@@ -92,9 +92,13 @@ Ms.prototype. gen	=function( r, maxc )
 
 Ms.prototype. save	=async function()
 {
-	this.gr.save(this.conf.dir)
-
-	this.trees.save(this.conf.dir)
+	var proms	=
+	[
+		this.gr.save(this.conf.dir)
+		,
+		this.trees.save(this.conf.dir)
+	]
+	return await Promise.allSettled( proms )
 }
 
 

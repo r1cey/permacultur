@@ -58,6 +58,19 @@ Server.prototype. start	=async function( port )
 }
 
 
+
+Server.prototype. stop	=function()
+{
+	console.log(`Server shutting down.`)
+
+	for(var cl of this.wss.clients )
+	{
+		cl.close( 4801 )
+	}
+	this.wss.close()
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -205,17 +218,6 @@ Server. json	=function( data, ip )
 
 
 
-Server.prototype. stop	=function()
-{
-	console.log(`Server shut down.`)
-
-	for(var cl of this.wss.clients )
-	{
-		cl.close( 4801 )
-	}
-	
-	this.wss.close()
-}
 
 Server.prototype. remcls	=function()
 {

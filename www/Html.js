@@ -2,13 +2,14 @@ import Con from './Console.js'
 import Can from './canvas/Canvas.js'
 import Menu	from "./Menu.js"
 import Imgs	from "./Imgs.js"
-import Inv from "./Inventory.js"
 
 export default class Html
 {
 	cl	//client
 
 	con	=new Con(this, document.querySelector('console'))
+
+	screen	=document.querySelector("screen")
 
 	fps	=
 	{
@@ -26,6 +27,8 @@ export default class Html
 
 	ps	={}
 
+	inv	//not necessary since should be already in .ps
+
 	imgs	=new Imgs(this)
 
 	resize	=
@@ -35,7 +38,6 @@ export default class Html
 		delay	:100
 	}
 
-	inv	=new Inv(this)
 
 	constructor( cl )
 	{
@@ -50,40 +52,7 @@ export default class Html
 }
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
-
-
-Html.prototype. onresize	=function()
-{
-	var res	=this.resize
-
-	if( res.tout )	clearTimeout( res.tout )
-	
-	res.tout	=setTimeout( this.can.resize. bind(this.can), res.delay )
-}
-
-
-
-
-Html.prototype. fetch	=function( url )
-{
-	return fetch(url, {cache: "no-store"})
-}
-
-
-
-
-Html.prototype. delpage	=function( name )
-{
-	if( this.ps[name] )
-	{
-		this.ps[name].el?.remove()
-		this.ps[name].css?.remove()
-		delete this.ps[name]
-	}
-}
-
 
 
 
@@ -103,7 +72,7 @@ Html.prototype. loadp	=async function( name )
 		el.rel	='stylesheet'
 		el.onload	=(ev)=> res(el)
 		el.onerror	=(ev)=> rej(el)
-		el.href	=`pages/${name}/main.css`
+		el.href	=`pages/${name}/main.css?${Math.floor(Math.random()*100)}`
 
 		document.head.appendChild(el)
 	})
@@ -136,13 +105,45 @@ Html.prototype. loadp	=async function( name )
 	}
 	else
 	{
-		p	=new (res[1].value.default)()
-
-		p.el	=el
-		p.css	=css
+		p	=new (res[1].value.default)(this, el, css)
 	}
 
 	this.ps[name]	=p
 
 	return p
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Html.prototype. onresize	=function()
+{
+	var res	=this.resize
+
+	if( res.tout )	clearTimeout( res.tout )
+	
+	res.tout	=setTimeout( this.can.resize. bind(this.can), res.delay )
+}
+
+
+
+
+Html.prototype. fetch	=function( url )
+{
+	return fetch(url, {cache: "no-store"})
+}
+
+
+
+
+Html.prototype. delpage	=function( name )
+{
+	if( this.ps[name] )
+	{
+		this.ps[name].el?.remove()
+		this.ps[name].css?.remove()
+		delete this.ps[name]
+	}
 }

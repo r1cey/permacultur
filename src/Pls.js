@@ -109,10 +109,13 @@ Pls.prototype. new	=function( plmsg )
 
 Pls.prototype. save	=async function()
 {
+	var proms	=[]
+
 	for(var name in this.o)
 	{
-		await this.o[name].save( this.conf.dir )
+		proms.push( this.o[name].save( this.conf.dir ) )
 	}
+	return await Promise.allSettled(proms)
 }
 
 

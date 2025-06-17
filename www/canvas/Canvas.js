@@ -315,7 +315,7 @@ Can.prototype. clicked	=function( possqel )
 				,
 				()=>
 				{
-					console.log("eq")
+					this.html.inv.show()
 				}
 			)
 		}

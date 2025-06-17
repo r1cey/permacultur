@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "zenit",
+  "name": "dirtopia",
   "version": "1.0.0",
   "main": "./src/index.js",
   "scripts": {

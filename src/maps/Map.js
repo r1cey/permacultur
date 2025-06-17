@@ -63,67 +63,71 @@ Map.prototype. save	=async function( dir ="")
 
 	var buf	=this.bin.getbuf()
 
-	if( buf )	fs.savebuf( pa+'.bin', buf )
+	var proms	=[]
 
-	fs.savejson( pa+'.json' , this.obj.o ,( key, val )=>
-	{
-		switch( key )
+	if( buf )	proms[0]	=fs.savebuf( pa+'.bin', buf )
+
+	proms[1]	=fs.savejson( pa+'.json' , this.obj.o ,( key, val )=>
 		{
-			case 'pl' :
+			switch( key )
+			{
+				case 'pl' :
 
-				return val.name
-		}
-		return val
-	})
+					return val.name
+			}
+			return val
+		})
+
+	return await Promise.allSettled( proms )
 }
 
 
-	///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
-	
 
-	Map.prototype. set_	=function( name, loc, ...vals )
+
+Map.prototype. set_	=function( name, loc, ...vals )
+{
+	this["set"+name]( loc, ...vals )
+
+	this.game?.server?.send_mapset_( this, name, loc, vals )
+}
+
+
+/** @arg name	-Name of the set method. "_i" will be added automatically */
+
+Map.prototype. set_ic_	=function( name, ic, loc, ...vals )
+{
+	this["set"+name+"_i"]( ic, ...vals )
+
+	this.game?.server?.send_mapset_( this, name, loc, vals )
+}
+
+
+Map.prototype. newshiftboard	=function( loc, r, dir )
+{
+	var Map	=this.constructor
+
+	var cellslen	=(r << 1) + 1
+
+	var bo	=new Map.MapShiftBo( cellslen, loc, r, dir )
+
+	var ic	=0
+
+	bo.obj.length	=cellslen
+
+	this.fordiredge(( v )=>
 	{
-		this["set"+name]( loc, ...vals )
+		bo.bin.setcell( ic, this.gbincell( v ))
+		
+		bo.obj[ic]	= this.obj.get(v)
 
-		this.game?.server?.send_mapset_( this, name, loc, vals )
-	}
+		ic ++
 
+	},	dir, r, loc)
 
-	/** @arg name	-Name of the set method. "_i" will be added automatically */
-
-	Map.prototype. set_ic_	=function( name, ic, loc, ...vals )
-	{
-		this["set"+name+"_i"]( ic, ...vals )
-
-		this.game?.server?.send_mapset_( this, name, loc, vals )
-	}
-
-
-	Map.prototype. newshiftboard	=function( loc, r, dir )
-	{
-		var Map	=this.constructor
-
-		var cellslen	=(r << 1) + 1
-
-		var bo	=new Map.MapShiftBo( cellslen, loc, r, dir )
-
-		var ic	=0
-
-		bo.obj.length	=cellslen
-
-		this.fordiredge(( v )=>
-		{
-			bo.bin.setcell( ic, this.gbincell( v ))
-			
-			bo.obj[ic]	= this.obj.get(v)
-
-			ic ++
-
-		},	dir, r, loc)
-
-		return bo
-	}
+	return bo
+}
 
 
 ///////////////////////////////////////////////////////////////////////////

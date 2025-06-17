@@ -13,7 +13,8 @@ export default class I
 
 		var fns	=
 		[
-			'leaves5.png'
+			'leaves5.png' ,
+			"sand3.png"
 		]
 
 		for(var fn of fns )

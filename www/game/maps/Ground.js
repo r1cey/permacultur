@@ -22,11 +22,13 @@ Gr.prototype. draw	=function( can )
 
 	let h	=can.pl?.pos.h	|| 0
 
+	can.ctx.globalAlpha	=1
+
 	can.forcell(( loc )=>
 	{
 		if( ! this.inside(loc) )	return
 
-		vsq.set(loc).tosqc(can)
+		// vsq.set(loc).tosqc(can)
 
 		this.drawhex( can, loc, h, vsq )
 	})
@@ -41,26 +43,26 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 {
 	var map	=this
 
-	vsq	??=new V().set(loc).tosqc(can)
+	vsq.set(loc).tosqc(can)
 
 	ic	??=map.i(loc)
 
-	var h	=can.units.h2>>1
+	var { r, h2 }	=can.units
+
+	var h	=h2>>1
 
 	if( can.showslopes )
 	{
 		var dir
 		
-		var arrw	=can.units.r*0.40
+		var arrw	=r*0.40
 		
-		var arrh	=can.units.h2*0.21
+		var arrh	=h2*0.21
 
 		var arrcol	="#ffffff"
 	}
 
 	var ctx	=can.ctx
-
-	ctx.globalAlpha	=1
 
 	var col	=new Col()
 
@@ -74,21 +76,28 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 			lvl	=map.getsoilhum_i( ic )
 
-			col.sethsl( 57, 16, 42)	// 2, 47, 10
+			if( lvl === 0 )
+			{
+				let vcorn	=vsq.c().sub(r, h2>>1)
 
-			max	=Gr.maxhum()
+				ctx.drawImage( can.imgs().o.sand3, vcorn.x,vcorn.y, r<<1, h2 )
+			}
+			else
+			{
+				col.sethsl( 57, 16, 42)	// 2, 47, 10
 
-			col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
+				max	=Gr.maxhum()
 
-			can.fillhex( vsq, col.str() )
+				col.add( lvl*(-55)/max, lvl*(31)/max, lvl*(-32)/max )
 
+				can.fillhex( vsq, col.str() )
+			}
 			if( can.showlvls )
 			{
 				can.ctx.fillStyle="#FFFFFF"
 
 				can.ctx.fillText( lvl, vsq.x, vsq.y )
 			}
-
 			switch( map.getplfl_i( ic ))
 			{
 				case "plant" :

@@ -60,11 +60,13 @@ Client.prototype. createpl	=async function( name )
 
 
 
-Client.prototype. setpl	=function( plmsg )
+Client.prototype. setpl	=async function( plmsg )
 {
 	this.html.delpage('createpl')
 
 	this.pl	=new Player( plmsg ,this)
+
+	this.html.inv	=await this.html.loadp( "inventory" )
 
 	var can	=this.html.can
 

@@ -1,16 +1,11 @@
 import Maps from './maps/Maps.js'
 import Srv from './Server/Server.js'
-// import Files from './Files.js'
-// import firstl from './firstl.js'
 // import Errors from './Errors.js'
 import Players from './Pls.js'
 import Loc	from './Loc.js'
-// import fs from './fs.js'
-// import Map from './Map.js'
 import Pl from './Player.js'
-// import Actions from './Acts.js'
-// import fs from 'fs/promises'
 // import { constrainedMemory } from 'process'
+import Con from "./Console.js"
 
 
 
@@ -53,15 +48,18 @@ export default class G
 
 	maps	=new Maps( this)
 
-	min15int
-
-	secint
+	intervals	=
+	{
+		min15 :0, sec :0
+	}
 
 	pls	=new Players( this)
 	
 	srv	=new Srv( this)
 
 	server	=this.srv
+
+	con	=new Con(this)
 
 
 	constructor( confpa )
@@ -113,15 +111,35 @@ G.prototype. start	=async function( confpa )
 }
 
 
+
+G.prototype. stop	=async function()
+{
+	var g	=this
+
+	for(var key in this.intervals )
+		clearInterval(this.intervals[key])
+
+	g.srv.stop()
+
+	await g.save()
+
+	process.exit()
+}
+
+
 ////////////////////////////////////////////////////////////////
 
 
 
-G.prototype. save	=function()
+G.prototype. save	=async function()
 {
-	this.maps.save()
-
-	this.pls.save()
+	var proms	=
+	[
+		this.maps.save()
+		,
+		this.pls.save()
+	]
+	return await Promise.allSettled( proms )
 }
 
 
@@ -219,6 +237,16 @@ G.prototype. min15	=function()
 	, true)
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+G.prototype. addobj	=function( loc, name )
+{
+
+}
+
 /*
 
 
@@ -230,192 +258,6 @@ Game.prototype. err	=function( code )
 }
 
 
-
-Game.prototype. stop	=async function()
-{
-	var g	=this
-
-	clearInterval(this.min15int)
-
-	this.files.savemaps( this.maps )
-
-	// await g.pls.save()
-	
-	g.srv.stop()
-}
-
-Game.prototype. min15	=function()
-{
-	var g	=this
-
-/*
-	g.maps.forcell(( loc, map )=>
-	{
-		var o	=map.o_g(loc)
-
-		var c	=map.arr_g(loc)
-
-		var pl	=o?.pl
-
-		if( pl )
-		{
-			if(pl.cl)
-			{
-				pl.subwater( 0.0208 )
-			}
-			else
-			{
-				pl.subwater( 0.007 )
-			}
-		}
-	}
-	, true)
-	*
-}
-
-
-Game.prototype. findpl	=function( name )
-{
-	var maps	=this.maps
-
-	var loc
-
-	for(var mapn in maps)
-	{
-		var map	=maps[mapn]
-
-		loc	=map.fore(( v )=>
-		{
-			if( map.o_g(v)?.pl.name === name )
-			{
-				return new Loc().set(v)
-			}
-		})
-
-		if(loc)	return loc
-	}
-}
-
-
-Game.prototype. getpl	=function( {name, loc} )
-{
-	var pl	=this.map.o_g(loc)?.pl
-
-	if(!pl)
-	{
-		pl	=this.findpl( name )
-	}
-
-	if(!pl)	this.err( 6418 )
-
-	return pl
-}
-
-
-
-Game.prototype. plsees	=function( cl, loc )
-{
-	return cl.loc.disth(loc) <= this.getpl(cl).vision
-}
-
-
-Game.prototype. connpl	=function( cl )
-{
-	var pl	=this.getpl( cl )
-
-	pl.cl	=cl
-
-	for(var cl2 of this.srv.cls)
-	{
-		if( cl2 === cl )	continue
-
-		if( this.plsees( cl.loc, loc ))
-		{
-			cl.send({ connpl : loc.newarr() })
-		}
-	}
-
-	return pl
-}
-Game.prototype. disconpl	=function( loc )
-{
-	var pl	=this.getpl(loc)
-	
-	pl.cl	=0
-
-	for(var cl of this.srv.cls)
-	{
-		if( cl.loc.eq( loc ))	continue
-
-		if( this.plsees( cl.loc, loc ))
-		{
-			cl.send({ disconpl : loc.newarr() })
-		}
-	}
-
-	return pl
-}
-
-
-/** !!!newloc will be modified!!! *
-
-Game.prototype. movpl	=function( pln, newloc )
-{
-	var game	=this
-
-	var srv	=game.srv
-
-	var pls	=game.pls
-
-	var pl	=pls[pln]
-
-	var loc	=pl.loc
-
-	if( pl.loc.eq( newloc )) return
-
-	loc.forlineh( newloc, (v)=>
-	{
-		newloc.set(v)
-
-		return true
-	})
-	
-	var pl2, seesoldloc
-
-	var cls	=game.srv.cls
-	
-	for(var i=0, len=cls.length; i<len; i++)
-	{
-		pl2	=pls[cls[i].pln]
-
-		if( ! pl2 || pl2 === pl )	continue
-		
-		seesoldloc	=pl2.sees(loc)
-
-		if( pl2.sees(newloc) || seesoldloc)
-		{
-			srv.s.plmov( i, pln, newloc, seesoldloc , pl )
-		}
-	}
-
-	var dv	=newloc.c().subv(loc)
-
-	pl.loc.set(newloc)
-
-	if( pl.cl )	srv.s.clplmov( pl.cl-1, V.dirv2dirh( dv ) )
-
-
-	game.map.fore( ( v ) =>
-	{
-		if( game.map.water(v) )
-		{
-			pl.setwater( 1 )
-
-			return true
-		}
-	}
-	, 1, pl.loc )
-}
 
 
 

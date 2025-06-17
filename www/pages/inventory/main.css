@@ -1,0 +1,29 @@
+inv
+{
+	position: absolute;
+
+	left: 10px;
+	top: 34%;
+	right: 10px;
+	bottom: 10px;
+
+	background-color: rgb(174, 148, 64);
+
+	padding: 1ex ;
+	text-align: center ;
+	border: 3px outset rgb(221 192 125) ;
+}
+
+inv>hands
+{
+	display: block ;
+	width: 85% ;
+	height: 60% ;
+
+	background: #c7bb8f url(hands.png) ;
+	background-size: contain ;
+	background-position: center ;
+	background-repeat: no-repeat ;
+
+	border: 1px inset rgb(174, 148, 64) ;
+}

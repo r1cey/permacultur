@@ -1,7 +1,8 @@
-export default class Page
-{
-	el
+import P from '../Page.js'
 
+
+export default class Page extends P
+{
 	get elbut()
 	{	
 		return this.el.querySelector('button')
