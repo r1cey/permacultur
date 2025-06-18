@@ -337,14 +337,18 @@ Can.prototype. clicked	=function( possqel )
 			}
 			let o	=map.obj.g(loc)
 
-			for(var key in o)
+			if( o )
 			{
-				switch( key )
+				if( o.dewd )
 				{
-					case "dewd" :
-
-						menu.addopt( "rotate right" ,()=>{ o[key].rot(1) })
-						menu.addopt( "rotate left" ,()=>{ o[key].rot(-1) })
+					menu.addopt( "rotate right" ,()=>
+					{
+						can.cl().srv.send_actonobj( loc, "dewd", "rot", [1] )
+					})
+					menu.addopt( "rotate left" ,()=>
+					{
+						can.cl().srv.send_actonobj( loc, "dewd", "rot", [-1] )
+					})
 				}
 			}
 

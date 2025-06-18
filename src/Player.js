@@ -187,7 +187,7 @@ Player.prototype. mov	=function( newloc )
 
 Player.prototype. climb	=function( hdir )
 {
-	var pl	=this
+	/*var pl	=this
 
 	var{ loc }	=pl
 
@@ -228,16 +228,26 @@ Player.prototype. climb	=function( hdir )
 
 	destmap.scello(loc).pl	=pl
 
-	pl.srv()?.send.plclimb( pl, hdir )
+	pl.srv()?.send_plclimb( pl, hdir )*/
+}
+
+
+Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
+{
+	if( this.loc.disth( loc ) > 1 )	return
+
+	obj[act]( ... params )
+
+	this.srv()?.send_plactonobj( this, loc, objkey, act, params )
 }
 
 
 
 
-Player.prototype. cl_send	=function( msg )
+/*Player.prototype. cl_send	=function( msg )
 {
 	this.cl.send( JSON.stringify(msg) )
-}
+}*/
 
 
 /** Supply the object dict of players to search in! */
@@ -278,16 +288,16 @@ Player.prototype. disconn	=function()
 
 Player.prototype. setwater	=function( lvl )
 {
-	PlMsg.O.prototype. setwater.call(this, lvl )
+	PlMsg.prototype. setwater.call(this, lvl )
 
-	this.cl?.send.json({ water: this.water })
+	this.cl?.sendjson({ water: this.water })
 }
-Player.prototype. subwater	=function( lvl )
+/*Player.prototype. subwater	=function( lvl )
 {
-	PlMsg.O.prototype. subwater.call(this, lvl )
+	PlMsg.prototype. subwater.call(this, lvl )
 
-	this.cl?.send.json({ water: this.water })
-}
+	this.cl?.sendjson({ water: this.water })
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////

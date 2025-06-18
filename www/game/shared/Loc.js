@@ -12,16 +12,13 @@ export default class Loc extends V
 
 	constructor( ...args )
 	{
-		super( ...args )
+		super()
 
-		if( Array.isArray( args[0] ) )
-		{
-			this.h	=args[0][2]
-		}
-		else
-		{
-			this.h	=args[2] ?? 0
-		}
+		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
+
+		else if( args[0] instanceof Loc )	this.set( args[0] )
+
+		else if( args.length > 1 )	this.setxy( ...args )
 	}
 
 	tovstr()

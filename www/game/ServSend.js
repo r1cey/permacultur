@@ -98,6 +98,12 @@ SS.prototype. act	=function( act, o )
 }
 
 
+SS.prototype. actonobj	=function( loc, objkey, act, params )
+{
+	this.sendjson({actonobj:{ loc, objkey, act, params }})
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

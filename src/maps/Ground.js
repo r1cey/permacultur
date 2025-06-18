@@ -96,7 +96,34 @@ G.prototype. addwater	=function( loc )
 
 G.prototype. dry	=function( loc )
 {
-	this.dryi( this.i(loc), loc )
+	this.dry_i( this.ic(loc), loc )
+}
+G.prototype. dry_i	=function( ic, loc )
+{
+	var lvl	=this.getsoilhum_i( ic )
+	
+	if( x > 0 )
+	{
+		this.set_ic_( "soilhum", ic, loc, -- lvl )
+	}
+}
+
+
+G.prototype. wet	=function( loc )
+{
+	this.wet_i( this.ic(loc), loc )
+}
+G.prototype. wet_i	=function( ic, loc )
+{
+	if( this.getwsr_i(ic) === "soil" )
+	{
+		let lvl	=this.getsoilhum_i( ic )
+
+		if( lvl < G.maxhum() )
+		{
+			this.set_ic_( "soilhum", ic, loc, ++ lvl )
+		}
+	}
 }
 
 
@@ -498,28 +525,7 @@ G.prototype. addwateri	=function( ic, loc )
 			this.setwateri( ic, wlvl+1, loc )
 		}
 	}
-}
-
-
-
-
-G.prototype. dryi	=function( ic, loc )
-{
-	var x	=this.getsoilhumi( ic )
-	
-	if( x > 0 )
-	{
-		this.setsoil_i( ic, x - 1, loc )
-	}
-	else if( x =this.gwateri( ic ))
-	{
-		if( x > 1 )
-		{
-			this.setwateri( ic, x - 1, loc )
-		}
-		else
-		{
-			this.setsoil_i( ic, this.maxhum(), loc )
-		}
-	}
 }*/
+
+
+

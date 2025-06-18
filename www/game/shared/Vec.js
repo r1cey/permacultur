@@ -16,7 +16,7 @@ export default class V
 
 	static delim	='_'
 
-	static zero	=new V(0,0)
+	static zero	=new V()	//bug, xy are set at the bottom
 	
 	x
 	y
@@ -25,12 +25,9 @@ export default class V
 	{
 		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
 
-		else
-		{
-			this.x	=args[0] ?? 0
-			
-			this.y	=args[1] ?? 0
-		}
+		else if( args[0] instanceof V )	this.set( args[0] )
+
+		else if( args.length > 1 )	this.setxy( ...args )
 	}
 }
 
@@ -66,7 +63,7 @@ V.prototype. tosqc	=function( can )
 
 
 
-V.dirvh	=[new V(1,0),new V(1,-1),new V(0,-1),new V(-1,0),new V(-1,1),new V(0,1)]
+// V.dirv is set at the bottom - bug
 
 V.dirv2dirh	=function(v)
 {
@@ -424,3 +421,8 @@ V. diredgesize	=function( r )
 
 
 V. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1]))
+
+
+V.zero.setxy(0,0)
+
+V.dirvh	=[new V(1,0),new V(1,-1),new V(0,-1),new V(-1,0),new V(-1,1),new V(0,1)]

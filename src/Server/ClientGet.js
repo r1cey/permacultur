@@ -87,6 +87,20 @@ ClG.prototype. climb	=function( o )
 }
 
 
+/** { loc, objkey, act, params } */
+
+ClG.prototype. actonobj	=function( o )
+{
+	var loc	=o.loc
+
+	var map	=this.srv.game.maps.fromloc( loc )
+
+	var obj	=map?.obj.g(loc)?.[o.objkey]
+
+	if( obj )	this.pl.actonobj( loc, obj, o.act, o.params, o.objkey )
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

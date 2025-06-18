@@ -93,7 +93,7 @@ Map.prototype. shift	=function( dir, board )
 	{
 		this.bin.setcell( this.ic(v), board.bin.getcell( boic ) )
 
-		this.obj.o[v.tovstr()]	=board.obj[boic]
+		if( board.obj[boic] )	this.obj.o[v.tovstr()]	=board.obj[boic]
 
 		boic ++
 	}

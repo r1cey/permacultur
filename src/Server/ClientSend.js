@@ -135,7 +135,7 @@ ClS.prototype. newpl	=function( pl2 )
 
 ClS.prototype.plconn	=function( pl2 )
 {
-	this.send_json({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
+	this.sendjson({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
 }
 
 
@@ -144,7 +144,7 @@ ClS.prototype.plconn	=function( pl2 )
 
 ClS.prototype. clplclimb	=function( dir )
 {
-	this.send_json({ clplclimb: { dir, newloc: this.pl.loc }})
+	this.sendjson({ clplclimb: { dir, newloc: this.pl.loc }})
 }
 
 
@@ -191,18 +191,27 @@ ClS.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 		o.name	=pl2n	:
 		o.pl	=pl2.newmsgvis(pl2n)
 
-	this.send_json(clid, { plmov: o })
+	this.sendjson(clid, { plmov: o })
 }
+
+
+
+ClS.prototype. actonobj	=function( loc, key, act, params )
+{
+	this.sendjson({actonobj:{ loc, key, act, params }})
+}
+
+
 
 ClS.prototype. wrtc	=function( o )
 {
-	this.send_json({ wrtc: o })
+	this.sendjson({ wrtc: o })
 }
 
 
 ClS.prototype. error	=function( str )
 {
-	this.send_json({ error: str })
+	this.sendjson({ error: str })
 }
 
 

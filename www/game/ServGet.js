@@ -111,7 +111,7 @@ SG.prototype. mapset_	=function( o )
 
 SG.prototype. water	=function( lvl )
 {
-	// this.cl().pl.water	=lvl
+	this.cl.pl.water	=lvl
 }
 
 
@@ -272,6 +272,15 @@ SG.prototype. clplclimb	=function( o )
 	pos.h	=desth
 }
 
+
+/** { loc, key, act, params } */
+
+SG.prototype. actonobj	=function( o )
+{
+	var map	=this.cl.maps.fromloc( o.loc )
+
+	map.obj.g(o.loc)[o.key][o.act]( ... o.params )
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -101,7 +101,19 @@ SSe.prototype. plclimb	=function( pl, dir )
 
 		if( pl2.sees(pl.loc) )
 		{
-			pl2.cl.s.plclimb( pl, dir )
+			pl2.cl.s_plclimb( pl, dir )
+		}
+	}
+}
+
+
+SSe.prototype. plactonobj	=function( pl, loc, objkey, act, params )
+{
+	for(var n in this.cls.o )
+	{
+		if( this.cls.o[n].pl.sees( loc ))
+		{
+			this.cls.o[n].send_actonobj( loc, objkey, act, params )
 		}
 	}
 }

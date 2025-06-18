@@ -102,9 +102,9 @@ G.prototype. start	=async function( confpa )
 
 	await this.maps.start()
 
-	// g.min15int	=setInterval(g.min15.bind(g), 15*60*1000)
+	g.intervals.min15	=setInterval(g.min15.bind(g), 15*60*1000)
 
-	// this.secint	=setInterval( this.sec.bind(this), 1000*60/80)
+	g.intervals.sec	=setInterval( this.sec.bind(this), 1000*60/80)
 
 	this.server.start()
 
@@ -183,7 +183,7 @@ G.prototype. sec	=function()
 {
 	var map	=this
 
-	var x, ic, v	=new Loc()
+	/*var x, ic, v	=new Loc()
 
 	this.maps.gr.fore(( loc )=>
 	{
@@ -225,7 +225,7 @@ G.prototype. sec	=function()
 				}
 			}
 		}
-	})
+	})*/
 }
 
 
@@ -233,25 +233,46 @@ G.prototype. min15	=function()
 {
 	var g	=this
 
-	var map	=g.maps.gr
+	var gr	=g.maps.gr
 
-	map.fore(( loc )=>
+	gr.fore(( loc )=>
 	{
-		var o	=map.o_g(loc)
+		var ic	=gr.ic(loc)
 
-		var c	=map.arr_g(loc)
-
-		var pl	=o?.pl
-
-		if( pl )
+		switch( gr.getwsr_i( ic ))
 		{
-			if(pl.cl)
+			case "soil" :
+
+				let lvl	=gr.getsoilhum_i( ic )
+
+				if( lvl > 0 && lvl < 4 )
+				{
+					gr.dry_i( ic, loc )	//TODO:drying less under shade
+				}
+		}
+
+		var o	=gr.obj.g(loc)
+
+		if( o )
+		{
+			if( o.pl )
 			{
-				pl.subwater( 0.0208 )
+				let pl	=o.pl
+
+				if(pl.cl)
+				{
+					pl.subwater( 0.0208 )
+				}
+				else
+				{
+					pl.subwater( 0.007 )
+				}
 			}
-			else
+			if( o.dewd )
 			{
-				pl.subwater( 0.007 )
+				let driploc	=new Loc(loc).neighh( o.dewd.dir )
+
+				gr.wet( driploc )
 			}
 		}
 	}
