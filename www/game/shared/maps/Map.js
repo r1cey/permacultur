@@ -76,9 +76,9 @@ Map.prototype. isready	=function()
 
 Map.prototype. isplmov	=function( dest, pl )
 {
-	var mpl	=this.obj.g(dest)?.pl
-
-	return ( ! mpl || mpl === pl ) && this.inside( dest )
+	var o	=this.obj.g(dest)
+	
+	return this.inside(dest) && (!o || (!o.pl || o.pl===pl) && !o.dewd)
 }
 
 
@@ -252,10 +252,10 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 
 	this.bin.setcell( ic, map2.bin.getcell( ic2 ) )
 
-	if( this.bin2 && map2.bin2 )
+	/*if( this.bin2 && map2.bin2 )
 	{
 		this.bin2.setcell( ic, map2.bin2.getcell( ic2 ) )
-	}
+	}*/
 
 	var str2	=loc2.tovstr()
 
@@ -263,10 +263,10 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 	{
 		this.obj.o[loc.tovstr()]	=map2.obj.o[str2]
 	}
-	else
+	/*else
 	{
 		delete this.obj.o[loc.tovstr()]
-	}
+	}*/
 }
 
 
@@ -514,65 +514,6 @@ Map.prototype. fordiredge	=function( fun, dir, r, c )
 	}
 
 	if( this.inside(v) )	fun( v, this )
-}
-
-
-/** Shift map in certain direction, add data
- * from cells array for revealed cells
- * @arg {Number}	dir	- direction
- * @arg {Array}	arrs	-for each buffer an array of codes
- * @arg {Array} objs	-empty cells are empty
- * @arg {Function}	parse	- parsing function to call on each object added
- */
-
-Map.prototype. shift	=function( dir, board )
-{
-	var map	=this
-
-	map.setloc(map.getloc().addv( Loc.dirvh[dir] ))
-
-	var diropp	=Loc.roth(dir, Loc.dirvh.length>>1)
-
-	var r	=this._r
-	
-	var coropp	=this.corner(diropp)
-
-	var v	=new Loc()
-	
-	var vnext	=new Loc()
-
-	for(var i, j, side =-1; side <= 1; side += 2 )
-	{
-		for(j=0;  j < r+1; j++)
-		{
-			if( j===0 && side>0 )	continue
-
-			v.set( coropp.c().steph(Loc.roth(dir, side), j) )
-
-			vnext.set( v.c().neighh(dir) )
-
-			for(i=0; i < (r<<1)-j; i++)
-			{
-				this.copycell( v, this, vnext )
-
-				v.neighh(dir)
-
-				vnext.neighh(dir)
-			}
-		}
-	}
-
-	var boic	=0	//board index cell
-
-	map.fordiredge(( v )=>
-	{
-		this.bin.setcell( this.ic(v), board.bin.getcell( boic ) )
-
-		this.obj.o[v.tovstr()]	=board.obj[boic]
-
-		boic ++
-	}
-	, dir )
 }
 
 

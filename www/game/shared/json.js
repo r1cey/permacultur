@@ -1,7 +1,7 @@
 import Loc from "./Loc.js"
 import Col from "./Color.js"
 import Hands from "./player/Hands.js"
-import Dewd from "./tools/Dewd.js"
+import * as tools from "./tools.js"
 
 
 var rules	=
@@ -28,7 +28,7 @@ var rules	=
 	},
 	dewd	:
 	{
-		rev:( val )=>new Dewd(val)
+		rev:( val )=>new tools.Dewd(val)
 	}
 }
 

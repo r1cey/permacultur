@@ -32,6 +32,20 @@ Gr.prototype. draw	=function( can )
 
 		this.drawhex( can, loc, h, vsq )
 	})
+
+	// var imgs	=can.imgs().o
+
+	can.forcell(( loc )=>
+	{
+		if( ! this.inside(loc) )	return
+
+		var o	=this.obj.get(loc)
+
+		for(var key in o )
+		{
+			o[key].draw?.( can, loc, vsq )
+		}
+	})
 }
 
 
@@ -78,9 +92,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 			if( lvl === 0 )
 			{
-				let vcorn	=vsq.c().sub(r, h2>>1)
-
-				ctx.drawImage( can.imgs().o.sand3, vcorn.x,vcorn.y, r<<1, h2 )
+				can.drawimg( loc, can.imgs().o.sand3, new V() )
 			}
 			else
 			{

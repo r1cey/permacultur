@@ -335,6 +335,18 @@ Can.prototype. clicked	=function( possqel )
 					}
 				)
 			}
+			let o	=map.obj.g(loc)
+
+			for(var key in o)
+			{
+				switch( key )
+				{
+					case "dewd" :
+
+						menu.addopt( "rotate right" ,()=>{ o[key].rot(1) })
+						menu.addopt( "rotate left" ,()=>{ o[key].rot(-1) })
+				}
+			}
 
 			switch(loc.h)
 			{
@@ -660,6 +672,17 @@ Can.prototype. fillhex	=function( c, col="#888888" )
 	ctx.closePath()
 	ctx.fillStyle	=col
 	ctx.fill()
+}
+
+
+
+Can.prototype. drawimg	=function( loc, img, vbuf )
+{
+	var{ r, h2 }	=this.units
+
+	vbuf.set(loc).tosqc(this).sub(r, h2>>1)
+
+	this.ctx.drawImage( img, vbuf.x,vbuf.y, r<<1, h2 )
 }
 
 

@@ -12,6 +12,8 @@ export default class V
 
 	static sec60	=sec60
 
+	static rad60	=Math.PI/3
+
 	static delim	='_'
 
 	static zero	=new V(0,0)

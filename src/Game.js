@@ -6,6 +6,7 @@ import Loc	from './Loc.js'
 import Pl from './Player.js'
 // import { constrainedMemory } from 'process'
 import Con from "./Console.js"
+import * as tools from "../www/game/shared/tools.js"
 
 
 
@@ -140,6 +141,26 @@ G.prototype. save	=async function()
 		this.pls.save()
 	]
 	return await Promise.allSettled( proms )
+}
+
+
+
+G.prototype. additem	=function( itemn, h, x, y )
+{
+	var loc	=new Loc(x,y,h)
+
+	var item
+
+	var map	=this.maps.fromloc( loc )
+
+	switch( itemn )
+	{
+		case "dewd"	:
+
+			item	=new tools.Dewd()
+			
+			map.obj.set(loc).dewd	=item
+	}
 }
 
 

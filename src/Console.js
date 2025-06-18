@@ -1,5 +1,7 @@
 import * as rl from "node:readline/promises"
 
+import Loc from "../www/game/shared/Loc.js"
+
 
 export default class Con
 {
@@ -22,17 +24,23 @@ Con.prototype. online	=async function( str )
 {
 	var arr	=str.split(" ")
 
+	var g	=this.game
+
 	switch(arr[0])
 	{
 		case "save" :
 
-			this.game.save()
+			g.save()
 		break
 		case "stop" :
 
-			await this.game.stop()
+			await g.stop()
+		break
+		case "additem"	:
 
-			console.log("stopped")
+			g.additem( ...arr.slice(1) )
+		break
+
 	}
 }
 
