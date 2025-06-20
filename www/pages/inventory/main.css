@@ -1,6 +1,7 @@
 inv
 {
 	position: absolute;
+	overflow: auto;
 
 	left: 10px;
 	top: 34%;
@@ -26,4 +27,18 @@ inv>hands
 	background-repeat: no-repeat ;
 
 	border: 1px inset rgb(174, 148, 64) ;
+}
+
+inv>seedbag
+{
+	display: block ;
+	width: 50% ;
+	height: 50% ;
+
+	background: rgb(112, 186, 114) url(seed_pouch.png) ;
+	background-size: contain ;
+	background-position: center ;
+	background-repeat: no-repeat ;
+
+	border: 1px inset rgb(30, 90, 65) ;
 }

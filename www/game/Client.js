@@ -68,6 +68,8 @@ Client.prototype. setpl	=async function( plmsg )
 
 	this.html.inv	=await this.html.loadp( "inventory" )
 
+	this.pl.attachhtmlinv( this.html.inv )
+
 	var can	=this.html.can
 
 	can.pl	=this.pl

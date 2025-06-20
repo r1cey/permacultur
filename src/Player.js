@@ -5,7 +5,7 @@ import Loc from './Loc.js'
 
 import * as fs	from './fs.js'
 
-import * as json from "../www/game/shared/json.js"
+import * as json from "../www/game/shared/newjsonrules.js"
 
 /*
 const SrvPl	=(c) => class extends c

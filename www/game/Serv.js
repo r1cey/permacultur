@@ -2,10 +2,12 @@ import SrvS from './ServSend.js'
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
-import * as json from './shared/json.js'
 import Pl from "./Player.js"
 import Loc from "./shared/Loc.js"
 
+import tools from "./tools.js"
+import newjsonrules from "./shared/newjsonrules.js"
+var json	=newjsonrules(tools)
 
 
 export default class Serv extends SrvS

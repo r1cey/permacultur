@@ -5,6 +5,8 @@ export default class Inv extends P
 {
 	cont
 
+	seedbag	=[]
+
 
 	constructor()
 	{
@@ -31,4 +33,52 @@ Inv.prototype. show	=function()
 Inv.prototype. hide	=function()
 {
 	this.cont.removeChild( this.el )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Inv.prototype. addseedbag	=function()
+{
+	var sb	=new Seedbag(this)
+
+	this.seedbag.push(sb)
+
+	return sb
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Seedbag
+{
+	inv
+
+	el
+
+
+	constructor( inv )
+	{
+		this.inv	=inv
+
+		this.el	=document.createElement( "SEEDBAG" )
+
+		this.inv.el.appendChild( this.el )
+	}
+}
+
+
+
+Seedbag.prototype. add	=function( itemn, item )
+{
+	switch( itemn )
+	{
+		case "cucumber_seeds" :
+
+			
+	}
 }

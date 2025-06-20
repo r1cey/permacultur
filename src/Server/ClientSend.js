@@ -1,4 +1,6 @@
-import * as json from '../../www/game/shared/json.js'
+import tools from "../../www/game/shared/tools.js"
+import newjsonrules from "../../www/game/shared/newjsonrules.js"
+var json	=newjsonrules(tools)
 
 import Loc from '../../www/game/shared/Loc.js'
 

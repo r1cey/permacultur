@@ -136,6 +136,19 @@ export default class Player extends ClPl( PlSh )
 
 
 
+Player.prototype. attachhtmlinv	=function( htmlinv )
+{
+	for(var sb of this.inv.seedbag )
+	{
+		sb.attachhtml( htmlinv )
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 Player.prototype. onmov	=function( newloc )
 {
 	if( this.ismovack )

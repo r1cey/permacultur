@@ -2,8 +2,9 @@ import ShObj	from "../../www/game/shared/maps/Obj.js"
 
 import * as fs	from '../fs.js'
 
-import * as json from "../../www/game/shared/json.js"
-
+import tools from "../../www/game/shared/tools.js"
+import newjsonrules from "../../www/game/shared/newjsonrules.js"
+var json	=newjsonrules(tools)
 
 
 

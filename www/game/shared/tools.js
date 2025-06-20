@@ -1,7 +1,11 @@
 import Loc	from "./Loc.js"
 
 
-export class Dewd
+var t	={}
+
+
+
+t.Dewd	=class
 {
 	dir	=5
 
@@ -37,3 +41,18 @@ export class Dewd
 		ctx.restore()
 	}
 }
+
+
+t.Seedbag	=class
+{
+	o	={}
+
+
+	constructor( obj )
+	{
+		Object.assign( this.o, obj.o )
+	}
+}
+
+
+export default t
