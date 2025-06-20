@@ -27,6 +27,7 @@ inv>hands
 	background-repeat: no-repeat ;
 
 	border: 1px inset rgb(174, 148, 64) ;
+	margin: 1ex ;
 }
 
 inv>seedbag
@@ -41,4 +42,23 @@ inv>seedbag
 	background-repeat: no-repeat ;
 
 	border: 1px inset rgb(30, 90, 65) ;
+}
+
+inv>seedbag>item
+{
+	display: inline-block;
+	width: 10mm ;
+	height: 10mm ;
+
+	background-color: rgba(255, 255, 255, 0.33);
+	background-size: contain ;
+	background-position: center ;
+	background-repeat: no-repeat ;
+	border: 1px white;
+}
+
+
+inv .cucumber_seeds
+{
+	background-image: url(../imgs/cucumber_seeds.png) ;
 }

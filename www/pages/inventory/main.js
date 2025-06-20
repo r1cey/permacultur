@@ -75,10 +75,14 @@ class Seedbag
 
 Seedbag.prototype. add	=function( itemn, item )
 {
+	var el	=document.createElement( "ITEM" )
+
 	switch( itemn )
 	{
 		case "cucumber_seeds" :
 
-			
+			el.className	=itemn
+
 	}
+	this.el.appendChild(el)
 }
