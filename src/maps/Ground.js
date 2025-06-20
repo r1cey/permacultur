@@ -102,7 +102,7 @@ G.prototype. dry_i	=function( ic, loc )
 {
 	var lvl	=this.getsoilhum_i( ic )
 	
-	if( x > 0 )
+	if( lvl > 0 )
 	{
 		this.set_ic_( "soilhum", ic, loc, -- lvl )
 	}

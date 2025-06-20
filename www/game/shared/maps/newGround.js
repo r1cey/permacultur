@@ -133,13 +133,17 @@ export default function( Base )
 	{
 		return this.bin.getval_str( ic, Gr.Bin.bmap.wsr.ty )
 	}
+	Gr.prototype. setwsr_i	=function( ic, str )
+	{
+		this.bin.setval_str( ic, Gr.Bin.bmap.wsr.ty, str )
+	}
 
 
 	Gr.prototype. setsoil_i	=function( ic, lvl )
 	{
-		this.bin.setval_str( ic, Gr.Bin.bmap.wsr.ty, "soil" )
+		this.setwsr_i( ic, "soil" )
 
-		this.bin.setval( ic, Gr.Bin.bmap.wsr.lvl, lvl )
+		this.setsoilhum_i( ic, lvl )
 	}
 
 
@@ -152,6 +156,10 @@ export default function( Base )
 	Gr.prototype. getsoilhum_i	=function(ic)
 	{
 		return this.bin.getval( ic, Gr.Bin.bmap.wsr.lvl )
+	}
+	Gr.prototype. setsoilhum_i	=function(ic, lvl )
+	{
+		this.bin.setval( ic, Gr.Bin.bmap.wsr.lvl, lvl )
 	}
 
 

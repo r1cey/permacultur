@@ -290,7 +290,7 @@ Player.prototype. setwater	=function( lvl )
 {
 	PlMsg.prototype. setwater.call(this, lvl )
 
-	this.cl?.sendjson({ water: this.water })
+	this.cl && this.cl.sendjson({ water: this.water })
 }
 /*Player.prototype. subwater	=function( lvl )
 {

@@ -45,6 +45,10 @@ export default function( Map )
 	{
 		return this.getwsr_i(this.ic(loc))
 	}
+	GM.prototype. setwsr	=function( loc, str )
+	{
+		return this.setwsr_i(this.ic(loc), str )
+	}
 
 
 
@@ -67,6 +71,10 @@ export default function( Map )
 	GM.prototype. getsoilhum	=function( loc )
 	{
 		return this.getsoilhum_i(this.ic( loc ))
+	}
+	GM.prototype. setsoilhum	=function( loc, lvl )
+	{
+		return this.setsoilhum_i(this.ic( loc ), lvl )
 	}
 
 	

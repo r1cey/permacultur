@@ -40,7 +40,8 @@ export default class Pls
 				""	:
 				{
 					rev	:( val )=> new Pl( val, game )
-				}
+				},
+				"cl" :{ rev :( val )=> 0 }
 			} ) )
 	}
 }

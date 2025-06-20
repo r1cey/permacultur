@@ -83,6 +83,21 @@ Seedbag.prototype. add	=function( itemn, item )
 
 			el.className	=itemn
 
+			el.onclick	=( ev )=>
+			{
+				let menu	=this.inv.html.contextmenu.new(ev)
+
+				menu.addopt( "plant", ()=>
+				{
+					this.inv.hide()
+
+					this.inv.html.can.addonclick((loc, can)=>
+					{
+						console.log("plant", loc)
+					})
+				})
+			}
+
 	}
 	this.el.appendChild(el)
 }

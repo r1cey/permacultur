@@ -1,6 +1,7 @@
 import Con from './Console.js'
 import Can from './canvas/Canvas.js'
 import Menu	from "./Menu.js"
+import ContextMenu	from "./ContextMenu.js"
 import Imgs	from "./Imgs.js"
 
 export default class Html
@@ -28,6 +29,8 @@ export default class Html
 	ps	={}
 
 	inv	//not necessary since should be already in .ps
+
+	contextmenu	=new ContextMenu(this)
 
 	imgs	=new Imgs(this)
 

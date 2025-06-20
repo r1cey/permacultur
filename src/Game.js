@@ -275,8 +275,7 @@ G.prototype. min15	=function()
 				gr.wet( driploc )
 			}
 		}
-	}
-	, true)
+	})
 }
 
 
