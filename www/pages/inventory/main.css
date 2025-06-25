@@ -54,7 +54,7 @@ inv>seedbag>item
 	background-size: contain ;
 	background-position: center ;
 	background-repeat: no-repeat ;
-	border: 1px white;
+	border: 1px solid rgba(255,255,255,0.66);
 }
 
 

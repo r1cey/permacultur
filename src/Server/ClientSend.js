@@ -1,6 +1,5 @@
-import tools from "../../www/game/shared/tools.js"
-import newjsonrules from "../../www/game/shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+import newjsontr from "../../www/game/shared/newjsontransfrm.js"
+var jsontr	=newjsontr()
 
 import Loc from '../../www/game/shared/Loc.js'
 
@@ -22,7 +21,7 @@ export default class ClS
 
 ClS.prototype. setpl	=function()
 {
-	this.sendjson({ setpl: this.pl }, json.newreplcr())
+	this.sendjson({ setpl: this.pl }, jsontr.replcr)
 }
 
 
@@ -41,14 +40,14 @@ ClS.prototype. setmap	=function()
 
 	this.sendbin( slicedtr.bin.getbuf())
 
-	var jsonrule	=json.newrules(
+	var replcr	=newjsontr(
 		{
 			pl	:
 			{
 				rep	:( val )=> this.pl.name===val.name ? val.name : val
 			}
-		}
-	)
+		}).replcr
+		
 	this.sendjson(
 		{
 			setmap:
@@ -59,7 +58,7 @@ ClS.prototype. setmap	=function()
 				,
 				r	:pl.vision
 			}
-		}, json.newreplcr(jsonrule) )
+		}, replcr )
 }
 
 

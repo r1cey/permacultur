@@ -1,7 +1,7 @@
-import PlSh from './shared/player/Player.js'
-import PlVSh from './shared/player/PlVis.js'
-import PCl from './PeerCl.js'
-import Loc from './shared/Loc.js'
+import PlSh from '../shared/player/Player.js'
+import PlVSh from '../shared/player/PlVis.js'
+import PCl from '../PeerCl.js'
+import Loc from '../shared/Loc.js'
 
 const ClPl =(c) => class extends c
 {
@@ -166,7 +166,7 @@ Player.prototype. onmov	=function( newloc )
 
 Player.prototype. rejmov	=function()
 {
-	this.dest.set( this.loc )
+	this.dest.set( this.loc )	//TODO: fix this!
 
 	this.ismovack	=true
 }
@@ -206,3 +206,11 @@ Player.prototype. climb	=function( loc )
 		}
 	}
 }*/
+
+
+Player.prototype. movitem	=function( from, itemn, to )
+{
+	to.additem( itemn, from.o[itemn] )
+	
+	from.remitem( itemn )
+}

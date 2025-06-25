@@ -9,8 +9,6 @@ export default class Pl extends PV
 
 	water	=1
 
-	inv	={}
-
 	constructor( pl )
 	{
 		super()

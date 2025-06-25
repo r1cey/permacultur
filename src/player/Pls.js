@@ -1,12 +1,13 @@
 import Pl	from './Player.js'
 
-import Loc	from '../www/game/shared/Loc.js'
+import Loc	from '../../www/game/shared/Loc.js'
 
-import * as fs from './fs.js'
+import * as fs from '../fs.js'
 
-import tools from "../www/game/shared/tools.js"
-import newjsonrules from "../www/game/shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+import tools from "../tools.js"
+import Hands from './Hands.js'
+import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+
 
 
 export default class Pls
@@ -35,14 +36,26 @@ export default class Pls
 	{
 		this.game	=game
 
-		this.rev	=json.newrevivr( json.newrules(
+		this.rev	=newjsontrans(
 			{
 				""	:
 				{
 					rev	:( val )=> new Pl( val, game )
 				},
-				"cl" :{ rev :( val )=> 0 }
-			} ) )
+				"cl" :
+				{
+					rev :( val )=> 0
+				},
+				hands	:
+				{
+					rev:( val )=>new Hands(val)
+				},
+				seedbag :
+				{
+					rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
+				}
+			}
+		).revivr
 	}
 }
 

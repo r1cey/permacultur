@@ -1,9 +1,9 @@
 import Maps from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'
-import Players from './Pls.js'
+import Players from './player/Pls.js'
 import Loc	from './Loc.js'
-import Pl from './Player.js'
+import Pl from './player/Player.js'
 // import { constrainedMemory } from 'process'
 import Con from "./Console.js"
 import * as tools from "../www/game/shared/tools.js"

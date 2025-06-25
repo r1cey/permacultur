@@ -1,18 +1,23 @@
 import P from '../Page.js'
+import V from "../../game/shared/Vec.js"
 
 
 export default class Inv extends P
 {
-	cont
+	box
+
+	context
 
 	seedbag	=[]
+
+	cl()	{return this.html.cl }
 
 
 	constructor()
 	{
 		super(...arguments)
 		
-		this.cont	=this.html.screen
+		this.box	=this.html.screen
 	}
 }
 
@@ -23,7 +28,7 @@ export default class Inv extends P
 
 Inv.prototype. show	=function()
 {
-	this.cont.appendChild( this.el )
+	this.box.appendChild( this.el )
 
 	this.html.can.el.addEventListener("click", this.hide. bind(this),{ once :true})
 }
@@ -32,7 +37,9 @@ Inv.prototype. show	=function()
 
 Inv.prototype. hide	=function()
 {
-	this.cont.removeChild( this.el )
+	// this.context.hide()
+
+	this.box.removeChild( this.el )
 }
 
 
@@ -85,10 +92,12 @@ Seedbag.prototype. add	=function( itemn, item )
 
 			el.onclick	=( ev )=>
 			{
-				let menu	=this.inv.html.contextmenu.new(ev)
+				let menu	=this.inv.html.contextmenu.newev(ev,)
 
 				menu.addopt( "plant", ()=>
 				{
+					this.inv.cl().pl.movitem( , itemn, )
+
 					this.inv.hide()
 
 					this.inv.html.can.addonclick((loc, can)=>

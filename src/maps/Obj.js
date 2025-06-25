@@ -2,9 +2,18 @@ import ShObj	from "../../www/game/shared/maps/Obj.js"
 
 import * as fs	from '../fs.js'
 
-import tools from "../../www/game/shared/tools.js"
-import newjsonrules from "../../www/game/shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+import tools from "../tools.js"
+import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+
+
+var jsontr	=newjsontrans(
+	{
+		dewd	:
+		{
+			rev:( val )=>new tools.Dewd(val)
+		}
+	}
+)
 
 
 
@@ -33,7 +42,7 @@ Obj.prototype. read	=async function( path )
 {
 	var map	=this.map
 
-	var o	=await fs.readjson( path+'.json', json.newrevivr() )
+	var o	=await fs.readjson( path+'.json', jsontr.revivr() )
 
 	if( ! o )	return
 

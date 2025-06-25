@@ -4,7 +4,7 @@ import Obj	from "./Obj.js"
 
 import * as fs	from '../fs.js'
 
-import Pl	from '../Player.js'
+import Pl	from '../player/Player.js'
 
 import Loc	from "../../www/game/shared/Loc.js"
 

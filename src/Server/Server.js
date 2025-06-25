@@ -6,9 +6,10 @@ import { WebSocketServer, WebSocket } from "ws"
 import Cls from "./Clients.js"
 import ServSend from './ServSend.js'
 
-import tools from "../../www/game/shared/tools.js"
-import newjsonrules from "../../www/game/shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+
+
+var jsontr	=newjsontrans()
 
 
 
@@ -121,7 +122,7 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 
 	try
 	{
-		var plmsg	=JSON.parse( str, json.newrevivr() )
+		var plmsg	=JSON.parse( str, jsontr.revivr )
 	}
 	catch(err)
 	{

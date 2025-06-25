@@ -5,8 +5,11 @@ import ClG from './ClientGet.js'
 import MapG	from "../maps/Ground.js"
 
 import tools from "../../www/game/shared/tools.js"
-import newjsonrules from "../../www/game/shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+
+import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+
+
+var jsontr	=newjsontrans()
 
 
 export default class Client extends ClG

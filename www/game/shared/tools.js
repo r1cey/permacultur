@@ -43,15 +43,14 @@ t.Dewd	=class
 }
 
 
-t.Seedbag	=class
+t.newSeedbag	=function( Inv )
 {
-	o	={}
-
-
-	constructor( obj )
+	class SB extends Inv
 	{
-		Object.assign( this.o, obj.o )
+
 	}
+
+	return SB
 }
 
 

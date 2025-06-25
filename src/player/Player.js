@@ -1,11 +1,14 @@
-import PlMsg from '../www/game/shared/player/Player.js'
-import V from '../www/game/shared/Vec.js'
+import PlMsg from '../../www/game/shared/player/Player.js'
+import V from '../../www/game/shared/Vec.js'
 
-import Loc from './Loc.js'
+import Loc from '../Loc.js'
 
-import * as fs	from './fs.js'
+import * as fs	from '../fs.js'
 
-import * as json from "../www/game/shared/newjsonrules.js"
+import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+
+
+var jsontr	=newjsontrans()
 
 /*
 const SrvPl	=(c) => class extends c
@@ -86,7 +89,7 @@ Player.prototype. save	=async function( dir )
 {
 	var pa	=dir+this.name+'.json'
 
-	await fs.savejson( pa, this, json.newreplcr() )
+	await fs.savejson( pa, this, jsontr.replcr )
 }
 
 

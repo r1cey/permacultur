@@ -1,6 +1,13 @@
+import V	from "./game/shared/Vec.js"
+
+
 export default class CM
 {
 	html
+
+	el	=document.createElement("ACTIONS")
+
+	pos	=new V()
 
 
 	constructor( html )
@@ -11,8 +18,11 @@ export default class CM
 
 
 
-CM.prototype. new	=function( ev )
+CM.prototype. new	=function( pos,  )
 {
+	if( pos instanceof Event )	
+
+
 	ev.offsetX
 	ev.offsetY
 
