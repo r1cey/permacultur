@@ -4,9 +4,11 @@ import V from "../../game/shared/Vec.js"
 
 export default class Inv extends P
 {
+	pl
+
 	box
 
-	context
+	hands	=new Hands(this)
 
 	seedbag	=[]
 
@@ -61,18 +63,49 @@ Inv.prototype. addseedbag	=function()
 
 
 
-class Seedbag
+class InvObj
 {
 	inv
 
 	el
 
 
-	constructor( inv )
+	additem	//func
+
+	remitem	//func
+
+
+	constructor( inv, el )
 	{
 		this.inv	=inv
 
-		this.el	=document.createElement( "SEEDBAG" )
+		this.el	=el
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Hands	extends InvObj
+{
+	constructor( inv )
+	{
+		super( inv, inv.el.getElementsByTagName("hands")[0] )
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Seedbag	extends InvObj
+{
+	constructor( inv )
+	{
+		super( inv, document.createElement( "SEEDBAG" ))
 
 		this.inv.el.appendChild( this.el )
 	}
@@ -80,7 +113,7 @@ class Seedbag
 
 
 
-Seedbag.prototype. add	=function( itemn, item )
+Seedbag.prototype. additem	=function( itemn, item )
 {
 	var el	=document.createElement( "ITEM" )
 
@@ -96,7 +129,7 @@ Seedbag.prototype. add	=function( itemn, item )
 
 				menu.addopt( "plant", ()=>
 				{
-					this.inv.cl().pl.movitem( , itemn, )
+					this.inv.pl.movitem(  this, itemn,  )
 
 					this.inv.hide()
 

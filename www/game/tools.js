@@ -1,26 +1,16 @@
 import tools	from "./shared/tools.js"
+import Inv	from "./player/Inv.js"
 
 
-tools.Seedbag	=class extends tools.Seedbag
+tools.Seedbag	=class extends tools.newSeedbag( Inv )
 {
-	htmlsb
-
-
-	/*constructor( obj, htmlinv )
+	attachhtmlinv( htmlinv )
 	{
-		super( obj )
-
-		this.htmlinv	=htmlinv
-	}*/
-
-
-	attachhtml( htmlinv )
-	{
-		this.htmlsb	=htmlinv.addseedbag()
+		this.htmlobj	=htmlinv.addseedbag()
 
 		for(var itemn in this.o )
 		{
-			this.htmlsb.add( itemn, this.o[itemn] )
+			this.htmlobj.additem( itemn, this.o[itemn] )
 		}
 	}
 }

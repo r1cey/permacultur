@@ -138,9 +138,13 @@ export default class Player extends ClPl( PlSh )
 
 Player.prototype. attachhtmlinv	=function( htmlinv )
 {
+	htmlinv.pl	=this
+
+	this.hands.attachhtmlinv( htmlinv )
+
 	for(var sb of this.inv.seedbag )
 	{
-		sb.attachhtml( htmlinv )
+		sb.attachhtmlinv( htmlinv )
 	}
 }
 

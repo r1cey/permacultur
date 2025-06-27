@@ -5,9 +5,13 @@ import Tr from './maps/Trees.js'
 import Pl from "./Player.js"
 import Loc from "./shared/Loc.js"
 
+import Hands	from "./player/Hands.js"
 import tools from "./tools.js"
-import newjsonrules from "./shared/newjsonrules.js"
-var json	=newjsonrules(tools)
+import newjsontr from "./shared/newjsontransfrm.js"
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 
 export default class Serv extends SrvS
@@ -31,25 +35,37 @@ export default class Serv extends SrvS
 
 		this.cl	=client
 
-		var rules	=json.newrules(
+		this.rev	=newjsontr(
+		{
+			pl	:
 			{
-				pl	:
-				{
-					rev :( val )=> typeof val==="string" ? client.pl : new Pl(val,client)
-				}
+				rev :( val )=> typeof val==="string" ? 
+					( val===client.pl.name ?
+						client.pl : console.error("revivr: "+val) ) :
+					new Pl(val,client)
+			},
+			hands	:
+			{
+				rev:( val )=>new Hands(val)
+			},
+			seedbag :
+			{
+				rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
 			}
-		)
-
-		this.rev	=json.newrevivr( rules )
+		}).revivr
 	}
 }
 
-// var Server	=Serv
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 
 Serv.prototype. test	=function()
 {
 
 }
+
 
 /** @arg	o	- whatever goes to s.login() */
 

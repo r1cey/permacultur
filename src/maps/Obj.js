@@ -42,7 +42,7 @@ Obj.prototype. read	=async function( path )
 {
 	var map	=this.map
 
-	var o	=await fs.readjson( path+'.json', jsontr.revivr() )
+	var o	=await fs.readjson( path+'.json', jsontr.revivr )
 
 	if( ! o )	return
 
