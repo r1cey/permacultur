@@ -255,8 +255,10 @@ V.prototype. tosq	=function( h2 = 32 )
 
 V.prototype. setev	=function(ev)
 {
-	this.x	=ev.offsetX
-	this.y	=ev.offsetY
+	this.x	=ev.pageX
+	this.y	=ev.pageY
+
+	return this
 }
 
 V.prototype. round	=function()

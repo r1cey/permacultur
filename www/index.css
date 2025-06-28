@@ -116,7 +116,7 @@ menu>option
 }
 
 
-screen>acts
+screen>actions
 {
 	position: absolute;
 	padding	:0;
@@ -125,7 +125,7 @@ screen>acts
 	background-color: hsla(7, 7%, 23%, 0.8);
 }
 
-screen>acts>button
+screen>actions>button
 {
 	margin: 1ex;
 }

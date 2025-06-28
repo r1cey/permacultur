@@ -2,7 +2,7 @@ import SrvS from './ServSend.js'
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
-import Pl from "./Player.js"
+import Pl from "./player/Player.js"
 import Loc from "./shared/Loc.js"
 
 import Hands	from "./player/Hands.js"
@@ -51,6 +51,10 @@ export default class Serv extends SrvS
 			seedbag :
 			{
 				rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
+			},
+			dewd	:
+			{
+				rev:( val )=>new tools.Dewd(val)
 			}
 		}).revivr
 	}

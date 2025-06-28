@@ -85,7 +85,7 @@ M.prototype. addopt	=function( str, act, check )
 {
 	var menu	=this
 
-	this.el	??=document.createElement( "acts" )
+	this.el	??=document.createElement( "actions" )
 
 	this.opts.push( new Opt( str, ()=>{ act(); menu.del() }, check, this.el ))
 }

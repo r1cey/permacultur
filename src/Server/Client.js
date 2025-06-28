@@ -46,7 +46,7 @@ export default class Client extends ClG
 
 		ws.on('close', this.onclose. bind(this))
 
-		this.jsonrev	=json.newrevivr()
+		// this.jsonrev	=json.newrevivr()
 	}
 }
 
@@ -59,7 +59,7 @@ Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var msg	=JSON.parse( data.toString() , this.jsonrev )
+	var msg	=JSON.parse( data.toString() , jsontr.revivr )
 
 	for(var prop in msg )
 	{

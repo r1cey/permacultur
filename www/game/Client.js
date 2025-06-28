@@ -1,6 +1,6 @@
 import Html	from '../Html.js'
 import Serv	from './Serv.js'
-import Player	from './Player.js'
+import Player	from './player/Player.js'
 import PCl	from './PeerCl.js'
 import Maps	from './maps/Maps.js'
 import V	from './shared/Vec.js'
@@ -66,9 +66,7 @@ Client.prototype. setpl	=async function( plmsg )
 
 	this.pl	=new Player( plmsg ,this)
 
-	this.html.inv	=await this.html.loadp( "inventory" )
-
-	this.pl.attachhtmlinv( this.html.inv )
+	this.html.inv	=await this.html.loadp( "inventory", this.pl )
 
 	var can	=this.html.can
 

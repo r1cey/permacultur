@@ -59,7 +59,7 @@ export default class Html
 
 
 
-Html.prototype. loadp	=async function( name )
+Html.prototype. loadp	=async function( name, ...args )
 {
 	var promis	=[,,]
 
@@ -108,7 +108,7 @@ Html.prototype. loadp	=async function( name )
 	}
 	else
 	{
-		p	=new (res[1].value.default)(this, el, css)
+		p	=new (res[1].value.default)(this, el, css, ...args)
 	}
 
 	this.ps[name]	=p

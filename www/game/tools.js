@@ -6,7 +6,7 @@ tools.Seedbag	=class extends tools.newSeedbag( Inv )
 {
 	attachhtmlinv( htmlinv )
 	{
-		this.htmlobj	=htmlinv.addseedbag()
+		this.htmlobj	=htmlinv.addseedbag( this )
 
 		for(var itemn in this.o )
 		{

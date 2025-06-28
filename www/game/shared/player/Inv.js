@@ -3,9 +3,9 @@ export default class Inv
 	o	={}
 
 
-	additem
+	//additem	//func
 
-	remitem
+	//remitem	//func
 
 
 	constructor( inv )

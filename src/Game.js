@@ -102,9 +102,9 @@ G.prototype. start	=async function( confpa )
 
 	await this.maps.start()
 
-	g.intervals.min15	=setInterval(g.min15.bind(g), 15*60*1000)
+	g.intervals.min15	=setInterval(g.min15.bind(g), 12*60*1000)
 
-	g.intervals.sec	=setInterval( this.sec.bind(this), 1000*60/80)
+	g.intervals.sec	=setInterval( this.sec.bind(this), 1000*60/73)
 
 	this.server.start()
 

@@ -1,6 +1,6 @@
 import Loc from './shared/Loc.js'
 
-import Pl from './Player.js'
+// import Pl from './Player.js'
 
 import Maps	from './maps/Maps.js'
 
