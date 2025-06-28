@@ -325,15 +325,11 @@ Can.prototype. clicked	=function( possqel )
 
 			if( map.climbable( loc ))
 			{
-				menu.addopt(
-					
-					"climb"
-					,
-					()=>
-					{
-						can.pl.climb(loc)
-					}
-				)
+				menu.addopt( "climb", ()=> can.pl.climb(loc) )
+			}
+			if( pl.hands.o.cucumber_seeds && map.plantable?.( loc ))
+			{
+				menu.addopt( "plant cucumbers", ()=> console.log("planted") )
 			}
 			let o	=map.obj.g(loc)
 

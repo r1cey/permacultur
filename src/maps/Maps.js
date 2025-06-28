@@ -58,10 +58,6 @@ Ms.prototype. start	=async function()
 	if( ! proms[0] )
 	{
 		console.log( `Ground files were not found` )
-
-		this.gr.gen(this.conf.size.r, this.conf.size.maxcells, this.trees)
-
-		this.save()
 	}
 	else if( ! proms[1] )
 	{
@@ -75,16 +71,20 @@ Ms.prototype. start	=async function()
 
 
 
-Ms.prototype. gen	=function( r, maxc )
+Ms.prototype. genriver	=function()
 {
-/*	r	??=this.conf.size.r
-	
-	maxc	??=this.conf.size.maxcells
+	this.gr.genriver( this.conf.size.r, this.conf.size.maxcells, this.trees )
 
-	var gr	=this.gr
-
-	var tr	=this.tr*/
+	this.save()
 }
+
+Ms.prototype. gendesert	=function()
+{
+	this.gr.gendesert( this.conf.size.r, this.conf.size.maxcells, this.trees )
+
+	this.save()
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

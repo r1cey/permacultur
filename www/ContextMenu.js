@@ -12,6 +12,19 @@ export default class CM
 	opts	=[]
 
 
+	del()
+	{
+		document.body.removeChild( this.el )
+
+		this.html.screen.removeEventListener( "click", this.delbound )
+
+		this.opts.length	=0
+
+		this.el.textContent = '';
+	}
+	delbound	=this.del.bind(this)
+
+
 	constructor( html )
 	{
 		this.html	=html
@@ -56,20 +69,11 @@ CM.prototype. show	=function()
 
 	this.setelpos()
 
-	this.html.screen.appendChild( this.el )
+	document.body.appendChild( this.el )
+
+	setTimeout(()=>{ this.html.screen.addEventListener( "click", this.delbound )})
 
 	// this.int	=window.setInterval( this.check.bind(this), 821 )	//73bpm
-}
-
-
-
-CM.prototype. del	=function()
-{
-	this.html.screen.removeChild( this.el )
-
-	this.opts.length	=0
-
-	this.el.textContent = '';
 }
 
 

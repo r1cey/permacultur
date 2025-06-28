@@ -30,6 +30,21 @@ inv>hands
 	margin: 1ex ;
 }
 
+inv>hands>item
+{
+	display: inline-block;
+	width: 33mm ;
+	height: 33mm ;
+
+	/* background-color: rgba(255, 255, 255, 0.33); */
+	background-size: contain ;
+	background-position: center ;
+	background-repeat: no-repeat ;
+	border: 1px solid rgba(255,255,255,0.66);
+}
+
+
+
 inv>seedbag
 {
 	display: block ;

@@ -20,7 +20,19 @@ export default class G extends ShGr
 
 /** Generate new procedural map */
 
-G.prototype. gen	=function( r, maxc, trees )
+G.prototype. gendesert	=function( r, maxc, trees )
+{
+	gr.build( r, maxc, new Loc(0,0,0) )
+
+	trees.build( r, maxc, new Loc( 0, 0, 1 ))
+
+	this.allsoil()
+
+	this.genumbrtrees(new Loc(0,0,0))
+}
+
+
+G.prototype. genriver	=function( r, maxc, trees )
 {
 	var gr	=this
 	
@@ -34,7 +46,6 @@ G.prototype. gen	=function( r, maxc, trees )
 
 	// this.randomwater()
 
-	/*
 	this.makeriver( 1, 3 )
 
 	this.makeriver( 4, 3 )
@@ -68,7 +79,6 @@ G.prototype. gen	=function( r, maxc, trees )
 				if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
 		}
 	})
-				*/
 }
 
 
@@ -438,6 +448,13 @@ G.prototype. gentree	=function( loc, lvl, ic )
 	}
 
 	return -1
+}
+
+
+
+G.prototype. genumbrtrees	=function( loc )
+{
+	
 }
 
 

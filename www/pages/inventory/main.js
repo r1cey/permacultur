@@ -15,6 +15,19 @@ export default class Inv extends P
 	cl()	{return this.html.cl }
 
 
+	hide()
+	{
+		try
+		{
+			this.box.removeChild( this.el )
+		}
+		catch(err) {}
+
+		this.html.can.el.removeEventListener( "click", this.hidebound )
+	}
+	hidebound	=this.hide.bind(this)
+
+
 	constructor( html, el, css, pl )
 	{
 		super( html, el, css )
@@ -36,16 +49,7 @@ Inv.prototype. show	=function()
 {
 	this.box.appendChild( this.el )
 
-	this.html.can.el.addEventListener("click", this.hide. bind(this),{ once :true})
-}
-
-
-
-Inv.prototype. hide	=function()
-{
-	// this.context.hide()
-
-	this.box.removeChild( this.el )
+	this.html.can.el.addEventListener("click", this.hidebound,{ once :true})
 }
 
 
@@ -76,9 +80,9 @@ class InvObj
 	plobj
 
 
-	//additem	//func
+	additem( itemn, item )	{}
 
-	//remitem	//func
+	remitem( itemn )	{}
 
 
 	constructor( inv, el, plobj )
@@ -102,6 +106,35 @@ class Hands	extends InvObj
 	{
 		super( inv, inv.el.getElementsByTagName("hands")[0], plobj )
 	}
+}
+
+
+Hands.prototype. additem	=function( itemn, item )
+{
+	var el	=document.createElement( "ITEM" )
+
+	switch( itemn )
+	{
+		case "cucumber_seeds" :
+
+			el.className	=itemn
+
+			el.onclick	=( ev )=>
+			{
+				let acts	=this.inv.html.contextmenu.newev( ev )
+
+				acts.addopt( "plant", ()=>{	this.inv.hide()	})
+
+				acts.show()
+			}
+
+	}
+	this.el.appendChild(el)
+}
+
+Hands.prototype. remitem	=function( itemn )
+{
+	this.el.removeChild( this.el.querySelector("."+itemn) )
 }
 
 
@@ -147,4 +180,10 @@ Seedbag.prototype. additem	=function( itemn, item )
 
 	}
 	this.el.appendChild(el)
+}
+
+
+Seedbag.prototype. remitem	=function( itemn )
+{
+	this.el.removeChild( this.el.querySelector("."+itemn) )
 }

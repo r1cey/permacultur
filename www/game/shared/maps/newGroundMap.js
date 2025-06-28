@@ -41,6 +41,20 @@ export default function( Map )
 
 
 
+	GM.prototype. plantable	=function( loc )
+	{
+		var ic	=this.ic( loc )
+
+		return this.getwsr_i(ic) === "soil" && this.getplfl_i(ic) === "plant" &&
+			this.getvegty_i(ic) === "none"
+	}
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+
 	GM.prototype. getwsr	=function( loc )
 	{
 		return this.getwsr_i(this.ic(loc))

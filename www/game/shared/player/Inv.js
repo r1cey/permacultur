@@ -3,11 +3,6 @@ export default class Inv
 	o	={}
 
 
-	//additem	//func
-
-	//remitem	//func
-
-
 	constructor( inv )
 	{
 		this.o	=inv.o
