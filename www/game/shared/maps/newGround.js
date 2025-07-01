@@ -69,7 +69,8 @@ var bmap	=
 						{
 							name	:"lvl"
 							,
-							bits	:5
+							bits	:5	//0-seed,1-tiny,2-walk over,3-difficult walk,
+								//4-no walk,no branch, 5-first branch
 						}
 					]
 				}
@@ -126,6 +127,13 @@ export default function( Base )
 	Gr.prototype. nemptycell_i	=function( ic )
 	{
 		return this.bin.getval( ic, Gr.Bin.bmap.wsr.ty )
+	}
+
+
+	Gr.prototype. plantable_i	=function( ic )
+	{
+		return this.getwsr_i(ic) === "soil" && this.getplfl_i(ic) === "plant" &&
+			this.getvegty_i(ic) === "none"
 	}
 
 	

@@ -20,13 +20,15 @@ export default function( Map )
 
 		var plfl	=GM.Bin.bmap.plfl
 
+		var plty	=this.bin.getval_str( ic, plfl.plant.ty )
+
 		return this.nemptycell_i(ic) && Map.prototype.isplmov.call(this, dest, pl ) &&
 		
 			! ( this.bin.getval_str( ic, plfl.ty ) === "plant" &&
 				
-				this.bin.getval_str( ic, plfl.plant.ty ) === "apple" &&
+				( plty === "apple" || plty === "umbrtr" ) &&
 			
-				this.bin.getval( ic, plfl.plant.lvl ) > 1 )
+				this.bin.getval( ic, plfl.plant.lvl ) > 3 )
 	}
 
 
@@ -43,10 +45,7 @@ export default function( Map )
 
 	GM.prototype. plantable	=function( loc )
 	{
-		var ic	=this.ic( loc )
-
-		return this.getwsr_i(ic) === "soil" && this.getplfl_i(ic) === "plant" &&
-			this.getvegty_i(ic) === "none"
+		this.plantable_i( this.ic( loc ))
 	}
 
 

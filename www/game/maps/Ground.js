@@ -116,7 +116,9 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 					switch( map.getvegty_i( ic ) )
 					{
-						case "apple":
+						case "apple" :
+						
+						case "umbrtr" :
 
 							map.drawstem( can, loc, vsq, ic, col )
 					}

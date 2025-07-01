@@ -2,7 +2,7 @@ import * as fs	from '../fs.js'
 import shMaps	from '../../www/game/shared/maps/Maps.js'
 
 import Ground from './Ground.js'
-import Trees from './Trees.js'
+import Trees from './Canopy.js'
 
 
 
@@ -32,8 +32,9 @@ export default class Ms extends shMaps
 	{
 		super()
 
-		this.ground	=new Ground( game )
-		this.trees	=new Trees( game )
+		this.trees	=new Trees( game, this.ground )
+
+		this.ground	=new Ground( game, this.trees )
 
 		this.game	=game
 	}
@@ -73,14 +74,16 @@ Ms.prototype. start	=async function()
 
 Ms.prototype. genriver	=function()
 {
-	this.gr.genriver( this.conf.size.r, this.conf.size.maxcells, this.trees )
+	this.gr.genriver( this.conf.size.r, this.conf.size.maxcells )
 
 	this.save()
 }
 
 Ms.prototype. gendesert	=function()
 {
-	this.gr.gendesert( this.conf.size.r, this.conf.size.maxcells, this.trees )
+	this.gr.gendesert( this.conf.size.r, this.conf.size.maxcells )
+
+	this.tr.gen( this.gr )
 
 	this.save()
 }

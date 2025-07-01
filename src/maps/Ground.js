@@ -12,74 +12,19 @@ export default class G extends ShGr
 	static name	='ground'
 
 	trees
+
+
+	constructor( game, trees )
+	{
+		super( game )
+
+		this.trees	=trees
+	}
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-/** Generate new procedural map */
-
-G.prototype. gendesert	=function( r, maxc, trees )
-{
-	gr.build( r, maxc, new Loc(0,0,0) )
-
-	trees.build( r, maxc, new Loc( 0, 0, 1 ))
-
-	this.allsoil()
-
-	this.genumbrtrees(new Loc(0,0,0))
-}
-
-
-G.prototype. genriver	=function( r, maxc, trees )
-{
-	var gr	=this
-	
-	gr.build( r, maxc, new Loc(0,0,0) )
-
-	trees.build( r, maxc, new Loc( 0, 0, 1 ))
-
-	this.allsoil()
-
-	// this.randomdir()
-
-	// this.randomwater()
-
-	this.makeriver( 1, 3 )
-
-	this.makeriver( 4, 3 )
-
-	this.makeriver( 3, 2 )
-
-	this.makeriver( 0, 1 )
-
-	var lvl
-
-	var ic
-
-	var loctr	=trees.getloc().clone()
-
-	gr.fore(( loc )=>
-	{
-		ic	=gr.ic(loc)
-
-		switch( gr.getwsr_i( ic ))
-		{
-			case "water" :
-		
-				gr.genwaterdepth( loc, ic )
-			break
-			case "soil" :
-		
-				lvl	=gr.genhum( loc, ic )
-
-				lvl	=gr.gentree( loc, lvl, ic )
-
-				if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
-		}
-	})
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,6 +79,88 @@ G.prototype. wet_i	=function( ic, loc )
 			this.set_ic_( "soilhum", ic, loc, ++ lvl )
 		}
 	}
+}
+
+
+
+G.prototype. grow	=function( loc )
+{
+	var ic	=this.ic(loc)
+
+	var lvl	=this.getveglvl_i( ic )
+
+	if( lvl >= G.maxveglvl() )	return
+
+	this.set_ic_( "veglvl", ic, loc, ++ lvl )
+
+	this.trees.grow( loc )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Generate new procedural map */
+
+G.prototype. gendesert	=function( r, maxc )
+{
+	this.build( r, maxc, new Loc(0,0,0) )
+
+	this.allsoil()
+
+	this.genumbrtrees(new Loc(0,0,0))
+}
+
+
+G.prototype. genriver	=function( r, maxc )
+{
+	var gr	=this
+
+	var trees	=this.trees
+	
+	gr.build( r, maxc, new Loc(0,0,0) )
+
+	trees.build( r, maxc, new Loc( 0, 0, 1 ))
+
+	this.allsoil()
+
+	// this.randomdir()
+
+	// this.randomwater()
+
+	this.makeriver( 1, 3 )
+
+	this.makeriver( 4, 3 )
+
+	this.makeriver( 3, 2 )
+
+	this.makeriver( 0, 1 )
+
+	var lvl
+
+	var ic
+
+	var loctr	=trees.getloc().clone()
+
+	gr.fore(( loc )=>
+	{
+		ic	=gr.ic(loc)
+
+		switch( gr.getwsr_i( ic ))
+		{
+			case "water" :
+		
+				gr.genwaterdepth( loc, ic )
+			break
+			case "soil" :
+		
+				lvl	=gr.genhum( loc, ic )
+
+				lvl	=gr.gentree( loc, lvl, ic )
+
+				if( lvl >= 0 )	trees.gentree( loctr.setv(loc), gr, ic, lvl )
+		}
+	})
 }
 
 
@@ -454,7 +481,19 @@ G.prototype. gentree	=function( loc, lvl, ic )
 
 G.prototype. genumbrtrees	=function( loc )
 {
+	this.genumbrtree( loc )
+}
+
+
+G.prototype. genumbrtree	=function( loc )
+{
+	var ic	=this.ic(loc)
+
+	if( !( this.plantable_i( ic ) && this.isplmov(loc) ))	return false
 	
+	this.setveg_i( ic, "umbrtr", 4 )
+
+	return true
 }
 
 

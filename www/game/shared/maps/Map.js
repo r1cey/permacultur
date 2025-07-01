@@ -78,7 +78,9 @@ Map.prototype. isplmov	=function( dest, pl )
 {
 	var o	=this.obj.g(dest)
 	
-	return this.inside(dest) && (!o || (!o.pl || o.pl===pl) && !o.dewd)
+	return this.inside(dest) && ( !o ||
+
+		(!o.pl || o.pl===pl) && !o.dewd )
 }
 
 
