@@ -3,6 +3,7 @@ import V from "../Vec.js"
 
 export default class Br
 {
+	/** Direction to take to arrive here */
 	dir
 
 	size	=1

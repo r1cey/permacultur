@@ -122,7 +122,9 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 			return false
 		}
 	}
-	var tree	=new Tree[type]( this, loc )
+	var tree	=new trees[type]( this, loc )
+
+	tree.grow()
 
 	if( ! tree.brs.length )
 	{
