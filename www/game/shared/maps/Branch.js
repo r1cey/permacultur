@@ -31,18 +31,16 @@ Br.prototype. scan	=function( map, v )
 
 	var dirs	=[V.roth(dir, -1), dir, V.roth(dir, 1)]
 
-	for(var i=0; i<dirs.length; i++)
+	for(var dir2 of dirs )
 	{
-		if( map.isnextbr( v.neighh(dirs[i]), dirs[i] ))
+		if( map.isnextbr( v.neighh(dir2), dir2 ))
 		{
-			brs.push( new Br( dirs[i] ).scan( map, v ))
+			var len	=brs.push( new Br( dir2 ).scan( map, v ) )
 
-			this.size	+=brs[brs.length-1].size
+			this.size	+=brs[len-1].size
 		}
-
-		v.neighh( V.rotopph( dirs[i]) )
+		v.neighh( V.rotopph( dir2 ) )
 	}
-
 	brs.sort(( b1, b2 )=> b1.size-b2.size )
 
 	return this

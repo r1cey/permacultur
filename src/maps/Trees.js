@@ -2,7 +2,7 @@ import Loc from "../../www/game/shared/Loc.js"
 import V from "../../www/game/shared/Vec.js"
 import branches from "./branches.js"
 
-import { pickrnd, rnd } from "./tools.js"
+import { WM } from "./tools.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ class Tr
 		{
 			if( map.isnextbr( v.set(loc).neighh(dir), dir ))
 			{
-				this.brs.push(new Br( dir ).scan( v ))
+				this.brs.push(new Br( dir ).scan( map, v ))
 			}
 		}
 		this.brs.sort(( b1, b2 )=> b1.size-b2.size )
@@ -64,7 +64,7 @@ export class umbrtr	extends Tr
 
 		for(var i=0,len= brs.length ;i<len;len++)
 		{
-			brsw.m.set( i, 3 )
+			brsw.m.set( i, 2 )
 		}
 		brsw.m.set( -1, 1 )
 
@@ -75,6 +75,8 @@ export class umbrtr	extends Tr
 
 			if( bri >= 0 )
 			{
+				// using this.loc for this can be risky but should work considering
+				// grow doesn't change vector
 				grew	=brs[bri].grow( this.map, this.loc.c().neighh( brs[bri].dir )) 
 			}
 			else
@@ -102,11 +104,11 @@ export class umbrtr	extends Tr
 		{
 			var dir	=brs[i].dir
 
-			dirsws[0].m.delete ( dir )
+			dirsws[1].m.delete ( dir )
 	
 			for(var j =-1 ; j <= 1; j++)
 			{
-				dirsws[1].m.delete( V.roth( dir, j ) )
+				dirsws[0].m.delete( V.roth( dir, j ) )
 			}
 		}
 		var v	=new Loc()
@@ -126,9 +128,8 @@ export class umbrtr	extends Tr
 					return true
 				}
 			}
-
-			
-		
+		}
+		return false
 	}
 }
 

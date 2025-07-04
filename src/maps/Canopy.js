@@ -6,7 +6,7 @@ import V from  '../../www/game/shared/Vec.js'
 
 import Gr	from './Ground.js'
 
-import trees from "./trees.js"
+import * as trees from "./trees.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,46 +122,7 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 			return false
 		}
 	}
-	var tree	=new trees[type]( this, loc )
-
-	tree.grow()
-
-	if( ! tree.brs.length )
-	{
-		return tree.newbranch()
-	}
-	else if( brs.length === 1 )
-	{
-		if( brs[0].size > 1 )
-		{
-			return newbranch( brs )
-		}
-		else
-		{
-			return brs[0].grow( m, v.set(loc) )
-		}
-	}
-	else
-	{
-		if( brs.length === 2 )
-		{
-			if( brs[0].size > 1 )
-			{
-				return newbranch( brs )
-			}
-		}
-
-		for(var i=brs.length-1; i>0; i--)
-		{
-			if( brs[i].size > brs[i-1].size+1 )
-			{
-				return brs[i-1].grow( m, v.set(loc) )
-			}
-		}
-
-		return brs[brs.length-1].grow( m, v.set(loc))
-	}
-
+	return new trees[type]( this, loc ).grow()
 }
 
 

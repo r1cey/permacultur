@@ -134,6 +134,11 @@ export default function( Map )
 		return this.getveglvl_i( this.ic(loc))
 	}
 
+	GM.prototype. setveglvl	=function( loc, lvl )
+	{
+		this.setveglvl_i( this.ic(loc), lvl )
+	}
+
 
 	///////////////////////////////////////////////////////////////////////////
 

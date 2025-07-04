@@ -36,6 +36,8 @@ export default class Ms extends shMaps
 
 		this.ground	=new Ground( game, this.trees )
 
+		this.trees.ground	=this.ground
+
 		this.game	=game
 	}
 }

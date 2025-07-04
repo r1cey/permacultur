@@ -2,10 +2,52 @@ import ShBr	from "../../www/game/shared/maps/Branch.js"
 
 import V from "../../www/game/shared/Vec.js"
 
-import { pickrnd, rnd } from "./tools.js"
+import { WM, rnd } from "./tools.js"
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 
 var br	={}
+
+export default br
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Br extends ShBr
+{
+	/** @method grow( map, v )
+	 * vec is changed in apple,
+	 * vec points to root for apple and to branch in umbrtr
+	 * The algorithm of growth maintains relative size of each branch in apple
+	 * @return if grew or not */
+}
+
+
+/** @arg v -points to new location already */
+
+Br.prototype. newbranch	=function( map, v, dir )
+{
+	map.set_("branch", v, dir )
+
+	this.brs.unshift( new this.constructor( dir ))
+
+	return true
+}
+
+
+Br.prototype. findbr	=function( dir )
+{
+	for(var i=0,len= this.brs.length ;i<len;i++)
+	{
+		if( this.brs[i].dir === dir )	return this.brs[i]
+	}
+	console.error( "Br.findbr "+dir )
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,13 +66,13 @@ br.umbrtr	=class extends Br
 
 		if( size < 5 )
 		{
-			let dirs	=[ V.roth(dir,-1), dir, V.roth(dir,1) ]
+			let dirsw	=new WM( [ V.roth(dir,-1), dir, V.roth(dir,1) ],
 
-			let chance	=[ 1, 9, 1 ]
+					[ 1, 9, 1 ] )
 
 			let dirnew
 			do{
-				dirnew	=pickrnd( dirs, chance )
+				dirnew	=dirsw.pickrnd()
 
 				if( map.getfloorty( v.neighh( dirnew )) === "none" )
 				{
@@ -42,17 +84,15 @@ br.umbrtr	=class extends Br
 				}
 				v.neighh( V.rotopph(dir) )
 			}
-			while( dirs.length && ! grew )
+			while( dirsw.m.size && ! grew )
 		}
 		else
 		{
 			let brs2	=brs.slice()
 
-			let chance	=[1,1,1]
-
 			let br
 			do{
-				br	=pickrnd( brs2, chance )
+				br	=brs2.splice( rnd(brs2.length), 1 )[0]
 
 				grew	=br.grow( map, v.neighh( br.dir ))
 
@@ -170,42 +210,6 @@ br.apple	=class extends ShBr
 			return -1
 		}
 	}
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-class Br extends ShBr
-{
-	/** @method grow( map, v )
-	 * vec is changed in apple,
-	 * vec points to root for apple and to branch in umbrtr
-	 * The algorithm of growth maintains relative size of each branch in apple
-	 * @return if grew or not */
-}
-
-
-/** @arg v -points to new location already */
-
-Br.prototype. newbranch	=function( map, v, dir )
-{
-	map.set_("branch", v, dir )
-
-	this.brs.unshift( new this.constructor( dir ))
-
-	return true
-}
-
-
-Br.prototype. findbr	=function( dir )
-{
-	for(var i=0,len= this.brs.length ;i<len;i++)
-	{
-		if( this.brs[i].dir === dir )	return this.brs[i]
-	}
-	console.error( "Br.findbr "+dir )
 }
 
 

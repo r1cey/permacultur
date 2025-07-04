@@ -1,33 +1,65 @@
-/** Removes the val from array
- * @returns the removed val */
-
-export function pickrnd( opts, weights )
+export class WM //WeightMap
 {
-	var sum	=0
+	m
 
-	for(var i=0,len= opts.length ;i<len;i++)
+
+	constructor()
 	{
-		sum	+= weights[i]
-	}
-	var r	=rnd( sum )
+		var map
 
-	var acc	=0
-
-	for(var i=0;i<len;i++)
-	{
-		if( r < acc )
+		if( Array.isArray( arguments[0] ) )
 		{
-			weights.splice( i, 1 )
+			let[ keys, ws ]	=arguments
 
-			return opts.splice( i, 1 )[0]
+			map	=new Map()
+
+			for(var i=0,len= keys.length ;i<len;i++)
+			{
+				map.set( keys[i], ws[i] )
+			}
 		}
+		else if( arguments[0] instanceof Map )
+		{
+			map	=new Map( arguments[0] )
+		}
+		else	map	=new Map()
+
+		this.m	=map
 	}
-	//shouldn't happen
-	i	=rnd( opts.length )
 
-	weights.splice( i, 1 )
 
-	return opts.splice( i, 1 )[0]
+	pickrnd()
+	{
+		var sum	=0
+
+		for(var val of this.m.values())
+		{
+			sum	+= val
+		}
+		var r	=Math.random() * sum
+
+		var acc	=0
+
+		for(var pair of this.m.entries())
+		{
+			acc	+= pair[1]
+
+			if( r < acc )
+			{
+				this.m.delete( pair[0] )
+
+				return pair[0]
+			}
+		}
+		//shouldn't happen
+		let key	=this.m.keys().next().value
+
+		console.error( "WeightMap", key )
+
+		this.m.delete( key )
+
+		return key
+	}
 }
 
 

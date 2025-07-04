@@ -199,7 +199,7 @@ export default function( Base )
 
 		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.plant.ty, type )
 
-		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.lvl, lvl )
+		this.setveglvl_i( ic, lvl )
 	}
 
 
@@ -218,6 +218,11 @@ export default function( Base )
 	Gr.prototype. getveglvl_i	=function( ic )
 	{
 		return this.bin.getval( ic, Gr.Bin.bmap.plfl.plant.lvl )
+	}
+
+	Gr.prototype. setveglvl_i	=function( ic, lvl )
+	{
+		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.lvl, lvl )
 	}
 
 
