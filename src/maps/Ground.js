@@ -180,6 +180,8 @@ G.prototype. grow	=function( loc )
 
 	this.set_ic_( "veglvl", ic, loc, this.getveglvl_i( ic) )
 
+	loc.h	=this.trees.getloc().h
+
 	this.trees.growtree( loc, type )
 }
 
