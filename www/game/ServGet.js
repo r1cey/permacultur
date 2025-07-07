@@ -93,7 +93,7 @@ SG.prototype. mapset_	=function( o )
 
 	var act	=o.act
 
-	var loc	=new Loc( o.loc )
+	var loc	=o.loc
 
 	if( map !== this.cl.maps.fromloc( loc ))
 	{

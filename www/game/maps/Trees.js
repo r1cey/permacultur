@@ -124,6 +124,13 @@ Tr.prototype. draw	=function( can, pl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+Tr.prototype. setbranch	=function( loc, dir )
+{
+	TrBase.prototype.setbranch. call(this, loc, dir )
+
+	this.updatefloorty( loc ,new V(), "branch" )
+}
+
 /** @todo check if loc is inside */
 
 Tr.prototype. setfloorty	=function( loc, type )
@@ -370,6 +377,8 @@ Tr.prototype. drawbranch	=function( can, loc, plh, ic, colbuf )
 
 	var odir	=map.getbrdir_i( ic )
 
+	var{ v, v2, ctx }	=can
+
 	// var ctx	=map.ctx
 
 	ctx.globalAlpha	=plh === map.getloc().h	? 1	: 0.3
@@ -385,8 +394,6 @@ Tr.prototype. drawbranch	=function( can, loc, plh, ic, colbuf )
 	ctx.beginPath()
 
 	var path	=new Path2D()
-
-	var{ v, v2, ctx }	=can
 
 	if( lvl === 1 )
 	{

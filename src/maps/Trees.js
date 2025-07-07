@@ -62,7 +62,7 @@ export class umbrtr	extends Tr
 
 		var brsw	=new WM()
 
-		for(var i=0,len= brs.length ;i<len;len++)
+		for(var i=0,len= brs.length ;i<len;i++)
 		{
 			brsw.m.set( i, 2 )
 		}
@@ -98,7 +98,7 @@ export class umbrtr	extends Tr
 
 		var dirsws	=[new WM([0,1,2,3,4,5], [5,4,3,4,5,6]), 0]
 		//soft removes adjacent directions to already existing branches
-		dirsws[1]	=new WM( dirsws[0] )
+		dirsws[1]	=new WM( dirsws[0].m )
 
 		for(var i=0; i<brs.length; i++ )// remove dirs
 		{
