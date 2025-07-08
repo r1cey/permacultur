@@ -47,6 +47,16 @@ class Tr
 }
 
 
+Tr.prototype. findbr	=function( dir )
+{
+	for(var br of this.brs )
+	{
+		if( br.dir === dir )	return br
+	}
+	return null
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,80 +66,72 @@ export class umbrtr	extends Tr
 	static Br	=branches.umbrtr
 
 
+	/** @todo consider movings brs to Map and look for neighbors through it */
 	grow()
 	{
 		var brs	=this.brs
 
-		var brsw	=new WM()
+		var loc	=this.loc
+
+		var dirsw	=new WM([0,1,2,3,4,5], [5,4,3,4,5,6])
+
+		var min	=Number.MAX_SAFE_INTEGER
+
+		var v	=new Loc()
 
 		for(var i=0,len= brs.length ;i<len;i++)
 		{
-			brsw.m.set( i, 2 )
+			min	=Math.min ( brs[i].size, min )
+
+			//if neighboring cells are empty,
+			//  penalise growth near existing branches
+			for(var j =-1 ;j <= 1 ;j += 2)
+			{
+				var newdir	=V.roth( brs[i].dir, j )
+
+				if( this.map.getfloorty( v.set(loc).neighh( newdir ))
+
+					=== "none" )	dirsw.m.set( newdir, 0.1 )
+			}
 		}
-		brsw.m.set( -1, 1 )
+		min	=len>=6	? min	: 0
+
+		for(i=0;i<len;i++)
+		{
+			var w	=dirsw.m.get(brs[i].dir)
+
+			var d	=brs[i].size - min
+
+			dirsw.m.set( brs[i].dir, d===0 ? w :
+
+				d===1 ? 27*(w-2)-w :
+
+					d===2 ? Math.max(0, 27*(w-5)-w) : 0 )
+		}
+		var map	=this.map
 
 		var grew	=false
-		do
-		{
-			var bri	=brsw.pickrnd()
+		do{
+			var dir	=dirsw.pickrnd()
 
-			if( bri >= 0 )
+			var floort	=map.getfloorty( v.set(loc).neighh(dir) )
+
+			if( floort === "branch" && map.getbrdir(v) === dir )
 			{
 				// using this.loc for this can be risky but should work considering
 				// grow doesn't change vector
-				grew	=brs[bri].grow( this.map, this.loc.c().neighh( brs[bri].dir )) 
+				grew	=this.findbr( dir ).grow( map, v )
 			}
-			else
+			else if( floort === "none" )
 			{
-				grew	=this.newbr()
+				map.set_("branch", v, dir )
+			
+				grew	=brs.unshift( new this.constructor.Br(dir) )
 			}
 		}
-		while( brsw.m.size && ! grew )
+		while( dirsw.m.size && !grew )
 
 		return grew
-	}
-
-
-	newbr()
-	{
-		var brs	=this.brs
-
-		if( brs.length === 6 )	return false
-
-		var dirsws	=[new WM([0,1,2,3,4,5], [5,4,3,4,5,6]), 0]
-		//soft removes adjacent directions to already existing branches
-		dirsws[1]	=new WM( dirsws[0].m )
-
-		for(var i=0; i<brs.length; i++ )// remove dirs
-		{
-			var dir	=brs[i].dir
-
-			dirsws[1].m.delete ( dir )
-	
-			for(var j =-1 ; j <= 1; j++)
-			{
-				dirsws[0].m.delete( V.roth( dir, j ) )
-			}
-		}
-		var v	=new Loc()
-
-		for(var dirsw of dirsws )
-		{
-			while( dirsw.m.size )
-			{
-				var dir	=dirsw.pickrnd()
-
-				if( this.map.getfloorty(v.set(this.loc).neighh(dir)) === "none" )
-				{
-					this.map.set_("branch", v, dir )
-			
-					brs.unshift( new this.constructor.Br(dir) )
-			
-					return true
-				}
-			}
-		}
-		return false
 	}
 }
 

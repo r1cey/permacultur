@@ -68,7 +68,7 @@ br.umbrtr	=class extends Br
 		{
 			let dirsw	=new WM( [ V.roth(dir,-1), dir, V.roth(dir,1) ],
 
-					[ 1, 9, 1 ] )
+					[ 1, 8, 1 ] )
 
 			let dirnew
 			do{
@@ -82,7 +82,7 @@ br.umbrtr	=class extends Br
 				{
 					grew	=this.findbr( dirnew ).grow( map, v )
 				}
-				v.neighh( V.rotopph(dir) )
+				v.neighh( V.rotopph(dirnew) )
 			}
 			while( dirsw.m.size && ! grew )
 		}
