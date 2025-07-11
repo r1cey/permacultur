@@ -134,14 +134,13 @@ Map.prototype. newshiftboard	=function( loc, r, dir )
 
 
 
-Map.prototype. setobj	=function( o )
+class Grid
 {
 
 }
 
 
-
-var rules	=
+Grid.prototype. make	=function( r )
 {
-
+	
 }

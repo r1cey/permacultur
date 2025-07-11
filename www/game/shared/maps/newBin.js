@@ -22,8 +22,8 @@ export default function( id, bmapa, structadd )
 	{
 		static id	=id
 
-		static bmapbins	=build_bmapbins( bmapa)
-
+		static bmapbins	=bmapa ? build_bmapbins( bmapa) : []
+		
 		static bmap	=build_bmap( this.bmapbins )
 	}
 
