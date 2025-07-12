@@ -187,6 +187,31 @@ V.prototype. neg	=function()
 	return this
 }
 
+
+/** Convert to location on super grid */
+
+V.prototype. totile	=function( r, sin, cos, dh2 )
+{
+	this.tosq( 1 )
+
+	sin	??=V.super.sin( r )
+
+	cos	??=Math.sqrt(1 - sin*sin)
+
+	var x	=this.x*cos - this.y*sin
+
+	this.y	=this.y*cos + this.x*sin
+
+	this.x	=x
+
+	dh2	??=V.super.dh2( r )
+
+	this.tohex( dh2 )
+
+	return this.roundh()
+}
+
+
 V.prototype. newcube	=function()
 {
 	return V.newcube( this.x, this.y, this.z() )
@@ -411,6 +436,28 @@ V.prototype. floor	=function()
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+V. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1]))
+
+
+
+V.dirvh	=[new V(1,0),new V(1,-1),new V(0,-1),new V(-1,0),new V(-1,1),new V(0,1)]
+
+
+
+V.super	=
+{
+	h2	:( r )=> Math.sqrt(3*r*r+3*r+1)
+	,
+	sin	:( r, h2 )=> sqr3*r/(2*(h2||V.super.h2(r)))
+	,
+	dh2	:( r )=> 1/V.super.h2(r)
+}
+
+
 
 V. diredgesize	=function( r )
 {
@@ -422,9 +469,4 @@ V. diredgesize	=function( r )
 
 
 
-V. isarr	=( a )=>	isNaN(parseInt(a[0])) * isNaN(parseInt(a[1]))
-
-
 V.zero.setxy(0,0)
-
-V.dirvh	=[new V(1,0),new V(1,-1),new V(0,-1),new V(-1,0),new V(-1,1),new V(0,1)]

@@ -1,19 +1,47 @@
-import newBinMap from "./newBinMap";
-import Loc from "../Loc";
+import newBinMap from "./newBinMap.js";
+import Loc from "../Loc.js";
+import V	from "../Vec.js";
 
 
-class SG extends newBinMap()
+export default class SG extends newBinMap( 88, [{ name :"x" , bits :1 }])
 {
-	arr
+	r
+
+	sin
+
+	cos
+
+	dh2
 
 
 	/** @arg mapr	-radius of the original map
 	 * @arg hexr */
 
-	constructor( mapr, hexr, loc )
+	constructor( mapr, hexr, loc =new Loc() )
 	{
 		super( SG.calcradius( mapr, hexr), 0, loc )
+
+		this.r	=hexr
+
+		var h2	=V.super.h2( hexr )
+
+		this.sin	=V.super.sin( hexr, h2 )
+
+		this.cos	=Math.sqrt( 1 - this.sin*this.sin )
+
+		this.dh2	=1 / h2
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** Transforms loc */
+
+SG.prototype. trans	=function( loc )
+{
+	return loc.totile(0, this.sin, this.cos, this.dh2 )
 }
 
 

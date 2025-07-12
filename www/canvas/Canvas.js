@@ -150,13 +150,13 @@ Can.prototype. stop	=function()
 
 Can.prototype. zoom	=function( x )
 {
+	this.units.calc( this.units.r * x )
+
 	var cntr	=this.gpos()
 
 	this.size2.div( x )
 
 	this.setpos(cntr)
-
-	this.units.calc( this.units.r * x )
 }
 
 
@@ -577,7 +577,8 @@ Can.prototype. resize	=function()
 
 
 
-/** fun( loc, can ) */
+/** fun( loc, can ) 
+ * Don't change loc in fun! */
 
 Can.prototype. forcell	=function( fun )
 {
@@ -612,7 +613,7 @@ Can.prototype. forcell	=function( fun )
 
 			vh.x++
 
-			if( ! (j&1) )
+			if( ! (j&1) )	// Can be branchless optimised
 			{
 				vh.y--
 			}
@@ -651,7 +652,7 @@ Can.prototype. drawmenu	=function()
 
 
 
-/** @arg {Vec} c	- in global pixels! */
+/** @arg {Vec} c	- in global pixels!*/
 
 Can.prototype. fillhex	=function( c, col="#888888" )
 {

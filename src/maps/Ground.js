@@ -1,5 +1,6 @@
 import newShGr	from '../../www/game/shared/maps/newGroundMap.js'
 import Map	from './Map.js'
+import SG	from "../../www/game/shared/maps/Supergrid.js"
 
 import Loc from  '../../www/game/shared/Loc.js'
 import Vec from  '../../www/game/shared/Vec.js'
@@ -511,6 +512,10 @@ G.prototype. gentree	=function( loc, lvl, ic )
 
 G.prototype. genumbrtrees	=function( loc )
 {
+	var sg	=new SG( this._r, 40, this.getloc() )
+
+	
+
 	this.genumbrtree( loc )
 }
 
