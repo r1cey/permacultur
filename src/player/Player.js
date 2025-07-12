@@ -131,7 +131,7 @@ Player.prototype. mov	=function( newloc )
 
 	var map	=this.map()
 
-	if( ! map.isplmov( newloc, pl ))
+	if( ! map.canplmov( newloc, pl ))
 	{
 		pl.cl?.send_movrej( newloc )
 
@@ -200,7 +200,7 @@ Player.prototype. climb	=function( hdir )
 
 	var destmap	=pl.game.maps.fromloc( dest )
 
-	if( ! destmap.isplmov( dest ))
+	if( ! destmap.canplmov( dest ))
 	{
 		pl.cl?.send.error( "Can't climb there" )
 

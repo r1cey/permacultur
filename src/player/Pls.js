@@ -100,13 +100,14 @@ Pls.prototype. new	=function( plmsg )
 
 	var pl	=new Pl( plmsg, g )
 
-	var loc	=new Loc(0,0,0)
+	var loc	=g.spawns[0].c()
 
-	while( map.obj.get(loc)?.pl )
+	var d	=map.getloc().c()
+
+	while( ! map.canplmov( loc ))	// TODO : fix infinite loop
 	{
-		loc.randh(8)
+		loc.set(g.spawns[0]).addv(d.randh(6))
 	}
-
 	pl.loc.set( loc )
 
 	this.o[pl.name]	=pl

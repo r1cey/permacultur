@@ -14,7 +14,7 @@ export default function( Map )
 	///////////////////////////////////////////////////////////////////////////
 
 
-	GM.prototype. isplmov	=function( dest, pl )
+	GM.prototype. canplmov	=function( dest, pl )
 	{
 		var ic	=this.ic(dest)
 
@@ -22,7 +22,7 @@ export default function( Map )
 
 		var plty	=this.bin.getval_str( ic, plfl.plant.ty )
 
-		return this.nemptycell_i(ic) && Map.prototype.isplmov.call(this, dest, pl ) &&
+		return this.nemptycell_i(ic) && Map.prototype.canplmov.call(this, dest, pl ) &&
 		
 			! ( this.bin.getval_str( ic, plfl.ty ) === "plant" &&
 				

@@ -60,6 +60,8 @@ export default class G
 
 	server	=this.srv
 
+	spawns	=[]
+
 	con	=new Con(this)
 
 

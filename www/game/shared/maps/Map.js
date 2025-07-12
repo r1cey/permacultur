@@ -74,7 +74,7 @@ Map.prototype. isready	=function()
  *Can optimize by making special case for server maps by testing for
  *distance from 0,0 */
 
-Map.prototype. isplmov	=function( dest, pl )
+Map.prototype. canplmov	=function( dest, pl )
 {
 	var o	=this.obj.g(dest)
 	

@@ -15,7 +15,7 @@ export default function( Map )
 
 
 	
-	TM.prototype. isplmov	=function( dest )
+	TM.prototype. canplmov	=function( dest )
 	{
 		var C	=this.constructor
 
@@ -27,7 +27,7 @@ export default function( Map )
 
 		var floorty	=this.bin.getval( ic, null, bmapval )
 
-		if( Map.prototype.isplmov. call(this, dest) && floorty !== bmapval.enum.trunk )
+		if( Map.prototype.canplmov. call(this, dest) && floorty !== bmapval.enum.trunk )
 		{
 			if( floorty === bmapval.e.branch )	return true
 

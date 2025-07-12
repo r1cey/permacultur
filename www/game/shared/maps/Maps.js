@@ -82,7 +82,7 @@ Maps.prototype. fore	=function( fun )
 
 
 
-Maps.prototype. isplmov	=function( dest )
+Maps.prototype. canplmov	=function( dest )
 {
-	return this.fromloc( dest ).isplmov( dest )
+	return this.fromloc( dest ).canplmov( dest )
 }

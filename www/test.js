@@ -18,7 +18,7 @@ window.draw	=draw
 
 function draw( r )
 {
-	var sg	=new SG( 30, r )
+	window.sg	=new SG( 30, r )
 
 	var vsq	=new V()
 

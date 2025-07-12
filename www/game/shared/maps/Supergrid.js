@@ -45,6 +45,20 @@ SG.prototype. trans	=function( loc )
 }
 
 
+
+SG.prototype. is	=function( loc )
+{
+	return this.getval( this.ic(loc), SG.bmap.x )
+}
+
+
+
+SG.prototype. setx	=function( loc, x )
+{
+	this.setval( this.ic(loc), SG.bmap.x, x )
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

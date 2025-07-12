@@ -267,7 +267,7 @@ Can.prototype. frame	=function(now)
 		
 		tch.last.set(tch.pos)
 
-		if( pl.gmap().isplmov( destloc, pl ) )
+		if( pl.gmap().canplmov( destloc, pl ) )
 		{
 			pl.dest.setv( dest )
 		}

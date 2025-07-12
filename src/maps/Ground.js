@@ -509,14 +509,41 @@ G.prototype. gentree	=function( loc, lvl, ic )
 }
 
 
+/** Used by desert mode. Adds the trees as spawn points. */
 
-G.prototype. genumbrtrees	=function( loc )
+G.prototype. genumbrtrees	=function()
 {
-	var sg	=new SG( this._r, 40, this.getloc() )
+	var minr	=30
 
-	
+	var sg	=new SG( this._r, minr, this.getloc() )
 
-	this.genumbrtree( loc )
+	var trn	=this.bin.cellsl / G.Bin.r2cells( minr * 5 )	//trees count
+
+	var loc	=this.getloc().c()
+
+	var loct	=new Loc()	// tile location
+
+	main: for(var i =0;i< trn ;i++)
+	{
+		var j	=0
+
+		do{
+			loc.randh( this._r )
+
+			sg.trans( loct.set(loc) )
+
+			if( ++ j > 20)	continue main;
+		}
+		while( sg.is( loct ))
+
+		sg.setx( loct, 1 )
+
+		if( loc.disth() < this._r>>1 )
+		{
+			this.game.spawns.push( loc.c() )
+		}
+		this.genumbrtree( loc )
+	}
 }
 
 
@@ -524,7 +551,7 @@ G.prototype. genumbrtree	=function( loc )
 {
 	var ic	=this.ic(loc)
 
-	if( !( this.plantable_i( ic ) && this.isplmov(loc) ))	return false
+	if( !( this.plantable_i( ic ) && this.canplmov(loc) ))	return false
 	
 	this.setveg_i( ic, "umbrtr", 4 )
 
