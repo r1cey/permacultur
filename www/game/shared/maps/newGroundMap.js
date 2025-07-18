@@ -8,6 +8,10 @@ export default function( Map )
 {
 	class GM extends newGround(Map)
 	{
+		trees
+
+		get tr()	{return this.trees }
+
 		static MapShiftBo	=newGround( BoMS )
 	}
 
@@ -137,6 +141,12 @@ export default function( Map )
 	GM.prototype. setveglvl	=function( loc, lvl )
 	{
 		this.setveglvl_i( this.ic(loc), lvl )
+	}
+
+
+	GM.prototype. getshade	=function( loc )
+	{
+		return this.trees.getleafl( loc )
 	}
 
 

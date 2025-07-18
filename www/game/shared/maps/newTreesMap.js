@@ -10,6 +10,10 @@ export default function( Map )
 {
 	class TM extends newTrees(Map)
 	{
+		ground
+
+		get gr()	{return this.ground }
+
 		static MapShiftBo	=newTrees( BoMS )
 	}
 
@@ -91,6 +95,37 @@ export default function( Map )
 	TM.prototype. getbrdir	=function( loc )
 	{
 		return this.getbrdir_i( this.ic(loc))
+	}
+
+
+
+	TM.prototype. setnewleaves	=function( loc, isflat =false )
+	{
+		this.fore(( loc )=>
+		{
+			this.setleafl( loc, 1 )
+		}
+		, 1, loc )
+
+		isflat ? null : this.setleafh( loc, 1 )
+	}
+
+
+	TM.prototype. setleafl	=function( loc, val )
+	{
+		this.setleafl_i( this.ic(loc), val )
+	}
+	TM.prototype. setleafh	=function( loc, val )
+	{
+		this.setleafh_i( this.ic(loc), val )
+	}
+	TM.prototype. getleafl	=function( loc )
+	{
+		return this.getleafl_i( this.ic(loc) )
+	}
+	TM.prototype. getleafh	=function( loc )
+	{
+		return this.getleafh_i( this.ic(loc) )
 	}
 
 

@@ -125,6 +125,8 @@ export class umbrtr	extends Tr
 			else if( floort === "none" )
 			{
 				map.set_("branch", v, dir )
+
+				map.set_("newleaves", v, true )
 			
 				grew	=brs.unshift( new this.constructor.Br(dir) )
 			}

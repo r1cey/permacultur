@@ -55,12 +55,12 @@ export default class G
 	}
 
 	pls	=new Players( this)
+
+	mode	=null
 	
 	srv	=new Srv( this)
 
 	server	=this.srv
-
-	spawns	=[]
 
 	con	=new Con(this)
 
@@ -237,6 +237,8 @@ G.prototype. min15	=function()
 
 	var gr	=g.maps.gr
 
+	var tr	=g.maps.tr
+
 	gr.fore(( loc )=>
 	{
 		var ic	=gr.ic(loc)
@@ -247,9 +249,9 @@ G.prototype. min15	=function()
 
 				let lvl	=gr.getsoilhum_i( ic )
 
-				if( lvl > 0 && lvl < 4 )
+				if( lvl > 0 && lvl < 4 && ! gr.getshade_i( ic ) )
 				{
-					gr.dry_i( ic, loc )	//TODO:drying less under shade
+					gr.dry_i( ic, loc )
 				}
 		}
 

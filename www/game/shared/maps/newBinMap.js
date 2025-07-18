@@ -1,9 +1,9 @@
 import newBin	from "./newBin.js"
 
 
-export default function( id, bmap )
+export default function( id, bmap, base=newBin )
 {
-	var Bin	=newBin( id, bmap )
+	var Bin	=base( id, bmap )
 
 
 	/** Binary representation of a typical round hex map. */

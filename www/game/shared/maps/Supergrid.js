@@ -1,9 +1,10 @@
 import newBinMap from "./newBinMap.js";
+import BitM from "./BitMap.js";
 import Loc from "../Loc.js";
 import V	from "../Vec.js";
 
 
-export default class SG extends newBinMap( 88, [{ name :"x" , bits :1 }])
+export default class SG extends newBinMap( 0,0, BitM )
 {
 	r
 
@@ -48,14 +49,14 @@ SG.prototype. trans	=function( loc )
 
 SG.prototype. is	=function( loc )
 {
-	return this.getval( this.ic(loc), SG.bmap.x )
+	return this.getval( this.ic(loc) )
 }
 
 
 
 SG.prototype. setx	=function( loc, x )
 {
-	this.setval( this.ic(loc), SG.bmap.x, x )
+	this.setval( this.ic(loc), x )
 }
 
 
@@ -79,6 +80,8 @@ SG.calcradius	=function( mapr, r )
 	while( n < mapr )
 	{
 		n	+= gendist[Number(!odd)].next().value
+
+		odd	=!odd
 
 		newmapr ++
 	}

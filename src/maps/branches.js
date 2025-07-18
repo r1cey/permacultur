@@ -30,9 +30,11 @@ class Br extends ShBr
 
 /** @arg v -points to new location already */
 
-Br.prototype. newbranch	=function( map, v, dir )
+Br.prototype. newbranch	=function( map, v, dir, isflat )
 {
 	map.set_("branch", v, dir )
+
+	map.set_("newleaves", v, isflat )
 
 	this.brs.unshift( new this.constructor( dir ))
 
@@ -76,7 +78,7 @@ br.umbrtr	=class extends Br
 
 				if( map.getfloorty( v.neighh( dirnew )) === "none" )
 				{
-					grew	=this.newbranch( map, v, dirnew )
+					grew	=this.newbranch( map, v, dirnew, true )
 				}
 				else if( map.isnextbr( v, dirnew ))
 				{

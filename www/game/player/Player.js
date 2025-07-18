@@ -1,5 +1,6 @@
 import PlSh from '../shared/player/Player.js'
 import PlVSh from '../shared/player/PlVis.js'
+import Hands from './Hands.js'
 import PCl from '../PeerCl.js'
 import Loc from '../shared/Loc.js'
 
@@ -12,6 +13,8 @@ const ClPl =(c) => class extends c
 	pos	=new Loc()
 
 	dest	=new Loc()
+
+	hands	=new Hands()
 
 	srv()	{return this.lcl.srv }
 
@@ -142,9 +145,12 @@ Player.prototype. attachhtmlinv	=function( htmlinv )
 
 	this.hands.attachhtmlinv( htmlinv )
 
-	for(var sb of this.inv.seedbag )
+	for(var invn in this.inv )
 	{
-		sb.attachhtmlinv( htmlinv )
+		for(var bag of this.inv[invn] )
+		{
+			bag.attachhtmlinv( htmlinv )
+		}
 	}
 }
 

@@ -83,6 +83,8 @@ Ms.prototype. genriver	=function()
 
 Ms.prototype. gendesert	=function()
 {
+	this.game.mode	="desert"
+
 	this.gr.gendesert( this.conf.size.r, this.conf.size.maxcells )
 
 	this.tr.gen( this.gr )

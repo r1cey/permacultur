@@ -541,68 +541,6 @@ Map.setids	=function( startid )
 }
 
 
-/** Creates new buffer class
- * @arg bmap	- [{name:[[bits],[bits,[enum]],...]},{name,[...]}]
- */
-
-Map.newBuf	=function( bpc, bmap, skipid )
-{
-	var g
-	
-	if(typeof window == 'object' && window)
-		g	=window
-	else if(typeof global == 'object' &&  global)
-		g	=global
-
-	var clss	=class extends Buf
-	{
-		static bpc	=bpc
-		
-		static Arr	=g['Uint'+(bpc<<3)+'Array']
-
-		static bmap	=[]
-
-		static bmapo	={}
-
-		static skipid	=skipid
-	}
-
-	for(var i =0;i< bmap.length ;i++)
-	{
-		clss.bmap[i]	=[]
-
-		for(var n in bmap[i] )
-		{
-			for(var j =0;j< bmap[i][n].length ;j++)
-			{
-				var bits	=bmap[i][n][j]
-
-				if( typeof bits === "number" )	bits	=[bits]
-
-				if( bits.length > 1 )
-				{
-					var enum1	={}
-
-					for(var ie =0; ie< bits[1].length ;ie++)
-					{
-						enum1[bits[1][ie]]	=ie
-					}
-
-					bits[1]	=enum1
-				}
-
-				clss.bmap[i][j]	=bits
-
-				clss.bmapo[n]	=i
-			}
-		}
-	}
-
-	return clss
-}
-
-
-
 
 Map.ibfrombid	=function( bid )
 {

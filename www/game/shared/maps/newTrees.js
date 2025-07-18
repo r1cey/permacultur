@@ -31,6 +31,23 @@ var bmap	=
 				}
 			}
 		]
+	},
+	{
+		name	:"leaves"
+		,
+		subd	:
+		[
+			{
+				name	:"low"
+				,
+				bits	:1
+			},
+			{
+				name	:"top"
+				,
+				bits	:1
+			}
+		]
 	}
 ]
 
@@ -86,6 +103,24 @@ export default function( Base )
 	Tr.prototype. getbrdir_i	=function( ic )
 	{
 		return this.bin.getval( ic, Tr.Bin.bmap.floor.branch.dir )
+	}
+
+
+	Tr.prototype. setleafl_i	=function( ic, val )
+	{
+		this.bin.setval( ic, Tr.Bin.bmap.leaves.low, val )
+	}
+	Tr.prototype. setleafh_i	=function( ic, val )
+	{
+		this.bin.setval( ic, Tr.Bin.bmap.leaves.top, val )
+	}
+	Tr.prototype. getleafl_i	=function( ic )
+	{
+		return this.bin.getval( ic, Tr.Bin.bmap.leaves.low )
+	}
+	Tr.prototype. getleafh_i	=function( ic )
+	{
+		return this.bin.getval( ic, Tr.Bin.bmap.leaves.top )
 	}
 
 	///////////////////////////////////////////////////////////////////////////////

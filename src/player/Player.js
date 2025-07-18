@@ -1,6 +1,7 @@
 import PlMsg from '../../www/game/shared/player/Player.js'
-import V from '../../www/game/shared/Vec.js'
+import Hands from './Hands.js'
 
+import V from '../../www/game/shared/Vec.js'
 import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
@@ -50,6 +51,8 @@ class PlSlp extends SrvPl( PlMsg.Vis )
 export default class Player extends PlMsg	//SrvPl( PlMsg )
 {	
 	game
+
+	hands	=new Hands()
 
 	map()	{return this.game.maps.fromloc( this.loc )}
 

@@ -226,7 +226,9 @@ Can.prototype. draw	=function( dt )
 	}
 	if( can.pl )
 	{
-		can.drawwatergui()
+		this.drawbargui( 0, this.pl.water, '#2211ff' )
+
+		this.drawbargui( 1, this.pl.heat, '#fc2200' )
 /*
 		if( can.menu )
 		{
@@ -499,23 +501,25 @@ Can.prototype. drawpl	=function( pl )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
 
 
-Can.prototype. drawwatergui	=function()
+
+Can.prototype. drawbargui	=function( i, val,  col )
 {
-	var can	=this
+var can	=this
 
 	var ctx	=this.ctx
 	
 	var margin	=10
 
-	var c	=can.crn.c().tosqc(can).add(margin,margin)
-	
 	var size	=new V(20, 100)
+	
+	var c	=can.crn.c().tosqc(can).add( margin*(i+1) + size.x*i, margin )
 
-	var empty	=1 - this.pl.water
+	var empty	=1 - val
 
-	ctx.fillStyle	='#2211ff'
+	ctx.fillStyle	=col
 	ctx.lineWidth	=1
 
 	ctx.beginPath()
@@ -538,10 +542,6 @@ Can.prototype. drawwatergui	=function()
 
 	ctx.stroke()
 }
-
-
-///////////////////////////////////////////////////////////////////////////////
-
 
 
 

@@ -18,8 +18,6 @@ export default class T extends ShTrees
 {
 	static name	='trees'
 
-	ground
-
 
 	constructor( game, gr )
 	{
@@ -114,6 +112,17 @@ T.prototype. growtree	=function( loc, type, brs, ic )
 		if( t === "none" )
 		{
 			m.set_ic_("floorty", ic, loc, "trunk" )
+
+			switch( type )
+			{
+				case "apple" :
+
+					m.set_("newleaves", loc )
+				break
+				case "umbrtr" :
+
+					m.set_("newleaves", loc, true )
+			}
 
 			return true
 		}

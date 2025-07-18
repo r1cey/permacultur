@@ -17,11 +17,6 @@ var bmap	=
 		name	:"size"
 		,
 		bits	:Gr.Bin.bmap.plfl.plant.lvl.bits
-	},
-	{
-		name	:"lvs"	// leaves
-		,
-		bits	:1
 	}
 ]
 
@@ -79,11 +74,13 @@ Tr.prototype. draw	=function( can, pl )
 	{
 		if( ! this.inside(loc) )	return
 
-		if( map.getleaves( loc ))
+		if( map.getleafl( loc ))
 		{
 			map.drawleaves( can, loc, 0, plh )
 		}
 	})
+	can.ctx.shadowColor = 'transparent'
+
 	can.forcell(( loc )=>
 	{
 		if( ! this.inside(loc) )	return
@@ -112,11 +109,12 @@ Tr.prototype. draw	=function( can, pl )
 	{
 		if( ! this.inside(loc) )	return
 
-		if( map.getleaves( loc ))
+		if( map.getleafh( loc ))
 		{
 			map.drawleaves( can, loc, 1, plh )
 		}
 	})
+	can.ctx.shadowColor = 'transparent'
 	// can.ctx.drawImage( map.can.transferToImageBitmap(), can._crn.x,can._crn.y)
 }
 
@@ -157,7 +155,7 @@ Tr.prototype. updatefloorty	=function( loc, vbuf, type )
 
 		case "trunk" :
 
-			this.paintleaves( loc, vbuf )
+			// this.paintleaves( loc, vbuf )
 	}
 }
 
@@ -189,7 +187,7 @@ Tr.prototype. getbrsize_i	=function( ic )
 
 
 
-
+/*
 Tr.prototype. setleaves	=function( loc, val )
 {
 	this.setleaves_i( this.ic(loc), val )
@@ -209,7 +207,7 @@ Tr.prototype. getleaves	=function( loc )
 Tr.prototype. getleaves_i	=function( ic )
 {
 	return this.bin2.getval( ic, Tr.Bincl.bmap.lvs )
-}
+}*/
 
 
 
@@ -239,7 +237,7 @@ Tr.prototype. shift	=function( dir, ...args )
 						case "trunk" :
 						case "branch" :
 
-							map.setleaves_i( ic, 1 )
+							// map.setleaves_i( ic, 1 )
 
 							break
 					}
@@ -247,11 +245,11 @@ Tr.prototype. shift	=function( dir, ...args )
 			break
 			case "trunk" :
 
-				map.paintleaves( loc, v )
+				// map.paintleaves( loc, v )
 			break
 			case "branch" :
 
-				map.paintleaves( loc, v )
+				// map.paintleaves( loc, v )
 
 				if( map.getbrsize_i(ic) )	break
 
@@ -272,7 +270,7 @@ Tr.prototype. shift	=function( dir, ...args )
 
 
 /** Just paint around. Don't check source v. 
- * v is just empty Vec */
+ * v is just empty Vec *
 
 Tr.prototype. paintleaves	=function( loc, v )
 {
@@ -290,7 +288,7 @@ Tr.prototype. paintleaves	=function( loc, v )
 			}
 		}
 	}
-}
+}*/
 
 
 
@@ -491,6 +489,10 @@ Tr.prototype. drawleaves	=function( can, loc, trans, plh )
 	v.set(loc).tosqc(can).sub(r, h2>>1)
 
 	ctx.globalAlpha	=! trans && plh === map.getloc().h	? 1	: 0.1
+
+	ctx.shadowColor = "black";
+	ctx.shadowOffsetX = 0;
+	ctx.shadowOffsetY = 1;
 
 	ctx.drawImage( can.imgs().o.leaves5, v.x,v.y, r<<1, h2 )
 

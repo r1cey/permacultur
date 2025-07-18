@@ -355,10 +355,10 @@ Bin. bpc	=function()
 
 	for(var bmbin of this.bmapbins )
 	{
-		bpc	+= bmbin.size
+		bpc	+= (bmbin.size >> 3)
 	}
 
-	return bpc>>3
+	return bpc
 }
 
 

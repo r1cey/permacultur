@@ -5,7 +5,7 @@ export default class Inv
 
 	constructor( inv )
 	{
-		this.o	=inv.o
+		this.o	=inv?.o || this.o
 	}
 }
 

@@ -2,6 +2,7 @@ import ShObj	from "../../www/game/shared/maps/Obj.js"
 
 import * as fs	from '../fs.js'
 
+import Loc from "../../www/game/shared/Loc.js"
 import tools from "../tools.js"
 import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
 
@@ -11,6 +12,16 @@ var jsontr	=newjsontrans(
 		dewd	:
 		{
 			rev:( val )=>new tools.Dewd(val)
+		},
+		spawns :
+		{
+			rev:( arr )=>
+			{
+				for(var i=0,len =arr.length ;i<len;i++)
+					arr[i]	=new Loc().fromJSON(arr[i]);
+
+				return arr
+			}
 		}
 	}
 )

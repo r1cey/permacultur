@@ -5,14 +5,14 @@ import SG	from "../../www/game/shared/maps/Supergrid.js"
 import Loc from  '../../www/game/shared/Loc.js'
 import Vec from  '../../www/game/shared/Vec.js'
 
+import { rnd } from "./tools.js"
+
 
 var ShGr	=newShGr(Map)
 
 export default class G extends ShGr
 {
 	static name	='ground'
-
-	trees
 
 
 	constructor( game, trees )
@@ -515,20 +515,26 @@ G.prototype. genumbrtrees	=function()
 {
 	var minr	=30
 
-	var sg	=new SG( this._r, minr, this.getloc() )
+	var trsize	={ min :13, range :5 }
 
-	var trn	=this.bin.cellsl / G.Bin.r2cells( minr * 5 )	//trees count
+	var r	=this._r >> 1
+
+	var sg	=new SG( r, minr, this.getloc() )
+
+	var trn	=Math.ceil(this.bin.cellsl / G.Bin.r2cells( minr * 5 ))	//trees count
 
 	var loc	=this.getloc().c()
 
 	var loct	=new Loc()	// tile location
+
+	this.obj.o.spawns	=[]
 
 	main: for(var i =0;i< trn ;i++)
 	{
 		var j	=0
 
 		do{
-			loc.randh( this._r )
+			loc.randh( r )
 
 			sg.trans( loct.set(loc) )
 
@@ -538,22 +544,20 @@ G.prototype. genumbrtrees	=function()
 
 		sg.setx( loct, 1 )
 
-		if( loc.disth() < this._r>>1 )
-		{
-			this.game.spawns.push( loc.c() )
-		}
-		this.genumbrtree( loc )
+		this.obj.o.spawns.push( loc.c() )
+		
+		this.genumbrtree( loc, trsize.min + rnd(trsize.range) )
 	}
 }
 
 
-G.prototype. genumbrtree	=function( loc )
+G.prototype. genumbrtree	=function( loc, size )
 {
 	var ic	=this.ic(loc)
 
 	if( !( this.plantable_i( ic ) && this.canplmov(loc) ))	return false
 	
-	this.setveg_i( ic, "umbrtr", 4 )
+	this.setveg_i( ic, "umbrtr", size )
 
 	return true
 }
