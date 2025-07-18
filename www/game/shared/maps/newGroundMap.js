@@ -146,7 +146,7 @@ export default function( Map )
 
 	GM.prototype. getshade	=function( loc )
 	{
-		return this.trees.getleafl( loc )
+		return this.getshade_i( this.ic(loc) )
 	}
 
 
