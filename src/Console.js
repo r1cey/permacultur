@@ -1,6 +1,6 @@
 import * as rl from "node:readline/promises"
 
-import newjsontr from "./www/game/shared/newjsontransfrm.js"
+import newjsontr from "../www/game/shared/newjsontransfrm.js"
 import tools from "./tools.js"
 import Loc from "../www/game/shared/Loc.js"
 
@@ -10,6 +10,10 @@ var rev	=newjsontr(
 	dewd	:
 	{
 		rev:( val )=>new tools.Dewd(val)
+	},
+	seedbag :
+	{
+		rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
 	}
 }).revivr
 
@@ -70,7 +74,11 @@ Con.prototype. online	=async function( str )
 				console.error("console", str )
 			}
 		break
+		case "pladdinv" :
 
+			let pl	=g.pls.o[arg.name]
+
+		break
 	}
 }
 

@@ -102,31 +102,39 @@ Pls.prototype. new	=function( plmsg )
 
 	var spawns	=map.obj.o.spawns
 
-	var loc	=spawns[0].c()
+	// var loc	=spawns[0].c()
 
-	var d	=map.getloc().c()
-
-	while( ! map.canplmov( loc ))	// TODO : fix infinite loop
+	map.fore(( loc )=>
 	{
-		loc.set(spawns[0]).addv(d.randh(6))
+		if( map.canplmov(loc) )
+		{
+			pl.loc.set(loc)
+
+			return true
+		}
 	}
-	pl.loc.set( loc )
+	, null, spawns[0] )
 
 	this.o[pl.name]	=pl
 
 	pl.save( this.conf.dir )
 
-	map.obj.set(loc).pl	=pl
+	map.obj.set(pl.loc).pl	=pl
 	{
-		for(let idewd =0;idewd< 3 ;idewd++)
-		{
-			do{
-				loc.set(spawns[0]).addv(d.randh( 12 ))
-			}
-			while( map.getshade( loc ) || map.canplmov( loc ))
+		let idewd =0
 
-			g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
-		}
+		map.fore(( loc )=>
+		{
+			if( ! map.getshade( loc ) && map.canplmov( loc ))
+			{
+				g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
+
+				idewd ++
+
+				if( idewd >= 3)	return true
+			}
+		},
+		null, spawns[0] )
 	}
 	g.srv?.send_newpl( pl )
 

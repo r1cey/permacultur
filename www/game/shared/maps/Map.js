@@ -147,7 +147,9 @@ Map.prototype. slice	=function( c, r )
  * If fun returns true then stop looping.
  * @arg {function} fun -( loc, distance, map )
  * @arg [r=mapRadius]
- * @arg [c=mapCenter]	-center from where to start looping */
+ * @arg [c=mapCenter]	-center from where to start looping
+ * @returns {Loc}	-if fun returned true, returns the location
+ * 		where it happened*/
 
 Map.prototype. fore	=function( fun, r, c )
 {

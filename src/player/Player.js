@@ -6,6 +6,8 @@ import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
 
+import tools from '../tools.js'
+
 import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
 
 
@@ -58,7 +60,7 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	srv()	{return this.game.server }
 
-
+	inv	={ seedbag :[new tools.Seedbag({o:{ cucumber_seeds :15 }}) ] }
 
 
 	constructor( pl, game )
