@@ -294,16 +294,22 @@ Player.prototype. disconn	=function()
 
 Player.prototype. setwater	=function( lvl )
 {
-	PlMsg.prototype. setwater.call(this, lvl )
+	var oldlvl	=this.water
 
-	this.cl && this.cl.sendjson({ water: this.water })
+	lvl	=PlMsg.prototype. setwater.call(this, lvl )
+
+	oldlvl !== lvl && this.cl && this.cl.sendjson({ plwater: lvl })
 }
-/*Player.prototype. subwater	=function( lvl )
-{
-	PlMsg.prototype. subwater.call(this, lvl )
 
-	this.cl?.sendjson({ water: this.water })
-}*/
+
+Player.prototype. setheat	=function( lvl )
+{
+	var oldlvl	=this.heat
+
+	lvl	=PlMsg.prototype. setheat.call(this, lvl )
+
+	oldlvl !== lvl && this.cl && this.cl.sendjson({ plheat: lvl })
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

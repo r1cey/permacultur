@@ -80,6 +80,26 @@ SG.prototype. units	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** Received a map obj changing method
+ * @param msg
+ * @arg msg.mapid
+ * @arg msg.loc
+ * @arg msg.o */
+
+SG.prototype. mapaddobj	=function( msg )
+{
+	var map	=this.cl.maps.fromid( msg.mapid )
+
+	var loc	=msg.loc
+
+	if( map !== this.cl.maps.fromloc( loc ))
+	{
+		console.error("srv.on_mapset_o_", msg.loc, msg.name )
+	}
+	map.additem( loc, msg.o )
+}
+
+
 /** Received a map changing method
  * @param o 
  * @arg o.mapid
@@ -99,7 +119,6 @@ SG.prototype. mapset_	=function( o )
 	{
 		console.error("srv.on_mapset_", o.act, o.loc, o.vals )
 	}
-
 	map["set"+act]( loc, ...o.vals )
 }
 
@@ -109,9 +128,18 @@ SG.prototype. mapset_	=function( o )
 
 /** This is your new water level. */
 
-SG.prototype. water	=function( lvl )
+SG.prototype. plwater	=function( lvl )
 {
 	this.cl.pl.water	=lvl
+}
+
+
+
+SG.prototype. plheat	=function( lvl )
+{
+	// console.log(lvl)
+
+	this.cl.pl.heat	=lvl
 }
 
 

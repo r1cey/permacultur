@@ -5,7 +5,7 @@ import SG	from "../../www/game/shared/maps/Supergrid.js"
 import Loc from  '../../www/game/shared/Loc.js'
 import Vec from  '../../www/game/shared/Vec.js'
 
-import { rnd } from "./tools.js"
+import { rnd } from "../../www/game/shared/utils.js"
 
 
 var ShGr	=newShGr(Map)
@@ -84,17 +84,19 @@ G.prototype. wet_i	=function( ic, loc )
 
 
 
-G.prototype. grow	=function( loc )
+G.prototype. grow	=function( loc, ic, type, lvl )
 {
-	var ic	=this.ic(loc)
+	ic	??=this.ic(loc)
 
-	if( this.getplfl_i( ic) !== "plant" )	return
+	if( ! type )
+	{
+		if( this.getplfl_i( ic) !== "plant" )	return
 
-	var type	=this.getvegty_i( ic)
+		type	=this.getvegty_i( ic)
 
-	if( type === "none" )	return
-
-	var lvl	=this.getveglvl_i( ic )
+		if( type === "none" )	return
+	}
+	lvl	??=this.getveglvl_i( ic )
 
 	if( lvl >= G.maxveglvl() )	return
 
@@ -556,8 +558,10 @@ G.prototype. genumbrtree	=function( loc, size )
 	var ic	=this.ic(loc)
 
 	if( !( this.plantable_i( ic ) && this.canplmov(loc) ))	return false
+
+	var time	=rnd( G.maxvegtime() )
 	
-	this.setveg_i( ic, "umbrtr", size )
+	this.setveg_i( ic, "umbrtr", size, time )
 
 	return true
 }

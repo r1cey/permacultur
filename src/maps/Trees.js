@@ -2,7 +2,7 @@ import Loc from "../../www/game/shared/Loc.js"
 import V from "../../www/game/shared/Vec.js"
 import branches from "./branches.js"
 
-import { WM } from "./tools.js"
+import { WM } from "../../www/game/shared/utils.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -71,6 +71,11 @@ var bmap	=
 							,
 							bits	:5	//0-seed,1-tiny,2-walk over,3-difficult walk,
 								//4-no walk,no branch, 5-first branch
+						},
+						{
+							name	:"time"
+							,
+							bits	:7	//12 minutes * 128 = 25.6hours
 						}
 					]
 				}
@@ -193,13 +198,15 @@ export default function( Base )
 
 
 
-	Gr.prototype. setveg_i	=function( ic, type, lvl =0 )
+	Gr.prototype. setveg_i	=function( ic, type, lvl =0, time =0 )
 	{
 		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.ty, "plant" )
 
 		this.bin.setval_str( ic, Gr.Bin.bmap.plfl.plant.ty, type )
 
 		this.setveglvl_i( ic, lvl )
+
+		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.time, time )
 	}
 
 
@@ -223,6 +230,12 @@ export default function( Base )
 	Gr.prototype. setveglvl_i	=function( ic, lvl )
 	{
 		this.bin.setval( ic, Gr.Bin.bmap.plfl.plant.lvl, lvl )
+	}
+
+
+	Gr.prototype. getvegtime_i	=function( ic )
+	{
+		return this.bin.getval( ic, Gr.Bin.bmap.plfl.plant.time )
 	}
 
 
@@ -255,6 +268,12 @@ export default function( Base )
 	Gr.maxveglvl	=function()
 	{
 		return Gr.Bin.getmaxval( Gr.Bin.bmap.plfl.plant.lvl )
+	}
+
+
+	Gr.maxvegtime	=function()
+	{
+		return Gr.Bin.getmaxval( Gr.Bin.bmap.plfl.plant.time )
 	}
 
 

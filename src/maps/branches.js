@@ -2,7 +2,7 @@ import ShBr	from "../../www/game/shared/maps/Branch.js"
 
 import V from "../../www/game/shared/Vec.js"
 
-import { WM, rnd } from "./tools.js"
+import { WM, rnd } from "../../www/game/shared/utils.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////

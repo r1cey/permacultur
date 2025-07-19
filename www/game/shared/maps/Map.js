@@ -50,21 +50,26 @@ Map.prototype. setbin	=function( bin )
 }
 
 
-/** TODO *
-
-Map.prototype. setobj	=function( o, loc, r )
+Map.prototype. ready	=function()
 {
-	this.obj.o	=o
-
-	this.obj.ready	=true
+	return this.bin
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
 
-Map.prototype. isready	=function()
+
+/**@arg {Loc}	loc
+ * @arg {}	o	-The object as it appears in map obj.
+ * 		It's done so local json parser handles it like it handles map obj */
+
+Map.prototype. additem	=function( loc, o )
 {
-	return this.bin?.getbuf() && this.obj.ready
-}*/
+	for(var itemn in o )
+	{
+		this.obj.set(loc)[itemn]	=o[itemn]
+	}
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

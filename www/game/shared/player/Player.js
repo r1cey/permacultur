@@ -212,23 +212,32 @@ Pl.prototype. seespl	=function( pl2 )
 
 
 
+Pl.prototype. subwater	=function( n )
+{
+	return this.setwater( this.water - n )
+}
+
 
 Pl.prototype. setwater	=function( lvl )
 {
-	if(lvl < 0)	lvl	=0
-	if(lvl > 1)	lvl	=1
+	lvl	=lvl<0 ? 0 : lvl>1 ? 1 : lvl
 	
-	this.water	=lvl
-
-	return lvl
+	return this.water	=lvl
 }
 
 
 
-
-Pl.prototype. subwater	=function( n )
+Pl.prototype. addheat	=function( n )
 {
-	return this.setwater( this.water - n )
+	return this.setheat( this.heat + n )
+}
+
+
+Pl.prototype. setheat	=function( lvl )
+{
+	lvl	=lvl<0 ? 0 : lvl>1 ? 1 : lvl
+
+	return this.heat	=lvl
 }
 
 

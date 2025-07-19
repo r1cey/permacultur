@@ -1,5 +1,5 @@
 import Loc	from "./Loc.js"
-
+import { rnd }	from "./utils.js"
 
 var t	={}
 
@@ -13,6 +13,8 @@ t.Dewd	=class
 	constructor( dewd )
 	{
 		Object.assign( this, dewd )
+
+		this.dir	=dewd?.dir || rnd(6)
 	}
 
 

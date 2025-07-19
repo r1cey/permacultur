@@ -117,7 +117,17 @@ Pls.prototype. new	=function( plmsg )
 	pl.save( this.conf.dir )
 
 	map.obj.set(loc).pl	=pl
+	{
+		for(let idewd =0;idewd< 3 ;idewd++)
+		{
+			do{
+				loc.set(spawns[0]).addv(d.randh( 12 ))
+			}
+			while( map.getshade( loc ) || map.canplmov( loc ))
 
+			g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
+		}
+	}
 	g.srv?.send_newpl( pl )
 
 	return pl

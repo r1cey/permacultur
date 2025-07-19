@@ -6,7 +6,6 @@ import Loc	from './Loc.js'
 import Pl from './player/Player.js'
 // import { constrainedMemory } from 'process'
 import Con from "./Console.js"
-import * as tools from "../www/game/shared/tools.js"
 
 
 
@@ -16,19 +15,6 @@ Function.prototype. c	=function(...args)
 	{
 
 	})
-}
-
-
-var jsonkeys	=
-{
-	game	:
-	{
-		rep :()=> undefined
-	},
-	pl	:
-	{
-		rev :( val )=> new Pl( val )
-	}
 }
 
 
@@ -49,9 +35,13 @@ export default class G
 
 	maps	=new Maps( this)
 
-	intervals	=
+	time	=
 	{
-		min15 :0, sec :0
+		sec	:{ int	:0, i :0 }
+		,
+		min15	:{ int	:0, i :0 }
+		,
+		hour	:{ int	:0, i :0 }
 	}
 
 	pls	=new Players( this)
@@ -103,10 +93,12 @@ G.prototype. start	=async function( confpa )
 	}
 
 	await this.maps.start()
+	
+	g.time.hour.int	=setInterval( g.hour.bind(g), 60*1000*60*1.5 )
 
-	g.intervals.min15	=setInterval(g.min15.bind(g), 12*60*1000)
+	g.time.min15.int	=setInterval(g.min15.bind(g), 12*60*1000)
 
-	g.intervals.sec	=setInterval( this.sec.bind(this), 1000*60/73)
+	g.time.sec.int	=setInterval( this.sec.bind(this), 1000*60/73)
 
 	this.server.start()
 
@@ -146,27 +138,6 @@ G.prototype. save	=async function()
 }
 
 
-
-G.prototype. additem	=function( itemn, h, x, y )
-{
-	var loc	=new Loc(x,y,h)
-
-	var item
-
-	var map	=this.maps.fromloc( loc )
-
-	switch( itemn )
-	{
-		case "dewd"	:
-
-			item	=new tools.Dewd()
-			
-			map.obj.set(loc).dewd	=item
-	}
-}
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -183,14 +154,26 @@ G.prototype. rempls	=async function()
 
 G.prototype. sec	=function()
 {
-	var map	=this
+	var gr	=this.maps.gr
 
-	/*var x, ic, v	=new Loc()
+	//var x, ic, v	=new Loc()
 
-	this.maps.gr.fore(( loc )=>
+	gr.fore(( loc )=>
 	{
-		ic	=map.i(loc)
+		var ic	=gr.ic(loc)
 
+		var o	=gr.obj.g(loc)
+
+		if( o )
+		{
+			if( o.pl )
+			{
+				let pl	=o.pl
+
+				pl.addheat( gr.getshade_i(ic) ? -0.01 : 0.01 )
+			}
+		}
+	/*
 		if( x =map.gwateri( ic ))
 		{
 			v.set(loc)
@@ -226,8 +209,8 @@ G.prototype. sec	=function()
 					map.dryi( ic, loc )
 				}
 			}
-		}
-	})*/
+		}*/
+	})
 }
 
 
@@ -239,9 +222,13 @@ G.prototype. min15	=function()
 
 	var tr	=g.maps.tr
 
+	var itime	=g.time.min15.i
+
 	gr.fore(( loc )=>
 	{
 		var ic	=gr.ic(loc)
+
+		// DRY
 
 		switch( gr.getwsr_i( ic ))
 		{
@@ -254,6 +241,7 @@ G.prototype. min15	=function()
 					gr.dry_i( ic, loc )
 				}
 		}
+		// HUMIDIFY
 
 		var o	=gr.obj.g(loc)
 
@@ -278,6 +266,73 @@ G.prototype. min15	=function()
 
 				gr.wet( driploc )
 			}
+		}
+		// GROW		@TODO move growth checks to tree class
+
+		switch( gr.getplfl_i( ic ))
+		{
+			case "plant" :
+
+				let vegty	=gr.getvegty_i( ic )
+
+				if( vegty === "none" )	break
+
+				let time	=gr.getvegtime_i( ic )
+
+				if( time === itime )
+				{
+					let veglvl	=gr.getveglvl_i( ic )
+
+					if( vegty === "umbrtr")
+					{
+						if( veglvl <= 7 )
+						{
+							let humlvl	=gr.getsoilhum_i( ic )
+
+							if( humlvl > 0 )	gr.grow( loc, ic, vegty, veglvl )
+						}
+						else if( veglvl <= 25 )
+						{
+							gr.grow( loc, ic, vegty, veglvl )
+						}
+						else
+						{
+							let humlvl	=gr.getsoilhum_i( ic )
+
+							if( humlvl > 1 )	gr.grow( loc, ic, vegty, veglvl )
+						}
+					}
+				}
+		}
+	})
+	g.time.min15.i	=itime < gr.constructor.maxvegtime()-1 ? itime++ : 0
+}
+
+
+
+G.prototype. hour	=function()
+{
+	var g	=this
+
+	var gr	=g.maps.gr
+
+	var tr	=g.maps.tr
+
+	gr.fore(( loc )=>
+	{
+		var ic	=gr.ic(loc)
+
+		switch( gr.getwsr_i( ic ))
+		{
+			case "soil" :
+
+				let lvl	=gr.getsoilhum_i( ic )
+
+				if( lvl > 0 && lvl < 4 && gr.getshade_i( ic ) )
+				{
+					gr.dry_i( ic, loc )
+				}
+				
 		}
 	})
 }

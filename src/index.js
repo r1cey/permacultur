@@ -4,7 +4,11 @@ import Game from "./Game.js"
 
 global.game	=new Game( 'conf.json' )
 
-game.start()
+await game.start()
+
+if( ! game.maps.isready() )
+	
+	game.maps.gendesert()
 
 // game.server.start()
 

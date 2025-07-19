@@ -121,9 +121,9 @@ export default function( Map )
 
 
 
-	GM.prototype. setveg	=function( loc, type, lvl )
+	GM.prototype. setveg	=function( loc, type, lvl, time )
 	{
-		this.setveg_i(this.ic(loc), type, lvl )
+		this.setveg_i(this.ic(loc), type, lvl, time )
 	}
 
 
@@ -141,6 +141,11 @@ export default function( Map )
 	GM.prototype. setveglvl	=function( loc, lvl )
 	{
 		this.setveglvl_i( this.ic(loc), lvl )
+	}
+
+	GM.prototype. getvegtime	=function( loc )
+	{
+		return this.getvegtime_i( this.ic(loc) )
 	}
 
 

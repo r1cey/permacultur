@@ -65,9 +65,22 @@ ClS.prototype. setmap	=function()
 //////////////////////////////////////////////////////////////////////////////
 
 
+
+ClS.prototype. mapaddobj	=function( map, loc, o )
+{
+	this.sendjson({mapaddobj:
+		{
+			mapid	:map.bin.constructor.id
+			,
+			loc
+			,
+			o
+		}})
+}
+
+
 /** @arg {string} act 
  * @arg {array} vals */
-
 
 ClS.prototype. mapset_	=function( map, act, loc, vals )
 {

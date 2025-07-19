@@ -86,6 +86,15 @@ Map.prototype. save	=async function( dir ="")
 
 
 
+Map.prototype. additem	=function( loc, o )
+{
+	ShMap.prototype.additem. call(this, loc, o )
+	
+	this.game?.server?.send_mapaddobj( this, loc, o )
+}
+
+
+
 Map.prototype. set_	=function( name, loc, ...vals )
 {
 	this["set"+name]( loc, ...vals )

@@ -1,6 +1,17 @@
 import * as rl from "node:readline/promises"
 
+import newjsontr from "./www/game/shared/newjsontransfrm.js"
+import tools from "./tools.js"
 import Loc from "../www/game/shared/Loc.js"
+
+
+var rev	=newjsontr(
+{
+	dewd	:
+	{
+		rev:( val )=>new tools.Dewd(val)
+	}
+}).revivr
 
 
 export default class Con
@@ -22,11 +33,22 @@ export default class Con
 
 Con.prototype. online	=async function( str )
 {
-	var arr	=str.split(" ")
+	var i	=str.indexOf(" ")
 
+	var act	=str.slice(0, i )
+
+	try{
+		var arg	=i>=0 && i<str.length-2 ? JSON.parse(str.slice( i + 1 ), rev ) : null
+	}
+	catch(err)
+	{
+		console.error("console parse",str)
+
+		return
+	}
 	var g	=this.game
 
-	switch(arr[0])
+	switch(act)
 	{
 		case "save" :
 
@@ -38,7 +60,15 @@ Con.prototype. online	=async function( str )
 		break
 		case "additem"	:
 
-			g.additem( ...arr.slice(1) )
+			try{
+				let map	=g.maps.fromloc( arg.loc )
+
+				map.additem( arg.loc, arg.o )
+			}
+			catch(err)
+			{
+				console.error("console", str )
+			}
 		break
 
 	}

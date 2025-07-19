@@ -16,6 +16,20 @@ export default class SSe
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+SSe.prototype. mapaddobj	=function( map, loc, o )
+{
+	for(var n in this.cls.o )
+	{
+		var cl	=this.cls.o[n]
+
+		if( cl.pl.sees( loc ))
+		{
+			cl.send_mapaddobj( map, loc, o )
+		}
+	}
+}
+
 /** @arg {string} act 
  * @arg {array} vals */
 

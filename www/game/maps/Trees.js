@@ -114,7 +114,10 @@ Tr.prototype. draw	=function( can, pl )
 			map.drawleaves( can, loc, 1, plh )
 		}
 	})
-	can.ctx.shadowColor = 'transparent'
+	can.ctx.globalAlpha	=1
+
+	can.ctx.shadowColor ='transparent'
+
 	// can.ctx.drawImage( map.can.transferToImageBitmap(), can._crn.x,can._crn.y)
 }
 
@@ -488,11 +491,20 @@ Tr.prototype. drawleaves	=function( can, loc, trans, plh )
 
 	v.set(loc).tosqc(can).sub(r, h2>>1)
 
-	ctx.globalAlpha	=! trans && plh === map.getloc().h	? 1	: 0.1
+	// ctx.globalAlpha	=1
+	ctx.globalAlpha	=! trans && plh === map.getloc().h	? 1	: 0.18
 
-	ctx.shadowColor = "black";
-	ctx.shadowOffsetX = 0;
-	ctx.shadowOffsetY = 1;
+	// ctx.globalCompositeOperation	="multiply"
+
+	ctx.drawImage( can.imgs().o.leaves5_sh, v.x-1,v.y, r<<1, h2 )
+
+	// ctx.globalAlpha	=! trans && plh === map.getloc().h	? 1	: 0.18
+
+	// ctx.shadowColor = "black";
+	// ctx.shadowOffsetX = 0;
+	// ctx.shadowOffsetY = 1;
+
+	// ctx.globalCompositeOperation	="source-over"
 
 	ctx.drawImage( can.imgs().o.leaves5, v.x,v.y, r<<1, h2 )
 
