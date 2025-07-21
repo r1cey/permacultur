@@ -64,7 +64,7 @@ var bmap	=
 							,
 							bits	:7
 							,
-							valsa	:["none","umbrtr",,,"apple"]
+							valsa	:["none","umbrtr","sandpedro",,"apple"]
 						},
 						{
 							name	:"lvl"

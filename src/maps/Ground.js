@@ -120,6 +120,8 @@ G.prototype. gendesert	=function( r, maxc )
 	this.allsoil()
 
 	this.genumbrtrees(new Loc(0,0,0))
+
+	this.gencacti()
 }
 
 
@@ -540,7 +542,7 @@ G.prototype. genumbrtrees	=function()
 
 			sg.trans( loct.set(loc) )
 
-			if( ++ j > 20)	continue main;
+			if( ++ j > 40)	break main;
 		}
 		while( sg.is( loct ))
 
@@ -549,6 +551,42 @@ G.prototype. genumbrtrees	=function()
 		this.obj.o.spawns.push( loc.c() )
 		
 		this.genumbrtree( loc, trsize.min + rnd(trsize.range) )
+	}
+}
+
+
+
+G.prototype. gencacti	=function()
+{
+	var sg	=new SG( this._r, 10, this.getloc() )
+
+	var loc	=this.getloc().c()
+
+	var loct	=new Loc()	// tile location
+
+	var j	=0
+
+	sg.fore(( loct )=>
+	{
+		
+	})
+
+	///// TODO: just go through each supergrid and plant a cactus there
+
+	main: while(1)
+	{
+		do{
+			loc.randh( this._r )
+
+			sg.trans( loct.set(loc) )
+
+			if( ++ j > 40)	break main;
+		}
+		while( sg.is( loct ) || ! this.plantable(loc) )
+
+		sg.setx( loct, 1 )
+
+		this.gensanpedro( loc, 2 + rnd(15) )
 	}
 }
 
@@ -562,6 +600,21 @@ G.prototype. genumbrtree	=function( loc, size )
 	var time	=rnd( G.maxvegtime() )
 	
 	this.setveg_i( ic, "umbrtr", size, time )
+
+	return true
+}
+
+
+
+G.prototype. gensanpedro	=function( loc, size )
+{
+	var ic	=this.ic(loc)
+
+	if( !( this.plantable_i( ic ) && this.canplmov(loc) ))	return false
+
+	var time	=rnd( G.maxvegtime() )
+	
+	this.setveg_i( ic, "sandpedro", size, time )
 
 	return true
 }

@@ -40,9 +40,9 @@ export default class SG extends newBinMap( 0,0, BitM )
 
 /** Transforms loc */
 
-SG.prototype. trans	=function( loc )
+SG.prototype. tosuper	=function( loc )
 {
-	return loc.totile(0, this.sin, this.cos, this.dh2 )
+	return loc.tosuper(0, this.sin, this.cos, this.dh2 )
 }
 
 

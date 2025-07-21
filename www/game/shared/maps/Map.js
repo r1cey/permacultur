@@ -142,83 +142,6 @@ Map.prototype. slice	=function( c, r )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
-/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
- * If fun returns true then stop looping.
- * @arg {function} fun -( loc, distance, map )
- * @arg [r=mapRadius]
- * @arg [c=mapCenter]	-center from where to start looping
- * @returns {Loc}	-if fun returned true, returns the location
- * 		where it happened*/
-
-Map.prototype. fore	=function( fun, r, c )
-{
-	var v, ir, dir, i
-
-	r	??=this._r
-
-	c	??=this.getloc()
-
-	v	= c.c()
-
-	if( fun(v, 0, this) ) return v
-
-	for(ir=1; ir<=r; ir++)
-	{
-		v.neighh( 4 )
-
-		for(dir=0; dir<6; dir++)
-		{
-			for(i=0; i<ir; i++)
-			{
-				if( this.inside(v) )	// I can optimise this
-				{
-					if( fun(v, ir, this) ) return v
-				}
-
-				v.neighh(dir)
-			}
-		}
-	}
-}
-
-
-/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
- * If fun returns true then stop looping?
- * fun( loc, map )
- */
-
-Map.prototype. forring	=function( fun, r, c )
-{
-	if( ! r )
-	{
-		return fun( c, this )
-	}
-
-	r	??=this._r
-
-	c	??=this.getloc()
-
-	var v	=c.clone()
-
-	v.steph( 4, r )
-
-	for(var dir=0; dir<6; dir++)
-	{
-		for(var i=0; i<r; i++)
-		{
-			if( this.inside(v) )
-			{
-				if( fun( v, this ))	return v
-			}
-
-			v.neighh(dir)
-		}
-	}
-}
-
-
-
 /*
 Map.prototype. forstar	=function( fun, r, c )
 {
@@ -481,14 +404,6 @@ Map.o_sparse	=function( o, fun )
 	}
 }
 */
-
-
-Map.prototype. inside	=function( v )
-{
-	return this.getloc().disth(v) <= this._r
-}
-
-
 
 
 Map.prototype. corner	=function(dir)

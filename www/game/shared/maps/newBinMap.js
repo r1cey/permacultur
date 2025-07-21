@@ -83,6 +83,12 @@ export default function( id, bmap, base=newBin )
 
 
 
+	BM.prototype. inside	=function( v )
+	{
+		return this.getloc().disth(v) <= this.getr()
+	}
+
+
 	BM.prototype. ic	=function( loc )
 	{
 		let r	=this.getr()
@@ -94,6 +100,81 @@ export default function( id, bmap, base=newBin )
 		return (v.x>=0 && v.y<0) * (v.x*r - v.y) +
 			(v.y>=0 && v.z()<0) * (rsize + v.y*r - v.z()) +
 			(v.z()>=0 && v.x<0) * (rsize*2 + v.z()*r - v.x);
+	}
+
+
+	/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
+	 * If fun returns true then stop looping.
+	 * @arg {function} fun -( loc, distance, map )
+	 * @arg [r=mapRadius]
+	 * @arg [c=mapCenter]	-center from where to start looping
+	 * @returns {Loc}	-if fun returned true, returns the location
+	 * 		where it happened*/
+
+	BM.prototype. fore	=function( fun, r, c )
+	{
+		var v, ir, dir, i
+
+		r	??=this.getr()
+
+		c	??=this.getloc()
+
+		v	= c.c()
+
+		if( fun(v, 0, this) ) return v
+
+		for(ir=1; ir<=r; ir++)
+		{
+			v.neighh( 4 )
+
+			for(dir=0; dir<6; dir++)
+			{
+				for(i=0; i<ir; i++)
+				{
+					if( this.inside(v) )	// I can optimise this
+					{
+						if( fun(v, ir, this) ) return v
+					}
+
+					v.neighh(dir)
+				}
+			}
+		}
+	}
+
+
+	/** DON'T CHANGE VALUES OF VECTOR IN FUN() !!!
+	 * If fun returns true then stop looping?
+	 * fun( loc, map )
+	 */
+
+	Map.prototype. forring	=function( fun, r, c )
+	{
+		if( ! r )
+		{
+			return fun( c, this )
+		}
+
+		r	??=this.getr()
+
+		c	??=this.getloc()
+
+		var v	=c.clone()
+
+		v.steph( 4, r )
+
+		for(var dir=0; dir<6; dir++)
+		{
+			for(var i=0; i<r; i++)
+			{
+				if( this.inside(v) )
+				{
+					if( fun( v, this ))	return v
+				}
+
+				v.neighh(dir)
+			}
+		}
 	}
 
 

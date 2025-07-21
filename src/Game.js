@@ -224,11 +224,11 @@ G.prototype. min15	=function()
 
 	var itime	=g.time.min15.i
 
+	// DRY
+
 	gr.fore(( loc )=>
 	{
 		var ic	=gr.ic(loc)
-
-		// DRY
 
 		switch( gr.getwsr_i( ic ))
 		{
@@ -241,7 +241,12 @@ G.prototype. min15	=function()
 					gr.dry_i( ic, loc )
 				}
 		}
-		// HUMIDIFY
+	})
+	// HUMIDIFY
+
+	gr.fore(( loc )=>
+	{
+		// var ic	=gr.ic(loc)
 
 		var o	=gr.obj.g(loc)
 
@@ -267,7 +272,12 @@ G.prototype. min15	=function()
 				gr.wet( driploc )
 			}
 		}
-		// GROW		@TODO move growth checks to tree class
+	})
+	// GROW		@TODO move growth checks to tree class
+
+	gr.fore(( loc )=>
+	{	
+		var ic	=gr.ic(loc)
 
 		switch( gr.getplfl_i( ic ))
 		{
@@ -305,7 +315,7 @@ G.prototype. min15	=function()
 				}
 		}
 	})
-	g.time.min15.i	=itime < gr.constructor.maxvegtime()-1 ? itime++ : 0
+	g.time.min15.i	=itime < gr.constructor.maxvegtime()-1 ? ++itime : 0
 }
 
 

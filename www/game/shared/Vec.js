@@ -190,7 +190,7 @@ V.prototype. neg	=function()
 
 /** Convert to location on super grid */
 
-V.prototype. totile	=function( r, sin, cos, dh2 )
+V.prototype. tosuper	=function( r, sin, cos, dh2 )
 {
 	this.tosq( 1 )
 
@@ -210,6 +210,13 @@ V.prototype. totile	=function( r, sin, cos, dh2 )
 
 	return this.roundh()
 }
+
+
+V.prototype. tosub	=function()
+{
+
+}
+
 
 
 V.prototype. newcube	=function()
