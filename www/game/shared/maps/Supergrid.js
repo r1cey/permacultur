@@ -6,11 +6,13 @@ import V	from "../Vec.js";
 
 export default class SG extends newBinMap( 0,0, BitM )
 {
-	r
+	cellr
 
 	sin
 
 	cos
+
+	h2
 
 	dh2
 
@@ -22,9 +24,9 @@ export default class SG extends newBinMap( 0,0, BitM )
 	{
 		super( SG.calcradius( mapr, hexr), 0, loc )
 
-		this.r	=hexr
+		this.cellr	=hexr
 
-		var h2	=V.super.h2( hexr )
+		var h2	=this.h2	=V.super.h2( hexr )
 
 		this.sin	=V.super.sin( hexr, h2 )
 
@@ -43,6 +45,11 @@ export default class SG extends newBinMap( 0,0, BitM )
 SG.prototype. tosuper	=function( loc )
 {
 	return loc.tosuper(0, this.sin, this.cos, this.dh2 )
+}
+
+SG.prototype. tosub	=function( loc )
+{
+	return loc.tosub(0, this.sin, this.cos, this.h2 )
 }
 
 

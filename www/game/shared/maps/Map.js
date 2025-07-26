@@ -59,6 +59,13 @@ Map.prototype. ready	=function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+Map.prototype. inside	=function( loc )
+{
+	return this.bin.inside( loc )
+}
+
+
 /**@arg {Loc}	loc
  * @arg {}	o	-The object as it appears in map obj.
  * 		It's done so local json parser handles it like it handles map obj */
@@ -140,6 +147,20 @@ Map.prototype. slice	=function( c, r )
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.prototype. fore	=function( fun, r, c )
+{
+	return this.bin.fore( fun, r, c )
+}
+
+
+
+Map.prototype. forring	=function( fun, r, c )
+{
+	return this.bin.forring( fun, r, c )
+}
 
 
 /*

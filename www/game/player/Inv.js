@@ -22,3 +22,14 @@ Inv.prototype. remitem	=function( itemn )
 
 	this.htmlobj.remitem( itemn )
 }
+
+/*
+Inv.prototype. attachhtmlinv	=function( htmlinv )
+{
+	this.htmlobj	=htmlinv.addseedbag( this )
+
+	for(var itemn in this.o )
+	{
+		this.htmlobj.additem( itemn, this.o[itemn] )
+	}
+}*/

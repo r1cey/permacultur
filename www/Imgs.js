@@ -15,7 +15,8 @@ export default class I
 		[
 			'leaves5.png' ,
 			"sand3.png" ,
-			"dewd.png"
+			"dewd.png",
+			"cactus.png"
 		]
 		var shadows	=
 		{

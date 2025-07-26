@@ -582,7 +582,7 @@ Can.prototype. resize	=function()
 
 Can.prototype. forcell	=function( fun )
 {
-
+	/*
 	var crn	=this.crn.c().roundh().add(-1,0)
 
 	var vh	=new V().set(crn)
@@ -613,12 +613,42 @@ Can.prototype. forcell	=function( fun )
 
 			vh.x++
 
-			if( ! (j&1) )	// Can be branchless optimised
+			vh.y	-=Number( !(j&1) )
+			/*
+			if( !(j&1) )	// Can be branchless optimised
 			{
 				vh.y--
-			}
+			}*
+		}
+	}*/
+
+	var crn	=this.crn.c().add(-1,0).roundh()
+
+	var maxcrn	=this.size2.c().mul(2).add(2,1).todoffs()
+
+	var v	=new V()
+
+	for(var x =0;x<= maxcrn.x ;x++)
+	{
+		for(var y =0;y<= maxcrn.y ;y++)
+		{
+			fun( v.setxy(x,y).toaxial().addv(crn), this )
 		}
 	}
+}
+
+
+/** v is changed */
+
+Can.prototype. isvis	=function( v )
+{
+	// var crn	=this.crn.c().add(-1,0)
+
+	v.subv( this.crn ).add(1,0).todoffs()
+
+	var maxcrn	=this.size2.c().mul(2).add(1,0).todoffs()
+
+	return v.x >= 0 && v.x <= maxcrn.x && v.y>=0 && v.y<=maxcrn.y
 }
 
 
@@ -677,13 +707,13 @@ Can.prototype. fillhex	=function( c, col="#888888" )
 
 
 
-Can.prototype. drawimg	=function( loc, img, vbuf )
+Can.prototype. drawimg	=function( loc, img, size =1, vbuf )
 {
 	var{ r, h2 }	=this.units
 
-	vbuf.set(loc).tosqc(this).sub(r, h2>>1)
+	vbuf.set(loc).tosqc(this).sub(r*size, (h2>>1)*size)
 
-	this.ctx.drawImage( img, vbuf.x,vbuf.y, r<<1, h2 )
+	this.ctx.drawImage( img, vbuf.x,vbuf.y, (r<<1)*size, h2*size )
 }
 
 

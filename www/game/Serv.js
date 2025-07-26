@@ -48,6 +48,10 @@ export default class Serv extends SrvS
 			{
 				rev:( val )=>new Hands(val)
 			},
+			belt	:
+			{
+				rev:( val )=>new tools.Belt( val )
+			},
 			seedbag :
 			{
 				rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )

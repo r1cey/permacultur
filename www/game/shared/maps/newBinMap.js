@@ -148,7 +148,7 @@ export default function( id, bmap, base=newBin )
 	 * fun( loc, map )
 	 */
 
-	Map.prototype. forring	=function( fun, r, c )
+	BM.prototype. forring	=function( fun, r, c )
 	{
 		if( ! r )
 		{

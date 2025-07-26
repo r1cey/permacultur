@@ -38,7 +38,7 @@ t.Dewd	=class
 
 		ctx.translate( -vbuf.x, -vbuf.y )
 	
-		can.drawimg( loc, can.imgs().o.dewd, vbuf )
+		can.drawimg( loc, can.imgs().o.dewd, 1, vbuf )
 
 		ctx.restore()
 	}

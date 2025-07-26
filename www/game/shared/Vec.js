@@ -212,9 +212,25 @@ V.prototype. tosuper	=function( r, sin, cos, dh2 )
 }
 
 
-V.prototype. tosub	=function()
+V.prototype. tosub	=function( r, sin, cos, h2 )
 {
+	h2	??=V.super.h2( r )
 
+	this.tosq( h2 )
+
+	sin	??=V.super.sin( r )
+
+	cos	??=Math.sqrt(1 - sin*sin)
+
+	var x	=this.x*cos + this.y*sin
+
+	this.y	=this.y*cos - this.x*sin
+
+	this.x	=x
+
+	this.tohex( 1 )
+
+	return this.roundh()
 }
 
 
@@ -284,6 +300,27 @@ V.prototype. tosq	=function( h2 = 32 )
 
 	return this
 }
+
+
+/** Hex to double offset */
+
+V.prototype. todoffs	=function()
+{
+	this.y	=(this.y*2) + this.x
+
+	return this
+}
+
+/** Double offset to hex 
+ * DOESN'T DEAL WITH FRACTIONS */
+
+V.prototype. toaxial	=function()
+{
+	this.y	=(this.y - this.x)>>1
+
+	return this
+}
+
 
 V.prototype. setev	=function(ev)
 {

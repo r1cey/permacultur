@@ -540,7 +540,7 @@ G.prototype. genumbrtrees	=function()
 		do{
 			loc.randh( r )
 
-			sg.trans( loct.set(loc) )
+			sg.tosuper( loct.set(loc) )
 
 			if( ++ j > 40)	break main;
 		}
@@ -558,36 +558,29 @@ G.prototype. genumbrtrees	=function()
 
 G.prototype. gencacti	=function()
 {
-	var sg	=new SG( this._r, 10, this.getloc() )
+	var r	=10
+
+	var sg	=new SG( this._r, r, this.getloc() )
 
 	var loc	=this.getloc().c()
 
-	var loct	=new Loc()	// tile location
-
-	var j	=0
+	var randv	=new Loc()
 
 	sg.fore(( loct )=>
 	{
-		
-	})
+		var j	=0
 
-	///// TODO: just go through each supergrid and plant a cactus there
+		var size	=2 + rnd(15)
 
-	main: while(1)
-	{
 		do{
-			loc.randh( this._r )
+			sg.tosub( loc.set(loct) )
 
-			sg.trans( loct.set(loc) )
+			loc.addv( randv.randh( r-1 ))
 
-			if( ++ j > 40)	break main;
+			if( ++ j > 25)	return
 		}
-		while( sg.is( loct ) || ! this.plantable(loc) )
-
-		sg.setx( loct, 1 )
-
-		this.gensanpedro( loc, 2 + rnd(15) )
-	}
+		while( ! this.gensanpedro( loc, size ) )
+	})
 }
 
 

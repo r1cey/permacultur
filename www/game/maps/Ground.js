@@ -92,7 +92,7 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 
 			if( lvl === 0 )
 			{
-				can.drawimg( loc, can.imgs().o.sand3, new V() )
+				can.drawimg( loc, can.imgs().o.sand3, 1, new V() )
 			}
 			else
 			{
@@ -121,6 +121,10 @@ Gr.prototype. drawhex	=function( can, loc, plh, vsq, ic )
 						case "umbrtr" :
 
 							map.drawstem( can, loc, vsq, ic, col )
+						break
+						case "sandpedro" :
+
+							map.drawcactus( can, loc, vsq, ic )
 					}
 			}
 		break
@@ -203,6 +207,23 @@ Gr.prototype. drawstem	=function( can, loc, vsq, ic, col )
 
 		can.ctx.fillText( lvl, vsq.x, vsq.y )
 	}
+}
+
+
+
+Gr.prototype. drawcactus	=function( can, loc, vsq, ic )
+{
+	var map	=this
+
+	vsq	??=new V().set(loc).tosqc(can)
+
+	ic	??=map.i(loc)
+
+	var lvl	=map.getveglvl_i(ic)
+
+	var max	=Gr.maxveglvl()
+
+	can.drawimg( loc, can.imgs().o.cactus, lvl/max, new V() )
 }
 
 

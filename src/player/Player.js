@@ -60,7 +60,9 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	srv()	{return this.game.server }
 
-	inv	={ seedbag :[new tools.Seedbag({o:{ cucumber_seeds :15 }}) ] }
+	inv	={ seedbag :[new tools.Seedbag({o:{ cucumber_seeds :15 }}) ],
+
+		belt :{o:{ multitool :1 }}}
 
 
 	constructor( pl, game )

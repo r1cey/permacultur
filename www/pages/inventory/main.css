@@ -44,6 +44,33 @@ inv>hands>item
 }
 
 
+inv>belt
+{
+	display: block ;
+	width: 85% ;
+	height: 23% ;
+
+	background: #50ab49 url(belt.png) ;
+	background-size: contain ;
+	background-position: center ;
+	background-repeat: no-repeat ;
+	border: 1px inset #21a750a8;
+}
+
+inv>belt>item
+{
+	display: block;
+}
+
+inv .multitool
+{
+	width: 85%;
+	height: 85%;
+	
+	background-image: url(../imgs/multitool.png) ;
+}
+
+
 
 inv>seedbag
 {
