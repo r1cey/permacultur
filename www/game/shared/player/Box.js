@@ -1,4 +1,4 @@
-export default class Inv
+export default class Box
 {
 	o	={}
 
@@ -10,13 +10,13 @@ export default class Inv
 }
 
 
-Inv.prototype. additem	=function( itemn, item )
+Box.prototype. additem	=function( itemn, item )
 {
 	this.o[itemn]	=item
 }
 
 
-Inv.prototype. remitem	=function( itemn )
+Box.prototype. delitem	=function( itemn )
 {
 	delete this.o[itemn]
 }

@@ -1,4 +1,4 @@
 import newHands from "../../www/game/shared/player/newHands.js"
-import Inv from "../../www/game/shared/player/Inv.js"
+import Box from "../../www/game/shared/player/Box.js"
 
-export default newHands(Inv)
+export default newHands(Box)

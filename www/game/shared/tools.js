@@ -45,9 +45,16 @@ t.Dewd	=class
 }
 
 
-t.newSeedbag	=function( Inv )
+t.newBelt	=function( Box )
 {
-	class SB extends Inv
+	class SB extends Box {	}
+	return SB
+}
+
+
+t.newSeedbag	=function( Box )
+{
+	class SB extends Box
 	{
 
 	}

@@ -60,13 +60,17 @@ inv>belt
 inv>belt>item
 {
 	display: block;
+
+	background-size: inherit;
+	background-position: inherit ;
+	background-repeat: inherit ;
 }
 
 inv .multitool
 {
 	width: 85%;
 	height: 85%;
-	
+
 	background-image: url(../imgs/multitool.png) ;
 }
 

@@ -6,9 +6,11 @@ export default class Inv extends P
 {
 	pl
 
-	box
+	dadel
 
 	hands
+
+	belt
 
 	seedbag	=[]
 
@@ -19,7 +21,7 @@ export default class Inv extends P
 	{
 		try
 		{
-			this.box.removeChild( this.el )
+			this.dadel.removeChild( this.el )
 		}
 		catch(err) {}
 
@@ -32,7 +34,7 @@ export default class Inv extends P
 	{
 		super( html, el, css )
 		
-		this.box	=this.html.screen
+		this.dadel	=this.html.screen
 
 		this.hands	=new Hands(this, pl.hands )
 
@@ -47,7 +49,7 @@ export default class Inv extends P
 
 Inv.prototype. show	=function()
 {
-	this.box.appendChild( this.el )
+	this.dadel.appendChild( this.el )
 
 	this.html.can.el.addEventListener("click", this.hidebound,{ once :true})
 }
@@ -57,9 +59,18 @@ Inv.prototype. show	=function()
 
 
 
-Inv.prototype. addseedbag	=function( plobj )
+Inv.prototype. addbelt	=function( plbox )
 {
-	var sb	=new Seedbag(this, plobj )
+	this.belt	=new Belt(this, plbox )
+
+	return this.belt
+}
+
+
+
+Inv.prototype. addseedbag	=function( plbox )
+{
+	var sb	=new Seedbag(this, plbox )
 
 	this.seedbag.push(sb)
 
@@ -71,27 +82,34 @@ Inv.prototype. addseedbag	=function( plobj )
 
 
 
-class InvObj
+class HtmlBox
 {
 	inv
 
 	el
 
-	plobj
+	plbox
 
 
 	additem( itemn, item )	{}
 
-	remitem( itemn )	{}
+	delitem( itemn )	{}
 
 
-	constructor( inv, el, plobj )
+	constructor( inv, el, plbox )
 	{
 		this.inv	=inv
 
 		this.el	=el
 
-		this.plobj	=plobj
+		this.plbox	=plbox
+	}
+
+
+
+	delitem( itemn )
+	{
+		this.el.removeChild( this.el.querySelector("."+itemn) )
 	}
 }
 
@@ -100,11 +118,11 @@ class InvObj
 
 
 
-class Hands	extends InvObj
+class Hands	extends HtmlBox
 {
-	constructor( inv, plobj )
+	constructor( inv, plbox )
 	{
-		super( inv, inv.el.getElementsByTagName("hands")[0], plobj )
+		super( inv, inv.el.getElementsByTagName("hands")[0], plbox )
 	}
 }
 
@@ -132,9 +150,45 @@ Hands.prototype. additem	=function( itemn, item )
 	this.el.appendChild(el)
 }
 
-Hands.prototype. remitem	=function( itemn )
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+class Belt	extends HtmlBox
 {
-	this.el.removeChild( this.el.querySelector("."+itemn) )
+	constructor( inv, plbox )
+	{
+		super( inv, inv.el.getElementsByTagName("BELT")[0], plbox )
+	}
+
+
+	additem( itemn, item )
+	{
+		var el	=document.createElement( "ITEM" )
+
+		switch( itemn )
+		{
+			case "multitool" :
+
+				el.className	=itemn
+
+				el.onclick	=( ev )=>
+				{
+					let acts	=this.inv.html.contextmenu.newev( ev )
+
+					acts.addopt( "use", ()=>
+					{
+						this.inv.pl.movitem( this.plbox , itemn, this.inv.pl.hands )
+
+						this.inv.hide()
+					})
+					acts.show()
+				}
+			break
+		}
+		this.el.appendChild( el )
+	}
 }
 
 
@@ -142,11 +196,11 @@ Hands.prototype. remitem	=function( itemn )
 
 
 
-class Seedbag	extends InvObj
+class Seedbag	extends HtmlBox
 {
-	constructor( inv, plobj )
+	constructor( inv, plbox )
 	{
-		super( inv, document.createElement( "SEEDBAG" ), plobj )
+		super( inv, document.createElement( "SEEDBAG" ), plbox )
 
 		this.inv.el.appendChild( this.el )
 	}
@@ -170,7 +224,7 @@ Seedbag.prototype. additem	=function( itemn, item )
 
 				acts.addopt( "plant", ()=>
 				{
-					this.inv.pl.movitem( this.plobj , itemn, this.inv.pl.hands )
+					this.inv.pl.movitem( this.plbox , itemn, this.inv.pl.hands )
 
 					this.inv.hide()
 				})
@@ -180,10 +234,4 @@ Seedbag.prototype. additem	=function( itemn, item )
 
 	}
 	this.el.appendChild(el)
-}
-
-
-Seedbag.prototype. remitem	=function( itemn )
-{
-	this.el.removeChild( this.el.querySelector("."+itemn) )
 }

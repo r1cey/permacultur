@@ -147,9 +147,19 @@ Player.prototype. attachhtmlinv	=function( htmlinv )
 
 	for(var invn in this.inv )
 	{
-		for(var bag of this.inv[invn] )
+		switch( invn )
 		{
-			bag.attachhtmlinv( htmlinv )
+			case "belt" :
+
+				this.inv[invn].attachhtmlinv( htmlinv )
+			break
+			case "seedbag" :
+		
+				for(var bag of this.inv[invn] )
+				{
+					bag.attachhtmlinv( htmlinv )
+				}
+			break
 		}
 	}
 }
@@ -222,5 +232,5 @@ Player.prototype. movitem	=function( from, itemn, to )
 {
 	to.additem( itemn, from.o[itemn] )
 	
-	from.remitem( itemn )
+	from.delitem( itemn )
 }

@@ -1,15 +1,23 @@
 import tools	from "./shared/tools.js"
-import Inv	from "./player/Inv.js"
+import Box	from "./player/Box.js"
 
 
-tools.Belt	=class extends tools.newBelt( Inv )
+tools.Belt	=class extends tools.newBelt( Box )
 {
-	
+	attachhtmlinv( htmlinv )
+	{
+		this.htmlobj	=htmlinv.addbelt( this )
+
+		for(var itemn in this.o )
+		{
+			this.htmlobj.additem( itemn, this.o[itemn] )
+		}
+	}
 }
 
 
 
-tools.Seedbag	=class extends tools.newSeedbag( Inv )
+tools.Seedbag	=class extends tools.newSeedbag( Box )
 {
 	attachhtmlinv( htmlinv )
 	{

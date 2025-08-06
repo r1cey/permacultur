@@ -54,7 +54,7 @@ export default class Serv extends SrvS
 			},
 			seedbag :
 			{
-				rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
+				rev:( arr )=> arr.map(( val )=> new tools.Seedbag(val) )
 			},
 			dewd	:
 			{

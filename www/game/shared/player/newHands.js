@@ -1,6 +1,6 @@
-export default function newHands( Inv )
+export default function newHands( Box )
 {
-	class Ha extends Inv
+	class Ha extends Box
 	{
 
 	}
