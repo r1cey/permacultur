@@ -242,4 +242,15 @@ Pl.prototype. setheat	=function( lvl )
 }
 
 
+
+Pl.prototype. movitem	=function( boxfrom, itemn, num, boxto )
+{
+	var itemfrom	=boxfrom.o[itemn]
+
+	var movednum	=boxto.additem( itemn, itemfrom, num )
+
+	boxfrom.delitem( itemn, movednum )
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////

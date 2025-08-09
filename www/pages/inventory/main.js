@@ -91,9 +91,7 @@ class HtmlBox
 	plbox
 
 
-	additem( itemn, item )	{}
-
-	delitem( itemn )	{}
+	additem( itemn, item, num )	{}
 
 
 	constructor( inv, el, plbox )
@@ -107,9 +105,23 @@ class HtmlBox
 
 
 
-	delitem( itemn )
+	additem( itemn, num )
 	{
-		this.el.removeChild( this.el.querySelector("."+itemn) )
+		var el	=document.createElement( "ITEM" )
+
+		el.className	=itemn
+
+		el.textContent	=num
+	}
+
+
+	delitem( itemn, num )
+	{
+		var el	=this.el.querySelector("."+itemn)
+
+		var rem	=el.textContent - num
+
+		rem > 0	? el.textContent =rem	: this.el.removeChild( el )
 	}
 }
 
@@ -124,27 +136,24 @@ class Hands	extends HtmlBox
 	{
 		super( inv, inv.el.getElementsByTagName("hands")[0], plbox )
 	}
-}
 
 
-Hands.prototype. additem	=function( itemn, item )
-{
-	var el	=document.createElement( "ITEM" )
-
-	switch( itemn )
+	additem( itemn, item )
 	{
-		case "cucumber_seeds" :
+		var el	=super( itemn, item )
 
-			el.className	=itemn
+		switch( itemn )
+		{
+			case "cucumber_seeds" :
 
-			el.onclick	=( ev )=>
-			{
-				let acts	=this.inv.html.contextmenu.newev( ev )
+				el.onclick	=( ev )=>
+				{
+					let acts	=this.inv.html.contextmenu.newev( ev )
 
-				acts.addopt( "plant", ()=>{	this.inv.hide()	})
+					acts.addopt( "plant", ()=>{	this.inv.hide()	})
 
-				acts.show()
-			}
+					acts.show()
+				}
 
 	}
 	this.el.appendChild(el)

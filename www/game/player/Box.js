@@ -1,4 +1,4 @@
-import ShBox	from "../shared/player/Box.js"
+import ShBox	from "../shared/Box.js"
 
 
 
@@ -8,19 +8,20 @@ export default class Box extends ShBox
 }
 
 
-Box.prototype. additem	=function( itemn, item )
-{
-	ShInv.prototype.additem. call(this, itemn, item )
 
-	this.htmlbox?.additem( itemn, item )
+Box.prototype. additem	=function( itemn, item, num )
+{
+	var moved	=ShBox.prototype.additem. call(this, itemn, item, num )
+
+	moved &&	this.htmlbox?.additem( itemn, item, moved )
 }
 
 
-Box.prototype. delitem	=function( itemn )
+Box.prototype. delitem	=function( itemn, num )
 {
-	ShInv.prototype.delitem. call(this, itemn )
+	ShBox.prototype.delitem. call(this, itemn, num )
 
-	this.htmlbox?.delitem( itemn )
+	this.htmlbox?.delitem( itemn, num )
 }
 
 /*

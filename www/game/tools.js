@@ -1,4 +1,4 @@
-import tools	from "./shared/tools.js"
+import tools	from "./shared/items.js"
 import Box	from "./player/Box.js"
 
 
