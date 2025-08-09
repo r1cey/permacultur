@@ -226,11 +226,3 @@ Player.prototype. climb	=function( loc )
 		}
 	}
 }*/
-
-
-Player.prototype. movitem	=function( from, itemn, to )
-{
-	to.additem( itemn, from.o[itemn] )
-	
-	from.delitem( itemn )
-}

@@ -13,6 +13,8 @@ t.Item	=class
 	/** A unit is 125 cubic mm which is a sunflower seed */
 	static vol	=1
 
+	acts	={}
+
 
 	constructor( obj, num )
 	{
@@ -92,6 +94,15 @@ t.newSeedbag	=function( Box )
 		static vol	=Math.floor(40*25*20/125)
 
 		static boxvol	=Math.floor(55*45*45/125)
+	}
+}
+
+
+t.CucumberSeed	=class extends t.Item
+{
+	acts	=
+	{
+		plant	:8
 	}
 }
 

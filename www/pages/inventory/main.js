@@ -112,6 +112,26 @@ class HtmlBox
 		el.className	=itemn
 
 		el.textContent	=num
+
+		el.onclick	=( ev )=>
+		{
+			let acts	=this.inv.html.contextmenu.newev( ev )
+
+			acts.addopt( "Use All", ()=>
+			{
+				let pl	=this.inv.pl
+
+				let from	=this.plbox
+
+				let to	=pl.hands
+				
+				from !== to ? pl.movitem( from , itemn, num, to ) : 0
+
+				this.inv.hide()
+			})
+			acts.show()
+		}
+		this.el.appendChild( el )
 	}
 
 
@@ -136,27 +156,6 @@ class Hands	extends HtmlBox
 	{
 		super( inv, inv.el.getElementsByTagName("hands")[0], plbox )
 	}
-
-
-	additem( itemn, item )
-	{
-		var el	=super( itemn, item )
-
-		switch( itemn )
-		{
-			case "cucumber_seeds" :
-
-				el.onclick	=( ev )=>
-				{
-					let acts	=this.inv.html.contextmenu.newev( ev )
-
-					acts.addopt( "plant", ()=>{	this.inv.hide()	})
-
-					acts.show()
-				}
-
-	}
-	this.el.appendChild(el)
 }
 
 
@@ -169,34 +168,6 @@ class Belt	extends HtmlBox
 	constructor( inv, plbox )
 	{
 		super( inv, inv.el.getElementsByTagName("BELT")[0], plbox )
-	}
-
-
-	additem( itemn, item )
-	{
-		var el	=document.createElement( "ITEM" )
-
-		switch( itemn )
-		{
-			case "multitool" :
-
-				el.className	=itemn
-
-				el.onclick	=( ev )=>
-				{
-					let acts	=this.inv.html.contextmenu.newev( ev )
-
-					acts.addopt( "use", ()=>
-					{
-						this.inv.pl.movitem( this.plbox , itemn, this.inv.pl.hands )
-
-						this.inv.hide()
-					})
-					acts.show()
-				}
-			break
-		}
-		this.el.appendChild( el )
 	}
 }
 
@@ -213,34 +184,4 @@ class Seedbag	extends HtmlBox
 
 		this.inv.el.appendChild( this.el )
 	}
-}
-
-
-
-Seedbag.prototype. additem	=function( itemn, item )
-{
-	var el	=document.createElement( "ITEM" )
-
-	switch( itemn )
-	{
-		case "cucumber_seeds" :
-
-			el.className	=itemn
-
-			el.onclick	=( ev )=>
-			{
-				let acts	=this.inv.html.contextmenu.newev( ev )
-
-				acts.addopt( "plant", ()=>
-				{
-					this.inv.pl.movitem( this.plbox , itemn, this.inv.pl.hands )
-
-					this.inv.hide()
-				})
-
-				acts.show()
-			}
-
-	}
-	this.el.appendChild(el)
 }

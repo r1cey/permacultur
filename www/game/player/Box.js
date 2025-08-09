@@ -8,12 +8,13 @@ export default class Box extends ShBox
 }
 
 
+/** This needs to return the same as shared class */
 
 Box.prototype. additem	=function( itemn, item, num )
 {
 	var moved	=ShBox.prototype.additem. call(this, itemn, item, num )
 
-	moved &&	this.htmlbox?.additem( itemn, item, moved )
+	return moved &&	this.htmlbox?.additem( itemn, item, moved )
 }
 
 
