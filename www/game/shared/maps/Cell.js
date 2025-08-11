@@ -1,35 +1,29 @@
-import items	from "./items.js"
-
-
-export default class Box extends items.Item
+export default class Cell
 {
 	/** Including empty boxes */
 	items	={}
 
 	boxes	={}
-
-	static boxvol	=8000	//10cm^3
 }
 
 
 /** Only changes this box. Doesn't modify given item.
  * @returns how many items were transfered */
 
-Box.prototype. add	=function( item, num =1, dadbox )
+Box.prototype. add	=function( item, num =1 )
 {
-	if( dadbox && this.calcempty() )
-	{
-		Box.prototype.delitem. call(dadbox, this )
+	return item instanceof Box && ! item.calcempty() ?
+	
+		this.addbox( item ) : this.additem( item, num )
 
-		dadbox.addbox( this )
-	}
-	var itemb
-
-	if( item instanceof Box && ! item.calcempty() )
+	if(  )
 	
 		this.addbox( item)
 
-	else
+	else 
+	{
+
+	}
 
 	}
 		{

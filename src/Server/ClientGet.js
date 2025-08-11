@@ -21,7 +21,7 @@ export default class ClG extends ClS
  * @arg o.loc
  */
 
-ClG.prototype. mov	=function( o )
+ClG.prototype. on_mov	=function( o )
 {
 	// var loc	=Loc.fromJSON( o.loc )
 	
@@ -35,7 +35,7 @@ ClG.prototype. mov	=function( o )
  * @arg {Object}	o.msg
  */
 
-ClG.prototype. wrtc	=function( o )
+ClG.prototype. on_wrtc	=function( o )
 {
 	var cl2	=this.game().pls[o.name].cl
 
@@ -57,7 +57,7 @@ ClG.prototype. wrtc	=function( o )
 	cl2.s.wrtc( o )
 }
 
-ClG.prototype. dig	=function( o )
+ClG.prototype. on_dig	=function( o )
 {
 	var tool	=o
 
@@ -68,7 +68,7 @@ ClG.prototype. dig	=function( o )
 /** @arg o.dir	- true is up
  * @arg o.loc	- pl loc */
 
-ClG.prototype. climb	=function( o )
+ClG.prototype. on_climb	=function( o )
 {
 	var pl	=this.pl
 
@@ -87,9 +87,14 @@ ClG.prototype. climb	=function( o )
 }
 
 
+/** { itemloc[str],  } */
+
+ClG.prototype. on_movitem	=function( o )
+
+
 /** { loc, objkey, act, params } */
 
-ClG.prototype. actonobj	=function( o )
+ClG.prototype. on_actonobj	=function( o )
 {
 	var loc	=o.loc
 
@@ -103,10 +108,10 @@ ClG.prototype. actonobj	=function( o )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
+/*
 for(var funn in ClG.prototype)
 {
 	ClG.prototype["on_"+funn]	=ClG.prototype[funn]
 
 	delete ClG.prototype[funn]
-}
+}*/

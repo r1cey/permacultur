@@ -50,7 +50,7 @@ export default class Serv extends SrvS
 			},
 			belt	:
 			{
-				rev:( val )=>new tools.Belt( val )
+				rev:( o )=> foreach( o, (val)=>new tools.Belt( val ) )
 			},
 			seedbag :
 			{
@@ -263,4 +263,16 @@ Buf.prototype. iscomplete	=function( i, buf )
 
 		this.a.splice( i, 1 )
 	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+function ofore( o, fun )
+{
+	for(var key in o )	fun(o[key])
+
+	return o
 }

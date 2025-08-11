@@ -38,7 +38,11 @@ t.Dewd	=class extends t.Item
 {
 	dir
 
+	active	=false
+
 	static vol	=500000
+
+	static name	="dewd"
 
 
 	constructor( dewd )
@@ -83,6 +87,8 @@ t.newBelt	=function( Box )
 		static vol	=Math.floor(100*200*70/125)
 
 		static boxvol	=2**31
+
+		static name	="belt"
 	}
 }
 
@@ -94,16 +100,15 @@ t.newSeedbag	=function( Box )
 		static vol	=Math.floor(40*25*20/125)
 
 		static boxvol	=Math.floor(55*45*45/125)
+
+		static name="seedbag"
 	}
 }
 
 
 t.CucumberSeed	=class extends t.Item
 {
-	acts	=
-	{
-		plant	:8
-	}
+	static name	="cucumber_seeds"
 }
 
 ///////////////////////////////////////////////////////////////////////////////

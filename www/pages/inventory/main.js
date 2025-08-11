@@ -104,6 +104,7 @@ class HtmlBox
 	}
 
 
+	/** @return num */
 
 	additem( itemn, num )
 	{
@@ -132,6 +133,8 @@ class HtmlBox
 			acts.show()
 		}
 		this.el.appendChild( el )
+
+		return num
 	}
 
 
