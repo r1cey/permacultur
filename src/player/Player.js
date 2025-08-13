@@ -257,8 +257,23 @@ Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
 
 Player.prototype. movobj	=function( from, to, itemn, len, boxi )
 {
+	/** @TODO !!! : check that to and from are viable */
+
 	var{ game }	=this
 
+	/** How many items can destination accept? */
+
+	if( to.pln )
+	{
+
+	}
+
+	if( from.pln )
+	{
+		let pl	=game.pls.g(from.pln)
+
+		if( ! from.boxes.length )
+	}
 	var frombox	=from.pln ? game.pls.g(from.pln) : game.maps.objfromloc(from.loc)
 
 	if( ! frombox )
@@ -267,7 +282,6 @@ Player.prototype. movobj	=function( from, to, itemn, len, boxi )
 
 		return
 	}
-	
 	var fromdadbox
 
 	for(var boxn of from.boxes )
