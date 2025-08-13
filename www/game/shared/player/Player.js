@@ -253,6 +253,18 @@ Pl.prototype. setheat	=function( lvl )
 
 Pl.prototype. movitem	=function( frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
 {
+	var item	=cntfrom.gitem( itemn, ibox )
+
+	var movedl	=cntto.additem( item, len )
+
+	movedl	? cntfrom.delitem( itemn, movedl, ibox )	: 0
+
+	return movedl
+
+
+
+	// delete below
+
 	var itemfrom	=boxfrom.o[itemn]
 
 	var movednum	=tobox.additem( itemn, itemfrom, num )

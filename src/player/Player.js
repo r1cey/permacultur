@@ -260,6 +260,16 @@ Player.prototype. movobj	=function( from, to, itemn, len, boxi )
 	/** @TODO !!! : check that to and from are viable */
 
 	var{ game }	=this
+	
+	var cntfrom	=new Cont()
+	
+	from.pln ? cntfrom.frompl( game.pls.g(from.pln), from.boxes ) :
+
+		cntfrom.fromloc( game.maps, from.loc, from.boxes)
+
+	PlMsg.prototype.movitem. call(this, cntfrom, itemn, len, boxi, cntto )
+
+
 
 	/** How many items can destination accept? */
 

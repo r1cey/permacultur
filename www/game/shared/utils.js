@@ -68,3 +68,36 @@ export function rnd( n )
 {
 	return Math.floor(Math.random()*n )
 }
+
+
+
+export class IdPool
+{
+	next	 =0           // last issued id (uint32)
+
+    free	=[]          // stack of freed ids
+
+	
+	new()
+	{
+    	if( this.free.length )
+		{
+      		return this.free.pop()
+    	}
+    	if( this.next === Number.MAX_SAFE_INTEGER )
+		{
+			/** @todo : handle error better? */
+
+      		throw new Error("IdPool32 exhausted (no frees and wrapped).");
+    	}
+    	return this.next	=this.next + 1
+	}
+
+
+	del(id)
+	{
+    	// Blazing-fast path: assume valid & not double-freed
+    	// If you want safety, see the “safe mode” notes below.
+    	this.free.push(id)
+  	}
+}
