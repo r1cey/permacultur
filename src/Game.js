@@ -6,6 +6,7 @@ import Loc	from './Loc.js'
 import Pl from './player/Player.js'
 // import { constrainedMemory } from 'process'
 import Con from "./Console.js"
+// import Admin from "./Admin.js"
 
 
 
@@ -47,6 +48,8 @@ export default class G
 	pls	=new Players( this)
 
 	mode	=null
+
+	// admin	=new Admin( this )
 	
 	srv	=new Srv( this)
 

@@ -242,12 +242,20 @@ Pl.prototype. setheat	=function( lvl )
 }
 
 
+/** Different movement possibilities:
+ * 1. Directly from/to ground (map cell object)
+ * 2. From/to player box
+ * 3. From/to outside box
+ * Map cell objects are special. They are barebones and their
+ * management is done through the parent map object.
+ * @arg {Box|Loc} frombox
+ * @arg {Box|Map} fromdadbox */
 
-Pl.prototype. movitem	=function( boxfrom, itemn, num, boxto )
+Pl.prototype. movitem	=function( frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
 {
 	var itemfrom	=boxfrom.o[itemn]
 
-	var movednum	=boxto.additem( itemn, itemfrom, num )
+	var movednum	=tobox.additem( itemn, itemfrom, num )
 
 	boxfrom.delitem( itemn, movednum )
 }

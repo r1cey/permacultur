@@ -252,6 +252,44 @@ Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
 }
 
 
+/** From/To root is either a player or map location.
+ * from|to{ loc, pln, boxes[str] } */
+
+Player.prototype. movobj	=function( from, to, itemn, len, boxi )
+{
+	var{ game }	=this
+
+	var frombox	=from.pln ? game.pls.g(from.pln) : game.maps.objfromloc(from.loc)
+
+	if( ! frombox )
+	{
+		console.error(`ERR! pl.movobj{pln:${from.pln},loc:${from.loc}}`)
+
+		return
+	}
+	
+	var fromdadbox
+
+	for(var boxn of from.boxes )
+	{
+		fromdadbox	=frombox
+
+		frombox	=frombox[boxn]
+	}
+	var tobox	=to.pln ? game.pls.g(to.pln) : game.maps.objfromloc(to.loc)
+
+	var todadbox
+
+	for(var boxn of to.boxes )
+	{
+		todadbox	=tobox
+
+		tobox	=tobox[boxn]
+	}
+	PlMsg.prototype.movitem. call(this,
+		
+		frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
+}
 
 
 /*Player.prototype. cl_send	=function( msg )

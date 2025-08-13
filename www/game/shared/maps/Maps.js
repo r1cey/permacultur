@@ -51,6 +51,12 @@ Maps.prototype. fromloc	=function( loc )
 	return this.fromh( loc.h )
 }
 
+Maps.prototype. objfromloc	=function( loc )
+{
+	return this.fromloc(loc).obj.g( loc )
+}
+
+
 Maps.prototype. fromh	=function( h )
 {
 	return h	? this.tr	: this.gr

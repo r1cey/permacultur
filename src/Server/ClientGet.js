@@ -87,9 +87,13 @@ ClG.prototype. on_climb	=function( o )
 }
 
 
-/** { itemloc[str],  } */
+/** [ from{}, to{}, itemn, num, boxi ]
+ * { loc, pln, boxes[str] } */
 
-ClG.prototype. on_movitem	=function( o )
+ClG.prototype. on_movitem	=function( arr )
+{
+	this.pl.movitem( ...arr )
+}
 
 
 /** { loc, objkey, act, params } */
