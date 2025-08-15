@@ -73,7 +73,7 @@ export function rnd( n )
 
 export class IdPool
 {
-	next	 =0           // last issued id (uint32)
+	next	 =0           // last issued id
 
     free	=[]          // stack of freed ids
 
@@ -90,11 +90,11 @@ export class IdPool
 
       		throw new Error("IdPool32 exhausted (no frees and wrapped).");
     	}
-    	return this.next	=this.next + 1
+    	return ++this.next
 	}
 
 
-	del(id)
+	del( id )
 	{
     	// Blazing-fast path: assume valid & not double-freed
     	// If you want safety, see the “safe mode” notes below.

@@ -1,0 +1,40 @@
+Player
+{
+	inv	={}
+
+	add( item, len )
+}
+
+Hands
+{
+	pl
+
+	item
+
+	add( item, len )
+}
+
+Belt
+{
+	inv	={}
+
+	add( item, len )
+}
+
+Bag
+{
+	id
+
+	items	={}
+
+	bags	={}
+
+	add( item, len, dadbag )
+}
+
+Map
+{
+	cells
+
+	add( loc, item, len )
+}
