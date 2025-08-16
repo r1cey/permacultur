@@ -3,6 +3,8 @@ Player
 	inv	={}
 
 	add( item, len )
+
+	del( item, len )
 }
 
 Hands
@@ -12,6 +14,8 @@ Hands
 	item
 
 	add( item, len )
+
+	del()
 }
 
 Belt
@@ -19,6 +23,8 @@ Belt
 	inv	={}
 
 	add( item, len )
+
+	del( item, len )
 }
 
 Bag
@@ -30,6 +36,8 @@ Bag
 	bags	={}
 
 	add( item, len, dadbag )
+
+	del( item, len, dadbag )
 }
 
 Map
@@ -37,4 +45,6 @@ Map
 	cells
 
 	add( loc, item, len )
+
+	del( loc, item, len )
 }

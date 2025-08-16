@@ -255,7 +255,7 @@ Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
 /** From/To root is either a player or map location.
  * from|to{ loc, pln, boxes[str] } */
 
-Player.prototype. movobj	=function( from, to, itemn, len, boxi )
+Player.prototype. movitem	=function( from, to, itemn, len, boxi )
 {
 	/** @TODO !!! : check that to and from are viable */
 
@@ -265,7 +265,7 @@ Player.prototype. movobj	=function( from, to, itemn, len, boxi )
 	
 	from.pln ? cntfrom.frompl( game.pls.g(from.pln), from.boxes ) :
 
-		cntfrom.fromloc( game.maps, from.loc, from.boxes)
+		cntfrom.fromloc( game.maps, from.loc, from.boxes )
 
 	PlMsg.prototype.movitem. call(this, cntfrom, itemn, len, boxi, cntto )
 

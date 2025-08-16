@@ -1,33 +1,66 @@
+import Box	from "./Box.js"
+
+
 export default class Cnt
 {
-	pl
+	/** is any obj with additem and delitem methods */
+	obj
 
-	map
-
-	box
+	loc
 
 	dadbox
 }
 
 
-Cnt.prototype. frompl	=function( pl, boxes )
+Cnt.prototype. frompl	=function( pl, path )
 {
-	this.pl	=pl
+	var obj	=pl
 
-	var i	=0
-
-	var box
-
-	if( boxes?.[i] === "hands" )
+	if( path && path.length )
 	{
-		box	=pl.hands
+		var i	=0
+			
+		if( path[i] === "hands" )
+		{
+			obj	=pl.hands
 
-		i++
+			i++
+		}
+		else		obj	=pl.inv
+
+		for(; i < path.length ; i++ )
+		{
+			this.dadbox	=obj instanceof Box ? obj : 0
+
+			var val	=path[i]
+
+			obj	=typeof val==="number" ? obj.boxes[val] : obj.items[val]
+		}
 	}
-	else	box	=pl.inv
+	this.obj	=obj
+}
 
-	for(; i < boxes.length ; i++ )
+
+Cnt.prototype. fromloc	=function( maps, loc, boxes )
+{
+	var obj	=maps.fromloc( loc )
+
+	if( path?.length )
 	{
-		box	=box
+		// looks stupid, I know... Bad with names
+		obj	=obj.obj.g( loc )
+
+		for(var i =0;i< boxes.length ;i++)
+		{
+			this.dadbox	=obj instanceof Box ? obj : 0
+
+			var val	=path[i]
+
+			obj	=typeof val==="number" ? obj.boxes[val] : obj.items[val]
+		}
+	}
+	else
+	{
+		this.loc	=loc
 	}
 }
