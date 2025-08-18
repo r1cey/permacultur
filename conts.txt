@@ -2,6 +2,8 @@ Player
 {
 	inv	={}
 
+	getinv( name )
+
 	add( item, len )
 
 	del( item, len )
@@ -13,6 +15,8 @@ Hands
 
 	item
 
+	getinv( name )
+
 	add( item, len )
 
 	del()
@@ -21,6 +25,8 @@ Hands
 Belt
 {
 	inv	={}
+
+	getinv( name )
 
 	add( item, len )
 
@@ -35,6 +41,8 @@ Bag
 
 	bags	={}
 
+	getinv( name|boxid )
+
 	add( item, len, dadbag )
 
 	del( item, len, dadbag )
@@ -43,6 +51,8 @@ Bag
 Map
 {
 	cells
+
+	getinv( loc, name ){ obj.g(loc)[name] }
 
 	add( loc, item, len )
 

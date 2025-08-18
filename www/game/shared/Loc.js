@@ -20,11 +20,6 @@ export default class Loc extends V
 
 		else if( args.length > 1 )	this.setxy( ...args )
 	}
-
-	tovstr()
-	{
-		return super.toString()
-	}
 }
 
 
@@ -82,9 +77,23 @@ Loc.prototype. setvstr	=function( str, h )
 	return this
 }
 
+
+
 Loc.prototype. toString	=function()
 {
 	return this.x.toString()+V.delim+this.y+V.delim+this.h
+}
+
+
+
+Loc.prototype. tovstr	=V.prototype. toString
+
+
+/** Questionable use */
+
+Loc.prototype. isloc	=function( str )
+{
+	return ! isNaN(parseInt( str ))
 }
 
 

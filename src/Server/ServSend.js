@@ -47,6 +47,21 @@ SSe.prototype. mapset_	=function( map, act, loc, vals )
 }
 
 
+
+SSe.prototype. mapobjset	=function( map, loc, key )
+{
+	for(var n in this.cls.o )
+	{
+		var cl	=this.cls.o[n]
+
+		if( cl.pl.sees( loc ))
+		{
+			cl.send_mapobjset( map, loc, key )
+		}
+	}
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

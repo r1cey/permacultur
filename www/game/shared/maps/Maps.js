@@ -46,18 +46,13 @@ export default class Maps
 
 
 
-Maps.prototype. fromloc	=function( loc )
+Maps.prototype. loc2map	=function( loc )
 {
-	return this.fromh( loc.h )
-}
-
-Maps.prototype. objfromloc	=function( loc )
-{
-	return this.fromloc(loc).obj.g( loc )
+	return this.h2map( loc.h )
 }
 
 
-Maps.prototype. fromh	=function( h )
+Maps.prototype. h2map	=function( h )
 {
 	return h	? this.tr	: this.gr
 }
@@ -90,5 +85,5 @@ Maps.prototype. fore	=function( fun )
 
 Maps.prototype. canplmov	=function( dest )
 {
-	return this.fromloc( dest ).canplmov( dest )
+	return this.loc2map( dest ).canplmov( dest )
 }

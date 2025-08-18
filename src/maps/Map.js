@@ -113,6 +113,15 @@ Map.prototype. set_ic_	=function( name, ic, loc, ...vals )
 }
 
 
+
+Map.prototype. additem	=function( v, item, len )
+{
+	var addedl	=ShMap.prototype.additem. call(this, v, item, len )
+
+	return addedl
+}
+
+
 Map.prototype. newshiftboard	=function( loc, r, dir )
 {
 	var Map	=this.constructor

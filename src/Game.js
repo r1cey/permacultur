@@ -1,4 +1,5 @@
-import Maps from './maps/Maps.js'
+import Cnt	from '../www/game/shared/Container.js'
+import Maps	from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'
 import Players from './player/Pls.js'
@@ -27,7 +28,7 @@ Function.prototype. c	=function(...args)
  */
 
 
-export default class G
+export default class G extends Cnt
 {
 	conf	=
 	{
@@ -354,10 +355,11 @@ G.prototype. hour	=function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/**@arg	id	-[ loc, pln ] */
 
-G.prototype. addobj	=function( loc, name )
+G.prototype. getinv	=function([ loc, pln ])
 {
-
+	return pln ? this.pls.g(pln) : this.maps.loc2map(loc).getcnt( loc )
 }
 
 /*

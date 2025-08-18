@@ -56,7 +56,7 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	hands	=new Hands()
 
-	map()	{return this.game.maps.fromloc( this.loc )}
+	map()	{return this.game.maps.loc2map( this.loc )}
 
 	srv()	{return this.game.server }
 
@@ -205,7 +205,7 @@ Player.prototype. climb	=function( hdir )
 	
 	dest.h	=hdir	? 1	: 0
 
-	var destmap	=pl.game.maps.fromloc( dest )
+	var destmap	=pl.game.maps.loc2map( dest )
 
 	if( ! destmap.canplmov( dest ))
 	{
@@ -260,12 +260,27 @@ Player.prototype. movitem	=function( from, to, itemn, len, boxi )
 	/** @TODO !!! : check that to and from are viable */
 
 	var{ game }	=this
+
+	var fromcnt	=game
+
+	for(var id of frompath )
+	{
+		fromcnt	=fromcnt.getcnt( id )
+	}
+
+	PlMsg.prototype.movitem. call(this, fromcnt, itemid, len, tocnt )
+		
+		frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
+
+
+
+
 	
 	var cntfrom	=new Cont()
 	
 	from.pln ? cntfrom.frompl( game.pls.g(from.pln), from.boxes ) :
 
-		cntfrom.fromloc( game.maps, from.loc, from.boxes )
+		cntfrom.loc2map( game.maps, from.loc, from.boxes )
 
 	PlMsg.prototype.movitem. call(this, cntfrom, itemn, len, boxi, cntto )
 

@@ -1,66 +1,63 @@
-import Box	from "./Box.js"
+// import Box	from "./Box.js"
 
 
 export default class Cnt
 {
-	/** is any obj with additem and delitem methods */
-	obj
+	/** Returns container or item
+	 * Defined in derived class
+	@method getinv( id )	{} */
 
-	loc
+	/** Defined in derived class
+	@method additem( item, num )	{} */
 
-	dadbox
+	/** Defined in derived class
+	@method delitem( item, num )	{} */
 }
 
 
-Cnt.prototype. frompl	=function( pl, path )
+/*
+Cnt.prototype. getobj	=function( id )
 {
-	var obj	=pl
 
-	if( path && path.length )
+}
+
+
+Cnt.prototype. frompl	=function( path, game )
+{
+	var inv	=game
+
+	for(var id of path )
 	{
-		var i	=0
-			
-		if( path[i] === "hands" )
-		{
-			obj	=pl.hands
-
-			i++
-		}
-		else		obj	=pl.inv
-
-		for(; i < path.length ; i++ )
-		{
-			this.dadbox	=obj instanceof Box ? obj : 0
-
-			var val	=path[i]
-
-			obj	=typeof val==="number" ? obj.boxes[val] : obj.items[val]
-		}
+		inv.getinv( id )
 	}
-	this.obj	=obj
+	this.inv	=inv
 }
 
 
-Cnt.prototype. fromloc	=function( maps, loc, boxes )
+Cnt.prototype. loc2map	=function( maps, loc, boxes )
 {
-	var obj	=maps.fromloc( loc )
+	var inv	=maps.loc2map( loc )
+
+	inv	=inv.
+
+	for(var id of path )
 
 	if( path?.length )
 	{
 		// looks stupid, I know... Bad with names
-		obj	=obj.obj.g( loc )
+		inv	=inv.obj.g( loc )
 
 		for(var i =0;i< boxes.length ;i++)
 		{
-			this.dadbox	=obj instanceof Box ? obj : 0
+			this.dadbox	=inv instanceof Box ? inv : 0
 
 			var val	=path[i]
 
-			obj	=typeof val==="number" ? obj.boxes[val] : obj.items[val]
+			inv	=typeof val==="number" ? inv.boxes[val] : inv.items[val]
 		}
 	}
 	else
 	{
 		this.loc	=loc
 	}
-}
+}*/

@@ -171,6 +171,16 @@ Serv.prototype. onmsg	=function( ev )
 
 
 
+Serv.prototype. jsonparse	=function( obj, key )
+{
+	
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 class Buf
 {
 	a	=[]

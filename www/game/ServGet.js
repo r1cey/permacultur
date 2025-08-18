@@ -4,6 +4,8 @@ import Loc from './shared/Loc.js'
 
 import Maps	from './maps/Maps.js'
 
+import tools from "./tools.js"
+
 
 
 export default class SG
@@ -80,26 +82,6 @@ SG.prototype. units	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** Received a map obj changing method
- * @param msg
- * @arg msg.mapid
- * @arg msg.loc
- * @arg msg.o */
-
-SG.prototype. mapaddobj	=function( msg )
-{
-	var map	=this.cl.maps.fromid( msg.mapid )
-
-	var loc	=msg.loc
-
-	if( map !== this.cl.maps.fromloc( loc ))
-	{
-		console.error("srv.on_mapset_o_", msg.loc, msg.name )
-	}
-	map.additem( loc, msg.o )
-}
-
-
 /** Received a map changing method
  * @param o 
  * @arg o.mapid
@@ -115,11 +97,22 @@ SG.prototype. mapset_	=function( o )
 
 	var loc	=o.loc
 
-	if( map !== this.cl.maps.fromloc( loc ))
+	if( map !== this.cl.maps.loc2map( loc ))
 	{
 		console.error("srv.on_mapset_", o.act, o.loc, o.vals )
 	}
 	map["set"+act]( loc, ...o.vals )
+}
+
+
+/** @arg {*} obj	- the added object is under their key
+ * 		for automatic json parsing */
+
+SG.prototype. mapobjset	=function([ loc, key, obj ])
+{
+	loc	=new Loc(loc)
+
+	this.cl.maps.loc2map(loc).obj.s(loc)[key]	=this.jsonparse(obj,key)
 }
 
 
@@ -305,7 +298,7 @@ SG.prototype. clplclimb	=function( o )
 
 SG.prototype. actonobj	=function( o )
 {
-	var map	=this.cl.maps.fromloc( o.loc )
+	var map	=this.cl.maps.loc2map( o.loc )
 
 	map.obj.g(o.loc)[o.key][o.act]( ... o.params )
 }

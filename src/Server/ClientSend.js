@@ -97,6 +97,17 @@ ClS.prototype. mapset_	=function( map, act, loc, vals )
 }
 
 
+
+ClS.prototype. mapobjset	=function( map, loc, key )
+{
+	this.sendjson({mapobjset:
+		[
+			loc , key , map.obj.g(loc)[key]
+		]
+	})
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

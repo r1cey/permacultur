@@ -1,6 +1,9 @@
 import PV	from "./PlVis.js"
 
 
+
+/** Also extends Container class, but cbf doing mixins */
+
 export default class Pl extends PV
 {
 	speed	=1
@@ -242,6 +245,18 @@ Pl.prototype. setheat	=function( lvl )
 }
 
 
+Pl.prototype. getinv	=function( id )
+{
+	return id === "hands" ?	this.hands	: this.inv[id]
+}
+
+
+Pl.prototype. additem	=function( item, num )
+{
+	
+}
+
+
 /** Different movement possibilities:
  * 1. Directly from/to ground (map cell object)
  * 2. From/to player box
@@ -250,6 +265,13 @@ Pl.prototype. setheat	=function( lvl )
  * management is done through the parent map object.
  * @arg {Box|Loc} frombox
  * @arg {Box|Map} fromdadbox */
+
+
+Pl.prototype. movitem	=function( fromcnt, itemid, len, tocnt )
+{
+	var item	=cntfrom.gitem( itemid )
+}
+
 
 Pl.prototype. movitem	=function( frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
 {

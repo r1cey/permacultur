@@ -4,6 +4,8 @@ import Obj from './Obj.js'
 
 import Loc from '../Loc.js'
 
+import Cnt from '../Container.js'
+
 
 /** Hexagonally round version of Board.
  * In derived classes, make sure every set..._i method
@@ -93,6 +95,50 @@ Map.prototype. canplmov	=function( dest, pl )
 	return this.inside(dest) && ( !o ||
 
 		(!o.pl || o.pl===pl) && !o.dewd )
+}
+
+
+/**@todo Create class for the returned container. */
+
+Map.prototype. getcnt	=function( v )
+{
+	var cnt	=new Cnt()
+
+	cnt.map	=this
+
+	cnt.v	=v
+
+	cnt.getinv	=function( name )
+	{
+		this.map.obj.g( this.v )[name]
+	}
+	cnt.additem	=function( item, num )
+	{
+		this.map.additem( this.v, item, num )
+	}
+	cnt.delitem	=function( item, num )
+	{
+		this.map.delitem( this.v, item, num )
+	}
+	return cnt
+}
+
+
+/**@todo Add limits and spread of items
+ * @returns Supposed to return the amount of items successfully added */
+
+Map.prototype. additem	=function( v, item, num )
+{
+	var newit	=new item.constructor( item, num )
+
+	this.obj.s(v)[item.constructor.name]	=newit
+
+	return num
+}
+
+Map.prototype. delitem	=function( v, item, num )
+{
+	console.log("WARN: Haven't added map.delitem yet")
 }
 
 

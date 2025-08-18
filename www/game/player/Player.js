@@ -8,7 +8,7 @@ const ClPl =(c) => class extends c
 {
 	lcl
 
-	gmap (){return this.lcl.maps.fromloc( this.loc ) }
+	gmap (){return this.lcl.maps.loc2map( this.loc ) }
 
 	pos	=new Loc()
 

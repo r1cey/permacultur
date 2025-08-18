@@ -65,7 +65,7 @@ Con.prototype. online	=async function( str )
 		case "additem"	:
 
 			try{
-				let map	=g.maps.fromloc( arg.loc )
+				let map	=g.maps.loc2map( arg.loc )
 
 				map.additem( arg.loc, arg.o )
 			}

@@ -102,7 +102,7 @@ ClG.prototype. on_actonobj	=function( o )
 {
 	var loc	=o.loc
 
-	var map	=this.srv.game.maps.fromloc( loc )
+	var map	=this.srv.game.maps.loc2map( loc )
 
 	var obj	=map?.obj.g(loc)?.[o.objkey]
 
