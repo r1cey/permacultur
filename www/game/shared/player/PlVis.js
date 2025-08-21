@@ -1,12 +1,14 @@
 import Loc from "../Loc.js"
 import Col from '../Color.js'
 
+import Cnt from "../Container.js"
+
 // import Hands from "./newHands.js"
 
 
 /** Class for visible players. Has limited information. */
 
-export default class PlVis
+export default class PlVis	extends Cnt
 {
 	name
 

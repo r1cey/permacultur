@@ -1,27 +1,46 @@
 import items	from "./items.js"
 
+import{ IdPool }	from "./utils.js"
+
+
+/** Also extends Container class, but cbf doing mixins */
 
 export default class Box extends items.Item
 {
-	/** Including empty boxes */
+	id	=0
+
+	/** Including empty bags */
 	items	={}
 
-	boxes	={}
+	bags	={}
+
+	dad
+
+	/** pl|loc|bag */
+	dadtype
 
 	static boxvol	=8000	//10cm^3
+
+	static idpool	=new IdPool()
 }
 
 
-/** Only changes this box. Doesn't modify given item.
+
+Box.prototype. getinv	=function( id )
+{
+	return typeof id==="number"	? this.bags[id]	: this.items[id]
+}
+
+
+/** Only changes this bag. Doesn't modify given item.
  * @returns how many items were transfered */
 
-Box.prototype. add	=function( item, num =1, dadbox )
+Box.prototype. additem	=function( item, len =1 )
 {
-	if( dadbox && this.calcempty() )
+	if( this.num > 1 || this.calcempty() )
 	{
-		Box.prototype.delitem. call(dadbox, this )
+		this.setuniq()
 
-		dadbox.addbox( this )
 	}
 	var itemb
 
@@ -111,7 +130,22 @@ Box.prototype. calcempty	=function()
 
 
 
-Box.prototype. addbox	=function( box )
+Box.prototype. setuniq	=function()
 {
+	if( this.num > 1 )
+	{
+		
+	}
 
+	var bag	=this.num===1	? this	: this.take( 1 )
+
+	this.id	=this.constructor.idpool.new()
+
+	if( this.dad && this.dadtype==="bag" )
+	{
+		Box.prototype.delitem. call(dad, this )	//maybe problem with GUI
+
+		this.conv
 }
+
+

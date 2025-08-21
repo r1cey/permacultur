@@ -152,6 +152,17 @@ G.prototype. rempls	=async function()
 }
 
 
+
+G.prototype. parsePath	=function( path )
+{
+	var obj	=this
+
+	for(var n of path )	obj	=obj.getobj(n)
+	
+	return obj
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -357,9 +368,19 @@ G.prototype. hour	=function()
 
 /**@arg	id	-[ loc, pln ] */
 
-G.prototype. getinv	=function([ loc, pln ])
+G.prototype. getobj	=function( n )
 {
-	return pln ? this.pls.g(pln) : this.maps.loc2map(loc).getcnt( loc )
+	switch( n )
+	{
+		case "map" :
+
+			return this.maps
+		break
+		case "pl" :
+
+			return this.pls
+		break
+	}
 }
 
 /*

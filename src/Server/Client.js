@@ -20,6 +20,8 @@ export default class Client extends ClG
 
 	srv
 
+	get game()	{ return this.srv.game }
+
 	tc	=new Timecode( MapG.Bin.timecodelen )
 
 	rtcstate	=new Map()

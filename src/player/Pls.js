@@ -1,3 +1,4 @@
+import PathObj	from "../../www/game/shared/PathObj.js"
 import Pl	from './Player.js'
 
 import Loc	from '../../www/game/shared/Loc.js'
@@ -10,7 +11,7 @@ import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
 
 
 
-export default class Pls
+export default class Pls	extends PathObj
 {
 	game
 
@@ -189,6 +190,20 @@ Pls.prototype. addip	=function( ip )
 {
 	return this.game.srv.addip.call(this, ip )
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Pls.prototype. getobj	=function( n )
+{
+	return this.g( n )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 /** @return - { err, pl } *
 

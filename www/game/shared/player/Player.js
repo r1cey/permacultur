@@ -2,8 +2,6 @@ import PV	from "./PlVis.js"
 
 
 
-/** Also extends Container class, but cbf doing mixins */
-
 export default class Pl extends PV
 {
 	speed	=1
@@ -245,53 +243,45 @@ Pl.prototype. setheat	=function( lvl )
 }
 
 
-Pl.prototype. getinv	=function( id )
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Pl.prototype. getobj	=function( id )
 {
 	return id === "hands" ?	this.hands	: this.inv[id]
 }
 
 
+
 Pl.prototype. additem	=function( item, num )
 {
-	
+	var newitem	=item.take( 1 )
+
+	var additem	=this.inv[item.constructor.name]	??=newitem
+
+	return additem===newitem	? 1	: 0
 }
 
 
-/** Different movement possibilities:
- * 1. Directly from/to ground (map cell object)
- * 2. From/to player box
- * 3. From/to outside box
- * Map cell objects are special. They are barebones and their
- * management is done through the parent map object.
- * @arg {Box|Loc} frombox
- * @arg {Box|Map} fromdadbox */
-
-
-Pl.prototype. movitem	=function( fromcnt, itemid, len, tocnt )
+Pl.prototype. delitem	=function( item, num )
 {
-	var item	=cntfrom.gitem( itemid )
+	item.del(num)	? delete this.inv[item.constructor.name]	: 0
 }
 
 
-Pl.prototype. movitem	=function( frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
+/**@arg {Container}	from
+ * @arg {String|Number}	itemid
+ * @arg {Container}	to */
+
+
+Pl.prototype. movitem	=function( from, itemid, len, to )
 {
-	var item	=cntfrom.gitem( itemn, ibox )
+	var movedl	=to.additem( from.getinv( itemid ), len )
 
-	var movedl	=cntto.additem( item, len )
-
-	movedl	? cntfrom.delitem( itemn, movedl, ibox )	: 0
+	movedl	? from.delitem( itemid, movedl )	: 0
 
 	return movedl
-
-
-
-	// delete below
-
-	var itemfrom	=boxfrom.o[itemn]
-
-	var movednum	=tobox.additem( itemn, itemfrom, num )
-
-	boxfrom.delitem( itemn, movednum )
 }
 
 

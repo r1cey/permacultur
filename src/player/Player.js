@@ -1,5 +1,5 @@
 import PlMsg from '../../www/game/shared/player/Player.js'
-import Hands from './Hands.js'
+import Hands from '../../www/game/shared/player/Hands.js'
 
 import V from '../../www/game/shared/Vec.js'
 import Loc from '../Loc.js'
@@ -130,48 +130,25 @@ Player.prototype. clclosed	=function()
 
 /** //!!!newloc will be modified!!! */
 
-Player.prototype. mov	=function( newloc )
+Player.prototype. mov	=function( loc )
 {
-	var pl	=this
+	var{loc: curloc }	=pl
 
-	var{ loc }	=pl
-
-	var map	=this.map()
-
-	if( ! map.canplmov( newloc, pl ))
-	{
-		pl.cl?.send_movrej( newloc )
-
-		return
-	}
-
-	if( loc.eq( newloc ))
-	{
-		pl.cl?.send_error( "Already there." )
-		
-		return
-	}
-
-	pl.loc.forlineh( newloc, (loc)=>
-	{
-		newloc.set(loc)
-
-		return true
-	})
-
-	map.obj.del( loc, "pl" )
+	var map	=pl.map()
+	
+	map.obj.del( curloc, "pl" )
 
 	// var dir	=Loc.dirv2dirh(loc.subv(newloc).neg())
 
-	var oldloc	=loc
+	var oldloc	=new Loc().set(curloc)
 
-	pl.loc	=newloc
+	curloc.set( loc )
 
-	map.obj.set(newloc).pl	=this
+	map.obj.set(loc).pl	=this
 
 	this.srv()?.send_plmov( this, oldloc )
 
-	if( newloc.h === 0 )
+	if( loc.h === 0 )
 	{
 		map	=pl.game.maps.gr
 
@@ -179,14 +156,14 @@ Player.prototype. mov	=function( newloc )
 		{
 			if( map.iswater(loc) )
 			{
-				// pl.setwater( 1 )	// reinstate later
+				/**@todo reinstate later */
+				// pl.setwater( 1 )
 
 				return true
 			}
 		}
-		,1 ,loc )
+		,1 ,curloc )
 	}
-
 	// console.log(`Player ${this.pl.name} moved to ${this.pl.loc.p()}.`)
 }
 
@@ -252,10 +229,18 @@ Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
 }
 
 
+Player.prototype. additem	=function( item, len )
+{
+	var addl	=PlMsg.prototype.additem. call(this, item, len )
+
+	addl	? this.cl.send_clpladditem( )
+}
+
+
 /** From/To root is either a player or map location.
  * from|to{ loc, pln, boxes[str] } */
 
-Player.prototype. movitem	=function( from, to, itemn, len, boxi )
+Player.prototype. movitem	=function( from, itemid, len, to )
 {
 	/** @TODO !!! : check that to and from are viable */
 
@@ -263,9 +248,15 @@ Player.prototype. movitem	=function( from, to, itemn, len, boxi )
 
 	var fromcnt	=game
 
-	for(var id of frompath )
+	for(var key of from )
 	{
-		fromcnt	=fromcnt.getcnt( id )
+		fromcnt	=fromcnt.getinv( key )
+	}
+	var tocnt	=game
+
+	for(var key of to )
+	{
+		tocnt	=tocnt.getinv( key )
 	}
 
 	PlMsg.prototype.movitem. call(this, fromcnt, itemid, len, tocnt )

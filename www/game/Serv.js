@@ -173,7 +173,21 @@ Serv.prototype. onmsg	=function( ev )
 
 Serv.prototype. jsonparse	=function( obj, key )
 {
-	
+	switch( key )
+	{
+		case "belt" :
+			
+			return new tools.Belt( obj )
+		break
+		case "seedbag" :
+			
+			return obj.map(( val )=> new tools.Seedbag(val) )
+		break
+		case "dewd"	:
+			
+			return new tools.Dewd(val)
+		break
+	}
 }
 
 
@@ -270,7 +284,6 @@ Buf.prototype. iscomplete	=function( i, buf )
 		{
 			this.srv.cl.setmaps( buf.Gr, buf.obj.gr , buf.Tr, buf.obj.tr )
 		}
-
 		this.a.splice( i, 1 )
 	}
 }

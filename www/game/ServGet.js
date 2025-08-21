@@ -82,6 +82,29 @@ SG.prototype. units	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+SG.prototype. clpl_setitem	=function([ key, item ])
+{
+	item	? this.cl.pl.inv[key] =this.jsonparse(item,key) : delete this.cl.pl.inv[key]
+
+	/**@todo: now update GUI */
+}
+
+
+/**@todo Validate everything. */
+
+SG.prototype. clpl_setitem	=function([ path, item, key ])
+{
+	var cnt	=this.cl
+
+	for(var id of path )
+	{
+		cnt	=cnt.getinv( id )
+	}
+	cnt.setitem( item && this.jsonparse( item,key ))
+}
+
+
 /** Received a map changing method
  * @param o 
  * @arg o.mapid
@@ -108,7 +131,7 @@ SG.prototype. mapset_	=function( o )
 /** @arg {*} obj	- the added object is under their key
  * 		for automatic json parsing */
 
-SG.prototype. mapobjset	=function([ loc, key, obj ])
+SG.prototype. map_additem	=function([ loc, key, obj ])
 {
 	loc	=new Loc(loc)
 

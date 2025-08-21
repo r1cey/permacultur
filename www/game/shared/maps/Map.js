@@ -4,7 +4,7 @@ import Obj from './Obj.js'
 
 import Loc from '../Loc.js'
 
-import Cnt from '../Container.js'
+import Cell from './Cell.js'
 
 
 /** Hexagonally round version of Board.
@@ -68,19 +68,6 @@ Map.prototype. inside	=function( loc )
 }
 
 
-/**@arg {Loc}	loc
- * @arg {}	o	-The object as it appears in map obj.
- * 		It's done so local json parser handles it like it handles map obj */
-
-Map.prototype. additem	=function( loc, o )
-{
-	for(var itemn in o )
-	{
-		this.obj.set(loc)[itemn]	=o[itemn]
-	}
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -98,48 +85,12 @@ Map.prototype. canplmov	=function( dest, pl )
 }
 
 
-/**@todo Create class for the returned container. */
 
-Map.prototype. getcnt	=function( v )
+Map.prototype. newcell	=function( v )
 {
-	var cnt	=new Cnt()
-
-	cnt.map	=this
-
-	cnt.v	=v
-
-	cnt.getinv	=function( name )
-	{
-		this.map.obj.g( this.v )[name]
-	}
-	cnt.additem	=function( item, num )
-	{
-		this.map.additem( this.v, item, num )
-	}
-	cnt.delitem	=function( item, num )
-	{
-		this.map.delitem( this.v, item, num )
-	}
-	return cnt
+	return new Cell( this, v )
 }
 
-
-/**@todo Add limits and spread of items
- * @returns Supposed to return the amount of items successfully added */
-
-Map.prototype. additem	=function( v, item, num )
-{
-	var newit	=new item.constructor( item, num )
-
-	this.obj.s(v)[item.constructor.name]	=newit
-
-	return num
-}
-
-Map.prototype. delitem	=function( v, item, num )
-{
-	console.log("WARN: Haven't added map.delitem yet")
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,111 +1,46 @@
-export default class Cell
+import Cnt	from "../Container.js"
+
+
+
+export default class Cell	extends Cnt
 {
-	/** Including empty boxes */
-	items	={}
+	map
 
-	boxes	={}
-}
+	loc
 
 
-/** Only changes this box. Doesn't modify given item.
- * @returns how many items were transfered */
-
-Box.prototype. add	=function( item, num =1 )
-{
-	return item instanceof Box && ! item.calcempty() ?
-	
-		this.addbox( item ) : this.additem( item, num )
-
-	if(  )
-	
-		this.addbox( item)
-
-	else 
+	constructor( map, loc )
 	{
+		this.map	=map
 
+		this.loc	=loc
 	}
-
-	}
-		{
-			let itemo	=this.o[item.constructor.name]	??={}
-
-			itemb	=itemo["0"]	??=new item.constructor(item, 0)
-		}
-		else
-		{
-			this.addbox( item )
-
-			return 1
-		}
-	}
-	else
-	{
-		itemb	=this.o[item.constructor.name]	??=new item.constructor(item, 0)
-	}
-	var numb	=itemb.num
-
-	var maxvol	=this.constructor.boxvol
-
-	var maxnum	=Math.floor((maxvol - this.calcitemvol())/item.constructor.vol)
-
-	var addnum	=maxnum > num	? num	: maxnum
-
-	itemb.spoil	=( itemb.spoil*numb + item.spoil*addnum )/( numb + addnum )
-
-	itemb.num	+= addnum
-
-	return addnum
-}
-
-
-Box.prototype. delitem	=function( item, num =1, dadbox )
-{
-	var itemn	=item.constructor.name
-
-	item.notempty	? this.set.delete(item)	:
-	
-		(this.o[itemn].num	-= num) > 0	? 0	: delete this.o[itemn]
-
-	this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this )
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-
-
-Box.prototype. calcitemvol	=function()
+Cell.prototype. getobj	=function( name )
 {
-	var vol	=0
-
-	for(var itemn in this.o )
-	{
-		vol	+= this.o[itemn].calcvol()
-	}
-	for(var item of this.set )
-	{
-		vol	+= item.calcvol()
-	}
-	return vol
+	return this.map.obj.g( this.loc )[name]
 }
 
 
 
-Box.prototype. calcempty	=function()
+Cell.prototype. additem	=function( item, len )
 {
-	for(var itemn in this.o )
-	{
-		return false
-	}
-	return true
+	var{ map, loc }	=this
+
+	var newit	=item.take( len )
+
+	var additem	=map.obj.s( loc )[ item.constructor.name ]	??=newit
+
+	return additem===newit	? len	: 0
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-Box.prototype. addbox	=function( box )
+Cell.prototype. delitem	=function( item, len )
 {
+	var all	=item.del( len )
 
+	if( all )	this.map.obj.del( this.loc, item.constructor.name )
 }

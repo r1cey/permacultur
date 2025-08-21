@@ -1,0 +1,11 @@
+These are the rules for making game paths.
+
+1. Path is an array of string and numbers.
+
+2. First member is either: "map" or "pl".
+
+3. In case of "map", second member is loc: [i,i,i]
+
+4. If "pl", second is name of player.
+
+5. 

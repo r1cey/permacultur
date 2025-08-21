@@ -1,3 +1,6 @@
+import Loc from "../Loc"
+
+
 /*export default ( newGround, newTrees )=> class extends Maps
 {
 	ground	=newGround()
@@ -82,8 +85,23 @@ Maps.prototype. fore	=function( fun )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+
 
 Maps.prototype. canplmov	=function( dest )
 {
 	return this.loc2map( dest ).canplmov( dest )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Maps.prototype. getobj	=function( loca )
+{
+	var loc	=new Loc().seta(loca)
+
+	return this.loc2map(loc).newcell( loc )
 }

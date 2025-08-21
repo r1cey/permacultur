@@ -52,6 +52,5 @@ Obj.prototype. del	=function( loc, n )
 	{
 		return
 	}
-	
 	delete this.o[str]
 }

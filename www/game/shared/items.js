@@ -13,7 +13,7 @@ t.Item	=class
 	/** A unit is 125 cubic mm which is a sunflower seed */
 	static vol	=1
 
-	acts	={}
+	// acts	={}
 
 
 	constructor( obj, num )
@@ -21,6 +21,20 @@ t.Item	=class
 		Object.assign( this, obj )
 
 		num	!= null	? this.num	=num	: 0
+	}
+
+
+	/** Doesn't reduce from obj.
+	 * @returns new obj or this. */
+	take( l )
+	{
+		return l<this.num	? new this.constructor(this,l)	: this
+	}
+
+	/**@returns true if object remains empty */
+	del( l )
+	{
+		return ( this.num	-=l ) <= 0
 	}
 
 

@@ -61,10 +61,11 @@ Loc.prototype. setxy	=function( x, y, l )
 
 	return this
 }
-Loc.prototype. fromJSON	=function( a )
+Loc.prototype. seta	=function( a )
 {
 	return this.setxy( a[0], a[1], a[2] )
 }
+Loc.prototype.fromJSON	=Loc.prototype.seta
 
 
 

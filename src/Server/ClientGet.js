@@ -17,16 +17,36 @@ export default class ClG extends ClS
 
 
 
-/** @arg o
- * @arg o.loc
- */
 
-ClG.prototype. on_mov	=function( o )
+ClG.prototype. mov	=function([ loc ])
 {
-	// var loc	=Loc.fromJSON( o.loc )
+	loc	=Loc.seta( loc )
 	
-	// if( loc )	
-		this.pl.mov( o.loc )
+	var{ pl }	=this
+
+	var map	=pl.map()
+
+	if( ! map.canplmov( loc, pl ))
+	{
+		this.send_movrej( loc )
+
+		return
+	}
+	var{loc: curloc }	=pl
+
+	if( curloc.eq( loc ))
+	{
+		this.send_error( "Already there." )
+		
+		return
+	}
+	curloc.forlineh( loc, (loc2)=>
+	{
+		loc.set(loc2)
+
+		return true
+	})
+	pl.mov( loc )
 }
 
 /** Relay WRTC message between clients through the server.
@@ -35,7 +55,7 @@ ClG.prototype. on_mov	=function( o )
  * @arg {Object}	o.msg
  */
 
-ClG.prototype. on_wrtc	=function( o )
+ClG.prototype. wrtc	=function( o )
 {
 	var cl2	=this.game().pls[o.name].cl
 
@@ -57,7 +77,7 @@ ClG.prototype. on_wrtc	=function( o )
 	cl2.s.wrtc( o )
 }
 
-ClG.prototype. on_dig	=function( o )
+ClG.prototype. dig	=function( o )
 {
 	var tool	=o
 
@@ -68,7 +88,7 @@ ClG.prototype. on_dig	=function( o )
 /** @arg o.dir	- true is up
  * @arg o.loc	- pl loc */
 
-ClG.prototype. on_climb	=function( o )
+ClG.prototype. climb	=function( o )
 {
 	var pl	=this.pl
 
@@ -87,18 +107,23 @@ ClG.prototype. on_climb	=function( o )
 }
 
 
-/** [ from{}, to{}, itemn, num, boxi ]
- * { loc, pln, boxes[str] } */
+/** [ from[gpath], itemid, num, to[gpath] ] */
 
-ClG.prototype. on_movitem	=function( arr )
+ClG.prototype. movitem	=function([ from, itemid, len, to ])
 {
-	this.pl.movitem( ...arr )
+	var{ game }	=this
+
+	from	=game.parsePath( from )
+
+	to	=game.parsePath( to )
+
+	this.pl.movitem( from, itemid, len, to )
 }
 
 
 /** { loc, objkey, act, params } */
 
-ClG.prototype. on_actonobj	=function( o )
+ClG.prototype. actonobj	=function( o )
 {
 	var loc	=o.loc
 
@@ -112,10 +137,10 @@ ClG.prototype. on_actonobj	=function( o )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
+
 for(var funn in ClG.prototype)
 {
 	ClG.prototype["on_"+funn]	=ClG.prototype[funn]
 
 	delete ClG.prototype[funn]
-}*/
+}
