@@ -5,9 +5,9 @@ import Loc	from '../../www/game/shared/Loc.js'
 
 import * as fs from '../fs.js'
 
-import items from "../items.js"
-import Hands from './Hands.js'
-import newjsontrans from "../../www/game/shared/JsonRevivr.js"
+// import items from "../items.js"
+import Hands from '../../www/game/shared/player/Hands.js'
+import JRev from "../JsonRevivr.js"
 
 
 
@@ -31,13 +31,22 @@ export default class Pls	extends PathObj
 	s( n, pl)	{ this.o[n]	=pl }
 
 	
-	rev
+	static jrev	=new JRev().add([
+		{
+			key :"" , fromJSON :(val)=> new Pl(val)
+		},
+		{
+			key :"cl" , fromJSON :()=> 0
+		},
+		Hands
+	])
+
 
 	constructor( game )
 	{
 		this.game	=game
 
-		this.rev	=newjsontrans(
+		this.rev	=JRev(
 			{
 				""	:
 				{

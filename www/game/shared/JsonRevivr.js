@@ -2,24 +2,24 @@ import Loc from "./Loc.js"
 import Col from "./Color.js"
 
 
-export default class JT
+export default class JR
 {
 	objs	={}
 
-	rev
+	fn
 
 
 	constructor()
 	{
 		this.addobjs([ Loc, Col ])
 
-		this.rev	=this.revivr.bind(this)
+		this.fn	=this.revivr.bind(this)
 	}
 }
 
 
 
-JT.prototype. addobjs	=function( objs )
+JR.prototype. addobjs	=function( objs )
 {
 	for(var obj of objs )
 	{
@@ -29,11 +29,11 @@ JT.prototype. addobjs	=function( objs )
 	}
 }
 
-JT.prototype. add	=JT.prototype. addrules
+JR.prototype. add	=JR.prototype. addrules
 
 
 
-JT.prototype. revivr	=function( key, val, str )
+JR.prototype. revivr	=function( key, val, str )
 {
 	var obj	=this.objs[key]
 

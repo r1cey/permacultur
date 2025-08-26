@@ -40,6 +40,9 @@ export default class Server extends ServSend
 
 		// this.start(port)
 	}
+
+
+	toJSON()	{return undefined }
 }
 
 

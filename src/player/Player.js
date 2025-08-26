@@ -54,15 +54,11 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 {	
 	game
 
-	hands	=new Hands()
+	// hands	=new Hands()
 
 	map()	{return this.game.maps.loc2map( this.loc )}
 
 	srv
-
-	inv	={ seedbag :[new items.Seedbag({o:{ cucumber_seeds :15 }}) ],
-
-		belt :{o:{ multitool :1 }}}
 
 
 	constructor( pl, game )

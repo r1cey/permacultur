@@ -1,4 +1,8 @@
-export default class Item
+import Jable from "../Jsonable.js"
+
+
+
+export default class Item	extends Jable
 {
 	num	=1
 
@@ -9,11 +13,13 @@ export default class Item
 
 	// acts	={}
 
+	static key	="item"
 
 
 	constructor( obj, num )
 	{
-		Object.assign( this, obj )
+		super( obj )
+		// Object.assign( this, obj )
 
 		if( num	!= null )	this.num	=num
 	}
@@ -41,8 +47,19 @@ export default class Item
 	}
 
 
-	static fromJSON( obj )
+	toJSON( key )
 	{
-		return this( obj )
+		return key===Item.key ? {key:this.constructor.key, obj:this} : this
+	}
+
+
+	static newRev( jrev )
+	{
+		return {
+
+			key	:this.key
+			,
+			fromJSON	:( meta )=>	jrev.fn( meta.key, meta.obj )
+		}
 	}
 }

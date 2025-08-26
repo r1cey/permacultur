@@ -5,6 +5,8 @@ import{ rnd }	from "../utils.js"
 
 
 
+/** Anything that can be held in a hand */
+
 var t	={}
 
 
@@ -58,8 +60,10 @@ t.Dewd	=class extends Item
 }
 
 
-t.Belt	=class
+t.Belt	=class extends Item
 {
+	static vol	=Math.floor(15*15*10/125)
+
 	static key	="belt"
 }
 
@@ -76,6 +80,8 @@ t.Seedbag	=class extends Box
 
 t.CucumberSeed	=class extends Item
 {
+	static vol	=1
+
 	static key	="cucumber_seeds"
 }
 

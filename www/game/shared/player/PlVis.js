@@ -1,14 +1,18 @@
 import Loc from "../Loc.js"
 import Col from '../Color.js'
 
-import Cnt from "../items/Container.js"
+import Hands from "./Hands.js"
 
-// import Hands from "./newHands.js"
+// import Cnt from "../items/Container.js"
+import Jable from "../Jsonable.js"
 
 
-/** Class for visible players. Has limited information. */
 
-export default class PlVis	extends Cnt
+/** Class for visible players. Has limited information.
+ * Also extends Container
+*/
+
+export default class PlVis	extends Jable
 {
 	name
 
@@ -22,7 +26,7 @@ export default class PlVis	extends Cnt
 
 	sleep	=0
 
-	hands	//=new Hands() - define in derived classes
+	hands	=new Hands()
 
 	inv	={}
 }

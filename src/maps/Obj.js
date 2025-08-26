@@ -3,64 +3,42 @@ import ShObj	from "../../www/game/shared/maps/Obj.js"
 import * as fs	from '../fs.js'
 
 import Loc from "../../www/game/shared/Loc.js"
-import items from "../items.js"
-import JRev from "../../www/game/shared/JsonRevivr.js"
+// import items from "../items.js"
+import JRev from "../JsonRevivr.js"
 
-
-var jrev	=new JRev().addrev( "spawns"; fromJSON( arr ){ }}])
-
-var jsontr	=JRev(
-	{
-		dewd	:
-		{
-			rev:( val )=>new items.Dewd(val)
-		},
-		spawns :
-		{
-			rev:( arr )=>
-			{
-				for(var i=0,len =arr.length ;i<len;i++)
-					arr[i]	=new Loc().fromJSON(arr[i]);
-
-				return arr
-			}
-		}
-	}
-)
 
 
 
 export default class Obj extends ShObj
 {
-	rules
+	static jrev	=new JRev().add([
+		{
+			key :"spawns"
+			,
+			fromJSON :( arr )=> arr.map(( val )=> new Loc().seta(val) )
+		}
+	])
 
-
-	constructor( ...args )
+	/*constructor( ...args )
 	{
 		super( ...args )
-		/*
-		this.rules	=json.newrules(
-			{
-				pl	:
-				{
-					rev	:( val )=> this.map.game.pls.read
-				}
-			})*/
-	}
+	}*/
 }
 
 
 
 Obj.prototype. read	=async function( path )
 {
-	var map	=this.map
-
-	var o	=await fs.readjson( path+'.json', jsontr.revivr )
-
-	if( ! o )	return
+	var{ map }	=this
 
 	var proms	=[]
 
+	var o	=await fs.readjson( path+'.json', this.constructor.jrev.fn )
+
+	if( ! o )	return
+
+	/** Don't forget, the only reason we go through o again is to check
+	 * correct locations for each player *
 	for(var locst in o)
 	{
 		var c	=o[locst]
@@ -87,7 +65,7 @@ Obj.prototype. read	=async function( path )
 		}
 	}
 
-	await Promise.all( proms )
+	await Promise.all( proms )*/
 
 	this.o	=o
 }
