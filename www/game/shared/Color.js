@@ -4,16 +4,12 @@ export default class Color
 	s
 	l
 
-	constructor( ...args )
-	{
-		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
+	static key	="col"
+	
 
-		else
-		{
-			this.h	=args[0] ?? 0
-			this.s	=args[1] ?? 0
-			this.l	=args[2] ?? 0
-		}
+	constructor( h =0, s =0, l =0 )
+	{
+		this.sethsl( h,s,l )
 	}
 }
 
@@ -24,26 +20,38 @@ Color.prototype. c	=function()
 
 
 
-Color.prototype. set	=function( o )
+Color.prototype. sethsl	=function( h, s, l )
 {
-	this.h	=o.h
-	this.s	=o.s
-	this.l	=o.l
+	this.h	=h
+	this.s	=s
+	this.l	=l
 
 	return this
+}
+
+
+
+Color.prototype. set	=function({ h, s, l })
+{
+	return this.sethsl( h, s, l )
 }
 
 
 /** Colour  */
 
-Color.prototype. fromJSON	=function( arr )
+Color.prototype. seta	=function(a)
 {
-	this.h	=arr[0]
-	this.s	=arr[1]
-	this.l	=arr[2]
-
-	return this
+	return this.sethsl(...a)
 }
+
+
+
+Color. fromJSON	=function( a )
+{
+	return this(...a)
+}
+
+
 
 Color.prototype. toJSON	=function()
 {

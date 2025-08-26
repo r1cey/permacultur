@@ -21,13 +21,15 @@ export default class V
 	x
 	y
 	
-	constructor( ...args )
+	constructor( x =0, y =0 )
 	{
+		this.setxy( x, y )
+		/*
 		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
 
 		else if( args[0] instanceof V )	this.set( args[0] )
 
-		else if( args.length > 1 )	this.setxy( ...args )
+		else if( args.length > 1 )	this.setxy( ...args )*/
 	}
 }
 
@@ -112,15 +114,10 @@ V.set	=function( v )
 }
 
 
-/** Checks if array is valid */
 
 V.fromJSON	=function( arr )
 {
-	if( this.isarr( arr) )
-	{
-		return new this().fromJSON(arr)
-	}
-	return
+	return new this(...arr)
 }
 
 
@@ -138,20 +135,19 @@ V.prototype. toString	=function()
 
 
 
-V.prototype. set	=function( v )
+V.prototype. set	=function({ x, y })
 {
-	this.setxy( v.x, v.y )
-	return this
+	return this.setxy( x, y )
 }
 V.prototype. fromJSON	=function(arr)
 {
-	this.setxy( arr[0], arr[1])
-	return this
+	return this.setxy( ...arr )
 }
 V.prototype. setxy	=function( x , y )
 {
 	this.x	=x
 	this.y	=y
+
 	return this
 }
 /** @arg {x,y,z}	o	- One property is optional */

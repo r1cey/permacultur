@@ -3,15 +3,17 @@ import ShObj	from "../../www/game/shared/maps/Obj.js"
 import * as fs	from '../fs.js'
 
 import Loc from "../../www/game/shared/Loc.js"
-import tools from "../tools.js"
-import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+import items from "../items.js"
+import JRev from "../../www/game/shared/JsonRevivr.js"
 
 
-var jsontr	=newjsontrans(
+var jrev	=new JRev().addrev( "spawns"; fromJSON( arr ){ }}])
+
+var jsontr	=JRev(
 	{
 		dewd	:
 		{
-			rev:( val )=>new tools.Dewd(val)
+			rev:( val )=>new items.Dewd(val)
 		},
 		spawns :
 		{

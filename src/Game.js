@@ -1,4 +1,4 @@
-import Cnt	from '../www/game/shared/Container.js'
+import Cnt	from '../www/game/shared/items/Container.js'
 import Maps	from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'
@@ -381,6 +381,12 @@ G.prototype. getobj	=function( n )
 			return this.pls
 		break
 	}
+}
+
+
+G.prototype. toJSON	=function()
+{
+	return undefined
 }
 
 /*

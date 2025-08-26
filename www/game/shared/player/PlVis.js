@@ -1,7 +1,7 @@
 import Loc from "../Loc.js"
 import Col from '../Color.js'
 
-import Cnt from "../Container.js"
+import Cnt from "../items/Container.js"
 
 // import Hands from "./newHands.js"
 

@@ -9,16 +9,20 @@ export default class Loc extends V
 
 	static V	=V
 
+	static key	="loc"
 
-	constructor( ...args )
+
+	constructor( x =0, y =0, h =0 )
 	{
-		super()
+		super( x, y )
 
+		this.h	=h
+		/*
 		if( Array.isArray( args[0] ) )	this.fromJSON( args[0] )
 
 		else if( args[0] instanceof Loc )	this.set( args[0] )
 
-		else if( args.length > 1 )	this.setxy( ...args )
+		else if( args.length > 1 )	this.setxy( ...args )*/
 	}
 }
 
@@ -43,14 +47,14 @@ Loc.prototype. c	=Loc.prototype. clone
 
 
 
-Loc.prototype. set	=function( loc )
+Loc.prototype. set	=function({ x, y, h })
 {
-	return this.setxy( loc.x, loc.y, loc.h )
+	return this.setxy( x, y, h )
 
 }
-Loc.prototype. setv	=function( vec )
+Loc.prototype. setv	=function({ x, y })
 {
-	return this.setxy( vec.x, vec.y, this.h )
+	return this.setxy( x, y, this.h )
 }
 
 Loc.prototype. setxy	=function( x, y, l )
@@ -63,9 +67,16 @@ Loc.prototype. setxy	=function( x, y, l )
 }
 Loc.prototype. seta	=function( a )
 {
-	return this.setxy( a[0], a[1], a[2] )
+	return this.setxy( ...a )
 }
 Loc.prototype.fromJSON	=Loc.prototype.seta
+
+
+
+Loc.fromJSON	=function( a )
+{
+	return new this( ...a )
+}
 
 
 

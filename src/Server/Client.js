@@ -61,12 +61,10 @@ Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var msg	=JSON.parse( data.toString() , jsontr.revivr )
+	var[ act, args ]	=JSON.parse( data.toString() , jsontr.revivr )
 
-	for(var prop in msg )
-	{
-		this["on_"+prop]?.(msg[prop])
-	}
+	this["on_"+act]?.(...args)
+	
 	// console.error( `Client Msg: not found: ${prop}`)
 }
 
@@ -105,6 +103,14 @@ Client.prototype. sendbin	=function( buf )
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Client.prototype. toJSON	=function()
+{
+	return 1
+}
 
 
 

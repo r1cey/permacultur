@@ -27,8 +27,6 @@ export default class Cls
 
 Cls.prototype. new	=function( ws, pl )
 {
-	console.log( `Client ${pl.name} connected.` )
-
 	var cl	=new Cl( ws, pl, this.srv )
 
 	this.o[pl.name]	=cl

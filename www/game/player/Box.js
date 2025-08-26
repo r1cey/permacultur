@@ -1,4 +1,4 @@
-import ShBox	from "../shared/Box.js"
+import ShBox	from "../shared/items/Box.js"
 
 
 

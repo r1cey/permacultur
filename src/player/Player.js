@@ -6,9 +6,9 @@ import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
 
-import tools from '../tools.js'
+import items from '../items.js'
 
-import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+import newjsontrans from "../../www/game/shared/JsonRevivr.js"
 
 
 var jsontr	=newjsontrans()
@@ -58,9 +58,9 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	map()	{return this.game.maps.loc2map( this.loc )}
 
-	srv()	{return this.game.server }
+	srv
 
-	inv	={ seedbag :[new tools.Seedbag({o:{ cucumber_seeds :15 }}) ],
+	inv	={ seedbag :[new items.Seedbag({o:{ cucumber_seeds :15 }}) ],
 
 		belt :{o:{ multitool :1 }}}
 
@@ -70,6 +70,8 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 		super( pl )
 
 		this.game	=game
+
+		this.srv	=game.server
 	}
 
 	/*static Slp	=PlSlp
@@ -117,11 +119,11 @@ Player.prototype. conncl	=function( cl )
 
 Player.prototype. clclosed	=function()
 {
-	this.game.srv?.cls.del( this.name )
+	this.srv?.cls.del( this.name )
 
 	this.cl	=null
 
-	this.game.srv?.send.plconn( this )
+	this.srv?.send.plconn( this )
 }
 
 
@@ -146,7 +148,7 @@ Player.prototype. mov	=function( loc )
 
 	map.obj.set(loc).pl	=this
 
-	this.srv()?.send_plmov( this, oldloc )
+	this.srv?.send_plmov( this, oldloc )
 
 	if( loc.h === 0 )
 	{
@@ -215,7 +217,7 @@ Player.prototype. climb	=function( hdir )
 
 	destmap.scello(loc).pl	=pl
 
-	pl.srv()?.send_plclimb( pl, hdir )*/
+	pl.srv?.send_plclimb( pl, hdir )*/
 }
 
 
@@ -225,7 +227,7 @@ Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
 
 	obj[act]( ... params )
 
-	this.srv()?.send_plactonobj( this, loc, objkey, act, params )
+	this.srv?.send_plactonobj( this, loc, objkey, act, params )
 }
 
 
@@ -233,7 +235,7 @@ Player.prototype. additem	=function( item, len )
 {
 	var addl	=PlMsg.prototype.additem. call(this, item, len )
 
-	addl	? this.cl.send_clpladditem( )
+	addl	? this.cl.send_clpladditem( ) : 0
 }
 
 
@@ -261,7 +263,7 @@ Player.prototype. movitem	=function( from, itemid, len, to )
 
 	PlMsg.prototype.movitem. call(this, fromcnt, itemid, len, tocnt )
 		
-		frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
+//		frombox, fromdadbox, itemn, len, boxi, tobox, todadbox )
 
 
 
@@ -288,7 +290,7 @@ Player.prototype. movitem	=function( from, itemid, len, to )
 	{
 		let pl	=game.pls.g(from.pln)
 
-		if( ! from.boxes.length )
+		// if( ! from.boxes.length )
 	}
 	var frombox	=from.pln ? game.pls.g(from.pln) : game.maps.objfromloc(from.loc)
 

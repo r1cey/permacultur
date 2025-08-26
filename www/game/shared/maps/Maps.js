@@ -1,4 +1,4 @@
-import Loc from "../Loc"
+import Loc from "../Loc.js"
 
 
 /*export default ( newGround, newTrees )=> class extends Maps

@@ -95,7 +95,7 @@ Server.prototype. onconn	=function( ws, req )
 		return
 	}*/
 
-	ws.on( 'message', this.onlogin. bind(this, ws, ip ))
+	ws.on( 'message', this.onmsg. bind(this, ws, ip ))
 
 	ws.on( 'error', console.log )
 
@@ -109,48 +109,43 @@ Server.prototype. onconn	=function( ws, req )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** @arg o
- * @arg o.name
- * @arg [o.pl]
- */
+/** [ name, newpl ] */
 
-Server.prototype. onlogin	=async function( ws, ip, data, isbin )
+Server.prototype. onmsg	=function( ws, ip, data, isbin )
 {
 	var str	=data.toString()
 
-	console.log( `Login attempt from ${ip}: ${str}`)
+	console.log( `Srv msg from ${ip}: ${str}`)
 
 	try
 	{
-		var plmsg	=JSON.parse( str, jsontr.revivr )
+		var[ name, newpl ]	=JSON.parse( str )
 	}
 	catch(err)
 	{
 		return
 	}
-
-	var name	=plmsg.name
-
 	if(	this.cls.o[name] )
 	{
 		ws.close( 4123, 'Player already connected!' )
 
 		return
 	}
-
 	var pl	=this.game.pls.o[name]
 
 	if( pl )
 	{
+		console.log( "Connecting player: "+name )
+
 		this.cls.new( ws, pl )
 	}
-	else if( this.game.pls.left() <= 0 )
+	else if( this.game.pls.rem() <= 0 )
 	{
-		console.log("Too many players in the game :(")
+		console.log("Too many players on server :(")
 
-		ws.close( 4124, "Too many players in the game :(")
+		ws.close( 4124, "Too many players on server :(")
 	}
-	else if( plmsg.col  )
+	else if( newpl  )
 	{
 		this.cls.new( ws, this.game.pls.new( plmsg ) )
 	}
@@ -158,7 +153,7 @@ Server.prototype. onlogin	=async function( ws, ip, data, isbin )
 	{
 		console.log( `No ${name} player found. Create new.`)
 
-		ws.send( `{"createpl":"${name}"}` )
+		ws.send( `["createpl", ["${name}"]]` )
 	}
 }
 

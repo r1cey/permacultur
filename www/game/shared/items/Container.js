@@ -1,4 +1,4 @@
-import PObj from "./PathObj";
+import PObj from "../PathObj.js";
 
 
 export default class Cnt	extends PObj

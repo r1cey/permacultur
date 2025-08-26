@@ -1,11 +1,11 @@
-import items	from "./items.js"
+import Item	from "./Item.js"
 
-import{ IdPool }	from "./utils.js"
+import{ IdPool }	from "../utils.js"
 
 
 /** Also extends Container class, but cbf doing mixins */
 
-export default class Box extends items.Item
+export default class Box extends Item
 {
 	id	=0
 
@@ -50,20 +50,20 @@ Box.prototype. additem	=function( item, len =1 )
 
 	else
 
-	}
+	{
 		{
 			let itemo	=this.o[item.constructor.name]	??={}
 
 			itemb	=itemo["0"]	??=new item.constructor(item, 0)
 		}
-		else
+		// else
 		{
 			this.addbox( item )
 
 			return 1
 		}
 	}
-	else
+	// else
 	{
 		itemb	=this.o[item.constructor.name]	??=new item.constructor(item, 0)
 	}
@@ -91,7 +91,7 @@ Box.prototype. delitem	=function( item, num =1, dadbox )
 	
 		(this.o[itemn].num	-= num) > 0	? 0	: delete this.o[itemn]
 
-	this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this )
+	this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this ) : 0
 }
 
 
@@ -146,6 +146,7 @@ Box.prototype. setuniq	=function()
 		Box.prototype.delitem. call(dad, this )	//maybe problem with GUI
 
 		this.conv
+	}
 }
 
 

@@ -7,7 +7,7 @@ import Loc from "./shared/Loc.js"
 
 import Hands	from "./player/Hands.js"
 import tools from "./tools.js"
-import newjsontr from "./shared/newjsontransfrm.js"
+import newjsontr from "./shared/JsonRevivr.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -152,17 +152,11 @@ Serv.prototype. onmsg	=function( ev )
 	}
 	else if(typeof msg === 'string')
 	{
-		msg	=JSON.parse(ev.data, this.rev )
+		let[ act, args ]	=JSON.parse(ev.data, this.rev )
 
-		let key
+		this["on_"+act]?.( ...args )
 
-		for(key in msg)
-		{
-			this["on_"+key]?.( msg[key] )
-
-			console.log(key)
-		}
-		// console.error( `srv.onmsg: not found! ${key}`)
+		console.log(act)
 	}
 }
 

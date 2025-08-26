@@ -5,9 +5,9 @@ import Loc	from '../../www/game/shared/Loc.js'
 
 import * as fs from '../fs.js'
 
-import tools from "../tools.js"
+import items from "../items.js"
 import Hands from './Hands.js'
-import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+import newjsontrans from "../../www/game/shared/JsonRevivr.js"
 
 
 
@@ -53,7 +53,7 @@ export default class Pls	extends PathObj
 				},
 				seedbag :
 				{
-					rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
+					rev:( val )=> val.map(( bag )=> new items.Seedbag(bag) )
 				}
 			}
 		).revivr
@@ -84,7 +84,7 @@ Pls.prototype. read	=async function( name, map )
 
 
 
-Pls.prototype. left	=function()
+Pls.prototype. rem	=function()
 {
 	return this.conf.max
 }
