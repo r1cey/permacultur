@@ -1,6 +1,3 @@
-import newjsontr from "../../www/game/shared/newjsontransfrm.js"
-var jsontr	=newjsontr()
-
 import Loc from '../../www/game/shared/Loc.js'
 
 
@@ -21,14 +18,14 @@ export default class ClS
 
 ClS.prototype. setpl	=function()
 {
-	this.sendjson({ setpl: this.pl }, jsontr.replcr)
+	this.sendjson({ setpl: this.pl })
 }
 
 
 
 ClS.prototype. setmap	=function()
 {
-	var pl	=this.pl
+	var{ pl }	=this
 
 	var game	=this.srv.game
 
@@ -40,14 +37,6 @@ ClS.prototype. setmap	=function()
 
 	this.sendbin( slicedtr.bin.getbuf())
 
-	var replcr	=newjsontr(
-		{
-			pl	:
-			{
-				rep	:( val )=> this.pl.name===val.name ? val.name : val
-			}
-		}).replcr
-		
 	this.sendjson(
 		{
 			setmap:
@@ -58,7 +47,7 @@ ClS.prototype. setmap	=function()
 				,
 				r	:pl.vision
 			}
-		}, replcr )
+		}, ( key, val )=> key==="pl"&&pl.name===val.name ? val.name : val )
 }
 
 

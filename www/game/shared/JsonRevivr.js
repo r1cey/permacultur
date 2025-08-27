@@ -27,9 +27,10 @@ JR.prototype. addobjs	=function( objs )
 
 		this.objs[key]	=obj
 	}
+	return this
 }
 
-JR.prototype. add	=JR.prototype. addrules
+JR.prototype. add	=JR.prototype. addobjs
 
 
 

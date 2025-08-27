@@ -61,6 +61,7 @@ export default class G extends Cnt
 
 	constructor( confpa )
 	{
+		super()
 		// this.start(confpa)
 	}
 }

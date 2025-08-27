@@ -506,3 +506,13 @@ Map.getbmapbits	=function( name , j )
 
 	return Buf.bmap[Buf.bmapo[name]][j][0]
 }*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Map.prototype. toJSON	=function()
+{
+	return undefined
+}

@@ -6,10 +6,8 @@ import { WebSocketServer, WebSocket } from "ws"
 import Cls from "./Clients.js"
 import ServSend from './ServSend.js'
 
-import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+import JRev from "../../www/game/shared/JsonRevivr.js"
 
-
-var jsontr	=newjsontrans()
 
 
 
@@ -31,6 +29,9 @@ export default class Server extends ServSend
 	// g	=new Get(this)
 
 	// send	=new Send(this)
+
+	static jrev	=new JRev()
+
 
 	constructor( game, port )
 	{
@@ -122,7 +123,7 @@ Server.prototype. onmsg	=function( ws, ip, data, isbin )
 
 	try
 	{
-		var[ name, newpl ]	=JSON.parse( str )
+		var[ name, newpl ]	=JSON.parse( str, this.constructor.jrev.fn )
 	}
 	catch(err)
 	{

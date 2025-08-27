@@ -6,12 +6,12 @@ import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
 
-import items from '../items.js'
+// import items from '../items.js'
 
-import newjsontrans from "../../www/game/shared/JsonRevivr.js"
+// import newjsontrans from "../../www/game/shared/JsonRevivr.js"
 
 
-var jsontr	=newjsontrans()
+// var jsontr	=newjsontrans()
 
 /*
 const SrvPl	=(c) => class extends c
@@ -59,6 +59,8 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 	map()	{return this.game.maps.loc2map( this.loc )}
 
 	srv
+
+	static game
 
 
 	constructor( pl, game )
@@ -385,6 +387,17 @@ Player.prototype. setheat	=function( lvl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+Player. fromJSON	=function( val )
+{
+	var{ game }	=this
+
+	var pl	=PlMsg.fromJSON. call(this, val, game )
+
+	game.pls.s( pl )
+
+	return pl
+}
 
 /*Player. replacer	=function( key, val )
 {

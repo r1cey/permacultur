@@ -4,12 +4,9 @@ import ClG from './ClientGet.js'
 
 import MapG	from "../maps/Ground.js"
 
-import tools from "../../www/game/shared/tools.js"
-
-import newjsontrans from "../../www/game/shared/newjsontransfrm.js"
+import JRev from '../JsonRevivr.js'
 
 
-var jsontr	=newjsontrans()
 
 
 export default class Client extends ClG
@@ -29,7 +26,7 @@ export default class Client extends ClG
 	// 2:	slave
 	// BDSM
 
-	jsonrev	//json reviver
+	static jrev	=new JRev()
 
 	constructor(ws, pl, srv )
 	{
@@ -61,7 +58,7 @@ Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
-	var[ act, args ]	=JSON.parse( data.toString() , jsontr.revivr )
+	var[ act, args ]	=JSON.parse( data.toString(), this.constructor.jrev.fn )
 
 	this["on_"+act]?.(...args)
 	

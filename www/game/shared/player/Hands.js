@@ -36,11 +36,3 @@ Ha.prototype. toJSON	=function()
 	}
 	return this
 }
-
-
-Ha.fromJSON	=function( obj )
-{
-	var out	=Jable.fromJSON. call(this, obj )
-
-	out.item	=
-}

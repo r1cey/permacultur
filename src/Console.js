@@ -1,10 +1,10 @@
 import * as rl from "node:readline/promises"
 
-import newjsontr from "../www/game/shared/newjsontransfrm.js"
-import tools from "./tools.js"
+// import newjsontr from "../www/game/shared/newjsontransfrm.js"
+// import tools from "./tools.js"
 import Loc from "../www/game/shared/Loc.js"
 
-
+/*
 var rev	=newjsontr(
 {
 	dewd	:
@@ -15,7 +15,7 @@ var rev	=newjsontr(
 	{
 		rev:( val )=> val.map(( bag )=> new tools.Seedbag(bag) )
 	}
-}).revivr
+}).revivr*/
 
 
 export default class Con

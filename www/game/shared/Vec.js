@@ -31,6 +31,15 @@ export default class V
 
 		else if( args.length > 1 )	this.setxy( ...args )*/
 	}
+
+
+	setxy( x , y )
+	{
+		this.x	=x
+		this.y	=y
+
+		return this
+	}
 }
 
 
@@ -143,13 +152,13 @@ V.prototype. fromJSON	=function(arr)
 {
 	return this.setxy( ...arr )
 }
-V.prototype. setxy	=function( x , y )
+/*V.prototype. setxy	=function( x , y )
 {
 	this.x	=x
 	this.y	=y
 
 	return this
-}
+}*/
 /** @arg {x,y,z}	o	- One property is optional */
 V.prototype. setxyzh	=function( o )
 {

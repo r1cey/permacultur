@@ -6,7 +6,7 @@ import Loc	from '../../www/game/shared/Loc.js'
 import * as fs from '../fs.js'
 
 // import items from "../items.js"
-import Hands from '../../www/game/shared/player/Hands.js'
+// import Hands from '../../www/game/shared/player/Hands.js'
 import JRev from "../JsonRevivr.js"
 
 
@@ -28,10 +28,10 @@ export default class Pls	extends PathObj
 
 	g( n )	{ return this.o[n] }
 
-	s( n, pl)	{ this.o[n]	=pl }
+	s( pl )	{ this.o[pl.name]	=pl }
 
 	
-	static jrev	=new JRev().add([
+	/*static jrev	=new JRev().add([
 		{
 			key :"" , fromJSON :(val)=> new Pl(val)
 		},
@@ -39,33 +39,16 @@ export default class Pls	extends PathObj
 			key :"cl" , fromJSON :()=> 0
 		},
 		Hands
-	])
+	])*/
 
 
 	constructor( game )
 	{
+		super()
+
 		this.game	=game
 
-		this.rev	=JRev(
-			{
-				""	:
-				{
-					rev	:( val )=> new Pl( val, game )
-				},
-				"cl" :
-				{
-					rev :( val )=> 0
-				},
-				hands	:
-				{
-					rev:( val )=>new Hands(val)
-				},
-				seedbag :
-				{
-					rev:( val )=> val.map(( bag )=> new items.Seedbag(bag) )
-				}
-			}
-		).revivr
+		Pl.game	=game
 	}
 }
 
