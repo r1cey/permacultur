@@ -1,4 +1,4 @@
-import Cnt	from '../www/game/shared/items/Container.js'
+import PathO	from '../www/game/shared/items/PathObj.js'
 import Maps	from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'
@@ -28,7 +28,7 @@ Function.prototype. c	=function(...args)
  */
 
 
-export default class G extends Cnt
+export default class G extends PathO
 {
 	conf	=
 	{

@@ -270,9 +270,9 @@ Pl.prototype. delitem	=function( item, num )
 }
 
 
-/**@arg {Container}	from
+/**@arg {Holder}	from
  * @arg {String|Number}	itemid
- * @arg {Container}	to */
+ * @arg {Holder}	to */
 
 
 Pl.prototype. movitem	=function( from, itemid, len, to )

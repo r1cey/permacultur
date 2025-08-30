@@ -1,32 +1,20 @@
-import Item	from "./Item.js"
-
-import{ IdPool }	from "../utils.js"
+import Cnt from "./Container.js"
 
 
-/** Also extends Container class, but cbf doing mixins */
 
-export default class Box extends Item
+export default class Box extends Cnt
 {
-	id	=0
-
-	/** Including empty bags */
+	/** Including empty containers */
 	items	={}
 
-	bags	={}
-
-	dad
-
-	/** pl|loc|bag */
-	dadtype
+	cnts	={}
 
 	static boxvol	=8000	//10cm^3
-
-	static idpool	=new IdPool()
 }
 
 
 
-Box.prototype. getinv	=function( id )
+Box.prototype. getobj	=function( id )
 {
 	return typeof id==="number"	? this.bags[id]	: this.items[id]
 }
@@ -124,29 +112,3 @@ Box.prototype. calcempty	=function()
 	}
 	return true
 }
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-Box.prototype. setuniq	=function()
-{
-	if( this.num > 1 )
-	{
-		
-	}
-
-	var bag	=this.num===1	? this	: this.take( 1 )
-
-	this.id	=this.constructor.idpool.new()
-
-	if( this.dad && this.dadtype==="bag" )
-	{
-		Box.prototype.delitem. call(dad, this )	//maybe problem with GUI
-
-		this.conv
-	}
-}
-
-

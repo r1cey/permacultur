@@ -1,8 +1,8 @@
-import Cnt	from "../items/Container.js"
+import Holder	from "../Holder.js"
 
 
 
-export default class Cell	extends Cnt
+export default class Cell	extends Holder
 {
 	map
 

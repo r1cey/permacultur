@@ -267,7 +267,7 @@ Player.prototype. movitem	=function( from, itemid, len, to )
 
 
 	
-	var cntfrom	=new Cont()
+	var cntfrom	=new Holder()
 	
 	from.pln ? cntfrom.frompl( game.pls.g(from.pln), from.boxes ) :
 
