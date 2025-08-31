@@ -1,5 +1,7 @@
 import Loc from "../Loc.js"
 
+import PObj from "../PathObj.js"
+
 
 /*export default ( newGround, newTrees )=> class extends Maps
 {
@@ -17,7 +19,7 @@ import Loc from "../Loc.js"
 
 
 
-export default class Maps
+export default class Maps	extends PObj
 {
 	/** Define in derived
 	@var ground */

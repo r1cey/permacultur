@@ -7,7 +7,7 @@ import Loc from "./shared/Loc.js"
 
 import Hands	from "./player/Hands.js"
 import tools from "./tools.js"
-import newjsontr from "./shared/JsonRevivr.js"
+import JRev from "./JsonRevivr.js"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ export default class Serv extends SrvS
 
 		this.cl	=client
 
-		this.rev	=newjsontr(
+		this.rev	=JRev(
 		{
 			pl	:
 			{

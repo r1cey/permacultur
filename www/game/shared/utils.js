@@ -101,3 +101,26 @@ export class IdPool
     	this.free.push(id)
   	}
 }
+
+
+/**	Be careful, doesn't mix in constructors!
+ *  @arg []	mums */
+
+export function mixin( mums, clss )
+{
+	for(var mum of mums )
+	{
+		Object.getOwnPropertyNames(mum).forEach( name =>
+		{
+    		if( name!=="prototype" && name!=="name" && name!=="constructor" )
+			{
+      			Object.defineProperty( clss, name,
+
+        			Object.getOwnPropertyDescriptor( mum, name )
+      			)
+    		}
+		} )
+		Object.assign( clss.prototype, mum.prototype )
+	}
+	return clss
+}

@@ -1,10 +1,12 @@
 import ShBox	from "../shared/items/Box.js"
 
+import Holder from "../Holder.js"
 
+
+/** @extends Holder */
 
 export default class Box extends ShBox
 {
-	htmlbox
 }
 
 
