@@ -18,7 +18,7 @@ export default class Item	extends Jable
 
 	constructor( obj, num )
 	{
-		super( obj )
+		this.set( obj )
 		// Object.assign( this, obj )
 
 		if( num	!= null )	this.num	=num
@@ -53,7 +53,7 @@ export default class Item	extends Jable
 	}
 
 
-	static newRev( jrev )
+	static newRevObj( jrev )
 	{
 		return {
 

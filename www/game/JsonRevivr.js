@@ -13,6 +13,6 @@ export default class extends JRev
 
 		for(var it in its )	this.add([ it ])
 
-		this.add([ Pl, Hands, Item.newRev(this) ])
+		this.add([ Hands, Item.newRev(this) ])
 	}
 }

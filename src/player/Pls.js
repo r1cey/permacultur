@@ -6,7 +6,8 @@ import Loc	from '../../www/game/shared/Loc.js'
 import * as fs from '../fs.js'
 
 // import items from "../items.js"
-// import Hands from '../../www/game/shared/player/Hands.js'
+import Hands from '../../www/game/shared/player/Hands.js'
+import Item from "../../www/game/shared/items/Item.js"
 import JRev from "../JsonRevivr.js"
 
 
@@ -31,15 +32,12 @@ export default class Pls	extends PathObj
 	s( pl )	{ this.o[pl.name]	=pl }
 
 	
-	/*static jrev	=new JRev().add([
-		{
-			key :"" , fromJSON :(val)=> new Pl(val)
-		},
+	jrev	=new JRev().add([
 		{
 			key :"cl" , fromJSON :()=> 0
 		},
 		Hands
-	])*/
+	] )
 
 
 	constructor( game )
@@ -48,7 +46,12 @@ export default class Pls	extends PathObj
 
 		this.game	=game
 
-		Pl.game	=game
+		this.jrev.add([
+			{
+				key :"" , fromJSON :(val)=> new Pl( val, game )
+			}
+			, Item.newRev(this.jrev)
+		] )
 	}
 }
 
@@ -58,13 +61,13 @@ export default class Pls	extends PathObj
 
 /** Reads and saves */
 
-Pls.prototype. read	=async function( name, map )
+Pls.prototype. read	=async function( name )
 {
 	var game	=this.game
 
 	var pa	=this.conf.dir+name+'.json'
 
-	var pl	=await fs.readjson( pa, this.rev )
+	var pl	=await fs.readjson( pa, this.jrev )
 				
 	if(pl)
 	{

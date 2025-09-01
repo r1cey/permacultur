@@ -60,7 +60,7 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	srv
 
-	static game
+	// static game
 
 
 	constructor( pl, game )
@@ -96,7 +96,7 @@ Player.prototype. save	=async function( dir )
 {
 	var pa	=dir+this.name+'.json'
 
-	await fs.savejson( pa, this, jsontr.replcr )
+	await fs.savejson( pa, this )
 }
 
 
@@ -387,7 +387,7 @@ Player.prototype. setheat	=function( lvl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 Player. fromJSON	=function( val )
 {
 	var{ game }	=this

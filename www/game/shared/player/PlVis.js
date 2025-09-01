@@ -42,6 +42,5 @@ PlVis.prototype. set	=function( pl )
 			this[key]	=pl[key]
 		}
 	}
-
 	return this
 }

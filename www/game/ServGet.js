@@ -4,8 +4,6 @@ import Loc from './shared/Loc.js'
 
 import Maps	from './maps/Maps.js'
 
-import tools from "./tools.js"
-
 
 
 export default class SG

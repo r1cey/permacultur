@@ -6,7 +6,6 @@ import Pl from "./player/Player.js"
 import Loc from "./shared/Loc.js"
 
 import Hands	from "./player/Hands.js"
-import tools from "./tools.js"
 import JRev from "./JsonRevivr.js"
 
 
@@ -24,7 +23,7 @@ export default class Serv extends SrvS
 
 	ws
 
-	rev	//reviver
+	jrev	//json reviver
 
 	buf	=new Buf(this)
 
@@ -35,32 +34,19 @@ export default class Serv extends SrvS
 
 		this.cl	=client
 
-		this.rev	=JRev(
-		{
-			pl	:
+		this.jrev	=new JRev().add( [
 			{
-				rev :( val )=> typeof val==="string" ? 
-					( val===client.pl.name ?
-						client.pl : console.error("revivr: "+val) ) :
-					new Pl(val,client)
-			},
-			hands	:
-			{
-				rev:( val )=>new Hands(val)
-			},
-			belt	:
-			{
-				rev:( o )=> foreach( o, (val)=>new tools.Belt( val ) )
-			},
-			seedbag :
-			{
-				rev:( arr )=> arr.map(( val )=> new tools.Seedbag(val) )
-			},
-			dewd	:
-			{
-				rev:( val )=>new tools.Dewd(val)
+				key	:"pl"
+				,
+				fromJSON	:( val )=> typeof val==="string" ? 
+					(
+						val===client.pl.name ?
+
+						client.pl : console.error("revivr: "+val)
+					) :
+					new Pl.Vis(val,client)
 			}
-		}).revivr
+		] )
 	}
 }
 
@@ -152,7 +138,7 @@ Serv.prototype. onmsg	=function( ev )
 	}
 	else if(typeof msg === 'string')
 	{
-		let[ act, args ]	=JSON.parse(ev.data, this.rev )
+		let[ act, args ]	=JSON.parse(ev.data, this.jrev.fn )
 
 		this["on_"+act]?.( ...args )
 

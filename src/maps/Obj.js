@@ -47,7 +47,7 @@ Obj.prototype. read	=async function( path )
 
 	var proms	=[]
 
-	for(var pln in pls )
+	for(let pln in pls )
 	{
 		proms.push( (async()=>
 		{
@@ -62,34 +62,8 @@ Obj.prototype. read	=async function( path )
 			o[vstr].pl	=pl
 		})() )
 	}
-
 	/** Don't forget, the only reason we go through o again is to check
-	 * correct locations for each player *
-	for(var locst in o)
-	{
-		var c	=o[locst]
-
-		for(var p in c )
-		{
-			switch(p)
-			{
-				case 'pl':
-
-					let cell2save	=c
-
-					proms.push( (async()=>
-					{
-						var pl	=await map.game.pls.read( c.pl )
-
-						var h	=map.bin	? map.getloc().h	: pl.loc.h
-
-						pl.loc.setvstr(locst, h )
-						
-						cell2save.pl	=pl
-					})())
-			}
-		}
-	}*/
+	 * correct locations for each player */
 
 	await Promise.all( proms )
 
