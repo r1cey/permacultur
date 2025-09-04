@@ -1,4 +1,4 @@
-import PathO	from '../www/game/shared/items/PathObj.js'
+import PathO	from '../www/game/shared/PathObj.js'
 import Maps	from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'

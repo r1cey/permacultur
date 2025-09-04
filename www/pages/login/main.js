@@ -17,7 +17,7 @@ Page.prototype. start	=function(submit)
 
 		ev.currentTarget.disabled	=true
 
-		submit( { name: elinp.value } )
+		submit({ name: elinp.value })
 
 		return false
 	}

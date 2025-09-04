@@ -1,4 +1,4 @@
-import its	from ".../shared/items/items.js"
+import its	from "../shared/items/items.js"
 import Hold from "../Holder.js"
 import Item from "./Item.js"
 import Bag	from "./Box.js"
@@ -21,7 +21,7 @@ its.Belt	=mixin([ its.Belt, Item, Hold ],class
 
 
 
-its.Seedbag	=mixin([ its.Seedbag, ])
+its.Seedbag	=mixin([ its.Seedbag, Bag ],class
 {
 	attachhtmlinv( htmlinv )
 	{
@@ -32,19 +32,8 @@ its.Seedbag	=mixin([ its.Seedbag, ])
 			this.htmlobj.additem( itemn, this.o[itemn] )
 		}
 	}
-}
+} )
 
-newBelt( sh.Belt )
-
-Belt extends newItem(newHolder(ShBelt))
-
-Belt extends mixin([ ShBelt, Item, Holder ], class
-	{
-
-	}
-)
-
-Object.assign( Belt, )
 
 
 export default its

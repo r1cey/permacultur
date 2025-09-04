@@ -48,7 +48,7 @@ Color.prototype. seta	=function(a)
 
 Color. fromJSON	=function( a )
 {
-	return this(...a)
+	return new this().seta(a)
 }
 
 
@@ -65,6 +65,8 @@ Color.prototype. sethsl	=function( h, s, l )
 	this.h	=h
 	this.s	=s
 	this.l	=l
+
+	return this
 }
 
 
@@ -74,6 +76,8 @@ Color.prototype. add	=function( h, s, l )
 	this.h	+=Math.round(h)
 	this.s	+=Math.round(s)
 	this.l	+=Math.round(l)
+
+	return this
 }
 
 

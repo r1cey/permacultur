@@ -50,7 +50,7 @@ export default class Pls	extends PathObj
 			{
 				key :"" , fromJSON :(val)=> new Pl( val, game )
 			}
-			, Item.newRev(this.jrev)
+			, Item.newRevObj(this.jrev)
 		] )
 	}
 }
@@ -67,7 +67,7 @@ Pls.prototype. read	=async function( name )
 
 	var pa	=this.conf.dir+name+'.json'
 
-	var pl	=await fs.readjson( pa, this.jrev )
+	var pl	=await fs.readjson( pa, this.jrev.fn )
 				
 	if(pl)
 	{
@@ -116,7 +116,7 @@ Pls.prototype. new	=function( plmsg )
 	pl.save( this.conf.dir )
 
 	map.obj.set(pl.loc).pl	=pl
-	{
+	if(0){
 		let idewd =0
 
 		map.fore(( loc )=>

@@ -106,9 +106,9 @@ Player.prototype. conncl	=function( cl )
 {
 	this.cl	=cl
 
-	cl.send_setpl()
+	cl.send("setpl")
 
-	cl.send_setmap()
+	cl.send("setmap")
 
 	this.game.srv?.send_plconn( this )
 }

@@ -1,5 +1,9 @@
-import SG from './ServGet.js'
+// import SG from './ServGet.js'
 
+
+/********
+ * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
+ * ***
 
 export default class SS extends SG
 {
@@ -7,61 +11,19 @@ export default class SS extends SG
 	{
 		super()
 	}
-}
+}*/
+
+
+var out	={}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/********
- * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
- * ***/
 
-
-SS.prototype. login	=function( o )
+out. newplayer	=function( o )
 {
-	try
-	{
-		this.ws	=new WebSocket(this.url)
-	}
-	catch(err)
-	{
-		this.con().write(`WebSocket error: ${err}`)
-		return
-	}
-
-	var ws	=this.ws
-
-	ws.binaryType	="arraybuffer"
-
-	ws.onerror	=(ev)=>
-	{
-		this.con().write(`WebSocket error! ${ev.code}`)
-
-		this.cl.html.ps.login?.reset()
-	}
-
-	ws.onopen	=this.sendjson. bind(this, o )
-
-	ws.onmessage	=this.onmsg. bind(this)
-
-	ws.onclose	=(ev)=>
-	{
-		// console.log(`Connection closed:`,ev)
-
-		this.cl.html.con.write
-			(`Connection closed: ${ev.code} ${ev.reason}`)
-		
-		this.cl.html.ps.login?.reset()
-	}
-}
-
-
-
-
-SS.prototype. newplayer	=function( o )
-{
-	this.sendjson( o )
+	return[[ o ]]
 }
 
 
@@ -69,36 +31,29 @@ SS.prototype. newplayer	=function( o )
 
 
 
-SS.prototype. mov	=function( loc )
+out. mov	=function( loc )
 {
-	this.sendjson({ mov: { loc } })
+	return[[ loc ]]
 }
 
 
 
-SS.prototype. wrtc	=function( o )
+out. wrtc	=function( o )
 {
-	this.sendjson({ wrtc: o })
-}
-
-
-
-
-SS.prototype. climb	=function( dir, loc )
-{
-	this.sendjson({ climb: { loc, dir }})
+	return[[ o ]]
 }
 
 
 
 
-SS.prototype. act	=function( act, o )
+out. climb	=function( dir, loc )
 {
-	this.sendjson({ [act]: o })
+	return[[ dir, loc ]]
 }
 
 
-SS.prototype. actonobj	=function( loc, objkey, act, params )
+
+out. actonobj	=function( loc, objkey, act, params )
 {
 	this.sendjson({actonobj:{ loc, objkey, act, params }})
 }
@@ -108,11 +63,14 @@ SS.prototype. actonobj	=function( loc, objkey, act, params )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-for(var funn in SS.prototype)
+export default out
+
+/*
+for(var funn in out)
 {
-	SS.prototype["send_"+funn]	=SS.prototype[funn]
+	out["send_"+funn]	=out[funn]
 
-	SS.prototype["s_"+funn]	=SS.prototype[funn]
+	out["s_"+funn]	=out[funn]
 
-	delete SS.prototype[funn]
-}
+	delete out[funn]
+}*/

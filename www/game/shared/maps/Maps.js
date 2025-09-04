@@ -43,6 +43,7 @@ export default class Maps	extends PObj
 
 	constructor()
 	{
+		super()
 	}
 }
 

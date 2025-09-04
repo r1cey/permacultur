@@ -1,4 +1,5 @@
-import SrvS from './ServSend.js'
+import out from './ServSend.js'
+import get	from "./ServGet.js"
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
@@ -13,7 +14,7 @@ import JRev from "./JsonRevivr.js"
 
 
 
-export default class Serv extends SrvS
+export default class Serv
 {
 	cl
 
@@ -25,12 +26,14 @@ export default class Serv extends SrvS
 
 	jrev	//json reviver
 
+	get	=get
+
 	buf	=new Buf(this)
 
 
 	constructor(client)
 	{
-		super()
+		// super()
 
 		this.cl	=client
 
@@ -61,9 +64,9 @@ Serv.prototype. test	=function()
 }
 
 
-/** @arg	o	- whatever goes to s.login() */
+/** @arg	o	- whatever is sent to server */
 
-Serv.prototype. login	=function( o )
+Serv.prototype. sendlogin	=function( o )
 {
 	try
 	{
@@ -86,7 +89,7 @@ Serv.prototype. login	=function( o )
 		this.cl.html.ps.login?.reset()
 	}
 
-	ws.onopen	=this.s.login.bind( this, o )
+	ws.onopen	=this.sendjson. bind(this, o )
 
 	ws.onmessage	=this.onmsg. bind(this)
 
@@ -99,6 +102,15 @@ Serv.prototype. login	=function( o )
 		
 		this.cl.html.ps.login?.reset()
 	}
+}
+
+
+
+Serv.prototype. send	=function( fn, args )
+{
+	var[ outa, rep ]	=out[fn]. apply(this, args )
+
+	if( outa )	this.sendjson([ fn, outa ], rep )
 }
 
 
@@ -140,9 +152,11 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		let[ act, args ]	=JSON.parse(ev.data, this.jrev.fn )
 
-		this["on_"+act]?.( ...args )
+		this.get[act]?. apply(this, args )
 
-		console.log(act)
+		// this["on_"+act]?.( ...args )
+
+		console.log(act, args )
 	}
 }
 
@@ -230,7 +244,7 @@ Buf.prototype. addbinbuf	=function( bbuf, code )
 
 
 
-Buf.prototype. addobj	=function({ loc, dir, r, obj })
+Buf.prototype. addobj	=function( obj, loc, r, dir )
 {
 	dir	??=-1
 

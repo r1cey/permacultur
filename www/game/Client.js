@@ -36,7 +36,7 @@ Client.prototype. start	=async function()
 {
 	var p	=await this.html.loadp('login')
 
-	p.start(this.srv.send_login. bind(this.srv))
+	p.start(this.srv.sendlogin. bind(this.srv))
 
 
 	this.stream	=await navigator.mediaDevices.getUserMedia({audio:true})
@@ -46,14 +46,14 @@ Client.prototype. start	=async function()
 
 
 
-Client.prototype. createpl	=async function( name )
+/*Client.prototype. createpl	=async function( name )
 {
 	this.html.login.el.className='login'
 
 	var pg	=await this.html.loadp('createpl')
 	
-	pg.start( name, this.srv.s_newplayer. bind(this.srv))
-}
+	pg.start( name, this.srv.send. bind(this.srv, "newplayer" ) )
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 // import NS from '../../www/game/shared/NSpace.js'
 
-import ClS from './ClientSend.js'
+// import ClS from './ClientSend.js'
 
 import Loc from '../../www/game/shared/Loc.js'
 
@@ -8,17 +8,22 @@ import Loc from '../../www/game/shared/Loc.js'
 
 /*********************************************************************
  * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "on_" PREFIX
- * ******************************************************************/
+ * ******************************************************************
 
 export default class ClG extends ClS
 {
 
-}
+}*/
+
+
+var get	={}
+
+
+///////////////////////////////////////////////////////////////////////////////
 
 
 
-
-ClG.prototype. mov	=function([ loc ])
+get. mov	=function( loc )
 {
 	loc	=Loc.seta( loc )
 	
@@ -55,7 +60,7 @@ ClG.prototype. mov	=function([ loc ])
  * @arg {Object}	o.msg
  */
 
-ClG.prototype. wrtc	=function( o )
+get. wrtc	=function( o )
 {
 	var cl2	=this.game().pls[o.name].cl
 
@@ -77,7 +82,7 @@ ClG.prototype. wrtc	=function( o )
 	cl2.s.wrtc( o )
 }
 
-ClG.prototype. dig	=function( o )
+get. dig	=function( o )
 {
 	var tool	=o
 
@@ -88,7 +93,7 @@ ClG.prototype. dig	=function( o )
 /** @arg o.dir	- true is up
  * @arg o.loc	- pl loc */
 
-ClG.prototype. climb	=function( o )
+get. climb	=function( o )
 {
 	var pl	=this.pl
 
@@ -109,7 +114,7 @@ ClG.prototype. climb	=function( o )
 
 /** [ from[gpath], itemid, num, to[gpath] ] */
 
-ClG.prototype. movitem	=function([ from, itemid, len, to ])
+get. movitem	=function([ from, itemid, len, to ])
 {
 	var{ game }	=this
 
@@ -123,7 +128,7 @@ ClG.prototype. movitem	=function([ from, itemid, len, to ])
 
 /** { loc, objkey, act, params } */
 
-ClG.prototype. actonobj	=function( o )
+get. actonobj	=function( o )
 {
 	var loc	=o.loc
 
@@ -138,9 +143,13 @@ ClG.prototype. actonobj	=function( o )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+export default get
+
+/*
 for(var funn in ClG.prototype)
 {
 	ClG.prototype["on_"+funn]	=ClG.prototype[funn]
 
 	delete ClG.prototype[funn]
-}
+}*/

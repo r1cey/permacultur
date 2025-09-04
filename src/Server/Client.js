@@ -1,3 +1,7 @@
+import out	from "./ClientSend.js"
+
+import get from "./ClientGet.js"
+
 import V from '../../www/game/shared/Vec.js'
 
 import ClG from './ClientGet.js'
@@ -9,7 +13,7 @@ import JRev from '../JsonRevivr.js'
 
 
 
-export default class Client extends ClG
+export default class Client
 {
 	ws
 
@@ -18,6 +22,8 @@ export default class Client extends ClG
 	srv
 
 	get game()	{ return this.srv.game }
+
+	static get	=get
 
 	tc	=new Timecode( MapG.Bin.timecodelen )
 
@@ -30,7 +36,7 @@ export default class Client extends ClG
 
 	constructor(ws, pl, srv )
 	{
-		super()
+		// super()
 
 		Object.assign(this,{ srv, ws, pl })
 
@@ -54,13 +60,27 @@ export default class Client extends ClG
 
 
 
+Client.prototype. send	=function( fn, args )
+{
+	var[ outa, rep ]	=out[fn]. apply(this, args )
+
+	if( outa )	this.sendjson([ fn, outa ], rep )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 Client.prototype. onmsg	=function( data, isbin )
 {
 	console.log(`${this.pl.name}: WS msg: ${data.toString()}`)
 
 	var[ act, args ]	=JSON.parse( data.toString(), this.constructor.jrev.fn )
 
-	this["on_"+act]?.(...args)
+	get[act]?. apply(this, args )
+
+	// this["on_"+act]?.(...args)
 	
 	// console.error( `Client Msg: not found: ${prop}`)
 }

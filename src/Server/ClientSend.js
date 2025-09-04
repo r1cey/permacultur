@@ -4,26 +4,28 @@ import Loc from '../../www/game/shared/Loc.js'
 
 /********
  * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
- * ***/
+ * ***
 
 export default class ClS
 {
 	
-}
+}*/
+
+var out	={}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
-ClS.prototype. setpl	=function()
+out. setpl	=function()
 {
-	this.sendjson({ setpl: this.pl })
+	return[[ this.pl ]]
 }
 
 
 
-ClS.prototype. setmap	=function()
+out. setmap	=function()
 {
 	var{ pl }	=this
 
@@ -37,17 +39,16 @@ ClS.prototype. setmap	=function()
 
 	this.sendbin( slicedtr.bin.getbuf())
 
-	this.sendjson(
-		{
-			setmap:
-			{
-				obj	:{ gr :slicedgr.obj.o, tr :slicedtr.obj.o }
-				,
-				loc	:pl.loc
-				,
-				r	:pl.vision
-			}
-		}, ( key, val )=> key==="pl"&&pl.name===val.name ? val.name : val )
+	return[
+		[
+			{ gr :slicedgr.obj.o, tr :slicedtr.obj.o }
+			,
+			pl.loc
+			,
+			pl.vision
+		] ,
+		( key, val )=> key==="pl"&&pl.name===val.name ? val.name : val
+	]
 }
 
 
@@ -55,7 +56,7 @@ ClS.prototype. setmap	=function()
 
 
 
-ClS.prototype. mapaddobj	=function( map, loc, o )
+out. mapaddobj	=function( map, loc, o )
 {
 	this.sendjson({mapaddobj:
 		{
@@ -71,9 +72,9 @@ ClS.prototype. mapaddobj	=function( map, loc, o )
 /** @arg {string} act 
  * @arg {array} vals */
 
-ClS.prototype. mapset_	=function( map, act, loc, vals )
+out. mapset_	=function( map, act, loc, vals )
 {
-	this.sendjson({mapset_:
+	return [[
 		{
 			mapid	:map.bin.constructor.id
 			,
@@ -82,12 +83,12 @@ ClS.prototype. mapset_	=function( map, act, loc, vals )
 			vals
 			,
 			act
-		}})
+		} ]]
 }
 
 
 
-ClS.prototype. mapobjset	=function( map, loc, key )
+out. mapobjset	=function( map, loc, key )
 {
 	this.sendjson({mapobjset:
 		[
@@ -102,44 +103,39 @@ ClS.prototype. mapobjset	=function( map, loc, key )
 
 /** This client's player had moved. */
 
-ClS.prototype. clplmov	=function( delta )
+out. clplmov	=function( delta )
 {
-	var pl	=this.pl
+	var{ pl }	=this
 
-	var msg	=
-	{
-		loc	:pl.loc ,
-		dir	:Loc.dirv2dirh( delta ) ,
-		r	:pl.vision ,
-		obj	:
-		{
-			gr	:0 ,
-			tr	:0
-		}
-	}
+	var	loc	=pl.loc
+	
+	var dir	=Loc.dirv2dirh( delta )
 
-	var boards	=this.srv.game.maps.gshiftboards( msg.loc, msg.r, msg.dir )
+	var r	=pl.vision
+
+	var obj	={ gr	:0 , tr	:0 }
+
+	var boards	=this.srv.game.maps.gshiftboards( loc, r, dir )
 
 	for(var n in boards )
 	{
 		this.sendbin( boards[n].bin.getbuf() )
 
-		msg.obj[n]	=boards[n].obj
+		obj[n]	=boards[n].obj
 	}
-
-	this.sendjson({ clplmov : msg })
+	return[[ obj, loc, r, dir ]]
 }
 
 
-ClS.prototype. movrej	=function( newloc )
+out. movrej	=function( newloc )
 {
-	this.sendjson({ movrej :newloc })
+	return[[ newloc ]]
 }
 
 
 /** New player born. */
 
-ClS.prototype. newpl	=function( pl2 )
+out. newpl	=function( pl2 )
 {
 	this.sendjson({ newpl: pl2 })
 }
@@ -147,7 +143,7 @@ ClS.prototype. newpl	=function( pl2 )
 
 /** Different player connected */
 
-ClS.prototype.plconn	=function( pl2 )
+out. plconn	=function( pl2 )
 {
 	this.sendjson({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
 }
@@ -156,7 +152,7 @@ ClS.prototype.plconn	=function( pl2 )
 
 /** Assumes player has already climbed */
 
-ClS.prototype. clplclimb	=function( dir )
+out. clplclimb	=function( dir )
 {
 	this.sendjson({ clplclimb: { dir, newloc: this.pl.loc }})
 }
@@ -195,7 +191,7 @@ Send.prototype. water	=function()
 
 /** Player object should have old location still. */
 
-ClS.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
+out. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 {
 	var pl	=this.cl.pl
 
@@ -210,22 +206,22 @@ ClS.prototype. plmov	=function( clid, pl2n, newloc, seen, pl2 )
 
 
 
-ClS.prototype. actonobj	=function( loc, key, act, params )
+out. actonobj	=function( loc, key, act, params )
 {
 	this.sendjson({actonobj:{ loc, key, act, params }})
 }
 
 
 
-ClS.prototype. wrtc	=function( o )
+out. wrtc	=function( o )
 {
-	this.sendjson({ wrtc: o })
+	return[[ o ]]
 }
 
 
-ClS.prototype. error	=function( str )
+out. error	=function( str )
 {
-	this.sendjson({ error: str })
+	return[[ str ]]
 }
 
 
@@ -233,6 +229,10 @@ ClS.prototype. error	=function( str )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+export default out
+
+
+/*
 for(var funn in ClS.prototype)
 {
 	ClS.prototype["send_"+funn]	=ClS.prototype[funn]
@@ -240,4 +240,4 @@ for(var funn in ClS.prototype)
 	ClS.prototype["s_"+funn]	=ClS.prototype[funn]
 
 	delete ClS.prototype[funn]
-}
+}*/

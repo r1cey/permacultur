@@ -5,11 +5,13 @@ import Loc from './shared/Loc.js'
 import Maps	from './maps/Maps.js'
 
 
-
+/*
 export default class SG
 {
 	
-}
+}*/
+
+var get	={}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,13 +26,13 @@ export default class SG
 
 /** Player with [name] doesn't exist and needs to be created. */
 
-SG.prototype. createpl	=async function( name )
+get. createpl	=async function( name )
 {
 	this.cl.html.delpage('login')
 
 	var pg	=await this.cl.html.loadp('createpl')
 	
-	pg.start( name, this.send_newplayer. bind(this))
+	pg.start( name, this.sendjson. bind(this) )
 }
 
 
@@ -40,7 +42,7 @@ SG.prototype. createpl	=async function( name )
 
 /** This is your player. */
 
-SG.prototype. setpl	=function( plmsg )
+get. setpl	=function( plmsg )
 {
 	// debugger
 
@@ -56,9 +58,9 @@ SG.prototype. setpl	=function( plmsg )
  * @arg {obj} o.obj	-{gr, tr}
  */
 
-SG.prototype. setmap	=function( msg )
+get. setmap	=function( obj, loca, r )
 {
-	this.buf.addobj( msg )
+	this.buf.addobj( obj, new Loc().seta(loca), r )
 }
 
 
@@ -68,7 +70,7 @@ SG.prototype. setmap	=function( msg )
  * @arg {PlVis[]} o.pls
  *
 
-SG.prototype. units	=function( o )
+get. units	=function( o )
 {
 	for(var i=0;i<o.pls.length; i++)
 	{
@@ -81,7 +83,7 @@ SG.prototype. units	=function( o )
 
 
 
-SG.prototype. clpl_setitem	=function([ key, item ])
+get. clpl_setitem	=function([ key, item ])
 {
 	item	? this.cl.pl.inv[key] =this.jsonparse(item,key) : delete this.cl.pl.inv[key]
 
@@ -91,7 +93,7 @@ SG.prototype. clpl_setitem	=function([ key, item ])
 
 /**@todo Validate everything. */
 
-SG.prototype. clpl_setitem	=function([ path, item, key ])
+get. clpl_setitem	=function([ path, item, key ])
 {
 	var cnt	=this.cl
 
@@ -110,7 +112,7 @@ SG.prototype. clpl_setitem	=function([ path, item, key ])
  * @arg o.loc
  * @arg {array}	o.vals */
 
-SG.prototype. mapset_	=function( o )
+get. mapset_	=function( o )
 {
 	var map	=this.cl.maps.fromid( o.mapid )
 
@@ -129,7 +131,7 @@ SG.prototype. mapset_	=function( o )
 /** @arg {*} obj	- the added object is under their key
  * 		for automatic json parsing */
 
-SG.prototype. map_additem	=function([ loc, key, obj ])
+get. map_additem	=function([ loc, key, obj ])
 {
 	loc	=new Loc(loc)
 
@@ -142,14 +144,14 @@ SG.prototype. map_additem	=function([ loc, key, obj ])
 
 /** This is your new water level. */
 
-SG.prototype. plwater	=function( lvl )
+get. plwater	=function( lvl )
 {
 	this.cl.pl.water	=lvl
 }
 
 
 
-SG.prototype. plheat	=function( lvl )
+get. plheat	=function( lvl )
 {
 	// console.log(lvl)
 
@@ -168,15 +170,15 @@ SG.prototype. plheat	=function( lvl )
  * @arg {Array} 	msg.obj.tr
  */
 
-SG.prototype. clplmov	=function( msg )
+get. clplmov	=function( obj, loca, r, dir )
 {
-	this.buf.addobj( msg )
+	this.buf.addobj( obj, new Loc().seta(loca), r, dir )
 }
 
 
 /** { loc } */
 
-SG.prototype. movrej	=function( msg )
+get. movrej	=function( msg )
 {
 	this.cl.pl.rejmov()
 }
@@ -191,7 +193,7 @@ SG.prototype. movrej	=function( msg )
  * @arg [o.name]
 */
 
-SG.prototype. plmov	=function( o )
+get. plmov	=function( o )
 {
 	var vispls	=this.srv.cl.vispls
 
@@ -226,7 +228,7 @@ SG.prototype. plmov	=function( o )
  *@arg	o.cl
  */
 
-SG.prototype. plconn	=function( o )
+get. plconn	=function( o )
 {
 	var cl	=this.cl()
 
@@ -244,7 +246,7 @@ SG.prototype. plconn	=function( o )
 
 /** New player was created. */
 
-SG.prototype. newpl	=function( pl2visa )
+get. newpl	=function( pl2visa )
 {
 	var pl2vis	=new Pl.Vis(pl2visa, true, this.srv.cl )
 
@@ -264,7 +266,7 @@ SG.prototype. newpl	=function( pl2visa )
  * @arg	[o.msg.icecandi]
  */
 
-SG.prototype. wrtc	=async function( o )
+get. wrtc	=async function( o )
 {
 	var pcl	=this.cl().genepcl( o.name, false )
 
@@ -294,7 +296,7 @@ SG.prototype. wrtc	=async function( o )
  * @arg o.dir
  */
 
-SG.prototype. clplclimb	=function( o )
+get. clplclimb	=function( o )
 {
 	var pl	=this.cl.pl
 
@@ -317,17 +319,25 @@ SG.prototype. clplclimb	=function( o )
 
 /** { loc, key, act, params } */
 
-SG.prototype. actonobj	=function( o )
+get. actonobj	=function( o )
 {
 	var map	=this.cl.maps.loc2map( o.loc )
 
 	map.obj.g(o.loc)[o.key][o.act]( ... o.params )
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
+export default get
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/*
 class Mapbuf
 {
 	srv
@@ -347,7 +357,7 @@ class Mapbuf
 }
 
 
-/** @return {bool} */
+/** @return {bool} *
 
 Mapbuf.prototype. add	=function( loc, r )
 {
@@ -412,9 +422,9 @@ class Mapshbuf extends Mapbuf
 
 
 
-for(var funn in SG.prototype)
+/*for(var funn in get)
 {
-	SG.prototype["on_"+funn]	=SG.prototype[funn]
+	get["on_"+funn]	=get[funn]
 
-	delete SG.prototype[funn]
-}
+	delete get[funn]
+}*/

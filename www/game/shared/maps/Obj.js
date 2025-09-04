@@ -38,7 +38,6 @@ Obj.prototype. get	=function(loc)
 }
 
 Obj.prototype. g	=Obj.prototype. get
-// Bo.prototype. getcello	=Bo.prototype. gcello
 
 
 

@@ -123,23 +123,25 @@ Server.prototype. onmsg	=function( ws, ip, data, isbin )
 
 	try
 	{
-		var[ name, newpl ]	=JSON.parse( str, this.constructor.jrev.fn )
+		var plmsg	=JSON.parse( str, this.constructor.jrev.fn )
 	}
 	catch(err)
 	{
 		return
 	}
-	if(	this.cls.o[name] )
+	var pln	=plmsg.name
+
+	if(	this.cls.o[pln] )
 	{
 		ws.close( 4123, 'Player already connected!' )
 
 		return
 	}
-	var pl	=this.game.pls.o[name]
+	var pl	=this.game.pls.o[pln]
 
 	if( pl )
 	{
-		console.log( "Connecting player: "+name )
+		console.log( "Connecting player: "+pln )
 
 		this.cls.new( ws, pl )
 	}
@@ -149,15 +151,15 @@ Server.prototype. onmsg	=function( ws, ip, data, isbin )
 
 		ws.close( 4124, "Too many players on server :(")
 	}
-	else if( newpl  )
+	else if( plmsg.col  )
 	{
 		this.cls.new( ws, this.game.pls.new( plmsg ) )
 	}
 	else
 	{
-		console.log( `No ${name} player found. Create new.`)
+		console.log( `No ${pln} player found. Create new.`)
 
-		ws.send( `["createpl", ["${name}"]]` )
+		ws.send( `["createpl", ["${pln}"]]` )
 	}
 }
 
