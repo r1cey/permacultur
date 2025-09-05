@@ -18,6 +18,8 @@ export default class Item	extends Jable
 
 	constructor( obj, num )
 	{
+		super()
+		
 		this.set( obj )
 		// Object.assign( this, obj )
 
