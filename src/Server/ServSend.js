@@ -41,7 +41,7 @@ SSe.prototype. mapset_	=function( map, act, loc, vals )
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send_mapset_( map, act, loc, vals )
+			cl.send("mapset_", map, act, loc, vals )
 		}
 	}
 }
@@ -96,9 +96,9 @@ SSe.prototype. plmov	=function( pl, oldloc )
 {
 	var newloc	=pl.loc
 
-	var delta	=Loc.set(newloc).subv(oldloc)
+	var delta	=new Loc().set(newloc).subv(oldloc)
 
-	if( pl.cl && ! delta.h )	pl.cl.s_clplmov( delta )
+	if( pl.cl && ! delta.h )	pl.cl.send("clplmov", delta )
 
 	for(var n in this.cls.o )
 	{
@@ -110,7 +110,7 @@ SSe.prototype. plmov	=function( pl, oldloc )
 
 		if( pl2.sees(newloc) || seesoldloc)
 		{
-			pl2.cl.s_plmov( pl, delta, seesoldloc )
+			pl2.cl.send("plmov", pl, delta, seesoldloc )
 		}
 	}
 }

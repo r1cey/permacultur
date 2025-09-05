@@ -60,7 +60,7 @@ export default class Client
 
 
 
-Client.prototype. send	=function( fn, args )
+Client.prototype. send	=function( fn, ...args )
 {
 	var[ outa, rep ]	=out[fn]. apply(this, args )
 

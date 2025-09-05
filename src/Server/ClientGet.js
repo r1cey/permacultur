@@ -23,9 +23,9 @@ var get	={}
 
 
 
-get. mov	=function( loc )
+get. mov	=function( loca )
 {
-	loc	=Loc.seta( loc )
+	var loc	=new Loc().seta( loca )
 	
 	var{ pl }	=this
 
@@ -33,7 +33,7 @@ get. mov	=function( loc )
 
 	if( ! map.canplmov( loc, pl ))
 	{
-		this.send_movrej( loc )
+		this.send("movrej", loc )
 
 		return
 	}

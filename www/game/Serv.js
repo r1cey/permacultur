@@ -1,5 +1,5 @@
 import out from './ServSend.js'
-import get	from "./ServGet.js"
+import on	from "./ServGet.js"
 
 import Gr from './maps/Ground.js'
 import Tr from './maps/Trees.js'
@@ -26,7 +26,7 @@ export default class Serv
 
 	jrev	//json reviver
 
-	get	=get
+	static on	=on
 
 	buf	=new Buf(this)
 
@@ -106,7 +106,7 @@ Serv.prototype. sendlogin	=function( o )
 
 
 
-Serv.prototype. send	=function( fn, args )
+Serv.prototype. send	=function( fn, ...args )
 {
 	var[ outa, rep ]	=out[fn]. apply(this, args )
 
@@ -152,7 +152,7 @@ Serv.prototype. onmsg	=function( ev )
 	{
 		let[ act, args ]	=JSON.parse(ev.data, this.jrev.fn )
 
-		this.get[act]?. apply(this, args )
+		on[act]?. apply(this, args )
 
 		// this["on_"+act]?.( ...args )
 

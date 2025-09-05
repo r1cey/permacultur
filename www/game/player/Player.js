@@ -175,7 +175,7 @@ Player.prototype. onmov	=function( newloc )
 	{
 		this.ismovack	=false
 
-		this.lcl.srv.send_mov( newloc )
+		this.lcl.srv.send("mov", newloc )
 
 		return true
 	}

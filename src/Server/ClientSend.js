@@ -74,16 +74,17 @@ out. mapaddobj	=function( map, loc, o )
 
 out. mapset_	=function( map, act, loc, vals )
 {
-	return [[
-		{
-			mapid	:map.bin.constructor.id
+	return [
+		[
+			map.bin.constructor.id
 			,
 			loc
 			,
-			vals
-			,
 			act
-		} ]]
+			,
+			vals
+		]
+	]
 }
 
 

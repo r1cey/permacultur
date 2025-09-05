@@ -37,7 +37,7 @@ Obj.prototype. read	=async function( path )
 	{
 		if( val?.pl )
 		{
-			pls[ val.pl.name ]	=key
+			pls[ val.pl ]	=key
 
 			return val
 		}

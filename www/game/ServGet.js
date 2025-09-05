@@ -11,7 +11,7 @@ export default class SG
 	
 }*/
 
-var get	={}
+var on	={}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ var get	={}
 
 /** Player with [name] doesn't exist and needs to be created. */
 
-get. createpl	=async function( name )
+on. createpl	=async function( name )
 {
 	this.cl.html.delpage('login')
 
@@ -42,7 +42,7 @@ get. createpl	=async function( name )
 
 /** This is your player. */
 
-get. setpl	=function( plmsg )
+on. setpl	=function( plmsg )
 {
 	// debugger
 
@@ -58,7 +58,7 @@ get. setpl	=function( plmsg )
  * @arg {obj} o.obj	-{gr, tr}
  */
 
-get. setmap	=function( obj, loca, r )
+on. setmap	=function( obj, loca, r )
 {
 	this.buf.addobj( obj, new Loc().seta(loca), r )
 }
@@ -70,7 +70,7 @@ get. setmap	=function( obj, loca, r )
  * @arg {PlVis[]} o.pls
  *
 
-get. units	=function( o )
+on. units	=function( o )
 {
 	for(var i=0;i<o.pls.length; i++)
 	{
@@ -83,7 +83,7 @@ get. units	=function( o )
 
 
 
-get. clpl_setitem	=function([ key, item ])
+on. clpl_setitem	=function([ key, item ])
 {
 	item	? this.cl.pl.inv[key] =this.jsonparse(item,key) : delete this.cl.pl.inv[key]
 
@@ -93,7 +93,7 @@ get. clpl_setitem	=function([ key, item ])
 
 /**@todo Validate everything. */
 
-get. clpl_setitem	=function([ path, item, key ])
+on. clpl_setitem	=function([ path, item, key ])
 {
 	var cnt	=this.cl
 
@@ -112,26 +112,24 @@ get. clpl_setitem	=function([ path, item, key ])
  * @arg o.loc
  * @arg {array}	o.vals */
 
-get. mapset_	=function( o )
+on. mapset_	=function( mapid, loca, act, vals )
 {
-	var map	=this.cl.maps.fromid( o.mapid )
+	var map	=this.cl.maps.fromid( mapid )
 
-	var act	=o.act
-
-	var loc	=o.loc
+	var loc	=new Loc().seta(loca)
 
 	if( map !== this.cl.maps.loc2map( loc ))
 	{
-		console.error("srv.on_mapset_", o.act, o.loc, o.vals )
+		console.error("srv.on_mapset_", act, loc, vals )
 	}
-	map["set"+act]( loc, ...o.vals )
+	map["set"+act]( loc, ...vals )
 }
 
 
 /** @arg {*} obj	- the added object is under their key
  * 		for automatic json parsing */
 
-get. map_additem	=function([ loc, key, obj ])
+on. map_additem	=function([ loc, key, obj ])
 {
 	loc	=new Loc(loc)
 
@@ -144,14 +142,14 @@ get. map_additem	=function([ loc, key, obj ])
 
 /** This is your new water level. */
 
-get. plwater	=function( lvl )
+on. plwater	=function( lvl )
 {
 	this.cl.pl.water	=lvl
 }
 
 
 
-get. plheat	=function( lvl )
+on. plheat	=function( lvl )
 {
 	// console.log(lvl)
 
@@ -170,15 +168,15 @@ get. plheat	=function( lvl )
  * @arg {Array} 	msg.obj.tr
  */
 
-get. clplmov	=function( obj, loca, r, dir )
+on. clplmov	=function( obj, loca, r, dir )
 {
-	this.buf.addobj( obj, new Loc().seta(loca), r, dir )
+	this.buf.addobj( obj ,new Loc().seta(loca) ,r ,dir )
 }
 
 
 /** { loc } */
 
-get. movrej	=function( msg )
+on. movrej	=function( msg )
 {
 	this.cl.pl.rejmov()
 }
@@ -193,7 +191,7 @@ get. movrej	=function( msg )
  * @arg [o.name]
 */
 
-get. plmov	=function( o )
+on. plmov	=function( o )
 {
 	var vispls	=this.srv.cl.vispls
 
@@ -228,7 +226,7 @@ get. plmov	=function( o )
  *@arg	o.cl
  */
 
-get. plconn	=function( o )
+on. plconn	=function( o )
 {
 	var cl	=this.cl()
 
@@ -246,7 +244,7 @@ get. plconn	=function( o )
 
 /** New player was created. */
 
-get. newpl	=function( pl2visa )
+on. newpl	=function( pl2visa )
 {
 	var pl2vis	=new Pl.Vis(pl2visa, true, this.srv.cl )
 
@@ -266,7 +264,7 @@ get. newpl	=function( pl2visa )
  * @arg	[o.msg.icecandi]
  */
 
-get. wrtc	=async function( o )
+on. wrtc	=async function( o )
 {
 	var pcl	=this.cl().genepcl( o.name, false )
 
@@ -296,7 +294,7 @@ get. wrtc	=async function( o )
  * @arg o.dir
  */
 
-get. clplclimb	=function( o )
+on. clplclimb	=function( o )
 {
 	var pl	=this.cl.pl
 
@@ -319,7 +317,7 @@ get. clplclimb	=function( o )
 
 /** { loc, key, act, params } */
 
-get. actonobj	=function( o )
+on. actonobj	=function( o )
 {
 	var map	=this.cl.maps.loc2map( o.loc )
 
@@ -331,7 +329,7 @@ get. actonobj	=function( o )
 
 
 
-export default get
+export default on
 
 
 ///////////////////////////////////////////////////////////////////////////////

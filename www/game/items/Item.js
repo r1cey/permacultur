@@ -4,12 +4,11 @@ import ShIt	from "../shared/items/Item.js"
 
 export default class It	extends ShIt
 {
-	img
+	// img
 }
 
 
 
-It.prototype. draw	=function( can )
+It.prototype. draw	=function( can, lov, vbuf )
 {
-	
 }

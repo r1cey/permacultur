@@ -132,6 +132,8 @@ Player.prototype. clclosed	=function()
 
 Player.prototype. mov	=function( loc )
 {
+	var pl	=this
+
 	var{loc: curloc }	=pl
 
 	var map	=pl.map()
