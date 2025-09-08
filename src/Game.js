@@ -154,13 +154,33 @@ G.prototype. rempls	=async function()
 
 
 
-G.prototype. parsePath	=function( path )
+G.prototype. path2obj	=function( path )
 {
 	var obj	=this
 
-	for(var n of path )	obj	=obj.getobj(n)
-	
+	for(var n of path )
+	{
+		obj	=obj.getobj(n)
+
+		if( ! obj )	return
+	}
 	return obj
+}
+
+
+
+G.prototype. path2loc	=function( path )
+{
+	switch( this.getobj(path[0]) )
+	{
+		case this.pls :
+
+			return this.pls.getobj( path[1] ).loc
+		break
+		case this.maps :
+
+			return new Loc().seta( path[1] )
+	}
 }
 
 

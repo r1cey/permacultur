@@ -53,9 +53,9 @@ out. climb	=function( dir, loc )
 
 
 
-out. actonobj	=function( loc, objkey, act, params )
+out. actonobj	=function( path, act, params )
 {
-	this.sendjson({actonobj:{ loc, objkey, act, params }})
+	return[[ path, act, params ]]
 }
 
 

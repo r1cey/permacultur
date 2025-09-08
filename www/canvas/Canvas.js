@@ -299,7 +299,9 @@ Can.prototype. clicked	=function( possqel )
 	}
 	else
 	{
-		let pl	=can.pl
+		let srv	=can.cl().srv
+
+		let{ pl }	=can
 
 		let ploc	=pl.loc
 
@@ -329,7 +331,7 @@ Can.prototype. clicked	=function( possqel )
 			{
 				menu.addopt( "climb", ()=> can.pl.climb(loc) )
 			}
-			if( pl.hands.o.cucumber_seeds && map.plantable?.( loc ))
+			if( pl.hands.item?.constructor.key=="cucumber_seeds" && map.plantable?.( loc ))
 			{
 				menu.addopt( "plant cucumbers", ()=> console.log("planted") )
 			}
@@ -339,13 +341,39 @@ Can.prototype. clicked	=function( possqel )
 			{
 				if( o.dewd )
 				{
-					menu.addopt( "rotate right" ,()=>
+					let opath	=["maps",loc,"dewd"]
+
+					menu.addopt( "rotate CW" ,()=>
 					{
-						can.cl().srv.send_actonobj( loc, "dewd", "rot", [1] )
+						srv.send("actonobj", opath, "rot", [1] )
 					})
-					menu.addopt( "rotate left" ,()=>
+					menu.addopt( "rotate CCW" ,()=>
 					{
-						can.cl().srv.send_actonobj( loc, "dewd", "rot", [-1] )
+						srv.send("actonobj", opath, "rot", [-1] )
+					})
+					menu.addopt( "move N", ()=>
+					{
+						srv.send("actonobj", opath, "move", [2] )
+					})
+					menu.addopt( "move NE", ()=>
+					{
+						srv.send("actonobj", opath, "move", [1] )
+					})
+					menu.addopt( "move SE", ()=>
+					{
+						srv.send("actonobj", opath, "move", [0] )
+					})
+					menu.addopt( "move S", ()=>
+					{
+						srv.send("actonobj", opath, "move", [5] )
+					})
+					menu.addopt( "move SW", ()=>
+					{
+						srv.send("actonobj", opath, "move", [4] )
+					})
+					menu.addopt( "move NW", ()=>
+					{
+						srv.send("actonobj", opath, "move", [3] )
 					})
 				}
 			}

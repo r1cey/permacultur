@@ -118,25 +118,37 @@ get. movitem	=function([ from, itemid, len, to ])
 {
 	var{ game }	=this
 
-	from	=game.parsePath( from )
+	from	=game.path2obj( from )
 
-	to	=game.parsePath( to )
+	to	=game.path2obj( to )
 
 	this.pl.movitem( from, itemid, len, to )
 }
 
 
-/** { loc, objkey, act, params } */
+/** path[], act, params[] */
 
-get. actonobj	=function( o )
+get. actonobj	=function( path, act, params )
 {
-	var loc	=o.loc
+	var{ game, pl }	=this
 
-	var map	=this.srv.game.maps.loc2map( loc )
+	var tgt	=game.path2obj(path)
 
-	var obj	=map?.obj.g(loc)?.[o.objkey]
+	if( ! tgt )
+	{
+		this.send("error", `Object ${path.at(-1)} not found.` )
 
-	if( obj )	this.pl.actonobj( loc, obj, o.act, o.params, o.objkey )
+		return
+	}
+	var tgtloc	=game.path2loc(path)
+
+	if( tgtloc.disth( pl.loc ) > 1 )
+	{
+		this.send("error", `Distance to ${path.at(-1)} too far.` )
+
+		return
+	}
+	pl.actonobj( tgt, act, params )
 }
 
 
