@@ -132,14 +132,6 @@ get. actonobj	=function( path, act, params )
 {
 	var{ game, pl }	=this
 
-	var tgt	=game.path2obj(path)
-
-	if( ! tgt )
-	{
-		this.send("error", `Object ${path.at(-1)} not found.` )
-
-		return
-	}
 	var tgtloc	=game.path2loc(path)
 
 	if( tgtloc.disth( pl.loc ) > 1 )
@@ -148,7 +140,7 @@ get. actonobj	=function( path, act, params )
 
 		return
 	}
-	pl.actonobj( tgt, act, params )
+	pl.actonobj( path, act, params )
 }
 
 

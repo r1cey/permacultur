@@ -33,9 +33,9 @@ t.Dewd	=class extends Item
 	}
 
 
-	rot( dir )
+	sim_rot( dir )
 	{
-		this.dir	=Loc.roth( this.dir, dir )
+		return Loc.roth( this.dir, dir )
 	}
 
 

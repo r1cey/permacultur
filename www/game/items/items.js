@@ -1,4 +1,4 @@
-import its	from "../shared/items/items.js"
+import sh_its	from "../shared/items/items.js"
 import Hold from "../Holder.js"
 import Item from "./Item.js"
 import Bag	from "./Box.js"
@@ -6,7 +6,14 @@ import Bag	from "./Box.js"
 import{ mixin }	from "../shared/utils.js"
 
 
-its.Belt	=mixin([ its.Belt, Item, Hold ],class
+
+var its	={}
+
+Object.assign( its, sh_its )
+
+
+
+its.Belt	=mixin([ sh_its.Belt, Item, Hold ],class
 {
 	attachhtmlinv( htmlinv )
 	{
@@ -21,7 +28,7 @@ its.Belt	=mixin([ its.Belt, Item, Hold ],class
 
 
 
-its.Seedbag	=mixin([ its.Seedbag, Bag ],class
+its.Seedbag	=mixin([ sh_its.Seedbag, Bag ],class
 {
 	attachhtmlinv( htmlinv )
 	{
@@ -36,4 +43,20 @@ its.Seedbag	=mixin([ its.Seedbag, Bag ],class
 
 
 
-export default its
+its.Dewd	=mixin([ Item, sh_its.Dewd ],class
+{
+	rot( dir, srv )
+	{
+		var newdir	=this.sim_rot( dir )
+
+		srv.send()
+
+		sh_its.Dewd.prototype.rot. call(this, dir )
+
+
+	}
+} )
+
+
+
+export default sh_its

@@ -1,14 +1,32 @@
 import ShIt	from "../shared/items/Item.js"
 
+import Cl	from "../Client.js"
 
 
-export default class It	extends ShIt
+
+export default class Item extends ShIt
 {
-	// img
-}
+	dad
+
+	static imgmap
+
+	static img
 
 
 
-It.prototype. draw	=function( can, lov, vbuf )
-{
+	getcl()
+	{
+		var obj	=this.dad
+
+		while( !( obj instanceof Cl ) )	obj	=obj.dad
+	}
+
+
+
+	draw( can, lov, vbuf )
+	{
+	}
+
+
+
 }

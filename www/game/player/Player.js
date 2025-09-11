@@ -165,6 +165,19 @@ Player.prototype. attachhtmlinv	=function( htmlinv )
 }
 
 
+/*
+Player.prototype. lcl_acto	=function( path ,actk ,args )
+{
+	var{ lcl }	=this
+
+	var obj	=lcl.path2obj( path )
+
+	// if( ! obj )	
+
+	lcl.srv.send("actobj", path, actk, args )
+}*/
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

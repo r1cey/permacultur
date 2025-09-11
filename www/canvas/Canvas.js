@@ -343,6 +343,8 @@ Can.prototype. clicked	=function( possqel )
 				{
 					let opath	=["maps",loc,"dewd"]
 
+					let dewd	=o.dewd
+
 					menu.addopt( "rotate CW" ,()=>
 					{
 						srv.send("actonobj", opath, "rot", [1] )

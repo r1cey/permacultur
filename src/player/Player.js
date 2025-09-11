@@ -221,13 +221,11 @@ Player.prototype. climb	=function( hdir )
 }
 
 
-Player.prototype. actonobj	=function( loc, obj, act, params, objkey )
+Player.prototype. actonobj	=function( path, act, params )
 {
-	if( this.loc.disth( loc ) > 1 )	return
+	if( obj[act]( ...params ) )
 
-	obj[act]( ... params )
-
-	this.srv?.send_plactonobj( this, loc, objkey, act, params )
+		this.srv?.send_plactonobj( this, loc, objkey, act, params )
 }
 
 
