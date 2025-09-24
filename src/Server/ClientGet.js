@@ -126,6 +126,25 @@ get. movitem	=function([ from, itemid, len, to ])
 }
 
 
+
+get. rotobj	=function( loca ,key ,dir )
+{
+	var loc	=new Loc().seta(loca)
+
+	if( loc.disth( pl.loc ) > 1 )
+	{
+		this.send("error" ,`Distance to ${loc} too far.` )
+
+		return
+	}
+	/**@todo check that item exists */
+
+	var item	=pl.map().obj.g(loc)[key]
+
+	pl.rotobj( loc ,item ,dir )
+}
+
+
 /** path[], act, params[] */
 
 get. actonobj	=function( path, act, params )

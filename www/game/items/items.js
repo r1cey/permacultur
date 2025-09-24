@@ -45,15 +45,9 @@ its.Seedbag	=mixin([ sh_its.Seedbag, Bag ],class
 
 its.Dewd	=mixin([ Item, sh_its.Dewd ],class
 {
-	rot( dir, srv )
+	rot( dir )
 	{
-		var newdir	=this.sim_rot( dir )
-
-		srv.send()
-
-		sh_its.Dewd.prototype.rot. call(this, dir )
-
-
+		this.dir	=dir
 	}
 } )
 

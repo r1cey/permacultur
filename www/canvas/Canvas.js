@@ -341,13 +341,15 @@ Can.prototype. clicked	=function( possqel )
 			{
 				if( o.dewd )
 				{
-					let opath	=["maps",loc,"dewd"]
+					let key	="dewd"
 
-					let dewd	=o.dewd
+					// let opath	=["maps",loc,"dewd"]
+
+					let item	=o.dewd
 
 					menu.addopt( "rotate CW" ,()=>
 					{
-						srv.send("actonobj", opath, "rot", [1] )
+						srv.send("rotobj" ,loc ,key ,item.sim_rot(1) )
 					})
 					menu.addopt( "rotate CCW" ,()=>
 					{

@@ -315,6 +315,21 @@ on. clplclimb	=function( o )
 }
 
 
+
+on. rotobj	=function( loca ,key ,dir ,pln )
+{
+	var{ cl }	=this
+
+	var loc		=new Loc().seta(loc)
+
+	/**@todo if item moved, fix it */
+
+	var item	=cl.maps.loc2map(loc).obj.g(loc)[key]
+
+	item.rot( dir )
+}
+
+
 /** { loc, key, act, params } */
 
 on. actonobj	=function( o )
