@@ -1,4 +1,5 @@
 import Item from "./Item.js"
+import Cont	from "./Container.js"
 import Box	from "./Box.js"
 import Loc	from "../Loc.js"
 import{ rnd }	from "../utils.js"
@@ -60,21 +61,53 @@ t.Dewd	=class extends Item
 }
 
 
-t.Belt	=class extends Item
+t.Belt	=class extends Cont
 {
 	static vol	=Math.floor(15*15*10/125)
 
 	static key	="belt"
+
+	inv	=
+	{
+		seedbags	:{}
+	}
+
+
+	additem( item )
+	{
+		var inv	=this.inv
+
+		switch( item.constructor.key )
+		{
+			case "multi" :
+
+				if( inv.multi )	return false
+
+				inv.multi	=item
+			break
+			default :
+
+				return false
+		}
+		return true
+	}
 }
 
 
 t.Seedbag	=class extends Box
 {
 	static vol	=Math.floor(40*25*20/125)
-
+ 
 	static boxvol	=Math.floor(55*45*45/125)
 
 	static key	="seedbag"
+}
+
+
+
+t.Multi	=class extends Item
+{
+	static key	="multi"
 }
 
 

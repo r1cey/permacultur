@@ -9,6 +9,7 @@ import * as fs from '../fs.js'
 import Hands from '../../www/game/shared/player/Hands.js'
 import Item from "../../www/game/shared/items/Item.js"
 import JRev from "../JsonRevivr.js"
+import items	from "../../www/game/shared/items/items.js"
 
 
 
@@ -96,6 +97,18 @@ Pls.prototype. new	=function( plmsg )
 
 	var pl	=new Pl( plmsg, g )
 
+	pl.additem( new items.Belt() )
+
+	pl.inv.belt.additem( new items.Multi() )
+
+	pl.additem( new items.Seedbag() )
+
+	for(let bagid in pl.inv.seedbags )
+	{
+		pl.inv.seedbags[bagid].additem( new items.CucumberSeed( null ,15 ) )
+
+		break
+	}
 	var spawns	=map.obj.o.spawns
 
 	// var loc	=spawns[0].c()
@@ -132,7 +145,7 @@ Pls.prototype. new	=function( plmsg )
 		},
 		null, spawns[0] )
 	}
-	g.srv?.send_newpl( pl )
+	g.srv?.send("newpl", pl )
 
 	return pl
 }

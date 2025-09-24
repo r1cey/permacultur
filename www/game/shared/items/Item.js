@@ -27,11 +27,22 @@ export default class Item	extends Jable
 	}
 
 
-	/** Doesn't reduce from obj.
-	 * @returns new obj or this. */
+	/** @returns new obj or this. */
 	take( l )
 	{
-		return l<this.num	? new this.constructor(this,l)	: this
+		var out
+
+		if( l < this.num )
+		{
+			out	=new this.constructor( this ,l )
+
+			this.num	-= l
+		}
+		else
+		{
+			out	=this
+		}
+		return 	out
 	}
 
 

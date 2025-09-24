@@ -13,11 +13,11 @@ Object.assign( its, sh_its )
 
 
 
-its.Belt	=mixin([ sh_its.Belt, Item, Hold ],class
+its.Belt	=mixin( sh_its.Belt ,Item ,Hold ,class
 {
-	attachhtmlinv( htmlinv )
+	attachhtmlinv( htmlinv_dad )
 	{
-		this.htmlobj	=htmlinv.addbelt( this )
+		this.htmlinv	=htmlinv.addbelt( this )
 
 		for(var itemn in this.o )
 		{
@@ -43,7 +43,7 @@ its.Seedbag	=mixin([ sh_its.Seedbag, Bag ],class
 
 
 
-its.Dewd	=mixin([ Item, sh_its.Dewd ],class
+its.Dewd	=mixin( sh_its.Dewd ,Item ,class
 {
 	rot( dir )
 	{
@@ -53,4 +53,4 @@ its.Dewd	=mixin([ Item, sh_its.Dewd ],class
 
 
 
-export default sh_its
+export default its

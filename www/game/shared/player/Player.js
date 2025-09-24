@@ -253,14 +253,39 @@ Pl.prototype. getobj	=function( id )
 }
 
 
+/** @returns true if added */
 
-Pl.prototype. additem	=function( item, num )
+Pl.prototype. additem	=function( item )
 {
-	var newitem	=item.take( 1 )
+	var key	=item.constructor.key
 
-	var additem	=this.inv[item.constructor.name]	??=newitem
+	switch( key )
+	{
+		case "belt" :
 
-	return additem===newitem	? 1	: 0
+			this.inv.belt	=item
+		break
+		case "seedbag" :
+
+			let bags	=this.inv.seedbags
+
+			let bagsl	=0
+
+			for(var bagid in bags )
+			{
+				bagsl ++
+			}
+			if( bagsl >= 15 )	return false
+
+			if( ! item.id )	item.setuniq()
+
+			bags[item.id]	=item
+		break
+		default :
+
+			return false
+	}
+	return true
 }
 
 

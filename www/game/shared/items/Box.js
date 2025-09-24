@@ -87,6 +87,20 @@ Box.prototype. delitem	=function( item, num =1, dadbox )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+Box.prototype. mov2uniq	=function( cnt )
+{
+	var key	=cnt.constructor.key
+
+	if( this.items[key].num <= 0 )	delete this.items[key]
+
+	this.cnts[cnt.id]	=cnt
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 Box.prototype. calcitemvol	=function()
 {
 	var vol	=0

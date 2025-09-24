@@ -28,7 +28,10 @@ export default class PlVis	extends Jable
 
 	hands	=new Hands()
 
-	inv	={}
+	inv	=
+	{
+		seedbags	:{}
+	}
 }
 
 

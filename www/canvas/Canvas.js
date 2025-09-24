@@ -317,9 +317,9 @@ Can.prototype. clicked	=function( possqel )
 				
 				"equipment"
 				,
-				()=>
+				async()=>
 				{
-					this.html.inv.show()
+					this.html.addplinv( pl )
 				}
 			)
 		}
