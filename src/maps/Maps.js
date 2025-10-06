@@ -4,6 +4,8 @@ import shMaps	from '../../www/game/shared/maps/Maps.js'
 import Ground from './Ground.js'
 import Trees from './Canopy.js'
 
+import { ensuredir }	from "../fs.js"
+
 
 
 export default class Ms extends shMaps
@@ -19,9 +21,6 @@ export default class Ms extends shMaps
 		,
 		dir	:"./maps/"
 	}
-
-	game
-
 
 	static Ground	=Ground
 
@@ -49,6 +48,12 @@ export default class Ms extends shMaps
 
 Ms.prototype. start	=async function()
 {
+	var dir	=this.conf.dir
+
+	if( ! (await ensuredir(dir) && await this.game.pls.init() ) )
+	{
+		return false
+	}
 	var proms	=
 	[
 		this.gr.read( this.conf.dir )
@@ -70,6 +75,7 @@ Ms.prototype. start	=async function()
 
 		this.trees.save(this.conf.dir)
 	}
+	return true
 }
 
 

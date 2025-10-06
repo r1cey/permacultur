@@ -13,7 +13,7 @@ Object.assign( its, sh_its )
 
 
 
-its.Belt	=mixin( sh_its.Belt ,Item ,Hold ,class
+its.Belt	=mixin([ sh_its.Belt ,Item ,Hold ],class
 {
 	attachhtmlinv( htmlinv_dad )
 	{
@@ -43,7 +43,7 @@ its.Seedbag	=mixin([ sh_its.Seedbag, Bag ],class
 
 
 
-its.Dewd	=mixin( sh_its.Dewd ,Item ,class
+its.Dewd	=mixin([ sh_its.Dewd ,Item ],class
 {
 	rot( dir )
 	{

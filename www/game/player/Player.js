@@ -4,6 +4,9 @@ import Hands from './Hands.js'
 import PCl from '../PeerCl.js'
 import Loc from '../shared/Loc.js'
 
+
+/** Also extends Holder */
+
 const ClPl =(c) => class extends c
 {
 	lcl
@@ -17,6 +20,7 @@ const ClPl =(c) => class extends c
 	hands	=new Hands()
 
 	srv()	{return this.lcl.srv }
+
 
 	constructor( msg, lcl )
 	{
@@ -141,7 +145,7 @@ export default class Player extends ClPl( PlSh )
 
 Player.prototype. attachhtmlinv	=function( htmlinv )
 {
-	htmlinv.pl	=this
+	// htmlinv.pl	=this
 
 	this.hands.attachhtmlinv( htmlinv )
 
@@ -151,13 +155,13 @@ Player.prototype. attachhtmlinv	=function( htmlinv )
 		{
 			case "belt" :
 
-				this.inv[invn].attachhtmlinv( htmlinv )
+				this.inv[invn].attachhtmlinv( htmlinv.newinv( invn ))
 			break
-			case "seedbag" :
+			case "seedbags" :
 		
-				for(var bag of this.inv[invn] )
+				for(var id in this.inv[invn] )
 				{
-					bag.attachhtmlinv( htmlinv )
+					this.inv[invn][id].attachhtmlinv( htmlinv.newinv( invn ))
 				}
 			break
 		}

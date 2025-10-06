@@ -58,7 +58,7 @@ export default class Html
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Html.prototype. addplinv	=async function( pl )
+Html.prototype. injectplinv	=async function( pl )
 {
 	this.inv	=await this.loadp( "inventory", pl )
 

@@ -30,7 +30,16 @@ export default class Pls	extends PathObj
 
 	g( n )	{ return this.o[n] }
 
-	s( pl )	{ this.o[pl.name]	=pl }
+	s( pl )
+	{
+		this.o[pl.name]	=pl
+
+		var map	=pl.map()
+
+		map.findfirstplloc( pl.loc )
+
+		map.obj.set( pl.loc ).pl	=pl
+	}
 
 	
 	jrev	=new JRev().add([
@@ -60,9 +69,19 @@ export default class Pls	extends PathObj
 ///////////////////////////////////////////////////////////////////////////////
 
 
+Pls.prototype. init	=async function()
+{
+	if( ! fs.ensuredir( this.conf.dir ))
+	{
+		return false
+	}
+	return true
+}
+
+
 /** Reads and saves */
 
-Pls.prototype. read	=async function( name )
+Pls.prototype. readpl	=async function( name )
 {
 	var game	=this.game
 
@@ -70,11 +89,42 @@ Pls.prototype. read	=async function( name )
 
 	var pl	=await fs.readjson( pa, this.jrev.fn )
 				
-	if(pl)
+	if( ! pl)
 	{
-		this.o[pl.name]	=pl
+		console.error( "Error reading player: "+pln )
 
-		return pl
+		return false
+	}
+	return pl
+}
+
+
+
+Pls.prototype. fillmissing	=async function()
+{
+	var names	=await fs.readdir( this.conf.dir )
+
+	for(var name of names )
+	{
+		if( ! name.endsWith(".json") )
+		{
+			continue
+		}
+		name	=name.slice( 0 ,-5 )
+
+		console.log( "test555: "+name )
+
+		if( this.g(name) )
+		{
+			return
+		}
+		var pl	=await this.readpl( name )
+
+		if( ! pl )	continue
+
+		console.log( "Joining missing player: "+name )
+
+		this.s( pl )
 	}
 }
 
@@ -113,22 +163,12 @@ Pls.prototype. new	=function( plmsg )
 
 	// var loc	=spawns[0].c()
 
-	map.fore(( loc )=>
-	{
-		if( map.canplmov(loc) )
-		{
-			pl.loc.set(loc)
+	pl.loc.set( spawns[0] )
 
-			return true
-		}
-	}
-	, null, spawns[0] )
-
-	this.o[pl.name]	=pl
+	this.s( pl )
 
 	pl.save( this.conf.dir )
 
-	map.obj.set(pl.loc).pl	=pl
 	if(0){
 		let idewd =0
 

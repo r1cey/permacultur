@@ -97,8 +97,12 @@ G.prototype. start	=async function( confpa )
 		}
 	}
 
-	await this.maps.start()
-	
+	if( ! await this.maps.start() )
+	{
+		return false
+	}
+	await this.pls.fillmissing()
+
 	g.time.hour.int	=setInterval( g.hour.bind(g), 60*1000*60*1.5 )
 
 	g.time.min15.int	=setInterval(g.min15.bind(g), 12*60*1000)
@@ -108,6 +112,8 @@ G.prototype. start	=async function( confpa )
 	this.server.start()
 
 	console.log(`Game had started!`)
+
+	return true
 }
 
 

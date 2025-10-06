@@ -45,6 +45,8 @@ Obj.prototype. read	=async function( path )
 	} )
 	if( ! o )	return
 
+	this.o	=o
+
 	var proms	=[]
 
 	for(let pln in pls )
@@ -53,19 +55,25 @@ Obj.prototype. read	=async function( path )
 		{
 			var vstr	=pls[pln]
 
-			var pl	=await map.game.pls.read( pln )
+			var pl	=await map.game.pls.readpl( pln )
 
+			if( ! pl )
+			{
+				delete o[vstr].pl
+
+				return
+			}
+			/** @todo get height from map, not pl.loc */
+			
 			var h	=map.bin	? map.getloc().h	: pl.loc.h
 
 			pl.loc.setvstr(vstr, h )
 			
-			o[vstr].pl	=pl
+			map.game.pls.s( pl )
 		})() )
 	}
 	/** Don't forget, the only reason we go through o again is to check
 	 * correct locations for each player */
 
 	await Promise.all( proms )
-
-	this.o	=o
 }

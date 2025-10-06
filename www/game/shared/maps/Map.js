@@ -220,6 +220,25 @@ Map.prototype. copycell	=function( loc, map2, loc2 )
 }
 
 
+/** changes loc */
+
+Map.prototype. findfirstplloc	=function( loc )
+{
+	var map	=this
+
+	map.fore(( loc2 )=>
+	{
+		if( map.canplmov(loc2) )
+		{
+			loc.set(loc2)
+
+			return true
+		}
+	}
+	, null, loc )
+}
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,6 +2,24 @@ import { dir } from 'console'
 import fs from 'fs/promises'
 
 
+export async function ensuredir( url )
+{
+	try
+	{
+		await fs.mkdir( url )
+	}
+	catch(err)
+	{
+		if( err.code !== 'EEXIST' )
+		{
+			console.error( "Error in ensuring dir: "+url )
+
+			return false
+		}
+	}
+	return true
+}
+
 
 export async function readjson	( url, reviver )
 {

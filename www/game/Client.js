@@ -66,7 +66,7 @@ Client.prototype. setpl	=async function( plmsg )
 
 	this.pl	=new Player( plmsg ,this)
 
-	// this.html.inv	=await this.html.loadp( "inventory", this.pl )
+	this.html.inv	=await this.html.loadp( "inventory", this.pl )
 
 	var can	=this.html.can
 

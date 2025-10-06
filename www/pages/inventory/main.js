@@ -12,13 +12,19 @@ export default class Inv extends P
 
 	belt
 
-	seedbag	=[]
+	seedbags	=[]
 
 	cl()	{return this.html.cl }
 
 
 	hide()
 	{
+		this.belt.hide()
+
+		for(var seedbag of this.seedbags )
+		{
+			seedbag.hide()
+		}
 		try
 		{
 			this.dadel.removeChild( this.el )
@@ -33,12 +39,33 @@ export default class Inv extends P
 	constructor( html, el, css, pl )
 	{
 		super( html, el, css )
+
+		this.pl	=pl
 		
 		this.dadel	=this.html.screen
 
 		this.hands	=new Hands(this, pl.hands )
 
-		pl.attachhtmlinv( this )
+		// pl.attachhtmlinv( this )
+
+		for(var invk in pl.inv )
+		{
+			switch( invk )
+			{
+				case "belt" :
+
+					this.belt	=new Belt(this, pl.inv[invk] )
+
+				break
+				case "seedbags" :
+			
+					for(var id in pl.inv[invk] )
+					{
+						this.seedbags.push(new Seedbag(this, pl.inv[invk][id] ))
+					}
+				break
+			}
+		}
 	}
 }
 
@@ -49,6 +76,12 @@ export default class Inv extends P
 
 Inv.prototype. show	=function()
 {
+	// Load those containers whose contents are not obvious to the player
+
+	for(var sb of this.seedbags )
+	{
+		sb.show()
+	}
 	this.dadel.appendChild( this.el )
 
 	this.html.can.el.addEventListener("click", this.hidebound,{ once :true})
@@ -82,27 +115,58 @@ Inv.prototype. addseedbag	=function( plbox )
 
 
 
-class HtmlBox
+class HtmlCnt
 {
 	inv
 
 	el
 
-	plbox
+	plcnt
 
 
 	additem( itemn, item, num )	{}
 
 
-	constructor( inv, el, plbox )
+	constructor( inv, el, plcnt )
 	{
 		this.inv	=inv
 
 		this.el	=el
 
-		this.plbox	=plbox
+		this.plcnt	=plcnt
 	}
 
+
+	setitem( item )
+	{
+		var itemk	=item.constructor.key
+
+		var el	=document.createElement( "ITEM" )
+
+		el.className	=itemk
+
+		el.textContent	=num
+
+		// el.onclick	=( ev )=>
+			
+		this.el.appendChild( el )
+	}
+
+
+
+	show()
+	{
+
+	}
+
+
+	hide()
+	{
+		for(var itemel of this.el.getElementsByTagName("ITEM") )
+		{
+			this.el.removeChild( itemel )
+		}
+	}
 
 	/** @return num */
 
@@ -122,7 +186,7 @@ class HtmlBox
 			{
 				let pl	=this.inv.pl
 
-				let from	=this.plbox
+				let from	=this.plcnt
 
 				let to	=pl.hands
 				
@@ -153,11 +217,19 @@ class HtmlBox
 
 
 
-class Hands	extends HtmlBox
+class Hands	extends HtmlCnt
 {
-	constructor( inv, plbox )
+	constructor( inv, plhands )
 	{
-		super( inv, inv.el.getElementsByTagName("hands")[0], plbox )
+		super( inv, inv.el.getElementsByTagName("hands")[0], plhands )
+
+		// this.setitem( plhands.item )
+	}
+
+
+	show()
+	{
+		this.setitem( this.plcnt.item )
 	}
 }
 
@@ -166,7 +238,7 @@ class Hands	extends HtmlBox
 
 
 
-class Belt	extends HtmlBox
+class Belt	extends HtmlCnt
 {
 	constructor( inv, plbox )
 	{
@@ -179,7 +251,7 @@ class Belt	extends HtmlBox
 
 
 
-class Seedbag	extends HtmlBox
+class Seedbag	extends HtmlCnt
 {
 	constructor( inv, plbox )
 	{
