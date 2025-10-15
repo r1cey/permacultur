@@ -69,27 +69,52 @@ t.Belt	=class extends Cont
 
 	inv	=
 	{
+		/**@prop has seedbag ids. They all must have id even if empty */
 		seedbags	:{}
 	}
 
 
-	additem( item )
+	additem( item ,len )
 	{
-		var inv	=this.inv
+		var belt	=Cont.prototype.additem. call(this, item )
+
+		len	??=item.num
+
+		var inv	=belt.inv
+
+		var addedlen
 
 		switch( item.constructor.key )
 		{
 			case "multi" :
 
-				if( inv.multi )	return false
+				if( inv.multi )	return 0
 
-				inv.multi	=item
+				addedlen	=1
+
+				inv.multi	=item.take( addedlen )
 			break
 			default :
 
-				return false
+				addedlen	=0
 		}
-		return true
+		return addedlen
+	}
+
+
+	calcvol()
+	{
+		var vol	=0
+
+		for(var ik in this.inv )
+		{
+			if( ik === "seedbags" )
+			{
+				for(var sbid in this.inv[ik] )	vol	+= this.inv[ik][sbid].calcvol()
+			}
+			else	vol	+= this.inv[ik].calcvol()
+		}
+		return vol
 	}
 }
 

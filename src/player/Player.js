@@ -6,6 +6,8 @@ import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
 
+import items	from "../../www/game/shared/items/items.js"
+
 // import items from '../items.js'
 
 // import newjsontrans from "../../www/game/shared/JsonRevivr.js"
@@ -58,7 +60,7 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 	map()	{return this.game.maps.loc2map( this.loc )}
 
-	srv
+	get srv()	{return this.map.server }
 
 	// static game
 
@@ -69,7 +71,18 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 		this.game	=game
 
-		this.srv	=game.server
+		pl.additem( new items.Belt() )
+
+		pl.inv.belt.additem( new items.Multi() )
+
+		pl.additem( new items.Seedbag() )
+
+		for(let bagid in pl.inv.seedbags )
+		{
+			pl.inv.seedbags[bagid].additem( new items.CucumberSeed( null ,15 ) )
+
+			break
+		}
 	}
 
 	/*static Slp	=PlSlp
@@ -241,7 +254,9 @@ Player.prototype. additem	=function( item, len )
 {
 	var addl	=PlMsg.prototype.additem. call(this, item, len )
 
-	addl	? this.cl.send_clpladditem( ) : 0
+	if( addl )	this.srv?.send("setplitem" ,pl ,item ,addl )
+
+	return addl
 }
 
 

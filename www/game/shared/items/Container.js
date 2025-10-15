@@ -19,18 +19,19 @@ export default class Cnt	extends Item
 }
 
 
-/** Only changes this bag. Doesn't modify given item.
- * @returns how many items were transfered *
+/**@returns the container the item is going to be added to */
 
-Cnt.prototype. additem	=function( item, len =1 )
+Cnt.prototype. additem	=function( item )
 {
-	
-}*
+	if( ! this.id )	return this.setuniq()
+
+	return this
+}
 
 
 Cnt.prototype. delitem	=function( item, num =1, dadbox )
 {
-	/** If becomes empty, make generic and merge at dad. *
+	/** If becomes empty, make generic and merge at dad. */
 
 	var itemn	=item.constructor.name
 
@@ -39,12 +40,13 @@ Cnt.prototype. delitem	=function( item, num =1, dadbox )
 		(this.o[itemn].num	-= num) > 0	? 0	: delete this.o[itemn]
 
 	this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this ) : 0
-}*/
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @todo What's happening with dadtype ?? */
 
 Cnt.prototype. setuniq	=function()
 {
@@ -52,7 +54,7 @@ Cnt.prototype. setuniq	=function()
 
 	cnt.id	=this.constructor.idpool.new()
 
-	if( this.dad && this.dadtype==="cnt" )
+	if( this.dad /*&& this.dadtype==="cnt"*/ )
 	{
 		this.dad.mov2uniq( cnt )
 	}

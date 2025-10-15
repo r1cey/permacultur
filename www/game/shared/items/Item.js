@@ -28,7 +28,7 @@ export default class Item	extends Jable
 
 
 	/** @returns new obj or this. */
-	take( l )
+	take( l =1 )
 	{
 		var out
 

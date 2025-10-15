@@ -47,3 +47,51 @@ PlVis.prototype. set	=function( pl )
 	}
 	return this
 }
+
+
+
+PlVis.prototype. additem	=function( item ,len )
+{
+	len	??=item.num
+
+	var key	=item.constructor.key
+
+	var addedlen
+
+	switch( key )
+	{
+		case "belt" :
+
+			addedlen	=1
+
+			this.inv.belt	=item.take( addedlen )
+		break
+		case "seedbag" :
+
+			let bags	=this.inv.seedbags
+
+			let bagsl	=0
+
+			for(var bagid in bags )
+			{
+				bagsl ++
+			}
+			addedlen	=Math.min( len, 15 - bagsl )
+
+			if( addedlen <= 0 )	return 0
+
+			for(var i =0;i< addedlen ;i++)
+			{
+				var newitem	=item.take( 1 )
+
+				if( ! newitem.id )	newitem.setuniq()
+
+				bags[newitem.id]	=newitem
+			}
+		break
+		default :
+
+			addedlen	=0
+	}
+	return addedlen
+}

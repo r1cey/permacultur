@@ -148,10 +148,31 @@ SSe.prototype. plactonobj	=function( pl, loc, objkey, act, params )
 }
 
 
+
+SSe.prototype. setplitem	=function( pl ,item ,len )
+{
+	var itemk	=item.constructor.key
+
+	pl.cl?.send("setclplitem" ,itemk ,len )
+
+	for(var n in this.cls.o )
+	{
+		var pl2	=this.cls.o[n].pl
+
+		if( pl === pl2 )	continue
+
+		if( pl2.sees(pl.loc) )
+		{
+			pl2.cl.send("setplitem" ,pl.name ,pl.loc ,itemk ,len )
+		}
+	}
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 for(var funn in SSe.prototype)
 {
 	SSe.prototype["send_"+funn]	=SSe.prototype[funn]
@@ -159,4 +180,4 @@ for(var funn in SSe.prototype)
 	SSe.prototype["s_"+funn]	=SSe.prototype[funn]
 
 	delete SSe.prototype[funn]
-}
+}*/

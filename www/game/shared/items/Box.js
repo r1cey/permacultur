@@ -16,59 +16,62 @@ export default class Box extends Cnt
 
 Box.prototype. getobj	=function( id )
 {
-	return typeof id==="number"	? this.bags[id]	: this.items[id]
+	return typeof id==="number"	? this.cnts[id]	: this.items[id]
 }
 
 
 /** Only changes this bag. Doesn't modify given item.
  * @returns how many items were transfered */
 
-Box.prototype. additem	=function( item, len =1 )
+Box.prototype. additem	=function( item, len )
 {
-	if( this.num > 1 || this.calcempty() )
+	len	??=item.num
+
+	// calc len and volume
 	{
-		this.setuniq()
+		var maxvol	=this.constructor.boxvol
 
+		if( len > 1 )
+		{
+			let maxlen	=Math.floor((maxvol - this.calcitemvol())/item.constructor.vol)
+
+			len	=Math.min( maxlen, len )
+
+			if( len <= 0 )	return 0
+		}
+		else if( item.calcvol() + this.calcitemvol() >= maxvol )
+		{
+			return 0
+		}
 	}
-	var itemb
+	var bag	=Cnt.prototype.additem. call(this, item )
 
-	if( item instanceof Box && ! item.calcempty() )
-	
-		this.addbox( item)
+	if( item.constructor.idpool )	item.dad	=bag
 
+	if( item.id )
+	{
+		bag.cnts[item.id]	=item
+	}
 	else
-
 	{
-		{
-			let itemo	=this.o[item.constructor.name]	??={}
+		let itemk	=item.constructor.key
 
-			itemb	=itemo["0"]	??=new item.constructor(item, 0)
+		if( bag.items[itemk] )
+		{
+			let bagits	=bag.items[itemk]
+
+			bagits.spoil	=( bagits.spoil*bagits.num + item.spoil*len )/( bagits.num + len )
+
+			bagits.num	+= len
 		}
-		// else
+		else
 		{
-			this.addbox( item )
-
-			return 1
+			bag.items[itemk]	=item.take( len )
 		}
 	}
-	// else
-	{
-		itemb	=this.o[item.constructor.name]	??=new item.constructor(item, 0)
-	}
-	var numb	=itemb.num
-
-	var maxvol	=this.constructor.boxvol
-
-	var maxnum	=Math.floor((maxvol - this.calcitemvol())/item.constructor.vol)
-
-	var addnum	=maxnum > num	? num	: maxnum
-
-	itemb.spoil	=( itemb.spoil*numb + item.spoil*addnum )/( numb + addnum )
-
-	itemb.num	+= addnum
-
-	return addnum
+	return len
 }
+
 
 
 Box.prototype. delitem	=function( item, num =1, dadbox )
@@ -85,6 +88,13 @@ Box.prototype. delitem	=function( item, num =1, dadbox )
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+Box.prototype. calcvol	=function()
+{
+	return Cnt.prototype.calcvol() + this.calcitemvol()
+}
 
 
 
@@ -105,13 +115,13 @@ Box.prototype. calcitemvol	=function()
 {
 	var vol	=0
 
-	for(var itemn in this.o )
+	for(var itemk in this.items )
 	{
-		vol	+= this.o[itemn].calcvol()
+		vol	+= this.items[itemk].calcvol()
 	}
-	for(var item of this.set )
+	for(var itemid in this.cnts )
 	{
-		vol	+= item.calcvol()
+		vol	+= this.cnts[itemid].calcvol()
 	}
 	return vol
 }

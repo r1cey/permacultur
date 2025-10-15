@@ -60,11 +60,11 @@ export default class Client
 
 
 
-Client.prototype. send	=function( fn, ...args )
+Client.prototype. send	=function( fnk, ...args )
 {
-	var[ outa, rep ]	=out[fn]. apply(this, args )
+	var[ outa, rep ]	=out[fnk]. apply(this, args )
 
-	if( outa )	this.sendjson([ fn, outa ], rep )
+	if( outa )	this.sendjson([ fnk, outa ], rep )
 }
 
 

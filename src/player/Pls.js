@@ -147,18 +147,6 @@ Pls.prototype. new	=function( plmsg )
 
 	var pl	=new Pl( plmsg, g )
 
-	pl.additem( new items.Belt() )
-
-	pl.inv.belt.additem( new items.Multi() )
-
-	pl.additem( new items.Seedbag() )
-
-	for(let bagid in pl.inv.seedbags )
-	{
-		pl.inv.seedbags[bagid].additem( new items.CucumberSeed( null ,15 ) )
-
-		break
-	}
 	var spawns	=map.obj.o.spawns
 
 	// var loc	=spawns[0].c()
@@ -168,8 +156,8 @@ Pls.prototype. new	=function( plmsg )
 	this.s( pl )
 
 	pl.save( this.conf.dir )
-
-	if(0){
+	
+	{
 		let idewd =0
 
 		map.fore(( loc )=>

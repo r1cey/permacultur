@@ -11,7 +11,7 @@ import JRev from "../../www/game/shared/JsonRevivr.js"
 
 
 
-export default class Server extends ServSend
+export default class Server
 {
 	game
 
@@ -29,6 +29,8 @@ export default class Server extends ServSend
 	// g	=new Get(this)
 
 	// send	=new Send(this)
+
+	static out	=new ServSend()
 
 	static jrev	=new JRev()
 
@@ -75,6 +77,13 @@ Server.prototype. stop	=function()
 		cl.close( 4801 )
 	}
 	this.wss.close()
+}
+
+
+
+Server.prototype. send	=function( fnk ,...args )
+{
+	Server.out[fnk]. apply(this, args )
 }
 
 

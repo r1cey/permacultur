@@ -30,11 +30,23 @@ Cell.prototype. additem	=function( item, len )
 {
 	var{ map, loc }	=this
 
-	var newit	=item.take( len )
+	var mapcell	=map.obj.s( loc )
 
-	var additem	=map.obj.s( loc )[ item.constructor.name ]	??=newit
+	var itemk	=item.constructor.name
 
-	return additem===newit	? len	: 0
+	var mapitem	=mapcell[itemk]
+
+	if( mapitem )
+	{
+		if( mapitem.id || item.id )		return 0
+
+		mapitem.num	+= len
+	}
+	else
+	{
+		mapcell[itemk]	=item.take( len )
+	}
+	return len
 }
 
 
