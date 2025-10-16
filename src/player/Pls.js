@@ -155,8 +155,7 @@ Pls.prototype. new	=function( plmsg )
 
 	this.s( pl )
 
-	pl.save( this.conf.dir )
-	
+	pl.save( this.conf.dir )	
 	{
 		let idewd =0
 
@@ -164,7 +163,9 @@ Pls.prototype. new	=function( plmsg )
 		{
 			if( ! map.getshade( loc ) && map.canplmov( loc ))
 			{
-				g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
+				map.additem( new items.Dewd() )
+
+				// g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
 
 				idewd ++
 

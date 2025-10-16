@@ -1,5 +1,7 @@
 import Loc from '../../www/game/shared/Loc.js'
 
+import Item from '../../www/game/shared/items/Item.js'
+
 
 
 /********
@@ -56,16 +58,9 @@ out. setmap	=function()
 
 
 
-out. mapaddobj	=function( map, loc, o )
+out. map_additem	=function( map ,loc ,item )
 {
-	this.sendjson({mapaddobj:
-		{
-			mapid	:map.bin.constructor.id
-			,
-			loc
-			,
-			o
-		}})
+	return [[ map.bin.constructor.id ,loc ,item.toJSON(Item.key) ]]
 }
 
 

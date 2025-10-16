@@ -37,7 +37,7 @@ export default class Server
 
 	constructor( game, port )
 	{
-		super()
+		// super()
 
 		this.game	=game
 

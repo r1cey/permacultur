@@ -17,7 +17,7 @@ export default class SSe
 
 
 
-SSe.prototype. mapaddobj	=function( map, loc, o )
+SSe.prototype. map_additem	=function( map ,loc ,item )
 {
 	for(var n in this.cls.o )
 	{
@@ -25,7 +25,7 @@ SSe.prototype. mapaddobj	=function( map, loc, o )
 
 		if( cl.pl.sees( loc ))
 		{
-			cl.send_mapaddobj( map, loc, o )
+			cl.send("map_additem" ,map ,loc ,item )
 		}
 	}
 }
@@ -72,7 +72,7 @@ SSe.prototype. newpl	=function( pl )
 	{
 		if(this.cls.o[n].pl.seespl( pl ))
 		{
-			this.cls.o[n].send_newpl( pl )
+			this.cls.o[n].send("newpl", pl )
 		}
 	}
 }

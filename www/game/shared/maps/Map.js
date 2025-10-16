@@ -93,6 +93,31 @@ Map.prototype. newcell	=function( v )
 
 
 
+Map.prototype. additem	=function( loc ,item ,len )
+{
+	var map	=this
+
+	var mapcell	=map.obj.s( loc )
+
+	var itemk	=item.constructor.name
+
+	var mapitem	=mapcell[itemk]
+
+	if( mapitem )
+	{
+		if( mapitem.id || item.id )		return 0
+
+		mapitem.num	+= len
+	}
+	else
+	{
+		mapcell[itemk]	=item.take( len )
+	}
+	return len
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

@@ -86,11 +86,15 @@ Map.prototype. save	=async function( dir ="")
 
 
 
-Map.prototype. additem	=function( loc, o )
+Map.prototype. additem	=function( loc ,item ,len )
 {
-	ShMap.prototype.additem. call(this, loc, o )
-	
-	this.game?.server?.send_mapaddobj( this, loc, o )
+	var addedl	=ShMap.prototype.additem. call(this, loc ,item ,len )
+
+	if( addedl > 0 )
+	{
+		this.game?.server?.send("map_additem" ,this ,loc ,item )
+	}
+	return addedl
 }
 
 

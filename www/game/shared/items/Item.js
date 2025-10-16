@@ -62,7 +62,7 @@ export default class Item	extends Jable
 
 	toJSON( key )
 	{
-		return key===Item.key ? {key:this.constructor.key, obj:this} : this
+		return key===Item.key ? [ this.constructor.key, this ] : this
 	}
 
 
@@ -72,7 +72,7 @@ export default class Item	extends Jable
 
 			key	:this.key
 			,
-			fromJSON	:( meta )=>	jrev.fn( meta.key, meta.obj )
+			fromJSON	:( meta )=>	jrev.fn( meta[0], meta[1] )
 		}
 	}
 }
