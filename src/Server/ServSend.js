@@ -149,11 +149,11 @@ SSe.prototype. plactonobj	=function( pl, loc, objkey, act, params )
 
 
 
-SSe.prototype. setplitem	=function( pl ,item ,len )
+SSe.prototype. setplitem	=function( pl ,item )
 {
-	var itemk	=item.constructor.key
+	// var itemk	=item.constructor.key
 
-	pl.cl?.send("setclplitem" ,itemk ,len )
+	pl.cl?.send("setclplitem" ,item )
 
 	for(var n in this.cls.o )
 	{
@@ -163,7 +163,7 @@ SSe.prototype. setplitem	=function( pl ,item ,len )
 
 		if( pl2.sees(pl.loc) )
 		{
-			pl2.cl.send("setplitem" ,pl.name ,pl.loc ,itemk ,len )
+			pl2.cl.send("setplitem" ,pl.name ,pl.loc ,item )
 		}
 	}
 }

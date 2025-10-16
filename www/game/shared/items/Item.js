@@ -27,6 +27,9 @@ export default class Item	extends Jable
 	}
 
 
+	gkey()	{return this.constructor.key }
+
+
 	/** @returns new obj or this. */
 	take( l =1 )
 	{

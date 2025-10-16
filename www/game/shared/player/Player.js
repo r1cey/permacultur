@@ -247,9 +247,19 @@ Pl.prototype. setheat	=function( lvl )
 
 
 
-Pl.prototype. getobj	=function( id )
+Pl.prototype. additemcnt	=function( path ,item ,len )
 {
-	return id === "hands" ?	this.hands	: this.inv[id]
+	var cnt	=this
+
+	var nextit	=[,]
+
+	for(var i =0, len =path.length;i<len; i += nextit[1] )
+	{
+		cnt.getobj( path ,i ,nextit )
+
+		cnt	=nextit[0]
+	}
+	return cnt.additem( item ,len )
 }
 
 

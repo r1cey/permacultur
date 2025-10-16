@@ -6,6 +6,7 @@ import Hands from "./Hands.js"
 // import Holder from "../items/Container.js"
 import Jable from "../Jsonable.js"
 
+import items from "../items/items.js"
 
 
 /** Class for visible players. Has limited information.
@@ -35,6 +36,32 @@ export default class PlVis	extends Jable
 }
 
 
+/**@arg out	- [next item ,index step ] */
+
+PlVis.prototype. getobj	=function( path ,i ,out )
+{
+	out[1]	=1
+
+	switch( path[i] )
+	{
+		case Hands.key	:
+
+			out[0]	=this.hands
+		break
+		case items.Seedbag.key	:
+
+			out[0]	=this.inv.seedbags[path[i+1]]
+			
+			out[1]	=2
+		break
+		default	:
+
+			out[0]	=this.inv[path[i]]
+	}
+}
+
+
+
 
 PlVis.prototype. set	=function( pl )
 {
@@ -54,7 +81,7 @@ PlVis.prototype. additem	=function( item ,len )
 {
 	len	??=item.num
 
-	var key	=item.constructor.key
+	var key	=item.gkey()
 
 	var addedlen
 

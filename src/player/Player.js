@@ -71,18 +71,26 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 
 		this.game	=game
 
-		pl.additem( new items.Belt() )
+		var belt	=new items.Belt()
 
-		pl.inv.belt.additem( new items.Multi() )
+		pl.additem( belt )
 
-		pl.additem( new items.Seedbag() )
+		pl.additemcnt([ items.Belt.key ], new items.Multi() )
 
+		// pl.inv.belt.additem( new items.Multi() )
+
+		var sbag	=new items.Seedbag()
+
+		pl.additem( sbag )
+
+		pl.additemcnt([ sbag.gkey() ,sbag.id ], new items.CucumberSeed( null ,15 ) )
+		/*
 		for(let bagid in pl.inv.seedbags )
 		{
 			pl.inv.seedbags[bagid].additem( new items.CucumberSeed( null ,15 ) )
 
 			break
-		}
+		}*/
 	}
 
 	/*static Slp	=PlSlp
@@ -254,7 +262,17 @@ Player.prototype. additem	=function( item, len )
 {
 	var addl	=PlMsg.prototype.additem. call(this, item, len )
 
-	if( addl )	this.srv?.send("setplitem" ,pl ,item ,addl )
+	if( addl )	this.srv?.send("setplitem" ,this ,item ,addl )
+
+	return addl
+}
+
+
+Player.prototype. additemcnt	=function( path ,item ,len )
+{
+	var addl	=PlMsg.prototype.additemcnt. call(this, item, len )
+
+	if( addl )	this.cl?.send("setplitemcnt" ,this ,path ,item ,addl )
 
 	return addl
 }

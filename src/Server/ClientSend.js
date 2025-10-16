@@ -209,6 +209,36 @@ out. actonobj	=function( loc, key, act, params )
 
 
 
+out.setclplitem	=function( item )
+{
+	return [[ item.constructor.key ,item  ]]
+}
+
+
+
+out.setclplitemcnt	=function( path ,item )
+{
+	return [[ path ,item.constructor.key ,item ]]
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+out.setplitem	=function( plname ,plloc ,item )
+{
+	return [[ plname ,plloc ,item.constructor.key ,item ]]
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 out. wrtc	=function( o )
 {
 	return[[ o ]]
