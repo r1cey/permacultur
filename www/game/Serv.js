@@ -43,9 +43,9 @@ export default class Serv
 				,
 				fromJSON	:( val )=> typeof val==="string" ? 
 					(
-						val===client.pl.name ?
+						val===client.pl?.name ?
 
-						client.pl : console.error("revivr: "+val)
+						client.pl : val
 					) :
 					new Pl.Vis(val,client)
 			}

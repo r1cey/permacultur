@@ -20,7 +20,7 @@ var out	={}
 
 
 
-out. setpl	=function()
+out. setclpl	=function()
 {
 	return[[ this.pl ]]
 }
@@ -55,6 +55,63 @@ out. setmap	=function()
 
 
 //////////////////////////////////////////////////////////////////////////////
+
+
+/** This client's player had moved. */
+
+out. clplmov	=function( delta )
+{
+	var{ pl }	=this
+
+	var	loc	=pl.loc
+	
+	var dir	=Loc.dirv2dirh( delta )
+
+	var r	=pl.vision
+
+	var obj	={ gr	:0 , tr	:0 }
+
+	var boards	=this.srv.game.maps.gshiftboards( loc, r, dir )
+
+	for(var n in boards )
+	{
+		this.sendbin( boards[n].bin.getbuf() )
+
+		obj[n]	=boards[n].obj
+	}
+	return[[ obj, loc, r, dir ]]
+}
+
+
+out. movrej	=function( newloc )
+{
+	return[[ newloc ]]
+}
+
+
+/** Assumes player has already climbed */
+
+out. clplclimb	=function( dir )
+{
+	this.sendjson({ clplclimb: { dir, newloc: this.pl.loc }})
+}
+
+
+
+out.setclplitem	=function( item )
+{
+	return [[ item.gkey() ,item  ]]
+}
+
+
+
+out.setclplitemcnt	=function( path ,item )
+{
+	return [[ path ,item.gkey() ,item ]]
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -96,39 +153,6 @@ out. mapobjset	=function( map, loc, key )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
-/** This client's player had moved. */
-
-out. clplmov	=function( delta )
-{
-	var{ pl }	=this
-
-	var	loc	=pl.loc
-	
-	var dir	=Loc.dirv2dirh( delta )
-
-	var r	=pl.vision
-
-	var obj	={ gr	:0 , tr	:0 }
-
-	var boards	=this.srv.game.maps.gshiftboards( loc, r, dir )
-
-	for(var n in boards )
-	{
-		this.sendbin( boards[n].bin.getbuf() )
-
-		obj[n]	=boards[n].obj
-	}
-	return[[ obj, loc, r, dir ]]
-}
-
-
-out. movrej	=function( newloc )
-{
-	return[[ newloc ]]
-}
-
-
 /** New player born. */
 
 out. newpl	=function( pl2 )
@@ -144,14 +168,6 @@ out. plconn	=function( pl2 )
 	this.sendjson({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
 }
 
-
-
-/** Assumes player has already climbed */
-
-out. clplclimb	=function( dir )
-{
-	this.sendjson({ clplclimb: { dir, newloc: this.pl.loc }})
-}
 
 
 /*Send.prototype. createpl	=function( name )
@@ -209,30 +225,10 @@ out. actonobj	=function( loc, key, act, params )
 
 
 
-out.setclplitem	=function( item )
-{
-	return [[ item.constructor.key ,item  ]]
-}
-
-
-
-out.setclplitemcnt	=function( path ,item )
-{
-	return [[ path ,item.constructor.key ,item ]]
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-
-
-
 out.setplitem	=function( plname ,plloc ,item )
 {
 	return [[ plname ,plloc ,item.constructor.key ,item ]]
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////

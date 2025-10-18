@@ -163,7 +163,7 @@ Pls.prototype. new	=function( plmsg )
 		{
 			if( ! map.getshade( loc ) && map.canplmov( loc ))
 			{
-				map.additem( new items.Dewd() )
+				map.additem( loc ,new items.Dewd() )
 
 				// g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
 

@@ -64,19 +64,34 @@ Client.prototype. setpl	=async function( plmsg )
 {
 	this.html.delpage('createpl')
 
-	this.pl	=new Player( plmsg ,this)
+	var pl	=this.pl	=new Player( plmsg ,this)
 
 	this.html.inv	=await this.html.loadp( "inventory", this.pl )
 
 	var can	=this.html.can
 
-	can.pl	=this.pl
+	can.pl	=pl
 
-	can.setpos(can.pl.pos)
+	can.setpos(pl.pos)
 
 	can.draw()
 
-	if( can.maps )	can.start()
+	if( can.maps )
+	{
+		let map	=this.maps.loc2map(pl.loc)
+
+		let cell	=map.obj.g(pl.loc)
+
+		if( ! cell || ! cell.pl )
+		{
+			console.error( "setpl:" ,plmsg )
+
+			cell	=map.obj.s(pl.loc)
+		}
+		cell.pl	=pl
+
+		can.start()
+	}
 }
 
 
@@ -92,7 +107,7 @@ Client.prototype. setmaps	=function( grbin, grobj, trbin, trobj )
 
 	maps.tr.setbin( trbin )
 
-	maps.tr.obj.o	=grobj
+	maps.tr.obj.o	=trobj
 
 	// if( maps.ready() )
 	{

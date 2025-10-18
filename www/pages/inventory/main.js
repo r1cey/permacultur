@@ -12,7 +12,7 @@ export default class Inv extends P
 
 	belt
 
-	seedbags	=[]
+	seedbags	={}
 
 	cl()	{return this.html.cl }
 
@@ -48,23 +48,13 @@ export default class Inv extends P
 
 		// pl.attachhtmlinv( this )
 
-		for(var invk in pl.inv )
+		if( pl.inv.belt )
 		{
-			switch( invk )
-			{
-				case "belt" :
-
-					this.belt	=new Belt(this, pl.inv[invk] )
-
-				break
-				case "seedbags" :
-			
-					for(var id in pl.inv[invk] )
-					{
-						this.seedbags.push(new Seedbag(this, pl.inv[invk][id] ))
-					}
-				break
-			}
+			this.belt	=new Belt(this, pl.inv.belt )
+		}
+		for(var id in pl.inv.seedbags )
+		{
+			this.seedbags[id]	=new Seedbag(this, pl.inv.seedbags[id] )
 		}
 	}
 }
@@ -240,9 +230,13 @@ class Hands	extends HtmlCnt
 
 class Belt	extends HtmlCnt
 {
-	constructor( inv, plbox )
+	constructor( inv, plbelt )
 	{
-		super( inv, inv.el.getElementsByTagName("BELT")[0], plbox )
+		// super( inv, inv.el.getElementsByTagName("BELT")[0], plbox )
+
+		super( inv, document.createElement( "BELT" ) ,plbelt )
+
+		inv.el.appendChild( this.el )
 	}
 }
 
@@ -253,10 +247,10 @@ class Belt	extends HtmlCnt
 
 class Seedbag	extends HtmlCnt
 {
-	constructor( inv, plbox )
+	constructor( inv, plsb )
 	{
-		super( inv, document.createElement( "SEEDBAG" ), plbox )
+		super( inv, document.createElement( "SEEDBAG" ) ,plsb )
 
-		this.inv.el.appendChild( this.el )
+		inv.el.appendChild( this.el )
 	}
 }

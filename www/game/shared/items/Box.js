@@ -20,10 +20,10 @@ Box.prototype. getobj	=function( id )
 }
 
 
-/** Only changes this bag. Doesn't modify given item.
+/** Modifies given items if portion was taken.
  * @returns how many items were transfered */
 
-Box.prototype. additem	=function( item, len )
+Box.prototype. additem	=function( item ,len )
 {
 	len	??=item.num
 

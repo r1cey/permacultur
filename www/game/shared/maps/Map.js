@@ -92,14 +92,17 @@ Map.prototype. newcell	=function( v )
 }
 
 
+/** modifies given item if portion was taken */
 
 Map.prototype. additem	=function( loc ,item ,len )
 {
 	var map	=this
 
+	len	??=item.num
+
 	var mapcell	=map.obj.s( loc )
 
-	var itemk	=item.constructor.name
+	var itemk	=item.gkey()
 
 	var mapitem	=mapcell[itemk]
 
@@ -108,6 +111,8 @@ Map.prototype. additem	=function( loc ,item ,len )
 		if( mapitem.id || item.id )		return 0
 
 		mapitem.num	+= len
+
+		item.num	-= len
 	}
 	else
 	{

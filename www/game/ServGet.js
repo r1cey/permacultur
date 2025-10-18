@@ -42,9 +42,11 @@ on. createpl	=async function( name )
 
 /** This is your player. */
 
-on. setpl	=function( plmsg )
+on. setclpl	=function( plmsg )
 {
 	// debugger
+
+	console.log(plmsg)
 
 	this.cl.setpl( plmsg )
 }

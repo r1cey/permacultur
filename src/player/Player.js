@@ -65,13 +65,15 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 	// static game
 
 
-	constructor( pl, game )
+	constructor( plmsg, game )
 	{
-		super( pl )
+		super( plmsg )
 
 		this.game	=game
 
 		var belt	=new items.Belt()
+
+		var pl	=this
 
 		pl.additem( belt )
 
@@ -127,7 +129,7 @@ Player.prototype. conncl	=function( cl )
 {
 	this.cl	=cl
 
-	cl.send("setpl")
+	cl.send("setclpl")
 
 	cl.send("setmap")
 
@@ -270,9 +272,11 @@ Player.prototype. additem	=function( item, len )
 
 Player.prototype. additemcnt	=function( path ,item ,len )
 {
-	var addl	=PlMsg.prototype.additemcnt. call(this, item, len )
+	var addl	=PlMsg.prototype.additemcnt. call(this, path ,item, len )
 
-	if( addl )	this.cl?.send("setplitemcnt" ,this ,path ,item ,addl )
+	/** @todo Check if any other circumstance pl.cl can be 0 and the check would return true */
+
+	if( addl && this.cl )	this.cl.send("setplitemcnt" ,this ,path ,item ,addl )
 
 	return addl
 }
