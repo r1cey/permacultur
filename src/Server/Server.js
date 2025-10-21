@@ -80,19 +80,44 @@ Server.prototype. stop	=function()
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+
 
 Server.prototype. send	=function( fnk ,...args )
 {
 	Server.out[fnk]. apply(this, args )
-Server.prototype. sendvis	=function( loc ,msg ,replcr )
-{
-	for(var n in this.cls.o )
-	{
-		var pl	=this.cls.o[n].pl
+}
 
-		if( pl.sees(loc) )
+
+
+Server.prototype. sendvis	=function( loc ,fnk ,args )
+{
+	var dict	=this.cls.o
+
+	for(var n in dict )
+	{
+		var cl	=dict[n]
+
+		if( cl.pl.sees(loc) )
 		{
-			pl.cl.sendjson( msg ,replcr )
+			cl.send( fnk ,args )
+		}
+	}
+}
+
+
+Server.prototype. sendplvis	=function( pl ,fnk ,args )
+{
+	var dict	=this.cls.o
+
+	for(var n in dict )
+	{
+		var cl	=dict[n]
+
+		if( cl.pl.seespl(pl) )
+		{
+			cl.send( fnk ,args )
 		}
 	}
 }

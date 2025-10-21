@@ -173,23 +173,13 @@ out. plactonobj	=function( pl, loc, objkey, act, params )
 
 
 
-SSe.prototype. setplitem	=function( pl ,item )
+out. setplitem	=function( pl ,item )
 {
 	// var itemk	=item.constructor.key
 
 	pl.cl?.send("setclplitem" ,item )
 
-	for(var n in this.cls.o )
-	{
-		var pl2	=this.cls.o[n].pl
-
-		if( pl === pl2 )	continue
-
-		if( pl2.sees(pl.loc) )
-		{
-			pl2.cl.send("setplitem" ,pl.name ,pl.loc ,item )
-		}
-	}
+	this.sendplvis( pl ,"setplitem" ,[ pl.name ,pl.loc ,item ])
 }
 
 
