@@ -4,7 +4,7 @@ import { WebSocketServer, WebSocket } from "ws"
 // import Vec from '../www/game/shared/Vec.js'
 // import Player from './Player.js'
 import Cls from "./Clients.js"
-import ServSend from './ServSend.js'
+import out from './ServSend.js'
 
 import JRev from "../../www/game/shared/JsonRevivr.js"
 
@@ -84,6 +84,17 @@ Server.prototype. stop	=function()
 Server.prototype. send	=function( fnk ,...args )
 {
 	Server.out[fnk]. apply(this, args )
+Server.prototype. sendvis	=function( loc ,msg ,replcr )
+{
+	for(var n in this.cls.o )
+	{
+		var pl	=this.cls.o[n].pl
+
+		if( pl.sees(loc) )
+		{
+			pl.cl.sendjson( msg ,replcr )
+		}
+	}
 }
 
 

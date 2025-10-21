@@ -53,6 +53,20 @@ out. climb	=function( dir, loc )
 
 
 
+out. rotobj	=function( loc ,dir ,obj )
+{
+	return [[ loc, obj.sim_rot( dir ), obj.constructor.key ]]
+}
+
+
+
+out. movobj	=function( loc ,dir ,obj )
+{
+	return [[ loc, dir, obj.constructor.key ]]
+}
+
+
+
 out. actonobj	=function( path, act, params )
 {
 	return[[ path, act, params ]]

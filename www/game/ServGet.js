@@ -342,6 +342,28 @@ on. actonobj	=function( o )
 }
 
 
+/**@todo check that item still there. */
+
+on. rotobj	=function( loca ,dir ,key )
+{
+	var{ cl }	=this
+
+	var loc	=new Loc().seta(loca)
+
+	var item	=cl.maps.getitem( loc ,key )
+
+	if( ! item )
+	{
+		cl.con().write( `Error on rotobj: ${key}, ${loc}` )
+
+		return
+	}
+	item.dir	=dir
+
+	cl.html.objchanged( loc, key )
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

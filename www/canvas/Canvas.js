@@ -350,35 +350,35 @@ Can.prototype. clicked	=function( possqel )
 
 					menu.addopt( "rotate CW" ,()=>
 					{
-						srv.send("rotobj" ,loc ,key ,item.sim_rot(1) )
+						srv.send("rotobj" ,loc ,1 ,dewd )
 					})
 					menu.addopt( "rotate CCW" ,()=>
 					{
-						srv.send("actonobj", opath, "rot", [-1] )
+						srv.send("rotobj" ,loc ,-1 ,dewd )
 					})
-					menu.addopt( "move N", ()=>
+					menu.addopt( "move N" ,()=>
 					{
-						srv.send("actonobj", opath, "move", [2] )
+						srv.send("movobj" ,loc ,2 ,dewd )
 					})
 					menu.addopt( "move NE", ()=>
 					{
-						srv.send("actonobj", opath, "move", [1] )
+						srv.send("movobj" ,loc ,1 ,dewd )
 					})
 					menu.addopt( "move SE", ()=>
 					{
-						srv.send("actonobj", opath, "move", [0] )
+						srv.send("movobj" ,loc ,0 ,dewd )
 					})
 					menu.addopt( "move S", ()=>
 					{
-						srv.send("actonobj", opath, "move", [5] )
+						srv.send("movobj" ,loc ,5 ,dewd )
 					})
 					menu.addopt( "move SW", ()=>
 					{
-						srv.send("actonobj", opath, "move", [4] )
+						srv.send("movobj" ,loc ,4 ,dewd )
 					})
 					menu.addopt( "move NW", ()=>
 					{
-						srv.send("actonobj", opath, "move", [3] )
+						srv.send("movobj" ,loc ,3 ,dewd )
 					})
 				}
 			}

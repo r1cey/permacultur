@@ -45,10 +45,6 @@ its.Seedbag	=mixin([ sh_its.Seedbag, Bag ],class
 
 its.Dewd	=mixin([ sh_its.Dewd ,Item ],class
 {
-	rot( dir )
-	{
-		this.dir	=dir
-	}
 } )
 
 

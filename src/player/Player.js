@@ -244,11 +244,12 @@ Player.prototype. climb	=function( hdir )
 }
 
 
-Player.prototype. rotobj	=function( loc ,item ,dir )
-{
-	dir	=item.rot(dir)
 
-	this.srv?.send("rotobj" ,loc ,item ,dir ,this )
+Player.prototype. rotobj	=function( loc ,dir ,obj )
+{
+	obj.dir	=dir
+
+	this.srv?.sendvis( loc ,["rotobj" ,[loc, dir ,obj.constructor.key ]])
 }
 
 

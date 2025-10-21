@@ -126,22 +126,27 @@ get. movitem	=function([ from, itemid, len, to ])
 }
 
 
+/**@todo Check that not rotating players on accident... */
 
-get. rotobj	=function( loca ,key ,dir )
+get. rotobj	=function( loca, dir, key )
 {
+	var{ pl, game }	=this
+
 	var loc	=new Loc().seta(loca)
 
-	if( loc.disth( pl.loc ) > 1 )
+	if( this.pl.sendreach( loc ) )	return
+
+	var obj	=this.game.maps.getitem( loc, key )
+
+	if( ! obj )
 	{
-		this.send("error" ,`Distance to ${loc} too far.` )
+		this.send("error" ,`Object ${key} not found.`)
 
 		return
 	}
-	/**@todo check that item exists */
+	dir	=Loc.steprot( obj.dir, dir )
 
-	var item	=pl.map().obj.g(loc)[key]
-
-	pl.rotobj( loc ,item ,dir )
+	pl.rotobj( loc, dir, obj )
 }
 
 

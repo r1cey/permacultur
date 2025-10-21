@@ -5,19 +5,22 @@ import Loc from "../../www/game/shared/Loc.js"
 
 /********
  * ALL OF THE PROTOTYPE METHODS WILL RECEIVE "s_" and "send_" PREFIXES 
- * ***/
+ * ***
 
 
 export default class SSe
 {
-}
+}*/
+
+
+var out	={}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
-SSe.prototype. map_additem	=function( map ,loc ,item )
+out. mapaddobj	=function( map, loc, o )
 {
 	for(var n in this.cls.o )
 	{
@@ -33,7 +36,7 @@ SSe.prototype. map_additem	=function( map ,loc ,item )
 /** @arg {string} act 
  * @arg {array} vals */
 
-SSe.prototype. mapset_	=function( map, act, loc, vals )
+out. mapset_	=function( map, act, loc, vals )
 {
 	for(var n in this.cls.o )
 	{
@@ -48,7 +51,7 @@ SSe.prototype. mapset_	=function( map, act, loc, vals )
 
 
 
-SSe.prototype. mapobjset	=function( map, loc, key )
+out. mapobjset	=function( map, loc, key )
 {
 	for(var n in this.cls.o )
 	{
@@ -66,7 +69,7 @@ SSe.prototype. mapobjset	=function( map, loc, key )
 
 
 
-SSe.prototype. newpl	=function( pl )
+out. newpl	=function( pl )
 {
 	for(var n in this.cls.o )
 	{
@@ -79,7 +82,7 @@ SSe.prototype. newpl	=function( pl )
 
 
 
-SSe.prototype. plconn	=function( pl )
+out. plconn	=function( pl )
 {
 	for(var n in this.cls.o)
 	{
@@ -92,7 +95,7 @@ SSe.prototype. plconn	=function( pl )
 
 
 
-SSe.prototype. plmov	=function( pl, oldloc )
+out. plmov	=function( pl, oldloc )
 {
 	var newloc	=pl.loc
 
@@ -118,7 +121,7 @@ SSe.prototype. plmov	=function( pl, oldloc )
 
 
 
-SSe.prototype. plclimb	=function( pl, dir )
+out. plclimb	=function( pl, dir )
 {
 	if( pl.cl )	pl.cl.s.clplclimb( dir )
 
@@ -136,7 +139,28 @@ SSe.prototype. plclimb	=function( pl, dir )
 }
 
 
-SSe.prototype. plactonobj	=function( pl, loc, objkey, act, params )
+out. rotobj	=function( pl, loc, dir, obj )
+{
+	for(var n in this.cls.o )
+	{
+		var pl2	=this.cls.o[n].pl
+
+		if( pl2.sees(loc) )
+		{
+			pl2.cl.sendjson(["rotobj" ,[ pl.name ,loc ,dir ,obj.constructor.key ]])
+		}
+	}
+}
+
+
+
+out. movobj	=function( )
+{
+	
+}
+
+
+out. plactonobj	=function( pl, loc, objkey, act, params )
 {
 	for(var n in this.cls.o )
 	{
@@ -170,6 +194,10 @@ SSe.prototype. setplitem	=function( pl ,item )
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+export default out
 
 
 /*

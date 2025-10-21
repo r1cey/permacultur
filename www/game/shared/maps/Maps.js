@@ -88,6 +88,14 @@ Maps.prototype. fore	=function( fun )
 }
 
 
+/** @todo If item not found in location, find closest similar item. */
+
+Maps.prototype. getitem	=function( loc ,key )
+{
+	return this.loc2map(loc).obj.g(loc)?.key
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

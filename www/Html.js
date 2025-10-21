@@ -129,6 +129,20 @@ Html.prototype. loadp	=async function( name, ...args )
 
 
 
+Html.prototype. objchanged	=function( loc, key )
+{
+	var menu	=this.can.menu
+
+	if( ! menu )	return
+
+	if( menu.loc.eq(loc) )	menu.del()
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 Html.prototype. onresize	=function()
 {
 	var res	=this.resize
