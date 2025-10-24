@@ -147,6 +147,22 @@ Pls.prototype. new	=function( plmsg )
 
 	var pl	=new Pl( plmsg, g )
 
+	// add starter items
+	{
+		let belt	=new items.Belt()
+
+		pl.additem( belt )
+
+		pl.additemcnt([ items.Belt.key ], new items.Multi() )
+
+		// pl.inv.belt.additem( new items.Multi() )
+
+		let sbag	=new items.Seedbag()
+
+		pl.additem( sbag )
+
+		pl.additemcnt([ sbag.gkey() ,sbag.id ],new items.CucumberSeed( null ,15 ) )
+	}
 	var spawns	=map.obj.o.spawns
 
 	// var loc	=spawns[0].c()
@@ -156,6 +172,7 @@ Pls.prototype. new	=function( plmsg )
 	this.s( pl )
 
 	pl.save( this.conf.dir )	
+	
 	{
 		let idewd =0
 
@@ -174,7 +191,7 @@ Pls.prototype. new	=function( plmsg )
 		},
 		null, spawns[0] )
 	}
-	g.srv?.send("newpl", pl )
+	g.srv?.sendplvis( pl ,"newpl" ,[ pl ])
 
 	return pl
 }

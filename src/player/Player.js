@@ -70,29 +70,6 @@ export default class Player extends PlMsg	//SrvPl( PlMsg )
 		super( plmsg )
 
 		this.game	=game
-
-		var belt	=new items.Belt()
-
-		var pl	=this
-
-		pl.additem( belt )
-
-		pl.additemcnt([ items.Belt.key ], new items.Multi() )
-
-		// pl.inv.belt.additem( new items.Multi() )
-
-		var sbag	=new items.Seedbag()
-
-		pl.additem( sbag )
-
-		pl.additemcnt([ sbag.gkey() ,sbag.id ], new items.CucumberSeed( null ,15 ) )
-		/*
-		for(let bagid in pl.inv.seedbags )
-		{
-			pl.inv.seedbags[bagid].additem( new items.CucumberSeed( null ,15 ) )
-
-			break
-		}*/
 	}
 
 	/*static Slp	=PlSlp
@@ -133,11 +110,11 @@ Player.prototype. conncl	=function( cl )
 
 	cl.send("setmap")
 
-	this.game.srv?.send_plconn( this )
+	this.game.srv?.sendplvis( this ,"plconn" ,[ this ,true ])
 }
 
 
-
+/*
 Player.prototype. clclosed	=function()
 {
 	this.srv?.cls.del( this.name )
@@ -145,7 +122,7 @@ Player.prototype. clclosed	=function()
 	this.cl	=null
 
 	this.srv?.send.plconn( this )
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,7 +148,7 @@ Player.prototype. mov	=function( loc )
 
 	map.obj.set(loc).pl	=this
 
-	this.srv?.send_plmov( this, oldloc )
+	this.srv?.send( "plmov" ,this ,oldloc )
 
 	if( loc.h === 0 )
 	{
@@ -265,8 +242,12 @@ Player.prototype. additem	=function( item, len )
 {
 	var addl	=PlMsg.prototype.additem. call(this, item, len )
 
-	if( addl )	this.srv?.send("setplitem" ,this ,item ,addl )
+	if( addl )
+	{
+		this.cl?.send( "setclplitem" ,[ item ,addl ])
 
+		this.srv?.sendplvis( this ,"setplitem" ,[ this ,item ,addl ])
+	}
 	return addl
 }
 
@@ -277,7 +258,7 @@ Player.prototype. additemcnt	=function( path ,item ,len )
 
 	/** @todo Check if any other circumstance pl.cl can be 0 and the check would return true */
 
-	if( addl && this.cl )	this.cl.send("setplitemcnt" ,this ,path ,item ,addl )
+	if( addl )	this.cl?.send("setplitemcnt" ,[ this ,path ,item ,addl ])
 
 	return addl
 }

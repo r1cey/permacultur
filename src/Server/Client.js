@@ -60,8 +60,15 @@ export default class Client
 
 
 
-Client.prototype. send	=function( fnk, ...args )
+Client.prototype. send	=function( fnk, args )
 {
+	/** @todo remove in production */
+	if( ! out[fnk] )
+	{
+		console.error( `Client.send.${fnk} doesn't exist` )
+
+		return
+	}
 	var[ outa, rep ]	=out[fnk]. apply(this, args )
 
 	if( outa )	this.sendjson([ fnk, outa ], rep )
@@ -97,7 +104,7 @@ Client.prototype. onclose	=function( code, reason /*, wsclosed =false*/ )
 
 	pl.cl	=null
 
-	this.srv.send_plconn( pl, false )
+	this.srv.sendplvis( pl ,"plconn" ,[ pl, false ])
 
 	for(var cl2 of this.rtcstate)
 	{

@@ -154,8 +154,6 @@ Serv.prototype. onmsg	=function( ev )
 
 		on[act]?. apply(this, args )
 
-		// this["on_"+act]?.( ...args )
-
 		console.log(act, args )
 	}
 }

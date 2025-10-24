@@ -33,7 +33,7 @@ get. mov	=function( loca )
 
 	if( ! map.canplmov( loc, pl ))
 	{
-		this.send("movrej", loc )
+		this.send("movrej" ,[ loc ])
 
 		return
 	}
@@ -41,7 +41,7 @@ get. mov	=function( loca )
 
 	if( curloc.eq( loc ))
 	{
-		this.send_error( "Already there." )
+		this.send("error" ,[ "Already there." ])
 		
 		return
 	}
@@ -140,7 +140,7 @@ get. rotobj	=function( loca, dir, key )
 
 	if( ! obj )
 	{
-		this.send("error" ,`Object ${key} not found.`)
+		this.send("error" ,[ `Object ${key} not found.` ])
 
 		return
 	}
@@ -160,7 +160,7 @@ get. actonobj	=function( path, act, params )
 
 	if( tgtloc.disth( pl.loc ) > 1 )
 	{
-		this.send("error", `Distance to ${path.at(-1)} too far.` )
+		this.send("error" ,[ `Distance to ${path.at(-1)} too far.` ])
 
 		return
 	}

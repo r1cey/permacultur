@@ -16,7 +16,7 @@ export default class Obj extends ShObj
 			key :"spawns"
 			,
 			fromJSON :( arr )=> arr.map(( val )=> new Loc().seta(val) )
-		}
+		}		
 	])
 
 	/*constructor( ...args )
@@ -41,7 +41,7 @@ Obj.prototype. read	=async function( path )
 
 			return val
 		}
-		else	return this.constructor.jrev.fn( key, val )
+		else	return this.constructor.jrev.revivr( key, val )
 	} )
 	if( ! o )	return
 

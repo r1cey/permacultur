@@ -11,7 +11,13 @@ export default class JR
 
 	constructor()
 	{
-		this.addobjs([ Loc, Col ])
+		this.addobjs([ Loc ,Col ,
+			{
+				key	:"block"
+				,
+				fromJSON	:(val)=> this.revivr(val[0],val[1])
+			}
+		 ])
 
 		this.fn	=this.revivr.bind(this)
 	}

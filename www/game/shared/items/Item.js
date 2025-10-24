@@ -30,7 +30,8 @@ export default class Item	extends Jable
 	gkey()	{return this.constructor.key }
 
 
-	/** @returns new obj or this. */
+	/**	Doesn't reduce the num of this item. 
+	 * @returns new obj or this. */
 	take( l =1 )
 	{
 		var out
@@ -39,7 +40,7 @@ export default class Item	extends Jable
 		{
 			out	=new this.constructor( this ,l )
 
-			this.num	-= l
+			// this.num	-= l
 		}
 		else
 		{
@@ -75,7 +76,7 @@ export default class Item	extends Jable
 
 			key	:this.key
 			,
-			fromJSON	:( meta )=>	jrev.fn( meta[0], meta[1] )
+			fromJSON	:( meta )=>	jrev.revivr( meta[0], meta[1] )
 		}
 	}
 }

@@ -98,16 +98,16 @@ out. clplclimb	=function( dir )
 
 
 
-out.setclplitem	=function( item )
+out.setclplitem	=function( item ,addl )
 {
-	return [[ item.gkey() ,item  ]]
+	return [[ item.gkey() ,item ,addl ]]
 }
 
 
 
-out.setclplitemcnt	=function( path ,item )
+out.setclplitemcnt	=function( path ,item ,addl )
 {
-	return [[ path ,item.gkey() ,item ]]
+	return [[ path ,item.gkey() ,item ,addl ]]
 }
 
 
@@ -157,15 +157,15 @@ out. mapobjset	=function( map, loc, key )
 
 out. newpl	=function( pl2 )
 {
-	this.sendjson({ newpl: pl2 })
+	return [[ pl2 ]]
 }
 
 
 /** Different player connected */
 
-out. plconn	=function( pl2 )
+out. plconn	=function( pl2, connstat )
 {
-	this.sendjson({ plconn: { name: pl2.name, cl: pl2.cl ? 1 : 0 }})
+	return [[ pl2.name ,connstat ]]
 }
 
 
@@ -225,9 +225,9 @@ out. actonobj	=function( loc, key, act, params )
 
 
 
-out.setplitem	=function( plname ,plloc ,item )
+out.setplitem	=function( pl ,item ,addl )
 {
-	return [[ plname ,plloc ,item.constructor.key ,item ]]
+	return [[ pl.name ,pl.loc ,item.constructor.key ,item ,addl ]]
 }
 
 

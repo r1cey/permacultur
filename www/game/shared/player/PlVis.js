@@ -23,7 +23,7 @@ export default class PlVis	extends Jable
 	
 	loc	=new Loc(0,0,0)	//when this is derived on client, it can become a getter function
 
-	cl	=0
+	cl	=null
 
 	sleep	=0
 

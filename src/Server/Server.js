@@ -30,7 +30,7 @@ export default class Server
 
 	// send	=new Send(this)
 
-	static out	=new ServSend()
+	static out	=out //new ServSend()
 
 	static jrev	=new JRev()
 

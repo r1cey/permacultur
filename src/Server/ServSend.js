@@ -19,7 +19,7 @@ var out	={}
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 out. mapaddobj	=function( map, loc, o )
 {
 	for(var n in this.cls.o )
@@ -31,11 +31,11 @@ out. mapaddobj	=function( map, loc, o )
 			cl.send("map_additem" ,map ,loc ,item )
 		}
 	}
-}
+}*/
 
 /** @arg {string} act 
  * @arg {array} vals */
-
+/*
 out. mapset_	=function( map, act, loc, vals )
 {
 	for(var n in this.cls.o )
@@ -62,36 +62,13 @@ out. mapobjset	=function( map, loc, key )
 			cl.send_mapobjset( map, loc, key )
 		}
 	}
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 
-out. newpl	=function( pl )
-{
-	for(var n in this.cls.o )
-	{
-		if(this.cls.o[n].pl.seespl( pl ))
-		{
-			this.cls.o[n].send("newpl", pl )
-		}
-	}
-}
-
-
-
-out. plconn	=function( pl )
-{
-	for(var n in this.cls.o)
-	{
-		if( this.cls.o[n].pl.seespl( pl ))
-		{
-			this.cls.o[n].send.plconn( pl )
-		}
-	}
-}
 
 
 
@@ -101,7 +78,7 @@ out. plmov	=function( pl, oldloc )
 
 	var delta	=new Loc().set(newloc).subv(oldloc)
 
-	if( pl.cl && ! delta.h )	pl.cl.send("clplmov", delta )
+	if( pl.cl && ! delta.h )	pl.cl.send("clplmov" ,[ delta ])
 
 	for(var n in this.cls.o )
 	{
@@ -113,14 +90,14 @@ out. plmov	=function( pl, oldloc )
 
 		if( pl2.sees(newloc) || seesoldloc)
 		{
-			pl2.cl.send("plmov", pl, delta, seesoldloc )
+			pl2.cl.send("plmov" ,[ pl, delta, seesoldloc ])
 		}
 	}
 }
 
 
 
-
+/*
 out. plclimb	=function( pl, dir )
 {
 	if( pl.cl )	pl.cl.s.clplclimb( dir )
@@ -180,7 +157,7 @@ out. setplitem	=function( pl ,item )
 	pl.cl?.send("setclplitem" ,item )
 
 	this.sendplvis( pl ,"setplitem" ,[ pl.name ,pl.loc ,item ])
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
