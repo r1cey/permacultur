@@ -92,7 +92,7 @@ Map.prototype. additem	=function( loc ,item ,len )
 
 	if( addedl > 0 )
 	{
-		this.game?.server?.send("map_additem" ,this ,loc ,item )
+		this.game.server?.sendvis( loc ,"map_additem" ,[ this ,loc ,item ])
 	}
 	return addedl
 }

@@ -66,7 +66,15 @@ export default class Item	extends Jable
 
 	toJSON( key )
 	{
-		return key===Item.key ? [ this.constructor.key, this ] : this
+		switch( key )
+		{
+			case Item.key :
+
+			case "block" :
+
+				return[ this.constructor.key, this ]
+		}
+		return this
 	}
 
 

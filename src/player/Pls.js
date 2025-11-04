@@ -44,7 +44,7 @@ export default class Pls	extends PathObj
 	
 	jrev	=new JRev().add([
 		{
-			key :"cl" , fromJSON :()=> 0
+			key :"cl" , fromJSON :()=> null
 		},
 		Hands
 	] )
@@ -106,6 +106,8 @@ Pls.prototype. read	=async function( pllocs )
 				pl.loc.set( loc )
 
 				maps.loc2map(loc).obj.g(loc).pl	=pl
+
+				this.o[pln]	=pl
 			}
 		})())
 	}
@@ -175,9 +177,9 @@ Pls.prototype. new	=function( plmsg )
 {
 	console.log( `Creating new player: ${plmsg.name}` )
 
-	var g=this.game
+	const g=this.game
 
-	var map	=g.maps.ground
+	const map	=g.maps.ground
 
 	var pl	=new Pl( plmsg, g )
 
@@ -187,7 +189,7 @@ Pls.prototype. new	=function( plmsg )
 
 		pl.additem( belt )
 
-		pl.additemcnt([ items.Belt.key ], new items.Multi() )
+		pl.additemcnt([ belt.gkey() ], new items.Multi() )
 
 		// pl.inv.belt.additem( new items.Multi() )
 
@@ -205,8 +207,7 @@ Pls.prototype. new	=function( plmsg )
 
 	this.s( pl )
 
-	pl.save( this.conf.dir )	
-	
+	pl.save( this.conf.dir )		
 	{
 		let idewd =0
 

@@ -115,7 +115,7 @@ out.setclplitemcnt	=function( path ,item ,addl )
 
 
 
-out. map_additem	=function( map ,loc ,item )
+out. map_setitem	=function( map ,loc ,item )
 {
 	return [[ map.bin.constructor.id ,loc ,item.toJSON(Item.key) ]]
 }

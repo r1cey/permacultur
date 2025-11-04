@@ -81,7 +81,7 @@ Map.prototype. canplmov	=function( dest, pl )
 	
 	return this.inside(dest) && ( !o ||
 
-		(!o.pl || o.pl===pl) && !o.dewd )
+		(!o.pl || o.pl===pl) && !o.block )
 }
 
 
@@ -92,7 +92,7 @@ Map.prototype. newcell	=function( v )
 }
 
 
-/** modifies given item if portion was taken */
+/** doesn't modify item */
 
 Map.prototype. additem	=function( loc ,item ,len )
 {
@@ -111,8 +111,6 @@ Map.prototype. additem	=function( loc ,item ,len )
 		if( mapitem.id || item.id )		return 0
 
 		mapitem.num	+= len
-
-		item.num	-= len
 	}
 	else
 	{
