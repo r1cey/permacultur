@@ -26,6 +26,7 @@ export default class Obj extends ShObj
 }
 
 
+/** If successful, returns {[plname]:loc} */
 
 Obj.prototype. read	=async function( path )
 {
@@ -33,11 +34,13 @@ Obj.prototype. read	=async function( path )
 
 	var pls	={}
 
+	var h	=this.map.getloc().h
+
 	var o	=await fs.readjson( path+'.json', ( key, val )=>
 	{
 		if( val?.pl )
 		{
-			pls[ val.pl ]	=key
+			pls[ val.pl ]	=new Loc().setvstr( key ,h )
 
 			return val
 		}
@@ -45,35 +48,9 @@ Obj.prototype. read	=async function( path )
 	} )
 	if( ! o )	return
 
+	console.log( `Have read map obj file: ${this.map.constructor.name}`)
+
 	this.o	=o
 
-	var proms	=[]
-
-	for(let pln in pls )
-	{
-		proms.push( (async()=>
-		{
-			var vstr	=pls[pln]
-
-			var pl	=await map.game.pls.readpl( pln )
-
-			if( ! pl )
-			{
-				delete o[vstr].pl
-
-				return
-			}
-			/** @todo get height from map, not pl.loc */
-			
-			var h	=map.bin	? map.getloc().h	: pl.loc.h
-
-			pl.loc.setvstr(vstr, h )
-			
-			map.game.pls.s( pl )
-		})() )
-	}
-	/** Don't forget, the only reason we go through o again is to check
-	 * correct locations for each player */
-
-	await Promise.all( proms )
+	return pls
 }

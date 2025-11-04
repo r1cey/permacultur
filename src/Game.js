@@ -96,12 +96,11 @@ G.prototype. start	=async function( confpa )
 			console.error("Couldn't read conf file: "+confpa )
 		}
 	}
+	var pllocs	=await this.maps.start()
 
-	if( ! await this.maps.start() )
-	{
-		return false
-	}
-	await this.pls.fillmissing()
+	await this.pls.read( pllocs )
+
+	// await this.pls.fillmissing()
 
 	g.time.hour.int	=setInterval( g.hour.bind(g), 60*1000*60*1.5 )
 
@@ -112,6 +111,8 @@ G.prototype. start	=async function( confpa )
 	this.server.start()
 
 	console.log(`Game had started!`)
+
+	// console.log( this.maps.getitem(this.pls.g("gavriel").loc,"pl"))
 
 	return true
 }

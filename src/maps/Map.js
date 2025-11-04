@@ -35,7 +35,8 @@ export default class Map extends ShMap
 }
 
 
-
+/** Returns pls obj if map is read properly:
+ * {[plname]:loc} */
 
 Map.prototype. read	=async function( dir ="" )
 {
@@ -48,11 +49,10 @@ Map.prototype. read	=async function( dir ="" )
 		console.log('Has read bin map: '+this.constructor.name )
 
 		this.setbuf( buf )
+
+		return await this.obj.read( pa )
 	}
-
-	await this.obj.read( pa )
-
-	return buf
+	// return buf
 }
 
 

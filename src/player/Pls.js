@@ -79,7 +79,41 @@ Pls.prototype. init	=async function()
 }
 
 
-/** Reads and saves */
+/** Appropriately changes map obj properties. */
+
+Pls.prototype. read	=async function( pllocs )
+{
+	var proms	=[]
+
+	const maps	=this.game.maps
+
+	var loc
+
+	for(const pln in pllocs )
+	{
+		loc	=pllocs[pln]
+
+		proms.push((async()=>
+		{
+			var pl	=await this.readpl( pln )
+
+			if( ! pl )
+			{
+				delete maps.loc2map(loc).obj.g(loc).pl
+			}
+			else
+			{
+				pl.loc.set( loc )
+
+				maps.loc2map(loc).obj.g(loc).pl	=pl
+			}
+		})())
+	}
+	await Promise.all(proms)
+}
+
+
+/** Just reads and revives json */
 
 Pls.prototype. readpl	=async function( name )
 {

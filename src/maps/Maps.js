@@ -21,6 +21,7 @@ export default class Ms extends shMaps
 		,
 		dir	:"./maps/"
 	}
+	game
 
 	static Ground	=Ground
 
@@ -45,6 +46,8 @@ export default class Ms extends shMaps
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** Returns obj with correct player locations.
+ * { [plname] :loc } */
 
 Ms.prototype. start	=async function()
 {
@@ -54,28 +57,41 @@ Ms.prototype. start	=async function()
 	{
 		return false
 	}
-	var proms	=
-	[
-		this.gr.read( this.conf.dir )
-		,
-		this.trees.read( this.conf.dir )
-	]
-
-	proms	=await Promise.all(proms)
-
-	if( ! proms[0] )
+	var pllocs	=await Promise.all(
+		[
+			this.gr.read( this.conf.dir )
+			,
+			this.trees.read( this.conf.dir )
+		])
+	if( ! this.gr.bin )
 	{
-		console.log( `Ground files were not found` )
+		// console.log( `Ground files were not found` )
 	}
-	else if( ! proms[1] )
+	else if( ! this.trees.bin )
 	{
-		console.log( `Trees files were not found`)
+		console.log( `Generating new trees map from ground map.`)
 
 		this.tr.gen( this.gr )
 
 		this.trees.save(this.conf.dir)
 	}
-	return true
+	var errorlocs	=Ms.mergepllocs( pllocs )
+
+	var errormaps	=new Set()
+
+	for(var[ pln ,plloc ] of errorlocs )
+	{
+		var map	=this.loc2map( plloc )
+
+		errormaps.add( map )
+
+		delete map.obj.g(plloc).pl
+	}
+	for(var map of errormaps )
+	{
+		map.save( this.conf.dir )
+	}
+	return pllocs[0]
 }
 
 
@@ -206,4 +222,34 @@ Ms.prototype. gshiftboards	=function( loc, r, dir )
 {
 	return { gr :this.gr.newshiftboard( loc, r, dir ),
 				tr :this.tr.newshiftboard( loc, r, dir ) }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+/** @arg [] pllocs
+ * Merges locs into first array member. Returns errorlocs if conflicts happen. */
+
+Ms.mergepllocs	=function( pllocs )
+{
+	var errlocs	=[]
+
+	var root	=pllocs[0]
+
+	for(var i= 1 ;i< pllocs.length ;i++)
+	{
+		for( pln in pllocs[i] )
+		{
+			if( root[pln] )
+			{
+				errlocs.push([ pln ,pllocs[i][pln] ])
+			}
+			else
+			{
+				root[pln]	=pllocs[i][pln]
+			}
+		}
+	}
+	return errlocs
 }

@@ -92,7 +92,7 @@ Maps.prototype. fore	=function( fun )
 
 Maps.prototype. getitem	=function( loc ,key )
 {
-	return this.loc2map(loc).obj.g(loc)?.key
+	return this.loc2map(loc).obj.g(loc)?.[key]
 }
 
 
@@ -103,6 +103,19 @@ Maps.prototype. getitem	=function( loc ,key )
 Maps.prototype. canplmov	=function( dest )
 {
 	return this.loc2map( dest ).canplmov( dest )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Maps.prototype. delpls	=function( pls )
+{
+	for(var[ pln ,plloc ] of pls )
+	{
+		delete this.loc2map(plloc).g(plloc).pl
+	}
 }
 
 
