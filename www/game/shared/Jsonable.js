@@ -13,6 +13,9 @@ export default class Jable
 			fromJSON	:( val )=>	 this.fromJSON( val, ...args )
 		}
 	}
+
+	
+	gkey()	{return this.constructor.key }
 	
 
 	set( obj )	{return Object.assign( this, obj ) }

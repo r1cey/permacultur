@@ -1,3 +1,4 @@
+import Block	from "./Block.js"
 import Item from "./Item.js"
 import Cont	from "./Container.js"
 import Box	from "./Box.js"
@@ -15,11 +16,9 @@ var t	={}
 
 
 
-t.Dewd	=class extends Item
+t.Dewd	=class extends Block
 {
 	dir
-
-	active	=false
 
 	static vol	=500000
 
@@ -37,6 +36,24 @@ t.Dewd	=class extends Item
 	sim_rot( ddir )
 	{
 		return Loc.roth( this.dir, ddir )
+	}
+
+
+	activate( )
+	{
+		var cello	=map.obj.g(loc)
+
+		var item	=cello.drop[this.gkey()]
+
+		var actitem	=item.take()
+
+		delete cello.drop[this.gkey()]
+
+		/** @todo push remaining items out of cell */
+
+		actitem.active	=true
+
+		cello.block	=actitem
 	}
 
 

@@ -27,9 +27,6 @@ export default class Item	extends Jable
 	}
 
 
-	gkey()	{return this.constructor.key }
-
-
 	/**	Doesn't reduce the num of this item. 
 	 * @returns new obj or this. */
 	take( l =1 )
@@ -70,19 +67,18 @@ export default class Item	extends Jable
 		{
 			case Item.key :
 
-			case "block" :
-
 				return[ this.constructor.key, this ]
 		}
 		return this
 	}
 
 
+
 	static newRevObj( jrev )
 	{
 		return {
 
-			key	:this.key
+			key	:Item.key
 			,
 			fromJSON	:( meta )=>	jrev.revivr( meta[0], meta[1] )
 		}

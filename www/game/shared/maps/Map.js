@@ -92,6 +92,12 @@ Map.prototype. newcell	=function( v )
 }
 
 
+Map.prototype. setblock	=function( loc ,block )
+{
+	this.obj.s(loc).block	=block
+}
+
+
 /** doesn't modify item */
 
 Map.prototype. additem	=function( loc ,item ,len )

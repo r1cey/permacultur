@@ -110,13 +110,13 @@ export function mixin( mums, clss )
 {
 	for(var mum of mums )
 	{
-		Object.getOwnPropertyNames(mum).forEach( name =>
+		Object.getOwnPropertyNames(mum).forEach( propn =>
 		{
-    		if( name!=="prototype" && name!=="name" && name!=="constructor" )
+    		if( propn!=="prototype" && propn!=="name" && propn!=="constructor" )
 			{
-      			Object.defineProperty( clss, name,
+      			Object.defineProperty( clss, propn,
 
-        			Object.getOwnPropertyDescriptor( mum, name )
+        			Object.getOwnPropertyDescriptor( mum, propn )
       			)
     		}
 		} )

@@ -30,16 +30,8 @@ export default class Pls	extends PathObj
 
 	g( n )	{ return this.o[n] }
 
-	s( pl )
-	{
-		this.o[pl.name]	=pl
+	s( pl )	{ this.o[pl.name]	=pl }
 
-		var map	=pl.map()
-
-		map.findfirstplloc( pl.loc )
-
-		map.obj.set( pl.loc ).pl	=pl
-	}
 
 	
 	jrev	=new JRev().add([
@@ -135,7 +127,7 @@ Pls.prototype. readpl	=async function( name )
 }
 
 
-
+/*
 Pls.prototype. fillmissing	=async function()
 {
 	var names	=await fs.readdir( this.conf.dir )
@@ -162,7 +154,7 @@ Pls.prototype. fillmissing	=async function()
 
 		this.s( pl )
 	}
-}
+}*/
 
 
 
@@ -205,9 +197,14 @@ Pls.prototype. new	=function( plmsg )
 
 	pl.loc.set( spawns[0] )
 
+	map.findfirstplloc( pl.loc )
+
 	this.s( pl )
 
+	map.obj.s(pl.loc).pl	=pl
+
 	pl.save( this.conf.dir )		
+	
 	{
 		let idewd =0
 
@@ -215,7 +212,7 @@ Pls.prototype. new	=function( plmsg )
 		{
 			if( ! map.getshade( loc ) && map.canplmov( loc ))
 			{
-				map.additem( loc ,new items.Dewd() )
+				map.setblock( loc ,new items.Dewd() )
 
 				// g.con.online("additem "+JSON.stringify({loc, o:{ dewd :null }}))
 

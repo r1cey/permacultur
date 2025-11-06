@@ -1,5 +1,6 @@
 import Loc from "./Loc.js"
 import Col from "./Color.js"
+import Block from "./items/Block.js"
 
 
 export default class JR
@@ -12,11 +13,8 @@ export default class JR
 	constructor()
 	{
 		this.addobjs([ Loc ,Col ,
-			{
-				key	:"block"
-				,
-				fromJSON	:(val)=> this.revivr(val[0],val[1])
-			}
+			
+			Block.newRevObj(this)
 		 ])
 
 		this.fn	=this.revivr.bind(this)
