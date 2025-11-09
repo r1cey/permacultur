@@ -414,6 +414,17 @@ Player.prototype. setheat	=function( lvl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+Player.prototype. setbelt	=function( belt )
+{
+	PlMsg.prototype.setbelt. call(this, belt )
+
+	this.game?.srv.sendplvis( this ,"pl_setbelt" ,[ belt ])
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
 /*
 Player. fromJSON	=function( val )
 {

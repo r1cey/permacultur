@@ -173,19 +173,13 @@ Pls.prototype. new	=function( plmsg )
 
 	const map	=g.maps.ground
 
-	var pl	=new Pl( plmsg, g )
+	var pl	=new Pl( plmsg )
 
 	// add starter items
 	{
-		pl.inv.belt	=new things.cnts.Belt()
+		pl.setbelt( new things.cnts.Belt() )
 	
-		pl.inv.belt.inv.multi	=new things.stacks.Multi()
-
-		pl.cl.send( "plcl_setitem" ,[[ "seedbag" ,3 ], seeds ])
-
-		pl.inv.seedbags[3].add( )
-
-		
+		pl.gbelt().addmulti( new things.stacks.Multi() )
 
 		pl.addsbag( new things.bags.Seedbag() ).add( new things.stacks.CucumberSeed( null ,15 ) )
 	}
@@ -222,7 +216,6 @@ Pls.prototype. new	=function( plmsg )
 		},
 		null, spawns[0] )
 	}
-	g.srv?.sendplvis( pl ,"newpl" ,[ pl ])
 
 	return pl
 }
