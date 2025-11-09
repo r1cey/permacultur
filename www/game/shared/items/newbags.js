@@ -1,0 +1,21 @@
+export default function newbags( Bag )
+{
+	var o	={}
+
+	///////////////////////////////////////////////////////////////////////////////
+
+
+	o.Seedbag	=class extends Bag
+	{
+		static vol	=Math.floor(40*25*20/125)
+	
+		static boxvol	=Math.floor(55*45*45/125)
+
+		static key	="seedbag"
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
+
+	return o
+}

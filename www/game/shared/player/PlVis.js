@@ -77,6 +77,13 @@ PlVis.prototype. set	=function( pl )
 
 
 
+Pl.prototype. addsbag	=function( sbag )
+{
+	//this.inv.
+}
+
+
+/*
 PlVis.prototype. additem	=function( item ,len )
 {
 	len	??=item.num
@@ -121,4 +128,4 @@ PlVis.prototype. additem	=function( item ,len )
 			addedlen	=0
 	}
 	return addedlen
-}
+}*/

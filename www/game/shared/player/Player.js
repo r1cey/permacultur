@@ -246,7 +246,7 @@ Pl.prototype. setheat	=function( lvl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 Pl.prototype. additemcnt	=function( path ,item ,len )
 {
 	var cnt	=this
@@ -267,7 +267,7 @@ Pl.prototype. additemcnt	=function( path ,item ,len )
 Pl.prototype. delitem	=function( item, num )
 {
 	item.del(num)	? delete this.inv[item.constructor.name]	: 0
-}
+}*/
 
 
 /**@arg {Holder}	from

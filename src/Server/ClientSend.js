@@ -1,6 +1,6 @@
 import Loc from '../../www/game/shared/Loc.js'
 
-import Item from '../../www/game/shared/items/Item.js'
+import Stack from '../../www/game/shared/items/Stackable.js'
 
 
 
@@ -117,7 +117,7 @@ out.setclplitemcnt	=function( path ,item ,addl )
 
 out. map_setitem	=function( map ,loc ,item )
 {
-	return [[ map.bin.constructor.id ,loc ,item.toJSON(Item.key) ]]
+	return [[ map.bin.constructor.id ,loc ,item.toJSON(Stack.key) ]]
 }
 
 

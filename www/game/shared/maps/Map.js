@@ -77,11 +77,34 @@ Map.prototype. inside	=function( loc )
 
 Map.prototype. canplmov	=function( dest, pl )
 {
-	var o	=this.obj.g(dest)
-	
-	return this.inside(dest) && ( !o ||
+	if( ! this.inside(dest) )	return false
 
-		(!o.pl || o.pl===pl) && !o.block )
+	var c	=this.obj.g(dest)
+
+	if( !c )	return true
+
+	var areaS	=0
+
+	for(var k in c )
+	{
+		var o	=c[k]
+
+		if( k === "pl" )	return o === pl
+
+		var area	=7 ** ( ~ o.constructor.area & 7 )
+
+		areaS	+= area
+
+		if( areaS >= 50421 /* (7**5)*3 */ )
+		{
+			return false
+		}
+	}
+	return true
+
+	/*return this.inside(dest) && ( !o ||
+
+		(!o.pl || o.pl===pl) && !o.block )*/
 }
 
 
@@ -92,9 +115,45 @@ Map.prototype. newcell	=function( v )
 }
 
 
-Map.prototype. setblock	=function( loc ,block )
+
+Map.prototype. addstack	=function( loc ,stack )
 {
-	this.obj.s(loc).block	=block
+	var c	=this.obj.s(loc)
+
+	var key	=stack.gkey()
+
+	var cstack
+
+	if( Obj.getcnts( c ,key ))	return 0
+
+	else if( cstack =Obj.getstack( c ,key ))
+	{
+		return cstack.len	+= stack.len
+	}
+	else
+	{
+		Obj.setstack( c ,stack )
+
+		return stack.len
+	}
+}
+
+
+Map.prototype. addstack_cnt	=function( path, stack )
+{
+	var[ loc ,key ,id ]	=path
+
+	var cnt	=Obj.getcnt( this.obj.g(loc) ,key ,id )
+
+	for(var i =3 ;i< path.length - 2 ;i +=2 )
+	{
+		key	=path[i]
+		
+		id	=path[i+1]
+
+		cnt	=cnt.getitem( key ,id )
+	}
+	if()
 }
 
 

@@ -2,7 +2,7 @@ import Cnt from "./Container.js"
 
 
 
-export default class Box extends Cnt
+export default class Bag extends Cnt
 {
 	/** Including empty containers */
 	items	={}
@@ -14,7 +14,7 @@ export default class Box extends Cnt
 
 
 
-Box.prototype. getobj	=function( id )
+Bag.prototype. getobj	=function( id )
 {
 	return typeof id==="number"	? this.cnts[id]	: this.items[id]
 }
@@ -23,7 +23,7 @@ Box.prototype. getobj	=function( id )
 /** Modifies given items if portion was taken.
  * @returns how many items were transfered */
 
-Box.prototype. additem	=function( item ,len )
+Bag.prototype. additem	=function( item ,len )
 {
 	len	??=item.num
 
@@ -74,7 +74,7 @@ Box.prototype. additem	=function( item ,len )
 
 
 
-Box.prototype. delitem	=function( item, num =1, dadbox )
+Bag.prototype. delitem	=function( item, num =1, dadbox )
 {
 	var itemn	=item.constructor.name
 
@@ -82,7 +82,7 @@ Box.prototype. delitem	=function( item, num =1, dadbox )
 	
 		(this.o[itemn].num	-= num) > 0	? 0	: delete this.o[itemn]
 
-	this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this ) : 0
+	this.calcempty()	? dadbox.set.delete(this) && Bag.prototype.additem. call(dadbox, this ) : 0
 }
 
 
@@ -91,14 +91,14 @@ Box.prototype. delitem	=function( item, num =1, dadbox )
 
 
 
-Box.prototype. calcvol	=function()
+Bag.prototype. calcvol	=function()
 {
 	return Cnt.prototype.calcvol() + this.calcitemvol()
 }
 
 
 
-Box.prototype. mov2uniq	=function( cnt )
+Bag.prototype. mov2uniq	=function( cnt )
 {
 	var key	=cnt.constructor.key
 
@@ -111,7 +111,7 @@ Box.prototype. mov2uniq	=function( cnt )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-Box.prototype. calcitemvol	=function()
+Bag.prototype. calcitemvol	=function()
 {
 	var vol	=0
 
@@ -128,7 +128,7 @@ Box.prototype. calcitemvol	=function()
 
 
 
-Box.prototype. calcempty	=function()
+Bag.prototype. calcempty	=function()
 {
 	for(var itemn in this.o )
 	{

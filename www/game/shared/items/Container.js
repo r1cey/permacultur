@@ -1,21 +1,32 @@
 // import Holder from "../Holder.js";
-import Item	from "./Item.js"
+// import Item	from "./Item.js"
+import Jable from "../Jsonable.js"
 
 import{ IdPool }	from "../utils.js"
 
 
 /** @extends Holder */
 
-export default class Cnt	extends Item
+export default class Cnt	extends Jable
 {
 	id	=0
 
-	dad
+	holder
 
-	/** pl|loc|cnt */
-	dadtype
+	/** pl|loc|cnt *
+	dadtype*/
 
 	static idpool	=new IdPool()
+
+
+	constructor( init )
+	{
+		/** the difference is only relevant between server and client machines */
+		
+		if( init )	this.set( init )
+
+		else	this.id	=Cnt.idpool.new()
+	}
 }
 
 
@@ -46,7 +57,7 @@ Cnt.prototype. delitem	=function( item, num =1, dadbox )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/** @todo What's happening with dadtype ?? */
+/** @todo What's happening with dadtype ?? *
 
 Cnt.prototype. setuniq	=function()
 {
@@ -54,11 +65,11 @@ Cnt.prototype. setuniq	=function()
 
 	cnt.id	=this.constructor.idpool.new()
 
-	if( this.dad /*&& this.dadtype==="cnt"*/ )
+	if( this.dad /*&& this.dadtype==="cnt"* )
 	{
 		this.dad.mov2uniq( cnt )
 	}
 	return cnt
 }
-
+*/
 

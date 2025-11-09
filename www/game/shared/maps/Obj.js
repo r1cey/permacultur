@@ -53,3 +53,33 @@ Obj.prototype. del	=function( loc, n )
 	}
 	delete this.o[str]
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Obj. setstack	=function( c ,stack )
+{
+	var arr	=c[key]
+
+	if( ! arr )	arr =c[key] =[]
+
+	arr[0]	=stack
+}
+
+Obj. getstack	=function( c ,key )
+{
+	return c[key][0]
+}
+
+
+Obj.getcnts	=function( c ,key )
+{
+	return c[key][1]
+}
+
+Obj.getcnt	=function( c ,key ,id )
+{
+	return c[key][1][id]
+}

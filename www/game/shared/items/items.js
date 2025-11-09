@@ -1,13 +1,11 @@
 import Block	from "./Block.js"
-import Item from "./Item.js"
+import Stack from "./Stackable.js"
 import Cont	from "./Container.js"
-import Box	from "./Box.js"
+import Bag	from "./Bag.js"
 import Loc	from "../Loc.js"
 import{ rnd }	from "../utils.js"
 
 
-
-/** Anything that can be held in a hand */
 
 var t	={}
 
@@ -78,65 +76,8 @@ t.Dewd	=class extends Block
 }
 
 
-t.Belt	=class extends Cont
-{
-	static vol	=Math.floor(15*15*10/125)
 
-	static key	="belt"
-
-	inv	=
-	{
-		/**@prop has seedbag ids. They all must have id even if empty */
-		seedbags	:{}
-	}
-
-
-	additem( item ,len )
-	{
-		var belt	=Cont.prototype.additem. call(this, item )
-
-		len	??=item.num
-
-		var inv	=belt.inv
-
-		var addedlen
-
-		switch( item.constructor.key )
-		{
-			case "multi" :
-
-				if( inv.multi )	return 0
-
-				addedlen	=1
-
-				inv.multi	=item.take( addedlen )
-			break
-			default :
-
-				addedlen	=0
-		}
-		return addedlen
-	}
-
-
-	calcvol()
-	{
-		var vol	=0
-
-		for(var ik in this.inv )
-		{
-			if( ik === "seedbags" )
-			{
-				for(var sbid in this.inv[ik] )	vol	+= this.inv[ik][sbid].calcvol()
-			}
-			else	vol	+= this.inv[ik].calcvol()
-		}
-		return vol
-	}
-}
-
-
-t.Seedbag	=class extends Box
+t.Seedbag	=class extends Bag
 {
 	static vol	=Math.floor(40*25*20/125)
  
@@ -147,13 +88,13 @@ t.Seedbag	=class extends Box
 
 
 
-t.Multi	=class extends Item
+t.Multi	=class extends Stack
 {
 	static key	="multi"
 }
 
 
-t.CucumberSeed	=class extends Item
+t.CucumberSeed	=class extends Stack
 {
 	static vol	=1
 

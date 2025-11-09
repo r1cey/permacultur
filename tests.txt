@@ -7,3 +7,43 @@ create player in view of another client
 login/disconnect from player in view of another client
 
 move in/out of view of another client
+
+player can't move in a cell with:
+	- other players
+	- more than 3 occuppied subcells
+
+map.obj.g(loc).dewd_pck.unpack( map ,loc )
+
+property for objects which can be both stackables and containers
+	map.obj.o[loc][key]	=[ stack ,{ id :cnt }]
+
+bags if empty can be near other items on ground;
+	if not empty, moves other items away
+	if full enough, doesn't allow player to pass
+
+adding things must return how many things actually added
+
+adding things can turn stacks into containers anywhere in the path
+	that's why the given path must be updated to new path
+
+added	=map.addstack_cnt([ loc ,"bigbag" ,0 ], new things.stack.Belt() )
+
+bag.getcnt()
+
+
+
+
+
+map.addthing( loc ,new things.Bigbag() )
+
+map.obj.o[loc].bigbags
+
+map.obj.g(loc).bigbag[0].inv.pithos[1].take( "belts" ,1 )
+
+pl.inv.backpack
+
+pl sends[ "mov_thing" ,[[ [20,30,0] ,"bigbag" ,1 ], "belt" ,1 ,[ "gavriel" ,"bckpck" ]]]
+
+pl sends[ "mov_thing" ,[[ "gavriel" ,"bckpck" ,"belt" ,2 ], "seedbag" ,1 ,[ "gavriel" ]]]
+
+pl sends[ "plant" ,[[ "gavriel" ,"seedbag" ,1 ], "cuc_seed", 8 , [14,13,0] ]]

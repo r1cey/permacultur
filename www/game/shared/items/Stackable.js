@@ -2,9 +2,9 @@ import Jable from "../Jsonable.js"
 
 
 
-export default class Item	extends Jable
+export default class Stack	extends Jable
 {
-	num	=1
+	len	=1
 
 	spoil	=0
 
@@ -13,17 +13,14 @@ export default class Item	extends Jable
 
 	// acts	={}
 
-	static key	="item"
+	// static key	="item"
 
 
-	constructor( obj, num )
+	constructor( len )
 	{
 		super()
 		
-		this.set( obj )
-		// Object.assign( this, obj )
-
-		if( num	!= null )	this.num	=num
+		if( len	)	this.len	=len
 	}
 
 
@@ -33,7 +30,7 @@ export default class Item	extends Jable
 	{
 		var out
 
-		if( l < this.num )
+		if( l < this.len )
 		{
 			out	=new this.constructor( this ,l )
 
@@ -50,22 +47,22 @@ export default class Item	extends Jable
 	/**@returns true if object remains empty */
 	del( l )
 	{
-		return ( this.num	-=l ) <= 0
+		return ( this.len	-=l ) <= 0
 	}
 
 	
 
 	calcvol()
 	{
-		return this.constructor.vol * this.num
+		return this.constructor.vol * this.len
 	}
 
-
+/*
 	toJSON( key )
 	{
 		switch( key )
 		{
-			case Item.key :
+			case Stack.key :
 
 				return[ this.constructor.key, this ]
 		}
@@ -78,9 +75,9 @@ export default class Item	extends Jable
 	{
 		return {
 
-			key	:Item.key
+			key	:Stack.key
 			,
 			fromJSON	:( meta )=>	jrev.revivr( meta[0], meta[1] )
 		}
-	}
+	}*/
 }

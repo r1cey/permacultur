@@ -7,9 +7,9 @@ import * as fs from '../fs.js'
 
 // import items from "../items.js"
 import Hands from '../../www/game/shared/player/Hands.js'
-import Item from "../../www/game/shared/items/Item.js"
+import Stack from "../../www/game/shared/items/Stackable.js"
 import JRev from "../JsonRevivr.js"
-import items	from "../../www/game/shared/items/items.js"
+import things	from "../../www/game/shared/items/newthings.js"
 
 
 
@@ -52,7 +52,7 @@ export default class Pls	extends PathObj
 			{
 				key :"" , fromJSON :(val)=> new Pl( val, game )
 			}
-			, Item.newRevObj(this.jrev)
+			, Stack.newRevObj(this.jrev)
 		] )
 	}
 }
@@ -177,19 +177,17 @@ Pls.prototype. new	=function( plmsg )
 
 	// add starter items
 	{
-		let belt	=new items.Belt()
+		pl.inv.belt	=new things.cnts.Belt()
+	
+		pl.inv.belt.inv.multi	=new things.stacks.Multi()
 
-		pl.additem( belt )
+		pl.cl.send( "plcl_setitem" ,[[ "seedbag" ,3 ], seeds ])
 
-		pl.additemcnt([ belt.gkey() ], new items.Multi() )
+		pl.inv.seedbags[3].add( )
 
-		// pl.inv.belt.additem( new items.Multi() )
+		
 
-		let sbag	=new items.Seedbag()
-
-		pl.additem( sbag )
-
-		pl.additemcnt([ sbag.gkey() ,sbag.id ],new items.CucumberSeed( null ,15 ) )
+		pl.addsbag( new things.bags.Seedbag() ).add( new things.stacks.CucumberSeed( null ,15 ) )
 	}
 	var spawns	=map.obj.o.spawns
 
@@ -205,6 +203,7 @@ Pls.prototype. new	=function( plmsg )
 
 	pl.save( this.conf.dir )		
 	
+	// add start dewds
 	{
 		let idewd =0
 
