@@ -8,52 +8,101 @@ login/disconnect from player in view of another client
 
 move in/out of view of another client
 
-map cells can have any item as long as areas fit
+different items:
 
-containers can have only specific items
+seeds		- stackable
+fruits		- stack organic
+bags		- stackable <-> bag
+tool belt	- stackable <-> receptacle
+clothes dummy	- block receptacle
+stackable wood boxes	- stack <-> box
+non-stackable clay boxes	- stack <-> box
+items that take full cell	- block
+items that take multiple cells
+
+
+each cell can have only one item
+	for stacks, len allowed in cell is custom
+	for allowing player movement, different len
+
+for containers, there's a container class which manages their different ids
+
+cell.bags.g(id)
+
+because containers can change types based on items added or removed,
+	the methods must exist on the root container like cell or player
 
 bags can have any item as long as volumes fit
 
-cell[itemk]	<= stacks, containers, block
-
-problem: containers in bags and cells can have both stackables and uniques,
-	but in containers it's custom
-
-player can't move in a cell with:
-	- other players
-	- more than 3 occuppied subcells
-
-map.obj.g(loc).dewd_pck.unpack( map ,loc )
-
-property for objects which can be both stackables and containers
-	map.obj.o[loc][key]	=[ stack ,{ id :cnt }]
-
-bags if empty can be near other items on ground;
-	if not empty, moves other items away
-	if full enough, doesn't allow player to pass
+map.newitem( loc ,new items.Dewd_pck(1) )
+map.obj.g(loc).item.unpack( map ,loc )
+map.unpackitem( loc )
 
 adding things must return how many things actually added
 
-adding things can turn stacks into containers anywhere in the path
+adding things can change container id anywhere in the path
 	that's why the given path must be updated to new path
 
-added	=map.addstack_cnt([ loc ,"bigbag" ,0 ], new things.stack.Belt() )
+addings things must send the location of item over network
 
-bag.getcnt()
+adding things to empty containers on map can push other objects to
+	neighboring cells
+
+when moving items, items can move inside or outside visual range
+
+if an action sent to client creates side effects, let the client handle them
+
+sends[ "newitem" ,[ path to container[] , ]]
+
+map.newitem( loc ,new items.Bag_vc(3) )
+new items.Bag_vc(3).spawnonmap( map , loc )
+
+srv sends[ "newitem" ,[[ [0,0,0] ], "bag_vc" ,{len:3} ]]
+
+map.add2stack( loc  ,2 )
+item.
+
+srv sends[ "add2stack" ,[[ [0,0,0] ], "bag_vc",{len:5}]} ,2 ]]
+
+added	=map.obj.g(loc).item.newitem( new items.Bag_vc(3) ,map ,[ loc ])
+added	=map.newitem2cnt([ loc ],new items.Bag_vc(3) )
+
+srv sends[ "srv_movitem" ,[[ [1,0,0] ], {item:["bag_vc",{len:4}]} ,null ,
+						[ [0,0,0] ], {item:["bag_vc",{len:1}]} ]]
+					 	
+srv sends[ "srv_newitem" ,[[ [0,0,0] ,"bag" ], {inv:{bag_vc:{len:3}}} ]]
+
+pl.movitem([ loc ,"item" ,"bag_vc" ], 1, [ 1 ])
+
+srv sends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
+						[ [0,0,0] ,"bag" ] ]]
+
+var path	=[ loc ,"bag_vc" ]
+added	=map.obj.g(loc).item.inv.bag_vc.newitem( new items.Bag_vc(3) ,map ,path )
+added	=map.newitem2cnt( path ,new items.Bag_vc(3) )
+
+// send to those who view the inside of the bag
+srv sends[ "newitem" ,[  ]]
+
+// changes path to [ loc ,"bag" ,id ]
+
+cell{ item: bag{ bag_vc{2} ,bag{ bag_vc{3} } }}
+
+bags can have empty containers and used containers
+
+bags can have a number of used containers
+
+pl sends[ "mov_item" ,[[ [0,0,0] ], "bag" ,[ [0,1,0] ]]]
+
+pl sends[ "mov_item" ,[[ [0,1,0] ,"bag" ], "bag" ,id ,[ "gavriel" ,"bckpck" ]]]
+
+pl sends[ "mov_item" ,[[ [0,1,0] ,"bag" ], "bag" ,id ,[ "gavriel" ,"bckpck" ]]]
+
+pl sends[ "mov_item" ,[[ [0,2,0] ,"bag" ], "cucseed" ,14 ,[ "gavriel" ,"bckpck" ,"bag", id ]]]
+
+pl sends[ "mov_item" ,[[ "gavriel" ,"bckpck" ,"bag" ,id ]]]
 
 
-
-
-
-map.addthing( loc ,new things.Bigbag() )
-
-map.obj.o[loc].bigbags
-
-map.obj.g(loc).bigbag[0].inv.pithos[1].take( "belts" ,1 )
-
-pl.inv.backpack
-
-pl sends[ "mov_thing" ,[[ [20,30,0] ,"bigbag" ,1 ], "belt" ,1 ,[ "gavriel" ,"bckpck" ]]]
 
 pl sends[ "mov_thing" ,[[ "gavriel" ,"bckpck" ,"belt" ,2 ], "seedbag" ,1 ,[ "gavriel" ]]]
 

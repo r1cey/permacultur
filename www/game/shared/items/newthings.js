@@ -8,14 +8,6 @@ export default function newthings( Stack ,Cnt ,Bag ,Block )
 {
 	var o	=
 	{
-		stacks	:newstacks(Stack)
-		,
-		cnts	:newcnts(Cnt)
-		,
-		blocks: newblocks( Block )
-		,
-		bags: newbags( Bag )
-		,
 		foreach	:function( fn )
 		{
 			for(var k in this.stacks )	fn( this.stacks[k] )
@@ -27,7 +19,23 @@ export default function newthings( Stack ,Cnt ,Bag ,Block )
 			for(var k in this.bags )	fn( this.bags[k] )
 
 			//for(var k in this.)	fn( this.[k] )
-		}
+		},
+		keys	:{}
 	}
+
+	newBag( class
+	{
+		static vol	=Math.floor(40*25*20/125)
+	
+		static boxvol	=Math.floor(55*45*45/125)
+
+		static key	="seedbag"
+	}
+
+
+	o.foreach(( Clss )=>
+	{
+		o.keys[Clss.key]	=Clss
+	})
 	return o
 }

@@ -1,15 +1,48 @@
 import Cnt from "./Container.js"
 
 
-
-export default class Bag extends Cnt
+export function newBag({ Stack ,Box ,key ,vol ,boxvol })
 {
-	/** Including empty containers */
-	items	={}
+	class BagVc	extends Stack
+	{
+		static key	=key+"_vc"
 
-	cnts	={}
+		static Bag	=Bag
 
-	static boxvol	=8000	//10cm^3
+		static vol	=vol ?? Stack.vol
+
+
+		newbag()	{return	new Bag() }
+	}
+
+
+	class Bag extends Box
+	{
+		static key	=key
+
+		static Vacant	=BagVc
+
+		static boxvol	=boxvol ?? Box.boxvol	//10cm^3
+
+
+		calcempty(){ for(var k in this.inv) return true; return false }
+
+
+		calcitemvol()
+		{
+			var vol	=0
+
+			for(var k in this.inv )	vol += this.inv[k].vol()
+
+			return vol
+		}
+
+		
+		vol()	{return BagVc.vol + this.calcitemvol() }
+
+
+		newvcbag()	{return new BagVc() }
+	}
 }
 
 
