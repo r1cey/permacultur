@@ -8,16 +8,28 @@ login/disconnect from player in view of another client
 
 move in/out of view of another client
 
+all items must have static key prop
+
+basic items are identical to each other so have len property
+
+non empty containers are unique so must have id property
+
+containers must contain multiple items. their access is determined by
+	[key,id] pair
+
+each cell can have only one [key,id] paired item
+
+
 different items:
 
-seeds		- stackable
-fruits		- stack organic
-bags		- stackable <-> bag
-tool belt	- stackable <-> receptacle
-clothes dummy	- block receptacle
-stackable wood boxes	- stack <-> box
-non-stackable clay boxes	- stack <-> box
-items that take full cell	- block
+seeds
+fruits
+bags
+tool belt
+clothes dummy
+stackable wood boxes
+non-stackable clay boxes
+items that take full cell
 items that take multiple cells
 
 
