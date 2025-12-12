@@ -59,6 +59,12 @@ Obj.prototype. del	=function( loc, n )
 
 
 
+Obj.prototype. newitem2cell	=function( loc ,item )
+{
+	this.s(loc).item	=item
+}
+
+
 Obj. setstack	=function( c ,stack )
 {
 	var arr	=c[key]

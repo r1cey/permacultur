@@ -267,7 +267,7 @@ Player.prototype. additemcnt	=function( path ,item ,len )
 /** From/To root is either a player or map location.
  * from|to{ loc, pln, boxes[str] } */
 
-Player.prototype. movitem	=function( from, itemid, len, to )
+Player.prototype. movitem	=function( from, key, len$id, to )
 {
 	/** @TODO !!! : check that to and from are viable */
 

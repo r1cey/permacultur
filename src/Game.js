@@ -154,6 +154,16 @@ G.prototype. save	=async function()
 
 
 
+G.prototype. newitem	=function( path ,item )
+{
+	// if( path[0])
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 G.prototype. rempls	=async function()
 {
 	return this.conf.pls.max - (await this.files.readdir( this.conf.pls.dir )) 

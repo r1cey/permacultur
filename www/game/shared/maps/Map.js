@@ -14,13 +14,24 @@ import Cell from './Cell.js'
 
 export default class Map extends newBoard(newBinMap)
 {
-	obj	=new Obj(this)
+	maps
+
+	obj	//=new Obj(this)
 
 	get _r()	{return this.bin.getr()}
 
 	bin2	//optional additional binmap for local calculations
 
 	////
+
+	constructor( maps ,O )
+	{
+		this.maps	=maps
+
+		O	??=Obj
+
+		this.obj	=new O(this)
+	}
 }
 
 
@@ -114,6 +125,63 @@ Map.prototype. newcell	=function( v )
 	return new Cell( this, v )
 }
 
+
+/** @todo override this method on client class for animation */
+
+
+Map.prototype. movitem	=function( loc ,len ,newloc )
+{
+	var ocell	=this.obj.g(loc)
+
+	var item	=ocell.item
+
+	if( item.constructor.isstack && item.len <= len )
+	{
+		item	=item.take( len )
+	}
+	else
+	{
+		delete ocell.item
+	}
+	this.obj.s(newloc).item	=item
+}
+
+
+/**@returns len of items added */
+
+Map.prototype. newitem2cnt	=function( loc ,item )
+{
+	var ocell	=this.obj.g(loc)
+
+	var cnt	=ocell.item
+
+	if( cnt.constructor.isstack )
+	{
+		var stck	=cnt
+
+		cnt	=stck.newused()
+	}
+	var added	=0
+
+	added	=cnt.additem( item )
+
+	if( added < 1 )	return added
+
+	if( stck )
+	{
+		if( stck.len > 1 )
+		{
+			let newloc	=this.forring(( v )=>
+						{
+							if( ! this.obj.g(v)?.item )	return true
+						},
+						1 ,loc )
+
+			this.movitem( loc ,stck.len - 1 ,newloc )
+		}
+		ocell.item	=cnt
+	}
+}
 
 
 Map.prototype. addstack	=function( loc ,stack )
@@ -249,7 +317,7 @@ Map.prototype. fore	=function( fun, r, c )
 
 Map.prototype. forring	=function( fun, r, c )
 {
-	return this.bin.forring( fun, r, c )
+	return this.bin.forring( fun, r, c ,this )
 }
 
 

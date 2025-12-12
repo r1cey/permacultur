@@ -15,9 +15,7 @@ import newBinMShift	from "../../www/game/shared/maps/newBinMapShift.js"
 
 export default class Map extends ShMap
 {
-	game
-
-	get g()	{return this.game }
+	game()	{return this.maps.game }
 
 	/** define in derived class
 	@static
@@ -26,11 +24,9 @@ export default class Map extends ShMap
 	obj	=new Obj(this)
 
 
-	constructor( game )
+	constructor( maps )
 	{
-		super()
-
-		this.game	=game
+		super( maps ,Obj )
 	}
 }
 

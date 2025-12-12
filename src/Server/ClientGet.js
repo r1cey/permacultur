@@ -114,7 +114,7 @@ get. climb	=function( o )
 
 /** [ from[gpath], itemid, num, to[gpath] ] */
 
-get. movitem	=function([ from, itemid, len, to ])
+get. movitem	=function( from, key, len$id, to )
 {
 	var{ game }	=this
 
@@ -122,7 +122,7 @@ get. movitem	=function([ from, itemid, len, to ])
 
 	to	=game.path2obj( to )
 
-	this.pl.movitem( from, itemid, len, to )
+	this.pl.movitem( from, key, len$id, to )
 }
 
 

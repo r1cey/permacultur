@@ -54,3 +54,15 @@ Obj.prototype. read	=async function( path )
 
 	return pls
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Obj.prototype. newitem2cell	=function( loc ,item )
+{
+	ShObj.prototype.newitem2cell. call(this ,loc, item )
+
+	this.map.game
+}

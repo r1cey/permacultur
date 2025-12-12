@@ -8,51 +8,39 @@ login/disconnect from player in view of another client
 
 move in/out of view of another client
 
-all items must have static key prop
-
-basic items are identical to each other so have len property
-
-non empty containers are unique so must have id property
-
-containers must contain multiple items. their access is determined by
-	[key,id] pair
-
-each cell can have only one [key,id] paired item
-
-
 different items:
 
-seeds
-fruits
-bags
-tool belt
-clothes dummy
+seeds	- stack
+fruits	- stack spoil
+bags	- bag <-> stack container
+tool belt	- cnt <-> stck cnt
+clothes dummy	- block cnt
 stackable wood boxes
 non-stackable clay boxes
-items that take full cell
+items that take full cell	- blck
 items that take multiple cells
 
-
-each cell can have only one item
+each cell can have only one item key
 	for stacks, len allowed in cell is custom
 	for allowing player movement, different len
 
-for containers, there's a container class which manages their different ids
-
-cell.bags.g(id)
-
-because containers can change types based on items added or removed,
-	the methods must exist on the root container like cell or player
+considering making container ids as global...
 
 bags can have any item as long as volumes fit
 
 map.newitem( loc ,new items.Dewd_pck(1) )
+new items.Dewd_pck(1).spawnonmap( map ,loc )
+sends[[ "maps","g" ], "newitem" ,[ [x,y] ,[ "dewd_pck" , {len:1} ]]]
+
 map.obj.g(loc).item.unpack( map ,loc )
 map.unpackitem( loc )
+sends[[ "maps","g" ], "unpackitem" ,[ [x,y] ]]
+
+if you're changing item or container, must do it through its' own container
 
 adding things must return how many things actually added
 
-adding things can change container id anywhere in the path
+?adding things can change container id anywhere in the path
 	that's why the given path must be updated to new path
 
 addings things must send the location of item over network
@@ -64,34 +52,42 @@ when moving items, items can move inside or outside visual range
 
 if an action sent to client creates side effects, let the client handle them
 
-sends[ "newitem" ,[ path to container[] , ]]
+when changing any item, client-server updates need to happen,
+	therefore changing of items must happen in map or player
 
-map.newitem( loc ,new items.Bag_vc(3) )
-new items.Bag_vc(3).spawnonmap( map , loc )
+whatever I do to server, if clients need to updated, a path
+	object will be created.
 
-srv sends[ "newitem" ,[[ [0,0,0] ], "bag_vc" ,{len:3} ]]
+gm[[ "game","maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+map.obj.s(loc).newitem( new items.Bag_vc(3), map, loc )
+srv[[ "cl","maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
-map.add2stack( loc  ,2 )
-item.
+gm[[ "game","maps",[x,y,z],"item" ], "add" ,[ 2 ]]
+item.add( 2 ,map ,loc )
+srv[[ "cl","maps",]]
 
-srv sends[ "add2stack" ,[[ [0,0,0] ], "bag_vc",{len:5}]} ,2 ]]
+map.add2stack( loc ,2 )
+sends[[ "maps","g" ], "add2stack" ,[ [x,y] ,2 ]]
 
-added	=map.obj.g(loc).item.newitem( new items.Bag_vc(3) ,map ,[ loc ])
-added	=map.newitem2cnt([ loc ],new items.Bag_vc(3) )
+map.newitem2cnt( loc ,new items.Bag_vc(3) )
+sends[[ "maps","g" ], "newitem2cnt" ,[ [x,y] ,[ "bag_vc" ,{len:3} ]]]
 
-srv sends[ "srv_movitem" ,[[ [1,0,0] ], {item:["bag_vc",{len:4}]} ,null ,
-						[ [0,0,0] ], {item:["bag_vc",{len:1}]} ]]
-					 	
-srv sends[ "srv_newitem" ,[[ [0,0,0] ,"bag" ], {inv:{bag_vc:{len:3}}} ]]
-
-pl.movitem([ loc ,"item" ,"bag_vc" ], 1, [ 1 ])
-
-srv sends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
+pl.sends[ "movitem" ,[[ [x,y,z] ,"bag_vc" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
+srvsends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
 						[ [0,0,0] ,"bag" ] ]]
 
 var path	=[ loc ,"bag_vc" ]
 added	=map.obj.g(loc).item.inv.bag_vc.newitem( new items.Bag_vc(3) ,map ,path )
 added	=map.newitem2cnt( path ,new items.Bag_vc(3) )
+
+containers inside custom container are always used
+	so when an empty used container is put somewhere else,
+	this container needs to transform to stack,
+	and vice versa
+
+pl sends[ "movitem" ,[[ "pl" ], "backpack" ,1 ,[ [x,y,z] ]]]
+
+
 
 // send to those who view the inside of the bag
 srv sends[ "newitem" ,[  ]]

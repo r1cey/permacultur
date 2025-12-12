@@ -148,11 +148,13 @@ export default function( id, bmap, base=newBin )
 	 * fun( loc, map )
 	 */
 
-	BM.prototype. forring	=function( fun, r, c )
+	BM.prototype. forring	=function( fun, r, c ,map )
 	{
+		map	??=this
+
 		if( ! r )
 		{
-			return fun( c, this )
+			return fun( c, map )
 		}
 
 		r	??=this.getr()
@@ -169,7 +171,7 @@ export default function( id, bmap, base=newBin )
 			{
 				if( this.inside(v) )
 				{
-					if( fun( v, this ))	return v
+					if( fun( v, map ))	return v
 				}
 
 				v.neighh(dir)

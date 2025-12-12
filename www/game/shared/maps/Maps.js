@@ -24,12 +24,12 @@ export default class Maps	extends PObj
 	/** Define in derived
 	@var ground */
 	
-	get gr()	{return this.ground }
+	// get gr()	{return this.ground }
 
 	/** Define in derived
 	@var trees */
 
-	get tr()	{return this.trees }
+	// get tr()	{return this.trees }
 
 
 	/** Define in derived
@@ -41,8 +41,12 @@ export default class Maps	extends PObj
 	@var Trees */
 
 
-	constructor()
+	constructor( Gr ,Tr )
 	{
+		this.ground	=this.gr	=new Gr( this )
+
+		this.trees	=this.tr	=new Tr( this )
+		
 		super()
 	}
 }
@@ -93,6 +97,13 @@ Maps.prototype. fore	=function( fun )
 Maps.prototype. getitem	=function( loc ,key )
 {
 	return this.loc2map(loc).obj.g(loc)?.[key]
+}
+
+
+
+Maps.prototype. movitem	=function( from ,key, to )
+{
+
 }
 
 
