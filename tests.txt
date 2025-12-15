@@ -58,19 +58,18 @@ when changing any item, client-server updates need to happen,
 whatever I do to server, if clients need to updated, a path
 	object will be created.
 
-gm[[ "game","maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
-map.obj.s(loc).newitem( new items.Bag_vc(3), map, loc )
-srv[[ "cl","maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+game.$( [maps,loc] ,"newitem" ,item )
+obj.newitem([ path ,2 ], item )
+srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
-gm[[ "game","maps",[x,y,z],"item" ], "add" ,[ 2 ]]
-item.add( 2 ,map ,loc )
-srv[[ "cl","maps",]]
+gm[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
+game.$( [maps,loc,item] ,"add" ,2 )
+item.add([ path ,3 ], 2 )
+srv[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
 
-map.add2stack( loc ,2 )
-sends[[ "maps","g" ], "add2stack" ,[ [x,y] ,2 ]]
-
-map.newitem2cnt( loc ,new items.Bag_vc(3) )
-sends[[ "maps","g" ], "newitem2cnt" ,[ [x,y] ,[ "bag_vc" ,{len:3} ]]]
+stack.newitem([ maps,loc,stack ], new items.Bag_vc(3) )
+srv[[ "maps",[x,y,z],"item","bag_vc" ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
 pl.sends[ "movitem" ,[[ [x,y,z] ,"bag_vc" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
 srvsends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
