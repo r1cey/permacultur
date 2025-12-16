@@ -60,15 +60,15 @@ whatever I do to server, if clients need to updated, a path
 
 gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 game.$( [maps,loc] ,"newitem" ,item )
-obj.newitem([ path ,2 ], item )
+obj.newitem([ game ,path ,2 ], item )
 srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
 gm[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
 game.$( [maps,loc,item] ,"add" ,2 )
-item.add([ path ,3 ], 2 )
+item.add([ game ,path ,3 ], 2 )
 srv[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
 
-stack.newitem([ maps,loc,stack ], new items.Bag_vc(3) )
+stack.newitem( [game,[ maps,loc,stack ],3], new items.Bag_vc(3) )
 srv[[ "maps",[x,y,z],"item","bag_vc" ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
 pl.sends[ "movitem" ,[[ [x,y,z] ,"bag_vc" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
