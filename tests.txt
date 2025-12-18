@@ -52,26 +52,88 @@ when moving items, items can move inside or outside visual range
 
 if an action sent to client creates side effects, let the client handle them
 
+some actions client initiates might not be possible,
+	there should be a way to test if action is effective before doing it
+	that means action will be broken down in 3 layers:
+	1. do action without test
+	2. test
+	3. do action with test
+
 when changing any item, client-server updates need to happen,
-	therefore changing of items must happen in map or player
 
 whatever I do to server, if clients need to updated, a path
-	object will be created.
+	object will be created?
+
+any item is either in a custom container, bag, or lying on map
+	so when changing an item, dad can be changed too and each
+	dad has different rules.
+	So check container, AND the dad every time adding to cnt
 
 gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 game.$( [maps,loc] ,"newitem" ,item )
 obj.newitem([ game ,path ,2 ], item )
 srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
-gm[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
+gm[[ "maps",[x,y,z],"bag_vc" ], "add" ,2 ]
 game.$( [maps,loc,item] ,"add" ,2 )
 item.add([ game ,path ,3 ], 2 )
 srv[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
 
-stack.newitem( [game,[ maps,loc,stack ],3], new items.Bag_vc(3) )
+stack.newitem_test( [game,[ maps,loc,stack ],3], new items.Bag_vc(3) )
+{
+	if( this.test_newitem( hp ,item ))	return this.newitem( hp ,item )
+	else	return false
+}
+stack.test_newitem([ game,chain,pid ], item )
+{
+	if( game.$2( chain ,pid-1 ,"cancntadd" ,this ,item ))	
+}
+map.cancntadd( loc ,cnt ,item )
+{
+	if( cnt.isstack() )
+	{
+		return this.canpushitem( loc )
+	}
+	return true
+}
+stack.newitem([ game,path,pid ], item )
+{
+	var cnt	=this.newcnt()
+	cnt.newitem( item )
+	this.del(1)
+	if( this.len )	game.$2 (path,pid -1, "stack2cnt" ,this ,cnt )
+}
+srv.stack.newitem([ game,chain,cid ], item )
+{
+	Sh.newitem( hp ,item )
+
+	game.srv.send( hp ,item )
+}
 srv[[ "maps",[x,y,z],"item","bag_vc" ], "newitem" ,[ "bag_vc" ,{len:3} ]]
 
-pl.sends[ "movitem" ,[[ [x,y,z] ,"bag_vc" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
+pl.sends[ "movitem" ,[[ "pls","gavriel","backpack" ], "seed" ,1 ,[ "maps",[x,y,z],"bag","bag_vc" ]]]
+pl.test_movitem([ pls,pl,bpck ], item ,len ,[ maps,loc,bag,bag_vc ])
+{
+	if( from[0] instanceof Pls )
+	{
+		if( from[1].loc.dist( this.loc ))
+	}
+	if( to[0] instanceof Maps )
+	{
+		if( to[1].dist( this.loc ))
+	}
+	if( game.$( to ,"canadd" ,item ,len ))
+}
+cnt.canadd([ game ,chain ,cid ], item ,len )
+{
+	if( game.$2( chain,cid -1, "cancntadd" ,this ,item ,len ))
+}
+pl.movitem( from ,item ,len ,to )
+{
+
+}
+
+pl.sends[ "movitem" ,[[ [x,y,z] ,"bag" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
 srvsends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
 						[ [0,0,0] ,"bag" ] ]]
 
