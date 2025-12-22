@@ -64,55 +64,144 @@ when changing any item, client-server updates need to happen,
 whatever I do to server, if clients need to updated, a path
 	object will be created?
 
-any item is either in a custom container, bag, or lying on map
+These are the options of where an item can lie. Each has special rules:
+	1. In a bag.
+	2. In a custom container (like player)
+	3. On a map cell.
+
 	so when changing an item, dad can be changed too and each
 	dad has different rules.
 	So check container, AND the dad every time adding to cnt
 
-gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
-game.$( [maps,loc] ,"newitem" ,item )
-obj.newitem([ game ,path ,2 ], item )
-srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
-
-gm[[ "maps",[x,y,z],"bag_vc" ], "add" ,2 ]
-game.$( [maps,loc,item] ,"add" ,2 )
-item.add([ game ,path ,3 ], 2 )
-srv[[ "maps",[x,y,z],"item","bag_vc" ], "add" ,2 ]
-
-stack.newitem_test( [game,[ maps,loc,stack ],3], new items.Bag_vc(3) )
+stack.del( item ,len )
 {
-	if( this.test_newitem( hp ,item ))	return this.newitem( hp ,item )
-	else	return false
+	this.len	-= le
+	return this.len <= 0
 }
-stack.test_newitem([ game,chain,pid ], item )
+
+cnts.del( item ,len )
 {
-	if( game.$2( chain ,pid-1 ,"cancntadd" ,this ,item ))	
+	delete this.o[item.id]
+	return ! Objet.keys(this.o).length
 }
-map.cancntadd( loc ,cnt ,item )
+
+bag.delitem([ game,chain,cid ], item ,len )
 {
-	if( cnt.isstack() )
+	if( this.inv[item.gkey()].del( item ,len ))	delete this.inv[key]
+	if( this.isempty() )	game.$2( chain,cid -1, "cnt2stck" ,this )
+}
+map.delitem( loc ,len )
+{
+	if( ! cell.item.isstack() || item.del( len ))	delete cell.item
+}
+
+bag.cnt2stack( nav ,cnt )
+{
+	this.additem( nav ,cnt.newstack() )
+	this.delitem( nav ,cnt )
+}
+map.cnt2stack( loc )
+{
+	cell.item	=cell.item.newstack()
+}
+
+Bag.canadditem( nav ,item )
+{
+	return this.canfit(item) && ( ! nav.dad.isbag() || nav.dad.canfit( item ) )
+}
+bag.canadditem( nav ,item )
+{
+	This.canadditem.call( this ,nav ,item )
+}
+stckcnt.canadditem( nav ,item )
+{
+	This.Cnt.canadditem( nav ,item )
+
+	if( nav.dad.isloc() )
+}
+map.canadditem( loc ,item )
+{
+	if( item.isstack() )
 	{
 		return this.canpushitem( loc )
 	}
 	return true
 }
-stack.newitem([ game,path,pid ], item )
+
+bag.additem( nav ,item )
+{
+	if( ! this.inv[item.gkey()] )
+	{
+		this.inv[key]	=item.newkeyprop()
+	}
+	this.inv[key].add( item )
+}
+
+stackcnt.additem([ game,chain,cid ], item )
 {
 	var cnt	=this.newcnt()
-	cnt.newitem( item )
+	cnt.additem( nav ,item )
 	this.del(1)
-	if( this.len )	game.$2 (path,pid -1, "stack2cnt" ,this ,cnt )
+	game.$2( chain,cid -1, "stack2cnt" ,this ,cnt )
 }
-srv.stack.newitem([ game,chain,cid ], item )
+
+bag.stack2cnt([ game,chain,cid ], stackcnt ,cnt )
 {
-	Sh.newitem( hp ,item )
+	this.additem( nav ,)
 
-	game.srv.send( hp ,item )
+	if( stackcnt.isempty() )	delete this.inv[stackcnt.gkey()]
+
+	if( ! this.inv[cnt.gkey()] )	this.inv[ckey]	=cnt.newkeyprop()
+
+	this.inv[ckey].add( cnt )
 }
-srv[[ "maps",[x,y,z],"item","bag_vc" ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+map.stack2cnt( loc ,stackcnt ,cnt )
+{
+	if( ! stackcnt.isempty() )	this.pushitem( loc )
 
-pl.sends[ "movitem" ,[[ "pls","gavriel","backpack" ], "seed" ,1 ,[ "maps",[x,y,z],"bag","bag_vc" ]]]
-pl.test_movitem([ pls,pl,bpck ], item ,len ,[ maps,loc,bag,bag_vc ])
+	this.item	=cnt
+}
+
+gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+game.$( [maps,loc] ,"newitem" ,item )
+obj.newitem_test([ game ,path ,2 ], item )
+srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+
+gm[[ "maps",[x,y,z],"bag_vc" ], "add" ,2 ]
+game.$( [maps,loc,item] ,"add" ,2 )
+stack.add_test([ game ,path ,3 ], 2 )
+srv[[ "maps",[x,y,z],"bag_vc" ], "add" ,2 ]
+
+stackcnt.additem_test( [game,[ maps,loc,stackcnt ],3], new items.Bag_vc(3) )
+{
+	if( this.canadditem( hp ,item ))	return this.additem( hp ,item )
+	else	return false
+}
+stackcnt.canadditem([ game,chain,cid ], item )
+{
+	if( game.$2( chain ,cid-1 ,"canadditem" ,this ,item ,len ))
+}
+map.canadditem( loc ,cnt ,item ,len )
+{
+	
+}
+
+map.stack2cnt( loc ,stackcnt ,cnt )
+{
+	if( ! stackcnt.isempty() )	this.pushitem( loc )
+
+	this.item	=cnt
+}
+srv.stackcnt.additem([ game,chain,cid ], item )
+{
+	super.additem( hp ,item )
+
+	game.srv.send( hp ,"additem", item )
+}
+srv[[ "maps",[x,y,z],"item","bag_vc" ], "additem" ,[ "bag_vc" ,{len:3} ]]
+
+pl.sends[ "movitem" ,[[ "pls","gavriel","backpack",bid ], "seed" ,1 ,[ "maps",[x,y,z],"bag",bid,"bag_vc" ]]]
+pl.canmovitem([ pls,pl,bpck ], item ,len ,[ maps,loc,bag,bag_vc ])
 {
 	if( from[0] instanceof Pls )
 	{
@@ -128,10 +217,14 @@ cnt.canadd([ game ,chain ,cid ], item ,len )
 {
 	if( game.$2( chain,cid -1, "cancntadd" ,this ,item ,len ))
 }
-pl.movitem( from ,item ,len ,to )
+game.movitem( from ,item ,len ,to )
 {
+	game.$( from ,"delitem" ,item ,len )	//if cnt becomes stack
 
+	game.$( to ,"additem", item ,len )	//if stck becomes cnt
 }
+
+
 
 pl.sends[ "movitem" ,[[ [x,y,z] ,"bag" ], "bag_vc" ,1 ,[ "pl" ,"backpack" ]]]
 srvsends[ "movitem" ,[[ "gavriel" ], {item:["bag_vc",{len:1}]} ,null ,
