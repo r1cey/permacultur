@@ -88,7 +88,7 @@ cnts.del( item ,len )
 bag.delitem( nav ,_i, item ,len )
 {
 	if( this.inv[item.gkey()].del( item ,len ))	delete this.inv[key]
-	if( this.isempty() )	game.$2( chain,cid -1, "cnt2stck" ,this )
+	if( this.isempty() )	nav.call( -1 ,"cnt2stck", this )
 }
 cell.delitem( nav ,_i ,item ,len )
 {
