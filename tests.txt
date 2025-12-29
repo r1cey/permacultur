@@ -85,14 +85,16 @@ cnts.del( item ,len )
 	return ! Objet.keys(this.o).length
 }
 
-bag.delitem([ game,chain,cid ], item ,len )
+bag.delitem( nav ,_i, item ,len )
 {
 	if( this.inv[item.gkey()].del( item ,len ))	delete this.inv[key]
 	if( this.isempty() )	game.$2( chain,cid -1, "cnt2stck" ,this )
 }
-map.delitem( loc ,len )
+cell.delitem( nav ,_i ,item ,len )
 {
-	if( ! cell.item.isstack() || item.del( len ))	delete cell.item
+	if( ! item.isstack() || item.del( len ))	delete nav.dad(_i).obj.g(this).item
+
+	nav.send( "delitem" ,_i ,item ,len )
 }
 
 bag.cnt2stack( nav ,cnt )
@@ -105,19 +107,21 @@ map.cnt2stack( loc )
 	cell.item	=cell.item.newstack()
 }
 
-Bag.canadditem( nav ,item )
+Bag.canfit( nav ,cid ,item )
 {
-	return this.canfit(item) && ( ! nav.dad.isbag() || nav.dad.canfit( item ) )
-}
-bag.canadditem( nav ,item )
-{
-	This.canadditem.call( this ,nav ,item )
-}
-stckcnt.canadditem( nav ,item )
-{
-	This.Cnt.canadditem( nav ,item )
+	var canfit	=//calculate if bag can fit
 
-	if( nav.dad.isloc() )
+	return canfit && ( ! nav.arr[cid-1].isbag() || nav.exe( cid-1 ,"canfit" ,item ) )
+}
+bag.canadditem( nav ,cid ,item )
+{
+	return this.canfit( nav ,cid ,item )
+}
+stckcnt.canadditem( nav ,_i ,item )
+{
+	return This.Cnt.canfit( nav ,tid ,item ) &&
+
+			( ! nav.dad(tid).iscell() || nav.dadexe(tid ,"canpushitem" )
 }
 map.canadditem( loc ,item )
 {
@@ -126,6 +130,13 @@ map.canadditem( loc ,item )
 		return this.canpushitem( loc )
 	}
 	return true
+}
+
+map.additem( loc ,item ,act )
+{
+	this.obj.s(loc).item	=item
+
+	if( act )	act.send( )
 }
 
 bag.additem( nav ,item )
@@ -162,7 +173,30 @@ map.stack2cnt( loc ,stackcnt ,cnt )
 	this.item	=cnt
 }
 
+path.canadditem( item )
+{
+
+}
+
+pl.movitemf(new [ pls,pl,bpack,bag ]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
+movitem( from, f_i ,item, to ,to_i )
+{
+	if( ! to.exe( to_i ,"canadditem" ,item ))	return
+
+	if( from.iscnt() )
+	{
+
+	}
+}
+
 gm[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
+new Nav([ maps ,loc ]).exef("newitem" ,item )
+act.newitem()
+{
+	if( this.dest)
+	if( map.canadditem( loc ,item ))	map.additem( loc ,item ,this )
+}
+
 game.$( [maps,loc] ,"newitem" ,item )
 obj.newitem_test([ game ,path ,2 ], item )
 srv[[ "maps",[x,y,z] ], "newitem" ,[ "bag_vc" ,{len:3} ]]
@@ -269,3 +303,8 @@ pl sends[ "mov_item" ,[[ "gavriel" ,"bckpck" ,"bag" ,id ]]]
 pl sends[ "mov_thing" ,[[ "gavriel" ,"bckpck" ,"belt" ,2 ], "seedbag" ,1 ,[ "gavriel" ]]]
 
 pl sends[ "plant" ,[[ "gavriel" ,"seedbag" ,1 ], "cuc_seed", 8 , [14,13,0] ]]
+
+
+bag.mov()
+
+new Nav([pls,pl,bpack,bag]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
