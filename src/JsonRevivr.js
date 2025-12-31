@@ -4,7 +4,7 @@ import JRev	from "../www/game/shared/JsonRevivr.js"
 // import Item from "../www/game/shared/items/Item.js"
 // import Hands from "../www/game/shared/player/Hands.js"
 // import its from "../www/game/shared/items/items.js"
-import things	from "./things/things.js"
+import things	from "./items/things.js"
 
 
 

@@ -154,9 +154,45 @@ G.prototype. save	=async function()
 
 
 
-G.prototype. newitem	=function( path ,item )
+G.prototype. additem	=function( nav ,item ,len ,ismov )
 {
-	// if( path[0])
+	/** @todo implement methods */
+
+	if( nav.last().isstcnt() )
+	{
+		if( nav.dadl().iscell() )
+		{
+			let[ maps ,loc ,stcnt ]	=nav.a
+
+			this.movitem(new Nav([ maps ,loc ]), stcnt ,stcnt.len-1 ,new Nav([ maps ,maps.locpushitem(loc) ]))
+		}
+		var cnt	=this.stck2cnt( nav )
+	}
+	if( ! ismov )	this.srv.send("additem",[ nav ,item ,len ,cnt ])
+
+	nav.exl("additem", item ,len ,cnt)
+
+	return cnt
+}
+
+
+G.prototype. movitem	=function( from ,item ,len ,to ,mover )
+{
+	var cnt	=this.additem( to ,item ,len ,true )
+	
+	this.srv.send("movitem",[ from ,item ,len ,to ,mover ,cnt ])
+
+	from.exl("delitem" ,item ,len )
+
+	return this
+}
+
+
+G.prototype. delitem	=function( nav ,item ,len )
+{
+	this.srv.send("delitem",[ nav ,item ,len ])
+
+	nav.exl("delitem", item ,len )
 }
 
 
@@ -167,6 +203,16 @@ G.prototype. newitem	=function( path ,item )
 G.prototype. rempls	=async function()
 {
 	return this.conf.pls.max - (await this.files.readdir( this.conf.pls.dir )) 
+}
+
+
+G.prototype. stck2cnt	=function( nav )
+{
+	var cnt	=nav.last().newcnt()
+
+	this.srv.send("stck2cnt",[ nav ,cnt ])
+
+	return cnt
 }
 
 

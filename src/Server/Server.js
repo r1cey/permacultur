@@ -123,6 +123,29 @@ Server.prototype. sendplvis	=function( pl ,fnk ,args )
 }
 
 
+Server.prototype. senditemmoved	=function( from ,item ,len ,to ,mover )
+{
+	var cls	=new Set()
+
+	var dict	=this.cls.o
+
+	for(var n in dict )
+	{
+		var cl	=dict[n]
+
+		var pl	=cl.pl
+
+		if( pl.seesnavf( from ))	cls.add(cl)
+
+		if( pl.seesnavf( to ))	cls.add( cl )
+	}
+	for(var cl of cls )
+	{
+		cl.send("itemmoved" ,[ from ,item ,len ,to ,mover ])
+	}
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 

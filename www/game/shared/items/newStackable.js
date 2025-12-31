@@ -17,6 +17,9 @@ export default function( NewIt )
 		}
 
 
+		isstck()	{return this }
+
+
 		/**	Doesn't reduce the num of this item. 
 		 * @returns new obj or this. */
 		take( l =1 )

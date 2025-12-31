@@ -414,6 +414,32 @@ Player.prototype. setheat	=function( lvl )
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+Player.prototype. seesnavf	=function( nav )
+{
+	var cnt	=nav.last()
+
+	/** @todo add method to nav  */
+
+	if( this.sees( nav.loc() ))
+	{
+		if( cnt.iscell() || cnt.ischar() )	return true
+
+		else	return cnt.viewing.has( this )
+	}
+	else	return false
+}
+
+
+Player.prototype. viewscnt	=function( cnt )
+{
+	/** @todo add these methods to all classes  */
+
+	
+
+}
+
+
 Player.prototype. setbelt	=function( belt )
 {
 	PlMsg.prototype.setbelt. call(this, belt )

@@ -75,7 +75,7 @@ These are the options of where an item can lie. Each has special rules:
 
 stack.del( item ,len )
 {
-	this.len	-= le
+	this.len	-= len
 	return this.len <= 0
 }
 
@@ -107,11 +107,11 @@ map.cnt2stack( loc )
 	cell.item	=cell.item.newstack()
 }
 
-Bag.canfit( nav ,cid ,item )
+Bag.canfit( nav ,_i ,item )
 {
 	var canfit	=//calculate if bag can fit
 
-	return canfit && ( ! nav.arr[cid-1].isbag() || nav.exe( cid-1 ,"canfit" ,item ) )
+	return canfit && ( ! nav.dad(_i).isbag() || nav.exdad(_i, "canfit" ,item ))
 }
 bag.canadditem( nav ,cid ,item )
 {
@@ -119,9 +119,9 @@ bag.canadditem( nav ,cid ,item )
 }
 stckcnt.canadditem( nav ,_i ,item )
 {
-	return This.Cnt.canfit( nav ,tid ,item ) &&
+	return This.Cnt.canfit( nav ,_i ,item ) &&
 
-			( ! nav.dad(tid).iscell() || nav.dadexe(tid ,"canpushitem" )
+			( ! nav.dad(_i).iscell() || nav.exdad( _i, "canpushitem" ))
 }
 map.canadditem( loc ,item )
 {
@@ -178,7 +178,10 @@ path.canadditem( item )
 
 }
 
-pl.movitemf(new [ pls,pl,bpack,bag ]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
+cl: movitem [pls,pl,bpack,id,bag,id] seeds 1 [maps,loc,bag_vc]
+game.movitem(new Nav([ pls,pl,bpack,bag ]), item ,len ,new Nav([ maps,loc,bag_vc ]), mover )
+
+new Nav([ pls,pl,bpack,bag ]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
 movitem( from, f_i ,item, to ,to_i )
 {
 	if( ! to.exe( to_i ,"canadditem" ,item ))	return
