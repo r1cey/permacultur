@@ -1,4 +1,4 @@
-import PathObj	from "../../www/game/shared/PathObj.js"
+import PathObj	from "../../www/game/shared/newPathable.js"
 import Pl	from './Player.js'
 
 import Loc	from '../../www/game/shared/Loc.js'
@@ -9,7 +9,7 @@ import * as fs from '../fs.js'
 import Hands from '../../www/game/shared/player/Hands.js'
 import Stack from "../../www/game/shared/items/Stackable.js"
 import JRev from "../JsonRevivr.js"
-import things	from "../../www/game/shared/items/newthings.js"
+import things	from "../../www/game/shared/items/newitems.js"
 
 
 

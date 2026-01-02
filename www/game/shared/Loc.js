@@ -1,6 +1,10 @@
 import V	from './Vec.js'
 
-export default class Loc extends V
+import newPathable from './newPathable.js'
+
+
+
+export default class Loc extends newPathable( V )
 {
 	h
 
@@ -10,7 +14,6 @@ export default class Loc extends V
 	static V	=V
 
 	static key	="loc"
-
 
 	constructor( x =0, y =0, h =0 )
 	{
@@ -24,7 +27,22 @@ export default class Loc extends V
 
 		else if( args.length > 1 )	this.setxy( ...args )*/
 	}
+
+
+	isloc()	{return this }
+
+	
+	isempty( nav ,_i )	{return nav.dad(_i).loc2map(this).obj.g(this)?.item }
+
+	
+	fromJSON( a )	{return new this( ...a )}
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,10 +91,6 @@ Loc.prototype.fromJSON	=Loc.prototype.seta
 
 
 
-Loc.fromJSON	=function( a )
-{
-	return new this( ...a )
-}
 
 
 
@@ -136,6 +150,16 @@ Loc.prototype. sub	=function( x, y, h =0 )
 Loc.prototype. subv	=function( v )
 {
 	return this.sub(v.x, v.y, v.h )
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+Loc.prototype. iscell	=function()
+{
+	return tr
 }
 
 

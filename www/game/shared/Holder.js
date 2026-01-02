@@ -1,4 +1,4 @@
-import PObj from "./PathObj.js";
+import PObj from "./newPathable.js";
 
 
 export default class Hold	extends PObj

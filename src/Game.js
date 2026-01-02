@@ -1,4 +1,4 @@
-import PathO	from '../www/game/shared/PathObj.js'
+import PathO	from '../www/game/shared/newPathable.js'
 import Maps	from './maps/Maps.js'
 import Srv from './Server/Server.js'
 // import Errors from './Errors.js'
@@ -8,6 +8,7 @@ import Pl from './player/Player.js'
 // import { constrainedMemory } from 'process'
 import Con from "./Console.js"
 // import Admin from "./Admin.js"
+import Nav	from '../www/game/shared/Nav.js'
 
 
 
@@ -153,24 +154,31 @@ G.prototype. save	=async function()
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/** @todo what if no place to move stacks too */
 
 G.prototype. additem	=function( nav ,item ,len ,ismov )
 {
-	/** @todo implement methods */
 
 	if( nav.last().isstcnt() )
 	{
-		if( nav.dadl().iscell() )
+		if( nav.dadl().isloc() )
 		{
 			let[ maps ,loc ,stcnt ]	=nav.a
 
-			this.movitem(new Nav([ maps ,loc ]), stcnt ,stcnt.len-1 ,new Nav([ maps ,maps.locpushitem(loc) ]))
+			this.movitem(
+				
+				new Nav([ maps ,loc ]),
+				
+				stcnt ,stcnt.len-1 ,
+				
+				new Nav([ maps ,maps.findempty( loc ,dpush) ])
+			)
 		}
 		var cnt	=this.stck2cnt( nav )
 	}
 	if( ! ismov )	this.srv.send("additem",[ nav ,item ,len ,cnt ])
 
-	nav.exl("additem", item ,len ,cnt)
+	nav.exl("additem" ,[ item ,len ,cnt ])
 
 	return cnt
 }
@@ -178,13 +186,13 @@ G.prototype. additem	=function( nav ,item ,len ,ismov )
 
 G.prototype. movitem	=function( from ,item ,len ,to ,mover )
 {
-	var cnt	=this.additem( to ,item ,len ,true )
+	this.srv.send("movitem" ,[ from ,item ,len ,to ,mover ])
+
+	to.exl( "additem" ,[ item ,len ])
 	
-	this.srv.send("movitem",[ from ,item ,len ,to ,mover ,cnt ])
+	// var cnt	=this.additem( to ,item ,len ,true )
 
-	from.exl("delitem" ,item ,len )
-
-	return this
+	from.exl("delitem" ,[ item ,len ])
 }
 
 
@@ -217,17 +225,27 @@ G.prototype. stck2cnt	=function( nav )
 
 
 
-G.prototype. path2obj	=function( path )
+G.prototype. str2nav	=function( arr )
 {
-	var obj	=this
-
-	for(var n of path )
+	switch( arr[0] )
 	{
-		obj	=obj.getobj(n)
+		case "maps"	:
+			
+			arr[0]	=this.games
 
-		if( ! obj )	return
+			arr[1]	=new Loc().fromJSON( arr[1] )
+		break
+		case "pls"	:
+			
+			arr[0]	=this.pls
+
+			arr[1]	=arr[0][arr[1]]
+		break
 	}
-	return obj
+	for(var i =2 ,len =arr.length ;i<len;i++)
+	{
+		arr[i]	=arr[i-1].getitem( arr[i] )
+	}
 }
 
 

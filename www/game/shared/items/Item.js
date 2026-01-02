@@ -1,17 +1,19 @@
-import Jable from "../Jsonable.js";
+import Jable from "../Jsonable.js"
+
+import newPathable from "../newPathable.js"
 
 
-export default class It	extends Jable
+export default class It	extends newPathable(Jable)
 {
 	static key	="item"
+
+	/**@static
+	@var vol */
 	
 	/** A unit is 125 cubic mm which is a sunflower seed */
-	static vol	=1
+	static mm3perunit	=125
 
 
-	isstck()	{return null }
 
-	isstckcnt()	{return null }
-	
-	iscnt()	{return null }
+	vol()	{return this.constructor.vol }
 }

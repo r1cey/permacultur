@@ -1,5 +1,10 @@
+import{ rnd }	from "../utils.js"
+
+
 export default function newblocks( Block )
 {
+	var mmpu	=Block.mm3perunit
+
 	var o	={}
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -27,7 +32,7 @@ export default function newblocks( Block )
 			return Loc.roth( this.dir, ddir )
 		}
 
-
+		/*
 		activate( )
 		{
 			var cello	=map.obj.g(loc)
@@ -38,12 +43,12 @@ export default function newblocks( Block )
 
 			delete cello.drop[this.gkey()]
 
-			/** @todo push remaining items out of cell */
+			/** @todo push remaining items out of cell *
 
 			actitem.active	=true
 
 			cello.block	=actitem
-		}
+		}*/
 
 
 		draw( can, loc, vbuf )

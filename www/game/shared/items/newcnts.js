@@ -1,13 +1,15 @@
-export default function newcnts( Cnt )
+export default function newcnts( Rcpt ,SCnt )
 {
+	var mmpu	=Cnt.mm3perunit
+
 	var o	={}
 
 	///////////////////////////////////////////////////////////////////////////////
 
 
-	o.Belt	=class extends Cnt
+	o.Belt	=class extends Rcpt
 	{
-		static vol	=Math.floor(15*15*10/125)
+		static vol	=Math.floor(15*15*10/mmpu)
 
 		static key	="belt"
 
@@ -16,6 +18,8 @@ export default function newcnts( Cnt )
 			/**@prop { bagid : bag } */
 			seedbags	:{}
 		}
+
+		allowed	=Rcpt.newallow({"multi":1},{"seedbag":5})
 
 
 		/*
@@ -64,6 +68,11 @@ export default function newcnts( Cnt )
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
+
+	for(var n in o )
+	{
+		if( o[n] instanceof Cnt )	o[n+SCnt.suffix]	=o[n].newStck()
+	}
 
 	return o
 }

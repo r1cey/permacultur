@@ -1,6 +1,6 @@
 import Loc from "../Loc.js"
 
-import PObj from "../PathObj.js"
+import PObj from "../newPathable.js"
 
 
 /*export default ( newGround, newTrees )=> class extends Maps
@@ -92,19 +92,12 @@ Maps.prototype. fore	=function( fun )
 }
 
 
-/** @todo If item not found in location, find closest similar item. */
+/** @todo If item not found in location, find closest similar item. *
 
 Maps.prototype. getitem	=function( loc ,key )
 {
 	return this.loc2map(loc).obj.g(loc)?.[key]
-}
-
-
-
-Maps.prototype. movitem	=function( from ,key, to )
-{
-
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,6 +114,12 @@ Maps.prototype. canplmov	=function( dest )
 
 
 
+Maps.prototype. canpushitem	=function( loc )
+{
+	return this.loc2map( loc ).canpushitem( loc )
+}
+
+
 Maps.prototype. delpls	=function( pls )
 {
 	for(var[ pln ,plloc ] of pls )
@@ -133,10 +132,10 @@ Maps.prototype. delpls	=function( pls )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
+/*
 Maps.prototype. getobj	=function( loca )
 {
 	var loc	=new Loc().seta(loca)
 
 	return this.loc2map(loc).newcell( loc )
-}
+}*/

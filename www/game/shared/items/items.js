@@ -1,7 +1,7 @@
-import Block	from "./Block.js"
+import Block	from "./newBlock.js"
 import Stack from "./Stackable.js"
 import Cont	from "./newContainer.js"
-import Bag	from "./Bag.js"
+import Bag	from "./newBag.js"
 import Loc	from "../Loc.js"
 import{ rnd }	from "../utils.js"
 

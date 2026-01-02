@@ -120,141 +120,18 @@ Map.prototype. canplmov	=function( dest, pl )
 
 
 
-Map.prototype. newcell	=function( v )
+Map.prototype. findempty	=function( loc ,r )
 {
-	return new Cell( this, v )
-}
-
-
-/** @todo override this method on client class for animation */
-
-
-Map.prototype. movitem	=function( loc ,len ,newloc )
-{
-	var ocell	=this.obj.g(loc)
-
-	var item	=ocell.item
-
-	if( item.constructor.isstack && item.len <= len )
-	{
-		item	=item.take( len )
-	}
-	else
-	{
-		delete ocell.item
-	}
-	this.obj.s(newloc).item	=item
-}
-
-
-/**@returns len of items added */
-
-Map.prototype. newitem2cnt	=function( loc ,item )
-{
-	var ocell	=this.obj.g(loc)
-
-	var cnt	=ocell.item
-
-	if( cnt.constructor.isstack )
-	{
-		var stck	=cnt
-
-		cnt	=stck.newused()
-	}
-	var added	=0
-
-	added	=cnt.additem( item )
-
-	if( added < 1 )	return added
-
-	if( stck )
-	{
-		if( stck.len > 1 )
+	return this.fore(( v )=>
 		{
-			let newloc	=this.forring(( v )=>
-						{
-							if( ! this.obj.g(v)?.item )	return true
-						},
-						1 ,loc )
-
-			this.movitem( loc ,stck.len - 1 ,newloc )
+			if( ! this.obj.g(v)?.item )	return true
 		}
-		ocell.item	=cnt
-	}
+		, r ,loc )
 }
-
-
-Map.prototype. addstack	=function( loc ,stack )
-{
-	var c	=this.obj.s(loc)
-
-	var key	=stack.gkey()
-
-	var cstack
-
-	if( Obj.getcnts( c ,key ))	return 0
-
-	else if( cstack =Obj.getstack( c ,key ))
-	{
-		return cstack.len	+= stack.len
-	}
-	else
-	{
-		Obj.setstack( c ,stack )
-
-		return stack.len
-	}
-}
-
-
-Map.prototype. addstack_cnt	=function( path, stack )
-{
-	var[ loc ,key ,id ]	=path
-
-	var cnt	=Obj.getcnt( this.obj.g(loc) ,key ,id )
-
-	for(var i =3 ;i< path.length - 2 ;i +=2 )
-	{
-		key	=path[i]
-		
-		id	=path[i+1]
-
-		cnt	=cnt.getitem( key ,id )
-	}
-	if()
-}
-
-
-/** doesn't modify item */
-
-Map.prototype. additem	=function( loc ,item ,len )
-{
-	var map	=this
-
-	len	??=item.num
-
-	var mapcell	=map.obj.s( loc )
-
-	var itemk	=item.gkey()
-
-	var mapitem	=mapcell[itemk]
-
-	if( mapitem )
-	{
-		if( mapitem.id || item.id )		return 0
-
-		mapitem.num	+= len
-	}
-	else
-	{
-		mapcell[itemk]	=item.take( len )
-	}
-	return len
-}
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
 
 
 Map.prototype. printarr	=function( ibuf , r=6, c )

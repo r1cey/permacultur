@@ -81,14 +81,6 @@ Map.prototype. save	=async function( dir ="")
 ///////////////////////////////////////////////////////////////////////////
 
 
-
-Map.prototype. setblock	=function( loc ,block )
-{
-	ShMap.prototype.setblock. call(this, loc ,block )
-
-	this.game.server?.sendvis( loc ,"map_setblock" ,[ this ,loc ,block ])
-}
-
 /*
 Map.prototype. additem	=function( loc ,item ,len )
 {

@@ -1,6 +1,6 @@
 import Loc from "./Loc.js"
 import Col from "./Color.js"
-import Block from "./items/Block.js"
+import Block from "./items/newBlock.js"
 
 
 export default class JR

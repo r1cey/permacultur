@@ -7,7 +7,7 @@ import{ IdPool }	from "../utils.js"
 /** @extends Holder */
 
 
-export default function( Stck ,NewIt )
+export default function( NewIt )
 {
 	class Cnt	extends( NewIt || Item )
 	{
@@ -15,9 +15,8 @@ export default function( Stck ,NewIt )
 
 		id	=0
 
-		static idpool	=new IdPool()
-
-		static Stack	=Stck
+		/**@static
+		@var Stack */
 
 /*
 		constructor( init )
@@ -31,6 +30,35 @@ export default function( Stck ,NewIt )
 
 
 		iscnt()	{return this }
+
+
+		calcvol()	{return this.constructor.vol + this.itemvol() }
+		
+
+		isempty(){ for(var k in this.inv) return true; return false }
+
+
+		itemvol()
+		{
+			var vol	=0
+
+			var{ inv }	=this
+
+			for(var k in inv )	vol += inv[k].calcvol()
+
+			return vol
+		}
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+	Cnt. canadditem	=function( nav ,_i ,item ,len )
+	{
+		if( ! nav.dad(_i).isbox() )	return len
+
+		return nav.exdad(_i, "canadditem" ,item ,len )
 	}
 
 
@@ -58,24 +86,31 @@ export default function( Stck ,NewIt )
 	}
 
 
-	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////
 
 
-	/** @todo What's happening with dadtype ?? *
-
-	Cnt.prototype. setuniq	=function()
+	Cnt. newStck	=function( StckC )
 	{
-		var cnt	=this.take( 1 )
+		var Cnt	=this
 
-		cnt.id	=this.constructor.idpool.new()
+		var cname	=this.name+StckC.suffix
 
-		if( this.dad /*&& this.dadtype==="cnt"* )
+		var o	={}
+		
+		o[cname]	=class extends StckC
 		{
-			this.dad.mov2uniq( cnt )
+			static key	=Cnt.key+"_vc"
+
+			static vol	=Cnt.vol
+
+			static Cnt	=Cnt
 		}
-		return cnt
+		return	this.Stack	=o[cname]
 	}
-	*/
+
+
+	///////////////////////////////////////////////////////////////////////////
+
 
 	return Cnt
 }

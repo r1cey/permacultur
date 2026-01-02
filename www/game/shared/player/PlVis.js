@@ -8,6 +8,8 @@ import Jable from "../Jsonable.js"
 
 import items from "../items/items.js"
 
+import newPathable from "../newPathable.js"
+
 
 /** Class for visible players. Has limited information.
  * Also extends Container
@@ -33,6 +35,10 @@ export default class PlVis	extends Jable
 	{
 		seedbags	:{}
 	}
+
+	ispl()	{return this }
+
+	getitem()
 }
 
 

@@ -1,10 +1,13 @@
 import newStackable from "./newStackable.js";
 
-export default function( Cnt ,Stack )
+export default function( Stack )
 {
-	class St	extends( Stack || newStackable() )
+	class SC	extends( Stack || newStackable() )
 	{
-		static Cnt	=Cnt
+		/**@static
+		@var Cnt	*/
+
+		static suffix	="_vc"
 
 
 		constructor( ...args )
@@ -12,11 +15,7 @@ export default function( Cnt ,Stack )
 			super( ...args )
 		}
 
-		isstckcnt()	{return this }
-
-		isstck()	{return this }
-
-		iscnt()	{return null }
+		isstcnt()	{return this }
 
 		gCnt()	{return this.constructor.Cnt }
 
@@ -26,5 +25,16 @@ export default function( Cnt ,Stack )
 		}
 	}
 
-	return St
+
+	SC.prototype. canadditem	=function( nav ,_i ,item ,len )
+	{
+		return Number(
+			
+			( ! nav.dad(_i).isloc() || nav.exdad( _i, "isempty" )) &&
+
+			this.gCnt().canadditem( nav ,_i ,item ,len )
+		)
+	}
+
+	return SC
 }

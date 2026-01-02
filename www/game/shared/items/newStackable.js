@@ -1,9 +1,14 @@
 import Item	from "./Item.js"
 
+
+
 export default function( NewIt )
 {
 	class St	extends( NewIt || Item )
 	{
+		/**@todo ultimately this should be accessed through method because
+		 * containers class has it as a method */
+		
 		len	=1
 
 		// acts	={}
@@ -19,6 +24,8 @@ export default function( NewIt )
 
 		isstck()	{return this }
 
+
+		calcvol()	{return this.vol() * this.len }
 
 		/**	Doesn't reduce the num of this item. 
 		 * @returns new obj or this. */

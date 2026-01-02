@@ -1,5 +1,12 @@
-export default function newstacks( Stack )
+// import newStackable from "./newStackable.js"
+
+
+export default function newstacks( NewStack )
 {
+	var Stack	=NewStack// || newStackable()
+
+	var mmpu	=Stack.mm3perunit
+
 	var o	={}
 
 
@@ -8,9 +15,7 @@ export default function newstacks( Stack )
 
 	o.Multi	=class extends Stack
 	{
-		static area	=4
-
-		static height	=4.5
+		static vol	=30*20*150/mmpu
 
 		// static vol	=15*15*30
 
@@ -20,9 +25,7 @@ export default function newstacks( Stack )
 
 	o.CucumberSeed	=class extends Stack
 	{
-		static area	=6
-
-		static height	=0.15
+		static vol	=1
 
 		static key	="cucumber_seeds"
 	}
