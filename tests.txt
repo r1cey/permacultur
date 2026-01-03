@@ -311,3 +311,17 @@ pl sends[ "plant" ,[[ "gavriel" ,"seedbag" ,1 ], "cuc_seed", 8 , [14,13,0] ]]
 bag.mov()
 
 new Nav([pls,pl,bpack,bag]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
+
+
+class Pl extends Holder
+{
+	[allowed]
+	inv
+	ispl()
+	[key]
+}
+
+class Rcpt extends 
+
+
+class 

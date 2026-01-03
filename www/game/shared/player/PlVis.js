@@ -15,7 +15,7 @@ import newPathable from "../newPathable.js"
  * Also extends Container
 */
 
-export default class PlVis	extends Jable
+export default class PlVis	extends newPathable( Jable )
 {
 	name
 

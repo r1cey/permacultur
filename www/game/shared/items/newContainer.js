@@ -11,8 +11,6 @@ export default function( NewIt )
 {
 	class Cnt	extends( NewIt || Item )
 	{
-		inv	={}
-
 		id	=0
 
 		/**@static
@@ -33,21 +31,6 @@ export default function( NewIt )
 
 
 		calcvol()	{return this.constructor.vol + this.itemvol() }
-		
-
-		isempty(){ for(var k in this.inv) return true; return false }
-
-
-		itemvol()
-		{
-			var vol	=0
-
-			var{ inv }	=this
-
-			for(var k in inv )	vol += inv[k].calcvol()
-
-			return vol
-		}
 	}
 
 
@@ -99,7 +82,7 @@ export default function( NewIt )
 		
 		o[cname]	=class extends StckC
 		{
-			static key	=Cnt.key+"_vc"
+			static key	=Cnt.key+StckC.suffix
 
 			static vol	=Cnt.vol
 
