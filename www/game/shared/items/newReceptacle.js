@@ -1,8 +1,12 @@
-export default function( Cnt )
+import newSlot from "./newInvSlot.js"
+
+import newCnt from "./newContainer.js"
+
+
+export default function( Cnt =newCnt() ,newSlot =newSlot )
 {
-	class Rcpt	extends( Cnt )
+	class Rcpt	extends newSlot( Cnt )
 	{
-		allowed	={}
 	}
 
 

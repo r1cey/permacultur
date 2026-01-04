@@ -1,11 +1,15 @@
-import ShBox	from "../shared/items/Box.js"
+import newBox	from "../shared/items/newBox.js"
 
-import Holder from "../Holder.js"
+import newCnt from "../shared/items/newContainer.js"
+
+import Item from "./Item.js"
+
+import newInv from "./newInv.js"
 
 
 /** @extends Holder */
 
-export default class Box extends ShBox
+export default class Box extends newBox( newCnt( Item ,newInv ))
 {
 }
 

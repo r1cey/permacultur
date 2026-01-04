@@ -1,10 +1,10 @@
-// import Inv from "./Inv.js";
+import newInv from "./newInv.js";
 
 
 
-export default function( Inv )
+export default function( newInv =newInv )
 {
-    class Slt extends Inv
+    const Slt =newInv( class
     {
         static allowed  ={}
 
@@ -13,7 +13,7 @@ export default function( Inv )
         {
             var lenallow	=Math.min( this.allowed[item.gkey()] ,len )
         }
-    }
+    })
 
 
     return Slt

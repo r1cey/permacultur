@@ -1,15 +1,15 @@
 // import Holder from "../Holder.js";
 import Item	from "./Item.js"
 
+import newInv from "./newInv.js"
+
 import{ IdPool }	from "../utils.js"
 
 
-/** @extends Holder */
 
-
-export default function( NewIt )
+export default function( Item =Item ,newInv =newInv )
 {
-	class Cnt	extends( NewIt || Item )
+	class Cnt	extends newInv( Item )
 	{
 		id	=0
 
@@ -37,27 +37,21 @@ export default function( NewIt )
 	///////////////////////////////////////////////////////////////////////////
 
 
+
 	Cnt. canadditem	=function( nav ,_i ,item ,len )
 	{
-		if( ! nav.dad(_i).isbox() )	return len
-
-		return nav.exdad(_i, "canadditem" ,item ,len )
+		if( nav.dad(_i).isbox() )
+		{
+			return nav.exdad(_i, "canadditem" ,item ,len )
+		}
+		return len
 	}
 
 
-	/**@returns the container the item is going to be added to */
-
-	Cnt.prototype. additem	=function( item )
-	{
-		if( ! this.id )	return this.setuniq()
-
-		return this
-	}
-
-
+	/*
 	Cnt.prototype. delitem	=function( item, num =1, dadbox )
 	{
-		/** If becomes empty, make generic and merge at dad. */
+		/** If becomes empty, make generic and merge at dad. *
 
 		var itemn	=item.constructor.name
 
@@ -66,12 +60,13 @@ export default function( NewIt )
 			(this.o[itemn].num	-= num) > 0	? 0	: delete this.o[itemn]
 
 		this.calcempty()	? dadbox.set.delete(this) && Box.prototype.additem. call(dadbox, this ) : 0
-	}
+	}*/
 
 
 	///////////////////////////////////////////////////////////////////////////
 
 
+	
 	Cnt. newStck	=function( StckC )
 	{
 		var Cnt	=this
@@ -89,6 +84,22 @@ export default function( NewIt )
 			static Cnt	=Cnt
 		}
 		return	this.Stack	=o[cname]
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
+
+
+
+	Cnt.prototype. itemvol	=function()
+	{
+		var vol	=0
+
+		var{ inv }	=this
+
+		for(var k in inv )	vol += inv[k].calcvol()
+
+		return vol
 	}
 
 

@@ -1,9 +1,9 @@
-import Jable from "../Jsonable.js"
+import newJable from "../newJsonable.js"
 
 // import newPathable from "../newPathable.js"
 
 
-export default class It	extends Jable
+export default newJable( class It
 {
 	static key	="item"
 
@@ -16,4 +16,7 @@ export default class It	extends Jable
 
 
 	vol()	{return this.constructor.vol }
-}
+
+	
+	/**@method calcvol */
+})
