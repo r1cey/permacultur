@@ -324,4 +324,22 @@ class Pl extends Holder
 class Rcpt extends 
 
 
-class 
+Jable
+
+newPath
+
+Item extends Jable
+
+newStack( Item )
+
+newSCnt( newPath( Item ))
+
+Seeds extends newStack( Item )
+
+BagVc extends newSCnt( newStack( newJable( Item ))))
+
+Bpack extends newBag( newBox( newCnt( newInv( newPath( Item )))))
+
+Belt extends newRcpt( newCnt( newSlotC( newInv( newPath( Item ))))
+
+VisPl extends 

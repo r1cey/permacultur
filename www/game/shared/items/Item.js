@@ -1,9 +1,9 @@
 import Jable from "../Jsonable.js"
 
-import newPathable from "../newPathable.js"
+// import newPathable from "../newPathable.js"
 
 
-export default class It	extends newPathable(Jable)
+export default class It	extends Jable
 {
 	static key	="item"
 

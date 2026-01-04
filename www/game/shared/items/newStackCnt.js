@@ -1,8 +1,12 @@
-import newStackable from "./newStackable.js";
+// import newStackable from "./newStackable.js";
+
+import newPathable	from "../newPathable.js"
+
+
 
 export default function( Stack )
 {
-	class SC	extends( Stack || newStackable() )
+	class SC	extends newPathable( Stack )
 	{
 		/**@static
 		@var Cnt	*/
