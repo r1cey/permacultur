@@ -61,6 +61,17 @@ export default function( Item =Item )
 			return this.constructor.vol * this.len
 		}
 
+
+		static New( key ,vol ,newcls )
+		{
+			return class extends this
+			{
+				static key	=key
+
+				static vol
+			}
+		}
+
 	/*
 		toJSON( key )
 		{

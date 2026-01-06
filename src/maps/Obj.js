@@ -9,6 +9,7 @@ import JRev from "../JsonRevivr.js"
 
 
 
+
 export default class Obj extends ShObj
 {
 	static jrev	=new JRev().add([

@@ -6,7 +6,7 @@ import Loc from '../Loc.js'
 
 import * as fs	from '../fs.js'
 
-import items	from "../../www/game/shared/items/items.js"
+// import items	from "../../www/game/shared/items/items.js"
 
 // import items from '../items.js'
 

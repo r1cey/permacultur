@@ -1,17 +1,14 @@
-// import newStackable from "./newStackable.js"
+import newStack from "./newStackable.js"
 
 
-export default function newstacks( NewStack )
+export default function( Stack =newStack() )
 {
-	var Stack	=NewStack// || newStackable()
-
 	var mmpu	=Stack.mm3perunit
 
 	var o	={}
 
 
 	///////////////////////////////////////////////////////////////////////////
-
 
 	o.Multi	=class extends Stack
 	{

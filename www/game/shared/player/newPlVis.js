@@ -3,9 +3,9 @@ import Col from '../Color.js'
 
 import Hands from "./Hands.js"
 
-import newInvSlot	from "../items/items/newInvSlot.js"
+import newInvSlot	from "../items/newInvSlot.js"
 
-import items from "../items/items.js"
+// import items from "../items/items.js"
 
 
 /** Class for visible players. Has limited information. */

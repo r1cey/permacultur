@@ -6,14 +6,9 @@ export default function( Base )
 
 		static fromJSON(val, ...args )	{return new this(...args).set( val ) }
 
-		static newRevO( ...args )
+		static newrevfn( jrev )
 		{
-			return {
-
-				key	:this.key
-				,
-				fromJSON	:( val )=>	 this.fromJSON( val, ...args )
-			}
+			return ( val )=> jrev.revivr( val[0] ,val[1] )
 		}
 
 		
