@@ -1,6 +1,6 @@
 import Loc from "../Loc.js"
 
-import PObj from "../newPathable.js"
+// import PObj from "../newPathable.js"
 
 
 /*export default ( newGround, newTrees )=> class extends Maps
@@ -132,10 +132,10 @@ Maps.prototype. delpls	=function( pls )
 ///////////////////////////////////////////////////////////////////////////////
 
 
-/*
-Maps.prototype. getobj	=function( loca )
-{
-	var loc	=new Loc().seta(loca)
 
-	return this.loc2map(loc).newcell( loc )
-}*/
+Maps.prototype. msg2navo	=function( afrom ,i ,ato )
+{
+	var loc	=new Loc().fromJSON( afrom[i] )
+
+	ato.push( this.loc2map(loc).newcell( loc ))
+}

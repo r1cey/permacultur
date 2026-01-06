@@ -32,6 +32,9 @@ export default class Map extends newBoard(newBinMap)
 
 		this.obj	=new O(this)
 	}
+
+
+	newcell( v )	{return new Cell( this ,v )}
 }
 
 

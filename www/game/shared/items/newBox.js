@@ -18,7 +18,7 @@ export function newBox( Cnt )
 		{
 			return Math.min(
 				
-				Math.floor( this.remvol() / item.constructor.vol ),
+				Math.floor( this.remvol() / item.vol() ),
 
 				len ,
 

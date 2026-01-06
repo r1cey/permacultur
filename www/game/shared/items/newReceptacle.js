@@ -33,21 +33,5 @@ export default function( Cnt =newCnt() ,newSlot =newSlot )
 	}
 
 
-	Rcpt. newallow	=function( stcks ,cnts )
-	{
-		var allowed	=Object.assign( {} ,stcks )
-
-		// Object.assign( allowed  )
-
-		for(var k in cnts )
-		{
-			allowed[k]	=cnts[k]
-
-			allowed[k+this.Stack.suffix]	=cnts[k]
-		}
-		return allowed
-	}
-
-
 	return Rcpt
 }

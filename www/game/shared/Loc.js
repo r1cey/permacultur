@@ -31,8 +31,14 @@ export default class Loc extends newPathable( V )
 
 	isloc()	{return this }
 
+
+	getcell( maps )	{return maps.loc2map(this).obj.g(this) }
+
+
+	getitem( key ,maps ){	return this.getcell( maps )?.item }
+
 	
-	isempty( nav ,_i )	{return nav.dad(_i).loc2map(this).obj.g(this)?.item }
+	isempty( nav ,_i )	{return this.getcell( nav.dad(_i) )?.item }
 
 	
 	fromJSON( a )	{return new this( ...a )}

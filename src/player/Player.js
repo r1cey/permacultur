@@ -1,4 +1,4 @@
-import PlMsg from '../../www/game/shared/player/Player.js'
+import newPl from '../../www/game/shared/player/newPlayer.js'
 import Hands from '../../www/game/shared/player/Hands.js'
 
 import V from '../../www/game/shared/Vec.js'

@@ -3,9 +3,9 @@ import Item	from "./Item.js"
 // import newJable	from "../newJsonable.js"
 
 
-export default function( NewIt )
+export default function( Item =Item )
 {
-	class St	extends( NewIt || Item )
+	class St	extends Item
 	{
 		/**@todo ultimately this should be accessed through method because
 		 * containers class has it as a method */
@@ -23,7 +23,7 @@ export default function( NewIt )
 		}
 
 
-		isstck()	{return this }
+		// isstck()	{return this }
 
 
 		calcvol()	{return this.vol() * this.len }

@@ -3,7 +3,7 @@ import Item	from "./Item.js"
 
 import newInv from "./newInv.js"
 
-import{ IdPool }	from "../utils.js"
+// import{ IdPool }	from "../utils.js"
 
 
 
@@ -37,6 +37,7 @@ export default function( Item =Item ,newInv =newInv )
 	///////////////////////////////////////////////////////////////////////////
 
 
+	/** Check if dads can also contain the item */
 
 	Cnt. canadditem	=function( nav ,_i ,item ,len )
 	{

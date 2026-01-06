@@ -310,36 +310,19 @@ pl sends[ "plant" ,[[ "gavriel" ,"seedbag" ,1 ], "cuc_seed", 8 , [14,13,0] ]]
 
 bag.mov()
 
-new Nav([pls,pl,bpack,bag]).exef("mov", seeds ,1 ,new Nav([maps,loc,bag_vc]))
+
+new Nav([maps,loc,bag_vc]).exef("canadditem" ,multi ,1 )
+
+new Nav([pls,pl,bpack,belt]).exef("mov", multi ,1 ,new Nav([maps,loc,bag_vc]))
 
 
-class Pl extends Holder
+if( to.exf("isstcnt") && to.exdadf("isloc") )
 {
-	[allowed]
-	inv
-	ispl()
-	[key]
+	loc =to.exdadf( "findemptyneigh" ,3 )
+
+	if( loc )
+	{
+		game.mov( to ,to.last() ,to.last().len-1 ,new Nav([maps,loc]))
+	}
+	else
 }
-
-class Rcpt extends 
-
-
-Jable
-
-newPath
-
-Item extends Jable
-
-newStack( Item )
-
-newSCnt( newPath( Item ))
-
-Seeds extends newStack( Item )
-
-BagVc extends newSCnt( newStack( newJable( Item ))))
-
-Bpack extends newBag( newBox( newCnt( newInv( newPath( Item )))))
-
-Belt extends newRcpt( newCnt( newSlotC( newInv( newPath( Item ))))
-
-VisPl extends 

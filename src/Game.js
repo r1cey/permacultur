@@ -224,28 +224,28 @@ G.prototype. stck2cnt	=function( nav )
 }
 
 
+/**@todo do all of the error handling */
 
-G.prototype. str2nav	=function( arr )
+G.prototype. stra2nav	=function( amsg )
 {
-	switch( arr[0] )
+	var aobj	=[]
+
+	switch( amsg[0] )
 	{
 		case "maps"	:
 			
-			arr[0]	=this.games
-
-			arr[1]	=new Loc().fromJSON( arr[1] )
+			aobj[0]	=this.maps
 		break
 		case "pls"	:
 			
-			arr[0]	=this.pls
-
-			arr[1]	=arr[0][arr[1]]
+			aobj[0]	=this.pls
 		break
 	}
-	for(var i =2 ,len =arr.length ;i<len;i++)
+	for( var i =1 ,len= amsg.length ;i<len;++i)
 	{
-		arr[i]	=arr[i-1].getitem( arr[i] )
+		i	+=aobj[i-1].msg2navo( amsg ,i ,aobj ) || 0
 	}
+	return new Nav(aobj)
 }
 
 

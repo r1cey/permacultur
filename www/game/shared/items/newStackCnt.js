@@ -1,12 +1,12 @@
-// import newStackable from "./newStackable.js";
+import newStack from "./newStackable.js";
 
-import newPathable	from "../newPathable.js"
+import newPath	from "../newPathable.js"
 
 
 
-export default function( Stack )
+export default function( Stack =newStack() )
 {
-	class SC	extends newPathable( Stack )
+	class SC	extends newPath( Stack )
 	{
 		/**@static
 		@var Cnt	*/
@@ -14,12 +14,15 @@ export default function( Stack )
 		static suffix	="_vc"
 
 
+
 		constructor( ...args )
 		{
 			super( ...args )
 		}
 
+
 		isstcnt()	{return this }
+
 
 		gCnt()	{return this.constructor.Cnt }
 

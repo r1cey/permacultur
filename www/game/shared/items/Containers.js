@@ -1,5 +1,7 @@
 import newPathable from "../newPathable.js";
 
+
+
 export default newPathable( class Cs
 {
 	o	={}

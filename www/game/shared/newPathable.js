@@ -6,6 +6,8 @@ export default function(Base)
 
 		isloc()	{return null }
 
+		ishands()	{return null }
+
 		iscnts()	{return null }
 
 		isstck()	{return null }
@@ -22,6 +24,6 @@ export default function(Base)
 
 		isblock()	{return null }
 
-		/**@method getitem() */
+		/**@method msg2navo( arrfrom ,i ,arrto ) */
 	}
 }

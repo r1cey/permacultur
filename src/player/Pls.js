@@ -1,4 +1,4 @@
-import PathObj	from "../../www/game/shared/newPathable.js"
+import ShPls	from "../../www/game/shared/player/Players.js"
 import Pl	from './Player.js'
 
 import Loc	from '../../www/game/shared/Loc.js'
@@ -6,14 +6,14 @@ import Loc	from '../../www/game/shared/Loc.js'
 import * as fs from '../fs.js'
 
 // import items from "../items.js"
-import Hands from '../../www/game/shared/player/Hands.js'
-import Stack from "../../www/game/shared/items/Stackable.js"
+// import Hands from '../../www/game/shared/player/Hands.js'
+// import Stack from "../../www/game/shared/items/Stackable.js"
 import JRev from "../JsonRevivr.js"
-import things	from "../../www/game/shared/items/newitems.js"
+// import things	from "../../www/game/shared/items/newitems.js"
 
 
 
-export default class Pls	extends PathObj
+export default class Pls	extends ShPls
 {
 	game
 
@@ -23,14 +23,6 @@ export default class Pls	extends PathObj
 		,
 		dir	:'./pls/'
 	}
-
-	o	={}
-
-	// arr	=[]
-
-	g( n )	{ return this.o[n] }
-
-	s( pl )	{ this.o[pl.name]	=pl }
 
 
 	

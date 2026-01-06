@@ -13,6 +13,20 @@ export default function( Base )
 		
 
 		isempty(){ for(var k in this.inv) return true; return false }
+
+
+		msg2navo( afrom ,i ,ato )
+		{
+			var navo	=this.inv[afrom[i]]
+
+			if( navo.iscnts() )
+			{
+				ato.push( navo.o[afrom[i+1]] )
+
+				return 1
+			}
+			ato.push( navo )
+		}
 	}
 
 

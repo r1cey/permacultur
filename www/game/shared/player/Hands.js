@@ -1,22 +1,28 @@
-import Holder from "../Holder.js"
-import Jable from "../Jsonable.js"
+// import Holder from "../Holder.js"
+import newJable from "../newJsonable.js"
+
+import newPath from "../newPathable.js"
 
 
 /** Also extends Container */
 
-export default class Ha extends Jable
+var Ha	=newJable( newPath( class Ha
 {
 	item
 
 	static key	="hands"
-}
 
 
 
-Ha.prototype. getobj	=function()
-{
-	return this.item
-}
+	ishands()	{return this }
+
+
+	/**@todo error handling */
+	msg2navo( afrom ,i ,ato )
+	{
+		ato.push( this.item[afrom[i]] )
+	}
+}))
 
 
 
@@ -36,3 +42,6 @@ Ha.prototype. toJSON	=function()
 	}
 	return this
 }
+
+
+export default Ha
